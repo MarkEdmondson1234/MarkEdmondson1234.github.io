@@ -865,10 +865,10 @@ est_plot
     
     <item>
       <title>Scheduling R scripts for a team using RStudio Server, Docker, Github and Google Compute Engine</title>
-      <link>http://code.markedmondson.me/scheduling-r-scripts-for-a-team-using-rstudio-server-docker-github-and-google-compute-engine</link>
+      <link>http://code.markedmondson.me/setting-up-scheduled-r-scripts-for-an-analytics-team/</link>
       <pubDate>Thu, 21 Apr 2016 23:03:57 +0100</pubDate>
       
-      <guid>http://code.markedmondson.me/scheduling-r-scripts-for-a-team-using-rstudio-server-docker-github-and-google-compute-engine</guid>
+      <guid>http://code.markedmondson.me/setting-up-scheduled-r-scripts-for-an-analytics-team/</guid>
       <description>
 
 &lt;p&gt;&lt;em&gt;edit 20th November, 2016 - now everything in this post is abstracted away and available in the googleComputeEngineR package - I would say its a lot easier to use that.  Here is a post on getting started with it. &lt;a href=&#34;http://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/&#34;&gt;http://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;

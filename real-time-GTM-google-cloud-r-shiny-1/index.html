@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
-    <title>Insights sorting by delta metrics in the Google Analytics API v4 &middot; Mark Edmondson</title>
+    <title>Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one &middot; Mark Edmondson</title>
     <meta name="generator" content="Hugo 0.18.1" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -10,7 +10,7 @@
       <meta name="description" content="The code bit of the blog">
     
     
-    <link rel="canonical" href="http://code.markedmondson.me/insights-sorting-by-delta-metrics-in-the-google-analytics-api-v4"/>
+    <link rel="canonical" href="http://code.markedmondson.me/real-time-gtm-google-cloud-r-shiny-1/"/>
     <link rel="icon" href="http://code.markedmondson.me/favicon.ico">
     <link rel="apple-touch-icon" href="http://code.markedmondson.me/apple-touch-icon.png"/>
     <link rel="stylesheet" href="http://code.markedmondson.me/css/style.css">
@@ -20,13 +20,13 @@
     
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
-    <meta property="og:title" content="Insights sorting by delta metrics in the Google Analytics API v4" />
-<meta property="og:description" content="--- title: Insights sorting by delta metrics in the Google Analytics API v4 comments: true date: &#34;2016-12-01T23:03:57&#43;01:00&#34; tags: [&#34;R&#34;,&#34;google-analytics&#34;] banner: banners/delta.png --- As analysts, we are often called upon to see how website metrics have improved or declined over time. This is easy enough when looking at trends, but if you are looking to break down over other dimensions, it can involve a lot of ETL to get to what you need." />
+    <meta property="og:title" content="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" />
+<meta property="og:description" content="In part one of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&rsquo;s data streaming capability. In part two, we then go into how to query that table in realtime from R, make a forecast use Shiny and use the JavaScript visualisation library Highcharts to visualise the data." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://code.markedmondson.me/insights-sorting-by-delta-metrics-in-the-google-analytics-api-v4" />
+<meta property="og:url" content="http://code.markedmondson.me/real-time-gtm-google-cloud-r-shiny-1/" />
 
 
-<meta property="og:updated_time" content="2016-12-01T23:03:57&#43;01:00"/>
+<meta property="og:updated_time" content="2017-01-12T23:03:57&#43;01:00"/>
 
 
 
@@ -39,12 +39,12 @@
 
     
     
-<meta itemprop="name" content="Insights sorting by delta metrics in the Google Analytics API v4">
-<meta itemprop="description" content="--- title: Insights sorting by delta metrics in the Google Analytics API v4 comments: true date: &#34;2016-12-01T23:03:57&#43;01:00&#34; tags: [&#34;R&#34;,&#34;google-analytics&#34;] banner: banners/delta.png --- As analysts, we are often called upon to see how website metrics have improved or declined over time. This is easy enough when looking at trends, but if you are looking to break down over other dimensions, it can involve a lot of ETL to get to what you need.">
+<meta itemprop="name" content="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one">
+<meta itemprop="description" content="In part one of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&rsquo;s data streaming capability. In part two, we then go into how to query that table in realtime from R, make a forecast use Shiny and use the JavaScript visualisation library Highcharts to visualise the data.">
 
 
-<meta itemprop="dateModified" content="2016-12-01T23:03:57&#43;01:00" />
-<meta itemprop="wordCount" content="576">
+<meta itemprop="dateModified" content="2017-01-12T23:03:57&#43;01:00" />
+<meta itemprop="wordCount" content="1291">
 
 
 
@@ -56,8 +56,8 @@
 
 
 
-<meta name="twitter:title" content="Insights sorting by delta metrics in the Google Analytics API v4"/>
-<meta name="twitter:description" content="--- title: Insights sorting by delta metrics in the Google Analytics API v4 comments: true date: &#34;2016-12-01T23:03:57&#43;01:00&#34; tags: [&#34;R&#34;,&#34;google-analytics&#34;] banner: banners/delta.png --- As analysts, we are often called upon to see how website metrics have improved or declined over time. This is easy enough when looking at trends, but if you are looking to break down over other dimensions, it can involve a lot of ETL to get to what you need."/>
+<meta name="twitter:title" content="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one"/>
+<meta name="twitter:description" content="In part one of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&rsquo;s data streaming capability. In part two, we then go into how to query that table in realtime from R, make a forecast use Shiny and use the JavaScript visualisation library Highcharts to visualise the data."/>
 <meta name="twitter:site" content="@HoloMarkeD"/>
 <meta name="twitter:domain" content="markedmondson.me"/>
 
@@ -73,10 +73,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-
-
-
-
 </head>
 <body>
 <div class="container">
@@ -265,24 +261,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
         <div class="article-inner">
             
-                <img src="http://code.markedmondson.me/banners/delta.png" class="article-banner">
+                <img src="http://code.markedmondson.me/images/itsalive.png" class="article-banner">
             
 
             <header class="article-header">
-    <a href="http://code.markedmondson.me/insights-sorting-by-delta-metrics-in-the-google-analytics-api-v4">
+    <a href="http://code.markedmondson.me/real-time-gtm-google-cloud-r-shiny-1/">
     <h1 class="article-title" itemprop="name">
-        Insights sorting by delta metrics in the Google Analytics API v4
+        Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one
     </h1>
     </a>
     <div class="article-meta">
         <div class="article-date">
             <i class="fa fa-calendar"></i>
-            <time datetime="2016-12-01 23:03:57 &#43;0100 CET" itemprop="datePublished">2016-12-01</time>
+            <time datetime="2017-01-12 23:03:57 &#43;0100 CET" itemprop="datePublished">2017-01-12</time>
             &middot;
-            576
+            1291
             words
             &middot;
-            3
+            7
             minute read
         </div>
 
@@ -296,7 +292,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <i class="fa fa-tags"></i>
                 
                 
-                <a class="article-category-link" href="http://code.markedmondson.me/tags/r">R</a>
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/python">python</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/google-app-engine">google-app-engine</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/google-tag-manager">google-tag-manager</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/big-query">big-query</a>
                 &middot;
                 
                 
@@ -310,97 +318,206 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
             <div class="article-entry" itemprop="articleBody">
-                ---
-title: Insights sorting by delta metrics in the Google Analytics API v4
-comments: true
-date: "2016-12-01T23:03:57+01:00"
-tags: ["R","google-analytics"]
-banner: banners/delta.png
----
+                
 
+<p>In part one of this two part series we walk through the steps to stream data from a <a href="https://www.google.com/analytics/tag-manager/">Google Tag Manager</a> (GTM) implementation into a <a href="https://cloud.google.com/appengine/">Google App Engine</a> (GAE) web app, which then adds data to a <a href="https://cloud.google.com/bigquery/">BigQuery</a> table via BigQuery&rsquo;s data streaming capability.  In part two, we then go into how to query that table in realtime from R, make a forecast use <a href="https://shiny.rstudio.com/">Shiny</a> and use the JavaScript visualisation library <a href="http://jkunst.com/highcharter/">Highcharts</a> to visualise the data.</p>
 
+<p>The project combines several languages where their advantages lie: Python for its interaction with Google APIs and its quick start creating your own API on App Engine, SQL to query the BigQuery data itself, R for its forecasting libraries and the reactive Shiny framework, and JavaScript for the visualisation and data capture at the Google Tag Manager end.</p>
 
+<h2 id="thanks">Thanks</h2>
 
-<p>As analysts, we are often called upon to see how website metrics have improved or declined over time. This is easy enough when looking at trends, but if you are looking to break down over other dimensions, it can involve a lot of ETL to get to what you need.</p>
-<p>For instance, if you are looking at landing page performance of SEO traffic you can sort by the top performers, but not by the top <em>most improved</em> performers. To see that you need to first extract your metrics for one month, extract it again for the comparison month, join the datasets on the page dimension and then create and sort by a delta metric. For large websites, you can be exporting millions of URLs just so you can see say the top 20 most improved.</p>
-<p>This comes from the fact the Google Analytics web UI and Data Studio don’t let you sort by the <em>change</em> of a metric. However, this is available in the Google Analytics API v4 so a small demo on how to it and how it can be useful is shown here.</p>
-<div id="extracting-the-data" class="section level2">
-<h2>Extracting the data</h2>
-<p>In v4, you can pass in two date ranges in one call. When you do this a new ordering type comes available, the <a href="https://developers.google.com/analytics/devguides/reporting/core/v4/basics#delta_ordering"><code>DELTA</code></a> which is what we can use to sort the results.</p>
-<p>Bear in mind any metric filters you add will apply to the first date range, not the second.</p>
-</div>
-<div id="code" class="section level2">
-<h2>Code</h2>
-<p>The below is implemented in R using <a href="http://code.markedmondson.me/googleAnalyticsR/"><code>googleAnalyticsR</code></a></p>
-<p>We first load the library, authenticate and set our ViewID:</p>
-<pre class="r"><code>library(googleAnalyticsR)
-ga_auth()
+<p>This project wouldn&rsquo;t have been possible without the help of the excellent work gone beforehand by <a href="https://www.analyticspros.com/blog/data-science/streaming-prebid-data-google-bigquery/">Luke Cempre&rsquo;s post on AnalyticsPros</a> for streaming data from Google Tag Manager to BigQuery, and <a href="http://jkunst.com/">Joshua Kunst</a> for his help with the Highcharts JavaScript.</p>
 
-al &lt;- google_analytics_account_list()
+<h2 id="data-flows">Data flows</h2>
 
-gaid &lt;- yourViewID</code></pre>
-<p>These are some helper functions to get the start and end dates of last month, and the same month the year before:</p>
-<pre class="r"><code>#&#39; Start of the month
-#&#39; @param x A date
-som &lt;- function(x) {
-  as.Date(format(x, &quot;%Y-%m-01&quot;))
-}
+<p>There are two data flows in this project.  The first adds data to BigQuery:</p>
 
-#&#39; End of the month
-#&#39; @param x A date
-eom &lt;- function(x) {
-  som(som(x) + 35) - 1
-}
+<ol>
+<li>GTM collects data into its dataLayer from a web visit.</li>
+<li>A custom HTML tag in GTM collects the data you want to stream then calls an App Engine URL with its data payload.</li>
+<li>The app engine URL is sent to a queue to add the data to BigQuery.</li>
+<li>The data plus a timestamp is put into a BigQuery row.</li>
+</ol>
 
-#&#39; Start and end of month
-get_start_end_month &lt;- function(x = Sys.Date()){
-  c(som(som(x) - 1), som(x) - 1)
-}
+<p>Then to read the data:</p>
 
-last_month &lt;- get_start_end_month()
-year_before &lt;- get_start_end_month(Sys.Date() - 365)</code></pre>
-<p>We now create an SEO filter as we only want to examine SEO traffic, and a transactions over 0 metric filter:</p>
-<pre class="r"><code>## only organic traffic
-seo_filter &lt;- filter_clause_ga4(list(dim_filter(&quot;medium&quot;, 
-                                                 &quot;EXACT&quot;, 
-                                                 &quot;organic&quot;)
-                               ))
-                               
-## met filters are on the first date
-transaction0 &lt;- filter_clause_ga4(list(met_filter(&quot;transactions&quot;, 
-                                                  &quot;GREATER_THAN&quot;, 
-                                                  0)))</code></pre>
-<p>This is the sorting parameter, that we specify to be by the biggest change in transactions from last year at the top of the results:</p>
-<pre class="r"><code>## order by the delta change of year_before - last_month
-delta_trans &lt;- order_type(&quot;transactions&quot;,&quot;DESCENDING&quot;, &quot;DELTA&quot;)</code></pre>
-<p>We now make the Google Analytics API v4 call:</p>
-<pre class="r"><code>gadata &lt;- google_analytics_4(gaid,
-                             date_range = c(year_before, last_month),
-                             metrics = c(&quot;visits&quot;,&quot;transactions&quot;,&quot;transactionRevenue&quot;),
-                             dimensions = c(&quot;landingPagePath&quot;),
-                             dim_filters = seo_filter,
-                             met_filters = transaction0,
-                             order = delta_trans,
-                             max = 20)</code></pre>
-<p>You should now have the top 20 most declined landing pages from last year measured by e-commerce transactions. Much easier than downloading all pages and doing the delta calculations yourself.</p>
-<p>If you want to get the absolute number of declined transactions, you can add the column via:</p>
-<pre class="r"><code>gadata$transactions.delta &lt;- gadata$transactions.d2 - gadata$transactions.d1</code></pre>
-</div>
-<div id="summary" class="section level2">
-<h2>Summary</h2>
-<p>With this data you can now focus on making SEO improvements to those pages so they can reclaim their past glory, at the very least its a good starting point for investigations.</p>
-</div>
+<ol>
+<li>The Shiny app calls an App Engine URL.</li>
+<li>App Engine queries the BigQuery table and returns the most recent rows as JSON.</li>
+<li>Shiny reads the JSON and puts it into a reactive dataset.</li>
+<li>A forecast is made with the updated data.</li>
+<li>The Highcharts visualisation reads the changing dataset, and adds it to the visualisation.</li>
+</ol>
 
+<p>This blog will cover the first, putting data into BigQuery.</p>
 
+<h2 id="bigquery-configuration">BigQuery configuration</h2>
+
+<p>Starting with BigQuery, you need to create a project, dataset and a table where the data will stream to.  The script we will use on App Engine assumes you have one field called &ldquo;ts&rdquo; which will hold a timestamp, other than that add the fields you will add in the Google Tag Manager script.</p>
+
+<p>Select &ldquo;partitioned&rdquo; table when creating, which is useful if holding more than one days worth of data.</p>
+
+<p>A demo is shown below, where the <code>ts</code> field is joined by the page URL and referrer for that page:</p>
+
+<p><img src="../images/BQconfig.png" alt="bqconfig" /></p>
+
+<h2 id="google-app-engine">Google App Engine</h2>
+
+<p>Next we get to the meat with the Google App Engine app. The code for the finished app is available on Github here:</p>
+
+<p><a href="https://github.com/MarkEdmondson1234/ga-bq-stream">https://github.com/MarkEdmondson1234/ga-bq-stream</a></p>
+
+<p>There is a guide on how to install and configure the app there too on its <a href="https://github.com/MarkEdmondson1234/ga-bq-stream/blob/master/README.md">README</a>.</p>
+
+<p>In this example the app both reads and writes the data to BigQuery, but in production this should be separated out to avoid hitting quotas.</p>
+
+<p>App Engine is useful in providing a way to run a script (in this case Python) whenever a URL is called, and also providing the infrastructure that lets you scale those hits from a free small amount to billions if you pay up.</p>
+
+<p>In essence we upload a Python script and tell App Engine to run the script when certain URL endpoints are called, and then we shall call that URL from Google Tag Manager with the data we want to stream.</p>
+
+<p>We now walk through the important functions of the app:</p>
+
+<h3 id="adding-data-to-bigquery">Adding data to BigQuery</h3>
+
+<p>You can read more about <a href="https://cloud.google.com/bigquery/streaming-data-into-bigquery">streaming data into BigQuery here</a>.</p>
+
+<p>The first function is modified from the <a href="https://github.com/GoogleCloudPlatform/python-docs-samples/blob/master/bigquery/cloud-client/stream_data.py">python BigQuery examples</a> and takes care of authentication, loading the JSON sent to the app into a Python list and sending to BigQuery:</p>
+
+<pre><code>def stream_data(dataset_name, table_name, json_data, time_stamp = time.time()):
+    bigquery_client = bigquery.Client()
+    dataset = bigquery_client.dataset(dataset_name)
+    table = dataset.table(table_name)
+    data = json_data
+
+    data['ts'] = time_stamp
+
+    # Reload the table to get the schema.
+    table.reload()
+
+    ## get the names of schema
+    schema = table.schema
+    schema_names = [o.name for o in schema]
+
+    logging.debug('BQ Schema: {}'.format(schema_names))
+
+    # from schema names get list of tuples of the values
+    rows = [(data[x] for x in schema_names)]
+
+    # Send data to bigquery, returning any errors
+    errors = table.insert_data(rows, row_ids = str(uuid.uuid4()))
+
+    if not errors:
+    	logging.debug('Loaded 1 row into {}:{}'.format(dataset_name, table_name))
+    else:
+        logging.error(errors)
+</code></pre>
+
+<p>The next class reads the data from a GET or POST request to the URL we specify later, and puts the job into a task queue, along with the timestamp.</p>
+
+<pre><code>class MainHandler(webapp2.RequestHandler):
+
+	## for debugging
+	def get(self):
+		## allows CORS
+		self.response.headers.add_header(&quot;Access-Control-Allow-Origin&quot;, &quot;*&quot;)
+
+		## get example.com?bq=blah
+		b = self.request.get(&quot;bq&quot;)
+
+		## send to async task URL
+		task = taskqueue.add(url='/bq-task', params={'bq': b, 'ts': str(time.time())})
+
+	# use in prod
+	def post(self):
+		## allows CORS
+		self.response.headers.add_header(&quot;Access-Control-Allow-Origin&quot;, &quot;*&quot;)
+
+		## get example.com?bq=blah
+		b = self.request.get(&quot;bq&quot;)
+
+		## send to task URL
+		task = taskqueue.add(url='/bq-task', params={'bq': b, 'ts': str(time.time())})
+</code></pre>
+
+<p>The task queue then reads the JSON data and calls the function to send data into BigQuery.  App Engine task queues will rerun if any connection problems and act as a buffer, so you can configure them to suit the needs and volumes of your app.</p>
+
+<pre><code>class BqHandler(webapp2.RequestHandler):
+	def post(self):
+
+		## get example.com/bq-task?bq=blah
+		b = self.request.get(&quot;bq&quot;)
+		ts = self.request.get(&quot;ts&quot;)
+
+		b = json.loads(b)
+
+		logging.debug('json load: {}'.format(b))
+
+		if len(b) &gt; 0:
+			datasetId = os.environ['DATASET_ID']
+			tableId   = os.environ['TABLE_ID']
+
+			today = date.today().strftime(&quot;%Y%m%d&quot;)
+
+			tableId = &quot;%s$%s&quot;%(tableId, today)
+
+			stream_data(datasetId, tableId, b, ts)
+
+</code></pre>
+
+<h3 id="full-app-engine-script">Full App Engine Script</h3>
+
+<p>The full script uploaded is available in the Github repository here: <a href="https://github.com/MarkEdmondson1234/ga-bq-stream/blob/master/main.py">main.py</a> which also includes the read functions used in the next blogpost.</p>
+
+<p>With this script you then need some configuration files for the app and upload it to your Google Project.  A guide on how to deploy this is and more is available from the <a href="https://github.com/MarkEdmondson1234/ga-bq-stream/blob/master/README.md">Github repository README</a>, but once done the app will be available at <code>https://YOUR-PROJECT-ID.appspot.com</code> and you will call the <code>/bq-streamer</code> and <code>/bq-get</code> URLs to send and get data.</p>
+
+<h2 id="google-tag-manager">Google Tag Manager</h2>
+
+<p>With the app ready, we now move to sending it data via Google Tag Manager.  This is relatively simple, since we just need to decide which data to add to the endpoint URL:</p>
+
+<pre><code>&lt;script&gt;
+
+  var bqArray = {};
+        
+  // put the variables you want realtime here      
+  bqArray[&quot;fieldname&quot;] = &quot;{{dataLayer}}&quot;;
+  bqArray[&quot;fieldname2&quot;] = &quot;{{dataLayer2}}&quot;;
+  	
+  jQuery.post(&quot;https://YOUR-PROJECT-ID.appspot.com/bq-streamer&quot;, {&quot;bq&quot;:JSON.stringify(bqArray)});
+
+&lt;/script&gt;
+</code></pre>
+
+<p>The script assumes you have jQuery defined on your website, if you haven&rsquo;t you will need to load it either on the page or hack it a bit by loading above the script via:</p>
+
+<pre><code>&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+
+<p>For my blog example, here is a screenshot from GTM all configured:</p>
+
+<p><img src="../images/GTMconfig.png" alt="gtm" /></p>
+
+<p>The app engine supports GET or POST hits, GET is useful for testing in the browser yourself but its better to POST in production as it supports more data.</p>
+
+<p>Add this as a custom HTML tag and deploy on a trigger that occurs after the data you want to collect is there.  Thats pretty much it.</p>
+
+<p>Once the tag is published, make sure you have deployed the App Engine app and you are using the exact same field names as the BigQuery table.</p>
+
+<h1 id="checking-its-all-working">Checking its all working</h1>
+
+<p>You should then be able to start seeing hits in the App Engine logs and in BigQuery (don&rsquo;t forget to turn off caching of results).  By default the BQ queries in the UI cache the results, so don&rsquo;t forget to turn those off, but then as new hits are made to the GTM container you should be able to refresh and see the results in BigQuery within a few seconds.  Here is the example from my blog:</p>
+
+<p><img src="../images/itsalive.png" alt="its-alive" /></p>
+
+<p>And thats it!  You could now query this table from various solutions such as Tableau or Data Studio, but in part two of this post I&rsquo;ll go in to how to query this table from an R Shiny application, updating a forecast and displaying using the Highcharts library.</p>
 
             </div>
             <footer class="article-footer">
-    <a data-url="http://code.markedmondson.me/insights-sorting-by-delta-metrics-in-the-google-analytics-api-v4" data-id="39380b7b735935c4e92646bd0b665eb0" class="article-share-link">
+    <a data-url="http://code.markedmondson.me/real-time-gtm-google-cloud-r-shiny-1/" data-id="bc1c5d2ec1ebb9518f633821279477ac" class="article-share-link">
         <i class="fa fa-share"></i>
         Share
     </a>
     
-    <a href="http://code.markedmondson.me/insights-sorting-by-delta-metrics-in-the-google-analytics-api-v4/#disqus_thread" class="article-comment-link">
+    <a href="http://code.markedmondson.me/real-time-gtm-google-cloud-r-shiny-1//#disqus_thread" class="article-comment-link">
         Comments
     </a>
     
@@ -476,21 +593,14 @@ delta_trans &lt;- order_type(&quot;transactions&quot;,&quot;DESCENDING&quot;, &q
         
 <nav id="article-nav">
     
-    <a href="http://code.markedmondson.me/launch-rstudio-server-in-the-google-cloud-with-two-lines-of-r" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="http://code.markedmondson.me/insights-sorting-by-delta-metrics-in-the-google-analytics-api-v4" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">
           Older
       </strong>
-      <div class="article-nav-title">Launch RStudio Server in the Google Cloud with two lines of R</div>
+      <div class="article-nav-title">Insights sorting by delta metrics in the Google Analytics API v4</div>
     </a>
     
 
-    
-    <a href="http://code.markedmondson.me/real-time-gtm-google-cloud-r-shiny-1/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">
-          Newer
-      </strong>
-      <div class="article-nav-title">Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one</div>
-    </a>
     
 </nav>
 
@@ -503,9 +613,9 @@ delta_trans &lt;- order_type(&quot;transactions&quot;,&quot;DESCENDING&quot;, &q
             <div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_shortname = 'markedmondson';
-    var disqus_identifier = 'http:\/\/code.markedmondson.me\/insights-sorting-by-delta-metrics-in-the-google-analytics-api-v4';
-    var disqus_title = 'Insights sorting by delta metrics in the Google Analytics API v4';
-    var disqus_url = 'http:\/\/code.markedmondson.me\/insights-sorting-by-delta-metrics-in-the-google-analytics-api-v4';
+    var disqus_identifier = 'http:\/\/code.markedmondson.me\/real-time-gtm-google-cloud-r-shiny-1\/';
+    var disqus_title = 'Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one';
+    var disqus_url = 'http:\/\/code.markedmondson.me\/real-time-gtm-google-cloud-r-shiny-1\/';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -535,7 +645,7 @@ delta_trans &lt;- order_type(&quot;transactions&quot;,&quot;DESCENDING&quot;, &q
                 <div class="item-thumbnail">
                     <a href="http://code.markedmondson.me/real-time-gtm-google-cloud-r-shiny-1/" class="thumbnail">
                     
-                        <span style="background-image:url(http://code.markedmondson.me/images/itsalive.png)" alt="Insights sorting by delta metrics in the Google Analytics API v4" class="thumbnail-image"></span>
+                        <span style="background-image:url(http://code.markedmondson.me/images/itsalive.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -552,7 +662,7 @@ delta_trans &lt;- order_type(&quot;transactions&quot;,&quot;DESCENDING&quot;, &q
                 <div class="item-thumbnail">
                     <a href="http://code.markedmondson.me/insights-sorting-by-delta-metrics-in-the-google-analytics-api-v4" class="thumbnail">
                     
-                        <span style="background-image:url(http://code.markedmondson.me/banners/delta.png)" alt="Insights sorting by delta metrics in the Google Analytics API v4" class="thumbnail-image"></span>
+                        <span style="background-image:url(http://code.markedmondson.me/banners/delta.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -569,7 +679,7 @@ delta_trans &lt;- order_type(&quot;transactions&quot;,&quot;DESCENDING&quot;, &q
                 <div class="item-thumbnail">
                     <a href="http://code.markedmondson.me/launch-rstudio-server-in-the-google-cloud-with-two-lines-of-r" class="thumbnail">
                     
-                        <span style="background-image:url(http://code.markedmondson.me/banners/rstudio-gce.png)" alt="Insights sorting by delta metrics in the Google Analytics API v4" class="thumbnail-image"></span>
+                        <span style="background-image:url(http://code.markedmondson.me/banners/rstudio-gce.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -586,7 +696,7 @@ delta_trans &lt;- order_type(&quot;transactions&quot;,&quot;DESCENDING&quot;, &q
                 <div class="item-thumbnail">
                     <a href="http://code.markedmondson.me/a-digital-analytics-workflow-through-the-google-cloud-using-r" class="thumbnail">
                     
-                        <span style="background-image:url(http://code.markedmondson.me/images/r-infrastructure.png)" alt="Insights sorting by delta metrics in the Google Analytics API v4" class="thumbnail-image"></span>
+                        <span style="background-image:url(http://code.markedmondson.me/images/r-infrastructure.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -603,7 +713,7 @@ delta_trans &lt;- order_type(&quot;transactions&quot;,&quot;DESCENDING&quot;, &q
                 <div class="item-thumbnail">
                     <a href="http://code.markedmondson.me/efficient-anti-sampling-with-the-google-analytics-reporting-api" class="thumbnail">
                     
-                        <span style="background-image:url(http://code.markedmondson.me/banners/sampling-ga.png)" alt="Insights sorting by delta metrics in the Google Analytics API v4" class="thumbnail-image"></span>
+                        <span style="background-image:url(http://code.markedmondson.me/banners/sampling-ga.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
                     
                     </a>
                 </div>

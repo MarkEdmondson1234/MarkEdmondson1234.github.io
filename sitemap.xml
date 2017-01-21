@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://code.markedmondson.me/real-time-forecasting-dashboard-with-google-tag-manager-google-cloud-and-r-shiny---part-one</loc>
+    <loc>http://code.markedmondson.me/real-time-gtm-google-cloud-r-shiny-1/</loc>
     <lastmod>2017-01-12T23:03:57+01:00</lastmod>
   </url>
   
@@ -37,7 +37,7 @@
   </url>
   
   <url>
-    <loc>http://code.markedmondson.me/scheduling-r-scripts-for-a-team-using-rstudio-server-docker-github-and-google-compute-engine</loc>
+    <loc>http://code.markedmondson.me/setting-up-scheduled-r-scripts-for-an-analytics-team/</loc>
     <lastmod>2016-04-21T23:03:57+01:00</lastmod>
   </url>
   
