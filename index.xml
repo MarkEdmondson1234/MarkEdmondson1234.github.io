@@ -1619,10 +1619,10 @@ gcloud compute instances start your-r-server-name
     
     <item>
       <title>googleAuthR 0.2.0</title>
-      <link>http://code.markedmondson.me/googleauthr-0.2.0/</link>
+      <link>http://code.markedmondson.me/googleauthr-0.2.0</link>
       <pubDate>Fri, 05 Feb 2016 23:03:57 +0100</pubDate>
       
-      <guid>http://code.markedmondson.me/googleauthr-0.2.0/</guid>
+      <guid>http://code.markedmondson.me/googleauthr-0.2.0</guid>
       <description>
 
 &lt;p&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/googleAuthR&#34;&gt;googleAuthR&lt;/a&gt; is now on CRAN version 0.2.0.&lt;/p&gt;
