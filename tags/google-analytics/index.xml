@@ -1,0 +1,780 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Google Analytics on Mark Edmondson</title>
+    <link>http://code.markedmondson.me/tags/google-analytics/index.xml</link>
+    <description>Recent content in Google Analytics on Mark Edmondson</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-GB</language>
+    <copyright>Powered by [Hugo](//gohugo.io). Theme by [PPOffice](http://github.com/ppoffice).</copyright>
+    <atom:link href="http://code.markedmondson.me/tags/google-analytics/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one</title>
+      <link>http://code.markedmondson.me/real-time-forecasting-dashboard-with-google-tag-manager-google-cloud-and-r-shiny---part-one</link>
+      <pubDate>Thu, 12 Jan 2017 23:03:57 +0100</pubDate>
+      
+      <guid>http://code.markedmondson.me/real-time-forecasting-dashboard-with-google-tag-manager-google-cloud-and-r-shiny---part-one</guid>
+      <description>
+
+&lt;p&gt;In part one of this two part series we walk through the steps to stream data from a &lt;a href=&#34;https://www.google.com/analytics/tag-manager/&#34;&gt;Google Tag Manager&lt;/a&gt; (GTM) implementation into a &lt;a href=&#34;https://cloud.google.com/appengine/&#34;&gt;Google App Engine&lt;/a&gt; (GAE) web app, which then adds data to a &lt;a href=&#34;https://cloud.google.com/bigquery/&#34;&gt;BigQuery&lt;/a&gt; table via BigQuery&amp;rsquo;s data streaming capability.  In part two, we then go into how to query that table in realtime from R, make a forecast use &lt;a href=&#34;https://shiny.rstudio.com/&#34;&gt;Shiny&lt;/a&gt; and use the JavaScript visualisation library &lt;a href=&#34;http://jkunst.com/highcharter/&#34;&gt;Highcharts&lt;/a&gt; to visualise the data.&lt;/p&gt;
+
+&lt;p&gt;The project combines several languages where their advantages lie: Python for its interaction with Google APIs and its quick start creating your own API on App Engine, SQL to query the BigQuery data itself, R for its forecasting libraries and the reactive Shiny framework, and JavaScript for the visualisation and data capture at the Google Tag Manager end.&lt;/p&gt;
+
+&lt;h2 id=&#34;thanks&#34;&gt;Thanks&lt;/h2&gt;
+
+&lt;p&gt;This project wouldn&amp;rsquo;t have been possible without the help of the excellent work gone beforehand by &lt;a href=&#34;https://www.analyticspros.com/blog/data-science/streaming-prebid-data-google-bigquery/&#34;&gt;Luke Cempre&amp;rsquo;s post on AnalyticsPros&lt;/a&gt; for streaming data from Google Tag Manager to BigQuery, and &lt;a href=&#34;http://jkunst.com/&#34;&gt;Joshua Kunst&lt;/a&gt; for his help with the Highcharts JavaScript.&lt;/p&gt;
+
+&lt;h2 id=&#34;data-flows&#34;&gt;Data flows&lt;/h2&gt;
+
+&lt;p&gt;There are two data flows in this project.  The first adds data to BigQuery:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;GTM collects data into its dataLayer from a web visit.&lt;/li&gt;
+&lt;li&gt;A custom HTML tag in GTM collects the data you want to stream then calls an App Engine URL with its data payload.&lt;/li&gt;
+&lt;li&gt;The app engine URL is sent to a queue to add the data to BigQuery.&lt;/li&gt;
+&lt;li&gt;The data plus a timestamp is put into a BigQuery row.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Then to read the data:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;The Shiny app calls an App Engine URL.&lt;/li&gt;
+&lt;li&gt;App Engine queries the BigQuery table and returns the most recent rows as JSON.&lt;/li&gt;
+&lt;li&gt;Shiny reads the JSON and puts it into a reactive dataset.&lt;/li&gt;
+&lt;li&gt;A forecast is made with the updated data.&lt;/li&gt;
+&lt;li&gt;The Highcharts visualisation reads the changing dataset, and adds it to the visualisation.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;This blog will cover the first, putting data into BigQuery.&lt;/p&gt;
+
+&lt;h2 id=&#34;bigquery-configuration&#34;&gt;BigQuery configuration&lt;/h2&gt;
+
+&lt;p&gt;Starting with BigQuery, you need to create a project, dataset and a table where the data will stream to.  The script we will use on App Engine assumes you have one field called &amp;ldquo;ts&amp;rdquo; which will hold a timestamp, other than that add the fields you will add in the Google Tag Manager script.&lt;/p&gt;
+
+&lt;p&gt;Select &amp;ldquo;partitioned&amp;rdquo; table when creating, which is useful if holding more than one days worth of data.&lt;/p&gt;
+
+&lt;p&gt;A demo is shown below, where the &lt;code&gt;ts&lt;/code&gt; field is joined by the page URL and referrer for that page:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;../images/BQconfig.png&#34; alt=&#34;bqconfig&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;google-app-engine&#34;&gt;Google App Engine&lt;/h2&gt;
+
+&lt;p&gt;Next we get to the meat with the Google App Engine app. The code for the finished app is available on Github here:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/ga-bq-stream&#34;&gt;https://github.com/MarkEdmondson1234/ga-bq-stream&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;There is a guide on how to install and configure the app there too on its &lt;a href=&#34;https://github.com/MarkEdmondson1234/ga-bq-stream/blob/master/README.md&#34;&gt;README&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In this example the app both reads and writes the data to BigQuery, but in production this should be separated out to avoid hitting quotas.&lt;/p&gt;
+
+&lt;p&gt;App Engine is useful in providing a way to run a script (in this case Python) whenever a URL is called, and also providing the infrastructure that lets you scale those hits from a free small amount to billions if you pay up.&lt;/p&gt;
+
+&lt;p&gt;In essence we upload a Python script and tell App Engine to run the script when certain URL endpoints are called, and then we shall call that URL from Google Tag Manager with the data we want to stream.&lt;/p&gt;
+
+&lt;p&gt;We now walk through the important functions of the app:&lt;/p&gt;
+
+&lt;h3 id=&#34;adding-data-to-bigquery&#34;&gt;Adding data to BigQuery&lt;/h3&gt;
+
+&lt;p&gt;You can read more about &lt;a href=&#34;https://cloud.google.com/bigquery/streaming-data-into-bigquery&#34;&gt;streaming data into BigQuery here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The first function is modified from the &lt;a href=&#34;https://github.com/GoogleCloudPlatform/python-docs-samples/blob/master/bigquery/cloud-client/stream_data.py&#34;&gt;python BigQuery examples&lt;/a&gt; and takes care of authentication, loading the JSON sent to the app into a Python list and sending to BigQuery:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;def stream_data(dataset_name, table_name, json_data, time_stamp = time.time()):
+    bigquery_client = bigquery.Client()
+    dataset = bigquery_client.dataset(dataset_name)
+    table = dataset.table(table_name)
+    data = json_data
+
+    data[&#39;ts&#39;] = time_stamp
+
+    # Reload the table to get the schema.
+    table.reload()
+
+    ## get the names of schema
+    schema = table.schema
+    schema_names = [o.name for o in schema]
+
+    logging.debug(&#39;BQ Schema: {}&#39;.format(schema_names))
+
+    # from schema names get list of tuples of the values
+    rows = [(data[x] for x in schema_names)]
+
+    # Send data to bigquery, returning any errors
+    errors = table.insert_data(rows, row_ids = str(uuid.uuid4()))
+
+    if not errors:
+    	logging.debug(&#39;Loaded 1 row into {}:{}&#39;.format(dataset_name, table_name))
+    else:
+        logging.error(errors)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The next class reads the data from a GET or POST request to the URL we specify later, and puts the job into a task queue, along with the timestamp.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class MainHandler(webapp2.RequestHandler):
+
+	## for debugging
+	def get(self):
+		## allows CORS
+		self.response.headers.add_header(&amp;quot;Access-Control-Allow-Origin&amp;quot;, &amp;quot;*&amp;quot;)
+
+		## get example.com?bq=blah
+		b = self.request.get(&amp;quot;bq&amp;quot;)
+
+		## send to async task URL
+		task = taskqueue.add(url=&#39;/bq-task&#39;, params={&#39;bq&#39;: b, &#39;ts&#39;: str(time.time())})
+
+	# use in prod
+	def post(self):
+		## allows CORS
+		self.response.headers.add_header(&amp;quot;Access-Control-Allow-Origin&amp;quot;, &amp;quot;*&amp;quot;)
+
+		## get example.com?bq=blah
+		b = self.request.get(&amp;quot;bq&amp;quot;)
+
+		## send to task URL
+		task = taskqueue.add(url=&#39;/bq-task&#39;, params={&#39;bq&#39;: b, &#39;ts&#39;: str(time.time())})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The task queue then reads the JSON data and calls the function to send data into BigQuery.  App Engine task queues will rerun if any connection problems and act as a buffer, so you can configure them to suit the needs and volumes of your app.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class BqHandler(webapp2.RequestHandler):
+	def post(self):
+
+		## get example.com/bq-task?bq=blah
+		b = self.request.get(&amp;quot;bq&amp;quot;)
+		ts = self.request.get(&amp;quot;ts&amp;quot;)
+
+		b = json.loads(b)
+
+		logging.debug(&#39;json load: {}&#39;.format(b))
+
+		if len(b) &amp;gt; 0:
+			datasetId = os.environ[&#39;DATASET_ID&#39;]
+			tableId   = os.environ[&#39;TABLE_ID&#39;]
+
+			today = date.today().strftime(&amp;quot;%Y%m%d&amp;quot;)
+
+			tableId = &amp;quot;%s$%s&amp;quot;%(tableId, today)
+
+			stream_data(datasetId, tableId, b, ts)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;full-app-engine-script&#34;&gt;Full App Engine Script&lt;/h3&gt;
+
+&lt;p&gt;The full script uploaded is available in the Github repository here: &lt;a href=&#34;https://github.com/MarkEdmondson1234/ga-bq-stream/blob/master/main.py&#34;&gt;main.py&lt;/a&gt; which also includes the read functions used in the next blogpost.&lt;/p&gt;
+
+&lt;p&gt;With this script you then need some configuration files for the app and upload it to your Google Project.  A guide on how to deploy this is and more is available from the &lt;a href=&#34;https://github.com/MarkEdmondson1234/ga-bq-stream/blob/master/README.md&#34;&gt;Github repository README&lt;/a&gt;, but once done the app will be available at &lt;code&gt;https://YOUR-PROJECT-ID.appspot.com&lt;/code&gt; and you will call the &lt;code&gt;/bq-streamer&lt;/code&gt; and &lt;code&gt;/bq-get&lt;/code&gt; URLs to send and get data.&lt;/p&gt;
+
+&lt;h2 id=&#34;google-tag-manager&#34;&gt;Google Tag Manager&lt;/h2&gt;
+
+&lt;p&gt;With the app ready, we now move to sending it data via Google Tag Manager.  This is relatively simple, since we just need to decide which data to add to the endpoint URL:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;script&amp;gt;
+
+  var bqArray = {};
+        
+  // put the variables you want realtime here      
+  bqArray[&amp;quot;fieldname&amp;quot;] = &amp;quot;{{dataLayer}}&amp;quot;;
+  bqArray[&amp;quot;fieldname2&amp;quot;] = &amp;quot;{{dataLayer2}}&amp;quot;;
+  	
+  jQuery.post(&amp;quot;https://YOUR-PROJECT-ID.appspot.com/bq-streamer&amp;quot;, {&amp;quot;bq&amp;quot;:JSON.stringify(bqArray)});
+
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The script assumes you have jQuery defined on your website, if you haven&amp;rsquo;t you will need to load it either on the page or hack it a bit by loading above the script via:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;script src=&amp;quot;//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For my blog example, here is a screenshot from GTM all configured:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;../images/GTMconfig.png&#34; alt=&#34;gtm&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The app engine supports GET or POST hits, GET is useful for testing in the browser yourself but its better to POST in production as it supports more data.&lt;/p&gt;
+
+&lt;p&gt;Add this as a custom HTML tag and deploy on a trigger that occurs after the data you want to collect is there.  Thats pretty much it.&lt;/p&gt;
+
+&lt;p&gt;Once the tag is published, make sure you have deployed the App Engine app and you are using the exact same field names as the BigQuery table.&lt;/p&gt;
+
+&lt;h1 id=&#34;checking-its-all-working&#34;&gt;Checking its all working&lt;/h1&gt;
+
+&lt;p&gt;You should then be able to start seeing hits in the App Engine logs and in BigQuery (don&amp;rsquo;t forget to turn off caching of results).  By default the BQ queries in the UI cache the results, so don&amp;rsquo;t forget to turn those off, but then as new hits are made to the GTM container you should be able to refresh and see the results in BigQuery within a few seconds.  Here is the example from my blog:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;../images/itsalive.png&#34; alt=&#34;its-alive&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And thats it!  You could now query this table from various solutions such as Tableau or Data Studio, but in part two of this post I&amp;rsquo;ll go in to how to query this table from an R Shiny application, updating a forecast and displaying using the Highcharts library.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Insights sorting by delta metrics in the Google Analytics API v4</title>
+      <link>http://code.markedmondson.me/insights-sorting-by-delta-metrics-in-the-google-analytics-api-v4</link>
+      <pubDate>Thu, 01 Dec 2016 23:03:57 +0100</pubDate>
+      
+      <guid>http://code.markedmondson.me/insights-sorting-by-delta-metrics-in-the-google-analytics-api-v4</guid>
+      <description>---
+title: Insights sorting by delta metrics in the Google Analytics API v4
+comments: true
+date: &#34;2016-12-01T23:03:57+01:00&#34;
+tags: [&#34;R&#34;,&#34;google-analytics&#34;]
+banner: banners/delta.png
+---
+
+
+&lt;!-- BLOGDOWN-BODY-BEFORE
+
+/BLOGDOWN-BODY-BEFORE --&gt;
+
+&lt;p&gt;As analysts, we are often called upon to see how website metrics have improved or declined over time. This is easy enough when looking at trends, but if you are looking to break down over other dimensions, it can involve a lot of ETL to get to what you need.&lt;/p&gt;
+&lt;p&gt;For instance, if you are looking at landing page performance of SEO traffic you can sort by the top performers, but not by the top &lt;em&gt;most improved&lt;/em&gt; performers. To see that you need to first extract your metrics for one month, extract it again for the comparison month, join the datasets on the page dimension and then create and sort by a delta metric. For large websites, you can be exporting millions of URLs just so you can see say the top 20 most improved.&lt;/p&gt;
+&lt;p&gt;This comes from the fact the Google Analytics web UI and Data Studio don’t let you sort by the &lt;em&gt;change&lt;/em&gt; of a metric. However, this is available in the Google Analytics API v4 so a small demo on how to it and how it can be useful is shown here.&lt;/p&gt;
+&lt;div id=&#34;extracting-the-data&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Extracting the data&lt;/h2&gt;
+&lt;p&gt;In v4, you can pass in two date ranges in one call. When you do this a new ordering type comes available, the &lt;a href=&#34;https://developers.google.com/analytics/devguides/reporting/core/v4/basics#delta_ordering&#34;&gt;&lt;code&gt;DELTA&lt;/code&gt;&lt;/a&gt; which is what we can use to sort the results.&lt;/p&gt;
+&lt;p&gt;Bear in mind any metric filters you add will apply to the first date range, not the second.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;code&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Code&lt;/h2&gt;
+&lt;p&gt;The below is implemented in R using &lt;a href=&#34;http://code.markedmondson.me/googleAnalyticsR/&#34;&gt;&lt;code&gt;googleAnalyticsR&lt;/code&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;We first load the library, authenticate and set our ViewID:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(googleAnalyticsR)
+ga_auth()
+
+al &amp;lt;- google_analytics_account_list()
+
+gaid &amp;lt;- yourViewID&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;These are some helper functions to get the start and end dates of last month, and the same month the year before:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#&amp;#39; Start of the month
+#&amp;#39; @param x A date
+som &amp;lt;- function(x) {
+  as.Date(format(x, &amp;quot;%Y-%m-01&amp;quot;))
+}
+
+#&amp;#39; End of the month
+#&amp;#39; @param x A date
+eom &amp;lt;- function(x) {
+  som(som(x) + 35) - 1
+}
+
+#&amp;#39; Start and end of month
+get_start_end_month &amp;lt;- function(x = Sys.Date()){
+  c(som(som(x) - 1), som(x) - 1)
+}
+
+last_month &amp;lt;- get_start_end_month()
+year_before &amp;lt;- get_start_end_month(Sys.Date() - 365)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We now create an SEO filter as we only want to examine SEO traffic, and a transactions over 0 metric filter:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;## only organic traffic
+seo_filter &amp;lt;- filter_clause_ga4(list(dim_filter(&amp;quot;medium&amp;quot;, 
+                                                 &amp;quot;EXACT&amp;quot;, 
+                                                 &amp;quot;organic&amp;quot;)
+                               ))
+                               
+## met filters are on the first date
+transaction0 &amp;lt;- filter_clause_ga4(list(met_filter(&amp;quot;transactions&amp;quot;, 
+                                                  &amp;quot;GREATER_THAN&amp;quot;, 
+                                                  0)))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This is the sorting parameter, that we specify to be by the biggest change in transactions from last year at the top of the results:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;## order by the delta change of year_before - last_month
+delta_trans &amp;lt;- order_type(&amp;quot;transactions&amp;quot;,&amp;quot;DESCENDING&amp;quot;, &amp;quot;DELTA&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We now make the Google Analytics API v4 call:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;gadata &amp;lt;- google_analytics_4(gaid,
+                             date_range = c(year_before, last_month),
+                             metrics = c(&amp;quot;visits&amp;quot;,&amp;quot;transactions&amp;quot;,&amp;quot;transactionRevenue&amp;quot;),
+                             dimensions = c(&amp;quot;landingPagePath&amp;quot;),
+                             dim_filters = seo_filter,
+                             met_filters = transaction0,
+                             order = delta_trans,
+                             max = 20)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You should now have the top 20 most declined landing pages from last year measured by e-commerce transactions. Much easier than downloading all pages and doing the delta calculations yourself.&lt;/p&gt;
+&lt;p&gt;If you want to get the absolute number of declined transactions, you can add the column via:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;gadata$transactions.delta &amp;lt;- gadata$transactions.d2 - gadata$transactions.d1&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;summary&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Summary&lt;/h2&gt;
+&lt;p&gt;With this data you can now focus on making SEO improvements to those pages so they can reclaim their past glory, at the very least its a good starting point for investigations.&lt;/p&gt;
+&lt;/div&gt;
+
+
+&lt;!-- BLOGDOWN-HEAD
+
+
+
+
+/BLOGDOWN-HEAD --&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Efficient anti-sampling with the Google Analytics Reporting API</title>
+      <link>http://code.markedmondson.me/efficient-anti-sampling-with-the-google-analytics-reporting-api</link>
+      <pubDate>Fri, 05 Aug 2016 23:03:57 +0100</pubDate>
+      
+      <guid>http://code.markedmondson.me/efficient-anti-sampling-with-the-google-analytics-reporting-api</guid>
+      <description>
+
+&lt;p&gt;Avoiding sampling is one of the most common reasons people start using the Google Analytics API.  This blog lays out some pseudo-code to do so in an efficient manner, avoiding too many unnecessary API calls.  The approach is used in the v4 calls for the R package &lt;a href=&#34;http://code.markedmondson.me/googleAnalyticsR/v4.html&#34;&gt;&lt;code&gt;googleAnalyticsR&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;avoiding-the-daily-walk&#34;&gt;Avoiding the daily walk&lt;/h2&gt;
+
+&lt;p&gt;The most common approach to mitigate sampling is to break down the API calls into one call per day.  This has some problems:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Its inefficient.&lt;/strong&gt;  If you have 80% sampling or 10% sampling, you use the same number of API calls.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;It takes a long time.&lt;/strong&gt;  A year long fetch is 365 calls of 5+ seconds that can equate to a 30mins+ wait.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;It doesn’t always work.&lt;/strong&gt; If you have so many sessions its sampled for one day, you will still have sampling, albeit at a lower rate.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;anti-sampling-based-on-session-size&#34;&gt;Anti-sampling based on session size&lt;/h2&gt;
+
+&lt;p&gt;Google Analytics sampling works as &lt;a href=&#34;https://support.google.com/analytics/answer/2637192&#34;&gt;outlined in this Google article&lt;/a&gt;.  The main points are that if your API call covers a date range greater than set session limits, it will return a sampled call.&lt;/p&gt;
+
+&lt;p&gt;The session limits vary according to if you are using Google Analytics 360 and other unknown factors in a sampling algorithm.  Fortunately, this information is available in the API responses via the &lt;code&gt;samplesReadCounts&lt;/code&gt; and &lt;code&gt;samplingSpaceSizes&lt;/code&gt; meta data.  See the &lt;a href=&#34;https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet#ReportData&#34;&gt;v4 API reference&lt;/a&gt; for their definitions.&lt;/p&gt;
+
+&lt;p&gt;These values change per API call, so the general strategy is to make two exploratory API calls first to get the sampling information and the number of sessions over the desired date period, then use that information to construct batches of calls over date ranges that are small enough to avoid sampling, but large enough to not waste API calls.&lt;/p&gt;
+
+&lt;p&gt;The two exploratory API calls to find the meta data are more than made up for once you have saved calls in the actual data fetch.&lt;/p&gt;
+
+&lt;h2 id=&#34;how-it-works-in-practice-80-quicker-data&#34;&gt;How it works in practice - 80%+ quicker data&lt;/h2&gt;
+
+&lt;p&gt;Following this approach, I have found a huge improvement in time spent for sampled calls, making it much more useable in say dynamic dashboards where waiting 30 mins for data is not an option.&lt;/p&gt;
+
+&lt;p&gt;An example response from the &lt;code&gt;googleAnalyticsR&lt;/code&gt; library is shown below - for a month&amp;rsquo;s worth of unsampled data  that would have taken 30 API calls via a daily walk, I get the same in 5 (2 to find batch sizes, 3 to get the data).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;&amp;gt; library(googleAnalyticsR)
+&amp;gt; ga_auth()
+&amp;gt; ga_data &amp;lt;- 
+    google_analytics_4(id, 
+                       date_range = c(&amp;quot;2016-01-01&amp;quot;,
+                                      &amp;quot;2016-02-01&amp;quot;), 
+                       metrics = c(&amp;quot;sessions&amp;quot;,
+                                   &amp;quot;bounceRate&amp;quot;), 
+                       dimensions = c(&amp;quot;date&amp;quot;,
+                                      &amp;quot;landingPagePath&amp;quot;,
+                                      &amp;quot;source&amp;quot;), 
+                       anti_sample = TRUE)
+                                
+anti_sample set to TRUE. Mitigating sampling via multiple API calls.
+Finding how much sampling in data request...
+Data is sampled, based on 54.06% of visits.
+Downloaded [10] rows from a total of [76796].
+Finding number of sessions for anti-sample calculations...
+Downloaded [32] rows from a total of [32].
+Calculated [3] batches are needed to download [113316] rows unsampled.
+Anti-sample call covering 10 days: 2016-01-01, 2016-01-10
+Downloaded [38354] rows from a total of [38354].
+Anti-sample call covering 20 days: 2016-01-11, 2016-01-30
+Downloaded [68475] rows from a total of [68475].
+Anti-sample call covering 2 days: 2016-01-31, 2016-02-01
+Downloaded [6487] rows from a total of [6487].
+Finished unsampled data request, total rows [113316]
+Successfully avoided sampling
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The time saved gets even greater the longer the time period you request.&lt;/p&gt;
+
+&lt;h2 id=&#34;limitations&#34;&gt;Limitations&lt;/h2&gt;
+
+&lt;p&gt;As with daily walk anti-sample techniques, user metrics and unique users are linked to the date range you are querying, so this technique will not match the numbers as if you queried over the whole date range.&lt;/p&gt;
+
+&lt;p&gt;The sampling session limit is also applied at a web property level, not View for non-GA360 accounts, so its best to use this on a Raw data View, as filters will cause the session calculations be incorrect.&lt;/p&gt;
+
+&lt;h2 id=&#34;example-pseudo-code&#34;&gt;Example pseudo-code&lt;/h2&gt;
+
+&lt;p&gt;R code that implements the above is &lt;a href=&#34;https://github.com/MarkEdmondson1234/googleAnalyticsR/blob/master/R/anti_sample.R&#34;&gt;available here&lt;/a&gt;, but the pseudo-code below is intended for you to port to different languages:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// Get the unsampled data
+test_call = get_ga_api(full_date_range, 
+                       metrics = your_metrics, 
+                       dimensions = your_dimensions)
+
+// # Read the sample meta data
+
+// read_counts is the number of sessions before sampling starts
+// I make it 10% smaller to ensure its small enough as
+// it seems a bit flakey
+read_counts = meta_data(test_call, &amp;quot;sampledReadCounts&amp;quot;)
+read_counts = read_counts * 0.9
+
+// space_size is total amount of sessions sampling was used for
+space_size = meta_data(test_call, &amp;quot;samplingSpaceSizes&amp;quot;)
+
+// dividing by each gives the % of sampling in the API call
+samplingPercent = read_counts / space_size
+
+// if there is no sample meta data, its not sampled. We&#39;re done!
+if(read_counts = NULL or space_size = NULL):
+  return(test_call)
+  
+// ..otherwise its sampled
+// # get info for batch size calculations
+
+// I found rowCount returned from a sampled call was not equal 
+// to an unsampled call, so I add 20% to rowCount to adjust
+rowCount = meta_data(test_call, &amp;quot;rowCount&amp;quot;)
+rowCount = rowCount * 1.2
+
+// get the number of sessions per day
+date_sessions = get_ga_api(full_date_range, 
+                           metric = &amp;quot;sessions&amp;quot;, 
+                           dimensions = &amp;quot;date&amp;quot;)
+
+// get the cumulative number of sessions over the year
+date_sessions.cumulative = cumsum(date_sessions.sessions)
+
+// modulus divide the cumulative sessions by the 
+// sample read_counts.
+date_sessions.sample_bucket = date_sessions.cumulative %% 
+                                            read_counts
+
+// get the new date ranges per sample_bucket group
+new_date_ranges = get_min_and_max_date(date_sessions)
+
+// new_date_ranges should now hold the smaller date ranges 
+// for each batched API call
+
+// # call GA api with new date ranges
+
+total = empty_matrix
+
+for i in new_date_ranges:
+
+  if(new_date_ranges[i].start == new_date_ranges[i].end):
+    // only one day so split calls into hourly
+    // see below for do_hourly() explanation
+    batch_call = do_hourly(new_date_range.start, 
+                           metrics = your_metrics, 
+                           dimensions = your_dimensions)
+  else:
+    // multi-day batching
+    batch_call = get_ga_api(new_date_ranges[i], 
+                            metrics = your_metrics, 
+                            dimensions = your_dimensions)
+                            
+  total = total + batch_call
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;per-hour-fetching-do-hourly&#34;&gt;Per hour fetching do_hourly()&lt;/h3&gt;
+
+&lt;p&gt;The &lt;code&gt;do_hourly()&lt;/code&gt; function is very similar to the above code for daily, but with a fetch to examine the session distribution per hour.  I only call it when necessary since it is a lot more API calls and its an edge case.&lt;/p&gt;
+
+&lt;p&gt;If you need anti-sampling for sub-hourly, then you should really be looking at using the &lt;a href=&#34;http://code.markedmondson.me/googleAnalyticsR/big-query.html&#34;&gt;BigQuery Google Analytics 360 exports&lt;/a&gt;. :)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>SEO keyword research using searchConsoleR and googleAnalyticsR</title>
+      <link>http://code.markedmondson.me/seo-keyword-research-using-searchconsoler-and-googleanalyticsr</link>
+      <pubDate>Tue, 21 Jun 2016 23:03:57 +0100</pubDate>
+      
+      <guid>http://code.markedmondson.me/seo-keyword-research-using-searchconsoler-and-googleanalyticsr</guid>
+      <description>
+
+&lt;p&gt;In this blog we look at a method to estimate where to prioritise your SEO resources, estimating which keywords will give the greatest increase in revenue if you could improve their Google rank.&lt;/p&gt;
+
+&lt;h2 id=&#34;overview&#34;&gt;Overview&lt;/h2&gt;
+
+&lt;p&gt;&lt;em&gt;Thanks to &lt;a href=&#34;https://data-seo.com/&#34;&gt;Vincent at data-seo.com&lt;/a&gt; who proof read and corrected some errors in the first draft&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Data comes from &lt;a href=&#34;https://www.google.com/webmasters/tools/home&#34;&gt;Google Search Console&lt;/a&gt; and &lt;a href=&#34;https://www.google.com/webmasters/tools/home?hl=en&#34;&gt;Google Analytics&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Search Console is used to provide the keywords in these days post &lt;a href=&#34;http://www.notprovidedcount.com/&#34;&gt;(not provided)&lt;/a&gt;.  We then link the two data sets by using the URLs as a key, and estimate how much each keyword made in revenue by splitting them in the same proportion as the traffic they have sent to the page.&lt;/p&gt;
+
+&lt;p&gt;This approach assumes each keyword converts at the same rate once on the page, and will work better with some more websites more than others - the best results I have seen are those websites with a lot of content on seperate URLs, such that they capture long-tail queries.  This is because the amount of keywords per URL is small, but with enough volume to make the estimates trustworthy.&lt;/p&gt;
+
+&lt;p&gt;We also try to incorporate magins of error in the results.  This avoids situations where one click on position 40 gets a massive weighting in potential revenue, which in reality could have been a freak event.&lt;/p&gt;
+
+&lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
+
+&lt;p&gt;The method produced a targeted keyword list of 226 from an original seed list of ~21,000.  The top 30 revenue targets are shown in the plot below:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;{{ site.baseurl }}/images/see-potential.png&#34; alt=&#34;seo-forecast-estimate&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Read below on how the plot was generated and what the figures mean.&lt;/p&gt;
+
+&lt;h2 id=&#34;getting-the-data&#34;&gt;Getting the data&lt;/h2&gt;
+
+&lt;p&gt;Google Analytics recently provided more integration between the Search Console imports and the web session data, of which &lt;a href=&#34;http://online-behavior.com/analytics/search-console&#34;&gt;Daniel Waisberg has an excellent walk-through&lt;/a&gt;, which could mean you can skip the first part of this script.&lt;/p&gt;
+
+&lt;p&gt;However, there are circumstances where the integration won&amp;rsquo;t work, such as when the URLs in Google Analytics are a different format to Search Console - with the below script you have control on how to link the URLs, by formatting them to look the same.&lt;/p&gt;
+
+&lt;p&gt;Data is provided via my &lt;a href=&#34;https://cran.r-project.org/web/packages/searchConsoleR/index.html&#34;&gt;searchConsoleR&lt;/a&gt; and &lt;a href=&#34;http://code.markedmondson.me/googleAnalyticsR/&#34;&gt;googleAnalyticsR&lt;/a&gt; R packages.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(searchConsoleR)
+library(googleAnalyticsR)
+
+## authentication with both GA and SC
+options(googleAuthR.scopes.selected = 
+  c(&amp;quot;https://www.googleapis.com/auth/webmasters&amp;quot;,
+    &amp;quot;https://www.googleapis.com/auth/analytics&amp;quot;,
+    &amp;quot;https://www.googleapis.com/auth/analytics.readonly&amp;quot;))
+    
+googleAuthR::gar_auth()
+
+## replace with your GA ID
+ga_id &amp;lt;- 1111111 
+
+## date range to fetch
+start &amp;lt;- as.character(Sys.Date() - 93)
+end &amp;lt;- &amp;quot;2016-06-01&amp;quot;
+
+## Using new GA v4 API
+## GAv4 filters
+google_seo &amp;lt;- 
+  filter_clause_ga4(list(dim_filter(&amp;quot;medium&amp;quot;, 
+                                     &amp;quot;EXACT&amp;quot;, 
+                                     &amp;quot;organic&amp;quot;),
+                          dim_filter(&amp;quot;source&amp;quot;, 
+                                     &amp;quot;EXACT&amp;quot;, 
+                                     &amp;quot;google&amp;quot;)),
+                     operator = &amp;quot;AND&amp;quot;)
+
+## Getting the GA data
+gadata &amp;lt;-
+  google_analytics_4(ga_id,
+                     date_range = c(start,end),
+                     metrics = c(&amp;quot;sessions&amp;quot;,
+                                 &amp;quot;transactions&amp;quot;,
+                                 &amp;quot;transactionRevenue&amp;quot;),
+                     dimensions = c(&amp;quot;landingPagePath&amp;quot;),
+                     dim_filters = google_seo,
+                     order = order_type(&amp;quot;transactions&amp;quot;, 
+                                        sort_order = &amp;quot;DESC&amp;quot;, 
+                                        orderType = &amp;quot;VALUE&amp;quot;),
+                     max = 20000)
+
+## Getting the Search Console data
+## The development version &amp;gt;0.2.0.9000 lets you get more than 5000 rows
+scdata &amp;lt;- search_analytics(&amp;quot;http://www.example.co.uk&amp;quot;, 
+                           startDate = start, endDate = end,
+                           dimensions = c(&amp;quot;page&amp;quot;,&amp;quot;query&amp;quot;),
+                           rowLimit = 20000)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;transforming-the-data&#34;&gt;Transforming the data&lt;/h2&gt;
+
+&lt;p&gt;First we change the Search Console URLs into the same format as Google Analytics.  In this example, the hostname is appended to the GA URLs already (a reason why the native support won&amp;rsquo;t work), but you may also need to append the hostname to the GA URLs via &lt;code&gt;paste0(&amp;quot;www.yourdomain.com&amp;quot;, gadata$page)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;We also get the search page result (e.g. Page 1 = 1-10, Page 2 = 11-20) as it may be useful.&lt;/p&gt;
+
+&lt;p&gt;For the split of revenue later, the last call calculates the % of clicks going to each URL.&lt;/p&gt;
+
+&lt;h3 id=&#34;search-console-data-transformation&#34;&gt;Search Console data transformation&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(dplyr)
+
+## get urls in same format
+
+## this will differ from website to website, 
+## but in most cases you will need to add the domain to the GA urls:
+## gadata$page &amp;lt;- paste0(&amp;quot;www.yourdomain.com&amp;quot;, gadata$landingPagePath)
+## gadata has urls www.example.com/pagePath
+## scdata has urls in http://www.example.com/pagePath
+scdata$page2 &amp;lt;- gsub(&amp;quot;http://&amp;quot;,&amp;quot;&amp;quot;, scdata$page)
+
+## get SERP
+scdata$serp &amp;lt;- cut(scdata$position, 
+                   breaks = seq(1, 100, 10), 
+                   labels = as.character(1:9),
+                   include.lowest = TRUE, 
+                   ordered_result = TRUE)
+
+## % of SEO traffic to each page per keyword
+scdata &amp;lt;- scdata %&amp;gt;% 
+  group_by(page2) %&amp;gt;% 
+  mutate(clickP = clicks / sum(clicks)) %&amp;gt;%
+  ungroup()
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;merging-with-google-analytics&#34;&gt;Merging with Google Analytics&lt;/h3&gt;
+
+&lt;p&gt;Now we merge the data, and calculate the estimates of revenue, transactions and sessions.&lt;/p&gt;
+
+&lt;p&gt;Why estimate sessions when we already have them?  This is how we assess how accurate this approach is - if the clicks is roughly the same as the estimated sessions, we can go further.&lt;/p&gt;
+
+&lt;p&gt;The accuracy metric is assessed as the ratio between the estiamted sessions and the clicks, minus 1.  This will be 0 when 100% accuracy, and then the further away from 0 the figure is the less we trust the results.&lt;/p&gt;
+
+&lt;p&gt;We also round the avergae position to the nearest whole number.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(dplyr)
+
+## join data on page
+joined_data &amp;lt;- gadata %&amp;gt;% 
+  left_join(scdata, by = c(landingPagePath = &amp;quot;page2&amp;quot;)) %&amp;gt;%
+  mutate(transactionsEst = clickP*transactions,
+         revenueEst = clickP*transactionRevenue,
+         sessionEst = clickP*sessions,
+         accuracyEst = ((sessionEst / clicks) - 1),
+         positionRound = round(position))
+
+## we only want clicks over 0, and get rid of a few columns.
+tidy_data &amp;lt;- joined_data %&amp;gt;% 
+  filter(clicks &amp;gt; 0) %&amp;gt;% 
+  select(-page, -sessions, -transactions, -transactionRevenue) 
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;is-it-reliable&#34;&gt;Is it reliable?&lt;/h3&gt;
+
+&lt;p&gt;A histogram of the accuracy estimate shows we consistently over estimate but the clicks and estimated sessions are within a magnitude:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;{{ site.baseurl }}/images/histogram1.png&#34; alt=&#34;keyword-sessio-click-estimate-histogram&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Most of the session estimates were intrestingly around 1.3 times more than the clicks.  This may be because Search Console clicks act more like Google SEO users, but any other ideas please say in comments!&lt;/p&gt;
+
+&lt;p&gt;From above I discarded all rows with an accuracy &amp;gt; 10 as unreliable, although you may want to be stricter in your criteria.  All figures are to be taken with a pinch of salt with this many assumptions, but if the relative performance looked ok then I feel there is still enough to get some action from the data.&lt;/p&gt;
+
+&lt;h2 id=&#34;creating-the-seo-forecasts&#34;&gt;Creating the SEO forecasts&lt;/h2&gt;
+
+&lt;p&gt;We now use the data to create a click curve table, with estimates on the CTR for each position, and the confidence in those results.&lt;/p&gt;
+
+&lt;p&gt;I first attempted some models on making predictions of click curves for a website, but didn&amp;rsquo;t find any general satisifactory regressions.&lt;/p&gt;
+
+&lt;p&gt;The diagram below uses a weighted &lt;code&gt;loess&lt;/code&gt; within &lt;code&gt;ggplot2&lt;/code&gt; which is good to show trend but not for making predictions.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;{{ site.baseurl }}/images/ctr_scatter.png&#34; alt=&#34;ctr-scatter-plot&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;a-click-curve-to-use&#34;&gt;A click curve to use&lt;/h3&gt;
+
+&lt;p&gt;However, 99% of the time we will only be concerned with the top 10, so it wasn&amp;rsquo;t too taxing to calculate the click through rates per website based on the data they had:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(dplyr)
+
+click_curve &amp;lt;- tidy_data %&amp;gt;% 
+  group_by(positionRound) %&amp;gt;% 
+  summarise(CTRmean = sum(clicks) / sum(impressions),
+            n = n(),
+            click.sum = sum(clicks),
+            impressions.sum = sum(impressions),
+            sd = sd(ctr),
+            E = poisson.test(click.sum)$conf.int[2] / poisson.test(impressions.sum)$conf.int[1],
+            lower = CTRmean - E/2,
+            upper = CTRmean + E/2) %&amp;gt;% ungroup()
+
+## add % increase to position 1
+## could also include other positions
+click_curve &amp;lt;- click_curve %&amp;gt;% 
+  mutate(CTR1 = CTRmean[1] / CTRmean,
+         CTR1.upper = upper[1] / upper,
+         CTR1.lower = lower[1] / lower)
+
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;{{ site.baseurl }}/images/ctr-curve.png&#34; alt=&#34;ctr-curve-seo&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;These CTR rates are then used to predict how much more traffic/revenue etc. a keyword could get if they moved up to position 1.&lt;/p&gt;
+
+&lt;h3 id=&#34;how-valuable-is-a-keyword-if-position-1&#34;&gt;How valuable is a keyword if position 1?&lt;/h3&gt;
+
+&lt;p&gt;Once happy with the click curve, we now apply it to the original data, and work out estimates on SEO revenue for each keyword if they were at position 1.&lt;/p&gt;
+
+&lt;p&gt;I trust results more if they have had more than 10 clicks, and the accuracy estimate figure is within 10 of 0. I would play around with this limits a little yourself to get something you can work with.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(dplyr)
+## combine with data
+
+predict_click &amp;lt;- tidy_data1 %&amp;gt;% 
+  mutate(positionRound = round(position)) %&amp;gt;%
+  left_join(click_curve, by=c(positionRound = &amp;quot;positionRound&amp;quot;)) %&amp;gt;%
+  mutate(revenueEst1 = revenueEst * CTR1,
+         transEst1 = transactionsEst * CTR1,
+         clickEst1 = clicks * CTR1,
+         sessionsEst1 = sessionEst * CTR1,
+         revenueEst1.lower = revenueEst * CTR1.lower,
+         revenueEst1.upper = revenueEst * CTR1.upper,
+         revenueEst1.change = revenueEst1 - revenueEst)
+
+estimates &amp;lt;- predict_click %&amp;gt;% 
+  select(landingPagePath, query, clicks, impressions, 
+         ctr, position, serp, revenueEst, revenueEst1, 
+         revenueEst1.change, revenueEst1.lower, revenueEst1.upper, 
+         accuracyEst) %&amp;gt;%
+  arrange(desc(revenueEst1)) %&amp;gt;% 
+  dplyr::filter(abs(accuracyEst) &amp;lt; 10, 
+                revenueEst1.change &amp;gt; 0, 
+                clicks &amp;gt; 10)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;estimates&lt;/code&gt; now in this example holds 226 rows sorted in order or how much revenue they are to make if position #1 in Google. This is from an original keyword list of 21437, which is at least a way to narrow down to important keywords.&lt;/p&gt;
+
+&lt;h2 id=&#34;plotting-the-data&#34;&gt;Plotting the data&lt;/h2&gt;
+
+&lt;p&gt;All that remains to to present the data: limiting the keywords to the top 30 lets you present like below.&lt;/p&gt;
+
+&lt;p&gt;The bars show the range of the estimate, as you can see its quite wide but lets you be more realistic in your expectations.&lt;/p&gt;
+
+&lt;p&gt;The number in the middle of the bar is the current position, with the revenue at the x axis and keyword on the y.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;{{ site.baseurl }}/images/see-potential.png&#34; alt=&#34;seo-forecast-estimate&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;ggplot2-code&#34;&gt;ggplot2 code&lt;/h3&gt;
+
+&lt;p&gt;To create the plots in this post, please see the ggplot2 code below.  Feel free to modify for your own needs:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(ggplot2)
+
+## CTR per position
+ctr_plot &amp;lt;- ggplot(tidy_data, aes(x = position, 
+                                  y = ctr
+                                  ))
+ctr_plot &amp;lt;- ctr_plot + theme_minimal()
+ctr_plot &amp;lt;- ctr_plot + coord_cartesian(xlim = c(1,30), 
+                                       ylim = c(0, 0.5))
+ctr_plot &amp;lt;- ctr_plot + geom_point(aes(alpha = log(clicks),
+                                      color = serp, 
+                                      size = clicks))
+ctr_plot &amp;lt;- ctr_plot + geom_smooth(aes(weight = clicks), 
+                                   size = 0.2)
+ctr_plot + scale_y_continuous(labels = scales::percent)
+ctr_plot
+
+hh &amp;lt;- ggplot(click_curve, aes(positionRound, CTRmean)) 
+hh &amp;lt;- hh + theme_minimal()
+hh &amp;lt;- hh + geom_line(linetype = 2) + coord_cartesian(xlim = c(1, 30), 
+                                                     ylim = c(0,0.5))
+hh &amp;lt;- hh + geom_ribbon(aes(positionRound, ymin = lower, ymax = upper), 
+                       alpha = 0.2, 
+                       fill = &amp;quot;orange&amp;quot;)
+hh &amp;lt;- hh + scale_y_continuous(labels = scales::percent)
+hh &amp;lt;- hh + geom_point() 
+hh &amp;lt;- hh + geom_label(aes(label = scales::percent(CTRmean)))
+hh
+
+
+est_plot &amp;lt;- ggplot(estimates[1:30,], 
+                   aes(reorder(query, revenueEst1), 
+                       revenueEst1, 
+                       ymax = revenueEst1.upper, 
+                       ymin =  revenueEst1.lower))
+est_plot &amp;lt;- est_plot + theme_minimal() + coord_flip()
+
+est_plot &amp;lt;- est_plot + geom_crossbar(aes(fill = cut(accuracyEst, 
+                                                    3, 
+                                                    labels = c(&amp;quot;Good&amp;quot;,
+                                                               &amp;quot;Ok&amp;quot;,
+                                                               &amp;quot;Poor&amp;quot;))
+                                                               ), 
+                                     alpha = 0.7, 
+                                     show.legend = FALSE)
+                                     
+est_plot &amp;lt;- est_plot + scale_x_discrete(name = &amp;quot;Query&amp;quot;)
+est_plot &amp;lt;- est_plot + scale_y_continuous(name = &amp;quot;Estimated SEO Revenue Increase for Google #1&amp;quot;, 
+                                          labels = scales::dollar_format(prefix = &amp;quot;£&amp;quot;))
+est_plot &amp;lt;- est_plot + geom_label(aes(label = round(position)), 
+                                  hjust = &amp;quot;center&amp;quot;)
+est_plot &amp;lt;- est_plot + ggtitle(&amp;quot;SEO Potential Revenue (Current position)&amp;quot;)
+est_plot
+
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
