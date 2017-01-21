@@ -12,10 +12,10 @@
     
     <item>
       <title>Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one</title>
-      <link>http://code.markedmondson.me/real-time-gtm-google-cloud-r-shiny-1</link>
+      <link>http://code.markedmondson.me/real-time-forecasting-dashboard-with-google-tag-manager-google-cloud-and-r-shiny---part-one</link>
       <pubDate>Thu, 12 Jan 2017 23:03:57 +0100</pubDate>
       
-      <guid>http://code.markedmondson.me/real-time-gtm-google-cloud-r-shiny-1</guid>
+      <guid>http://code.markedmondson.me/real-time-forecasting-dashboard-with-google-tag-manager-google-cloud-and-r-shiny---part-one</guid>
       <description>
 
 &lt;p&gt;In part one of this two part series we walk through the steps to stream data from a &lt;a href=&#34;https://www.google.com/analytics/tag-manager/&#34;&gt;Google Tag Manager&lt;/a&gt; (GTM) implementation into a &lt;a href=&#34;https://cloud.google.com/appengine/&#34;&gt;Google App Engine&lt;/a&gt; (GAE) web app, which then adds data to a &lt;a href=&#34;https://cloud.google.com/bigquery/&#34;&gt;BigQuery&lt;/a&gt; table via BigQuery&amp;rsquo;s data streaming capability.  In part two, we then go into how to query that table in realtime from R, make a forecast use &lt;a href=&#34;https://shiny.rstudio.com/&#34;&gt;Shiny&lt;/a&gt; and use the JavaScript visualisation library &lt;a href=&#34;http://jkunst.com/highcharter/&#34;&gt;Highcharts&lt;/a&gt; to visualise the data.&lt;/p&gt;
@@ -1076,10 +1076,10 @@ est_plot
     
     <item>
       <title>Scheduling R scripts for a team using RStudio Server, Docker, Github and Google Compute Engine</title>
-      <link>http://code.markedmondson.me/setting-up-scheduled-r-scripts-for-an-analytics-team</link>
+      <link>http://code.markedmondson.me/scheduling-r-scripts-for-a-team-using-rstudio-server-docker-github-and-google-compute-engine</link>
       <pubDate>Thu, 21 Apr 2016 23:03:57 +0100</pubDate>
       
-      <guid>http://code.markedmondson.me/setting-up-scheduled-r-scripts-for-an-analytics-team</guid>
+      <guid>http://code.markedmondson.me/scheduling-r-scripts-for-a-team-using-rstudio-server-docker-github-and-google-compute-engine</guid>
       <description>
 
 &lt;p&gt;&lt;em&gt;edit 20th November, 2016 - now everything in this post is abstracted away and available in the googleComputeEngineR package - I would say its a lot easier to use that.  Here is a post on getting started with it. &lt;a href=&#34;http://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/&#34;&gt;http://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
