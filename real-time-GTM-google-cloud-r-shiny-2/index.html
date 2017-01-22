@@ -483,7 +483,7 @@ do_bq &lt;- function(limit){
 
 <p>For realtime applications, <code>shiny::reactivePoll()</code> is a function that periodically checks a datasource for changes.</p>
 
-<p>ow, what constitutes &ldquo;realtime&rdquo; is debatable here - for my applications I really only need an update every ~30 seconds.  Practically the Shiny output dims when updating with data, so for periods less than say 10 seconds it may not be the best approach for you - updating directly via JavaScript libraries may be better, and rely on say OpenCPU to provide the forecasting or another JS library.</p>
+<p>Now, what constitutes &ldquo;realtime&rdquo; is debatable here - for my applications I really only need an update every ~30 seconds.  Practically the Shiny output dims when updating with data, so for periods less than say 10 seconds it may not be the best approach for you - updating directly via JavaScript libraries may be better, and rely on say OpenCPU to provide the forecasting or another JS library.</p>
 
 <p>However, for my purposes I just need something better than the Google Analytics 4-hour lag in data (for GA360) and this suits well, particularly as you can apply a whole host of R data functions to the output.</p>
 
@@ -646,7 +646,7 @@ shinyUI(fluidPage(
 
 <p>Ideally I&rsquo;d like to avoid the Shiny grey-out when new data is fetched and the graph redraw - I fiddled a bit trying to get the JavaScript to take data from an R table and pull it in directly put that didn&rsquo;t work out - I may update it if its figured out later.</p>
 
-<p>However, as I said above for my applicaiton I needed an update only every 60 seconds so it wasn&rsquo;t worth too much trouble over.  If say you needed (and who really <em>needs</em> this?) a smooth update every 5 seconds say, the grey out would be too often to be useable.</p>
+<p>However, as I said above for my application I needed an update only every 60 seconds so it wasn&rsquo;t worth too much trouble over.  But if say you needed (and who really <em>needs</em> this?) a smooth update every 5 seconds, the grey out would be too often to be useable.</p>
 
 <h2 id="summary">Summary</h2>
 
