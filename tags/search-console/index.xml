@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Search Console on Mark Edmondson</title>
+    <link>http://code.markedmondson.me/tags/search-console/index.xml</link>
+    <description>Recent content in Search Console on Mark Edmondson</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-GB</language>
+    <copyright>Powered by [Hugo](//gohugo.io). Theme by [PPOffice](http://github.com/ppoffice).</copyright>
+    <atom:link href="http://code.markedmondson.me/tags/search-console/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>SEO keyword research using searchConsoleR and googleAnalyticsR</title>
+      <link>http://code.markedmondson.me/search-console-google-analytics-r-keyword-research/</link>
+      <pubDate>Tue, 21 Jun 2016 23:03:57 +0100</pubDate>
+      
+      <guid>http://code.markedmondson.me/search-console-google-analytics-r-keyword-research/</guid>
+      <description>
+
+&lt;p&gt;In this blog we look at a method to estimate where to prioritise your SEO resources, estimating which keywords will give the greatest increase in revenue if you could improve their Google rank.&lt;/p&gt;
+
+&lt;h2 id=&#34;overview&#34;&gt;Overview&lt;/h2&gt;
+
+&lt;p&gt;&lt;em&gt;Thanks to &lt;a href=&#34;https://data-seo.com/&#34;&gt;Vincent at data-seo.com&lt;/a&gt; who proof read and corrected some errors in the first draft&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Data comes from &lt;a href=&#34;https://www.google.com/webmasters/tools/home&#34;&gt;Google Search Console&lt;/a&gt; and &lt;a href=&#34;https://www.google.com/webmasters/tools/home?hl=en&#34;&gt;Google Analytics&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Search Console is used to provide the keywords in these days post &lt;a href=&#34;http://www.notprovidedcount.com/&#34;&gt;(not provided)&lt;/a&gt;.  We then link the two data sets by using the URLs as a key, and estimate how much each keyword made in revenue by splitting them in the same proportion as the traffic they have sent to the page.&lt;/p&gt;
+
+&lt;p&gt;This approach assumes each keyword converts at the same rate once on the page, and will work better with some more websites more than others - the best results I have seen are those websites with a lot of content on seperate URLs, such that they capture long-tail queries.  This is because the amount of keywords per URL is small, but with enough volume to make the estimates trustworthy.&lt;/p&gt;
+
+&lt;p&gt;We also try to incorporate magins of error in the results.  This avoids situations where one click on position 40 gets a massive weighting in potential revenue, which in reality could have been a freak event.&lt;/p&gt;
+
+&lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
+
+&lt;p&gt;The method produced a targeted keyword list of 226 from an original seed list of ~21,000.  The top 30 revenue targets are shown in the plot below:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://code.markedmondson.me/images/see-potential.png&#34; alt=&#34;seo-forecast-estimate&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Read below on how the plot was generated and what the figures mean.&lt;/p&gt;
+
+&lt;h2 id=&#34;getting-the-data&#34;&gt;Getting the data&lt;/h2&gt;
+
+&lt;p&gt;Google Analytics recently provided more integration between the Search Console imports and the web session data, of which &lt;a href=&#34;http://online-behavior.com/analytics/search-console&#34;&gt;Daniel Waisberg has an excellent walk-through&lt;/a&gt;, which could mean you can skip the first part of this script.&lt;/p&gt;
+
+&lt;p&gt;However, there are circumstances where the integration won&amp;rsquo;t work, such as when the URLs in Google Analytics are a different format to Search Console - with the below script you have control on how to link the URLs, by formatting them to look the same.&lt;/p&gt;
+
+&lt;p&gt;Data is provided via my &lt;a href=&#34;https://cran.r-project.org/web/packages/searchConsoleR/index.html&#34;&gt;searchConsoleR&lt;/a&gt; and &lt;a href=&#34;http://code.markedmondson.me/googleAnalyticsR/&#34;&gt;googleAnalyticsR&lt;/a&gt; R packages.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(searchConsoleR)
+library(googleAnalyticsR)
+
+## authentication with both GA and SC
+options(googleAuthR.scopes.selected = 
+  c(&amp;quot;https://www.googleapis.com/auth/webmasters&amp;quot;,
+    &amp;quot;https://www.googleapis.com/auth/analytics&amp;quot;,
+    &amp;quot;https://www.googleapis.com/auth/analytics.readonly&amp;quot;))
+    
+googleAuthR::gar_auth()
+
+## replace with your GA ID
+ga_id &amp;lt;- 1111111 
+
+## date range to fetch
+start &amp;lt;- as.character(Sys.Date() - 93)
+end &amp;lt;- &amp;quot;2016-06-01&amp;quot;
+
+## Using new GA v4 API
+## GAv4 filters
+google_seo &amp;lt;- 
+  filter_clause_ga4(list(dim_filter(&amp;quot;medium&amp;quot;, 
+                                     &amp;quot;EXACT&amp;quot;, 
+                                     &amp;quot;organic&amp;quot;),
+                          dim_filter(&amp;quot;source&amp;quot;, 
+                                     &amp;quot;EXACT&amp;quot;, 
+                                     &amp;quot;google&amp;quot;)),
+                     operator = &amp;quot;AND&amp;quot;)
+
+## Getting the GA data
+gadata &amp;lt;-
+  google_analytics_4(ga_id,
+                     date_range = c(start,end),
+                     metrics = c(&amp;quot;sessions&amp;quot;,
+                                 &amp;quot;transactions&amp;quot;,
+                                 &amp;quot;transactionRevenue&amp;quot;),
+                     dimensions = c(&amp;quot;landingPagePath&amp;quot;),
+                     dim_filters = google_seo,
+                     order = order_type(&amp;quot;transactions&amp;quot;, 
+                                        sort_order = &amp;quot;DESC&amp;quot;, 
+                                        orderType = &amp;quot;VALUE&amp;quot;),
+                     max = 20000)
+
+## Getting the Search Console data
+## The development version &amp;gt;0.2.0.9000 lets you get more than 5000 rows
+scdata &amp;lt;- search_analytics(&amp;quot;http://www.example.co.uk&amp;quot;, 
+                           startDate = start, endDate = end,
+                           dimensions = c(&amp;quot;page&amp;quot;,&amp;quot;query&amp;quot;),
+                           rowLimit = 20000)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;transforming-the-data&#34;&gt;Transforming the data&lt;/h2&gt;
+
+&lt;p&gt;First we change the Search Console URLs into the same format as Google Analytics.  In this example, the hostname is appended to the GA URLs already (a reason why the native support won&amp;rsquo;t work), but you may also need to append the hostname to the GA URLs via &lt;code&gt;paste0(&amp;quot;www.yourdomain.com&amp;quot;, gadata$page)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;We also get the search page result (e.g. Page 1 = 1-10, Page 2 = 11-20) as it may be useful.&lt;/p&gt;
+
+&lt;p&gt;For the split of revenue later, the last call calculates the % of clicks going to each URL.&lt;/p&gt;
+
+&lt;h3 id=&#34;search-console-data-transformation&#34;&gt;Search Console data transformation&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(dplyr)
+
+## get urls in same format
+
+## this will differ from website to website, 
+## but in most cases you will need to add the domain to the GA urls:
+## gadata$page &amp;lt;- paste0(&amp;quot;www.yourdomain.com&amp;quot;, gadata$landingPagePath)
+## gadata has urls www.example.com/pagePath
+## scdata has urls in http://www.example.com/pagePath
+scdata$page2 &amp;lt;- gsub(&amp;quot;http://&amp;quot;,&amp;quot;&amp;quot;, scdata$page)
+
+## get SERP
+scdata$serp &amp;lt;- cut(scdata$position, 
+                   breaks = seq(1, 100, 10), 
+                   labels = as.character(1:9),
+                   include.lowest = TRUE, 
+                   ordered_result = TRUE)
+
+## % of SEO traffic to each page per keyword
+scdata &amp;lt;- scdata %&amp;gt;% 
+  group_by(page2) %&amp;gt;% 
+  mutate(clickP = clicks / sum(clicks)) %&amp;gt;%
+  ungroup()
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;merging-with-google-analytics&#34;&gt;Merging with Google Analytics&lt;/h3&gt;
+
+&lt;p&gt;Now we merge the data, and calculate the estimates of revenue, transactions and sessions.&lt;/p&gt;
+
+&lt;p&gt;Why estimate sessions when we already have them?  This is how we assess how accurate this approach is - if the clicks is roughly the same as the estimated sessions, we can go further.&lt;/p&gt;
+
+&lt;p&gt;The accuracy metric is assessed as the ratio between the estiamted sessions and the clicks, minus 1.  This will be 0 when 100% accuracy, and then the further away from 0 the figure is the less we trust the results.&lt;/p&gt;
+
+&lt;p&gt;We also round the avergae position to the nearest whole number.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(dplyr)
+
+## join data on page
+joined_data &amp;lt;- gadata %&amp;gt;% 
+  left_join(scdata, by = c(landingPagePath = &amp;quot;page2&amp;quot;)) %&amp;gt;%
+  mutate(transactionsEst = clickP*transactions,
+         revenueEst = clickP*transactionRevenue,
+         sessionEst = clickP*sessions,
+         accuracyEst = ((sessionEst / clicks) - 1),
+         positionRound = round(position))
+
+## we only want clicks over 0, and get rid of a few columns.
+tidy_data &amp;lt;- joined_data %&amp;gt;% 
+  filter(clicks &amp;gt; 0) %&amp;gt;% 
+  select(-page, -sessions, -transactions, -transactionRevenue) 
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;is-it-reliable&#34;&gt;Is it reliable?&lt;/h3&gt;
+
+&lt;p&gt;A histogram of the accuracy estimate shows we consistently over estimate but the clicks and estimated sessions are within a magnitude:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://code.markedmondson.me/images/histogram1.png&#34; alt=&#34;keyword-sessio-click-estimate-histogram&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Most of the session estimates were intrestingly around 1.3 times more than the clicks.  This may be because Search Console clicks act more like Google SEO users, but any other ideas please say in comments!&lt;/p&gt;
+
+&lt;p&gt;From above I discarded all rows with an accuracy &amp;gt; 10 as unreliable, although you may want to be stricter in your criteria.  All figures are to be taken with a pinch of salt with this many assumptions, but if the relative performance looked ok then I feel there is still enough to get some action from the data.&lt;/p&gt;
+
+&lt;h2 id=&#34;creating-the-seo-forecasts&#34;&gt;Creating the SEO forecasts&lt;/h2&gt;
+
+&lt;p&gt;We now use the data to create a click curve table, with estimates on the CTR for each position, and the confidence in those results.&lt;/p&gt;
+
+&lt;p&gt;I first attempted some models on making predictions of click curves for a website, but didn&amp;rsquo;t find any general satisifactory regressions.&lt;/p&gt;
+
+&lt;p&gt;The diagram below uses a weighted &lt;code&gt;loess&lt;/code&gt; within &lt;code&gt;ggplot2&lt;/code&gt; which is good to show trend but not for making predictions.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://code.markedmondson.me/images/ctr_scatter.png&#34; alt=&#34;ctr-scatter-plot&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;a-click-curve-to-use&#34;&gt;A click curve to use&lt;/h3&gt;
+
+&lt;p&gt;However, 99% of the time we will only be concerned with the top 10, so it wasn&amp;rsquo;t too taxing to calculate the click through rates per website based on the data they had:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(dplyr)
+
+click_curve &amp;lt;- tidy_data %&amp;gt;% 
+  group_by(positionRound) %&amp;gt;% 
+  summarise(CTRmean = sum(clicks) / sum(impressions),
+            n = n(),
+            click.sum = sum(clicks),
+            impressions.sum = sum(impressions),
+            sd = sd(ctr),
+            E = poisson.test(click.sum)$conf.int[2] / poisson.test(impressions.sum)$conf.int[1],
+            lower = CTRmean - E/2,
+            upper = CTRmean + E/2) %&amp;gt;% ungroup()
+
+## add % increase to position 1
+## could also include other positions
+click_curve &amp;lt;- click_curve %&amp;gt;% 
+  mutate(CTR1 = CTRmean[1] / CTRmean,
+         CTR1.upper = upper[1] / upper,
+         CTR1.lower = lower[1] / lower)
+
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://code.markedmondson.me/images/ctr-curve.png&#34; alt=&#34;ctr-curve-seo&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;These CTR rates are then used to predict how much more traffic/revenue etc. a keyword could get if they moved up to position 1.&lt;/p&gt;
+
+&lt;h3 id=&#34;how-valuable-is-a-keyword-if-position-1&#34;&gt;How valuable is a keyword if position 1?&lt;/h3&gt;
+
+&lt;p&gt;Once happy with the click curve, we now apply it to the original data, and work out estimates on SEO revenue for each keyword if they were at position 1.&lt;/p&gt;
+
+&lt;p&gt;I trust results more if they have had more than 10 clicks, and the accuracy estimate figure is within 10 of 0. I would play around with this limits a little yourself to get something you can work with.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(dplyr)
+## combine with data
+
+predict_click &amp;lt;- tidy_data1 %&amp;gt;% 
+  mutate(positionRound = round(position)) %&amp;gt;%
+  left_join(click_curve, by=c(positionRound = &amp;quot;positionRound&amp;quot;)) %&amp;gt;%
+  mutate(revenueEst1 = revenueEst * CTR1,
+         transEst1 = transactionsEst * CTR1,
+         clickEst1 = clicks * CTR1,
+         sessionsEst1 = sessionEst * CTR1,
+         revenueEst1.lower = revenueEst * CTR1.lower,
+         revenueEst1.upper = revenueEst * CTR1.upper,
+         revenueEst1.change = revenueEst1 - revenueEst)
+
+estimates &amp;lt;- predict_click %&amp;gt;% 
+  select(landingPagePath, query, clicks, impressions, 
+         ctr, position, serp, revenueEst, revenueEst1, 
+         revenueEst1.change, revenueEst1.lower, revenueEst1.upper, 
+         accuracyEst) %&amp;gt;%
+  arrange(desc(revenueEst1)) %&amp;gt;% 
+  dplyr::filter(abs(accuracyEst) &amp;lt; 10, 
+                revenueEst1.change &amp;gt; 0, 
+                clicks &amp;gt; 10)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;estimates&lt;/code&gt; now in this example holds 226 rows sorted in order or how much revenue they are to make if position #1 in Google. This is from an original keyword list of 21437, which is at least a way to narrow down to important keywords.&lt;/p&gt;
+
+&lt;h2 id=&#34;plotting-the-data&#34;&gt;Plotting the data&lt;/h2&gt;
+
+&lt;p&gt;All that remains to to present the data: limiting the keywords to the top 30 lets you present like below.&lt;/p&gt;
+
+&lt;p&gt;The bars show the range of the estimate, as you can see its quite wide but lets you be more realistic in your expectations.&lt;/p&gt;
+
+&lt;p&gt;The number in the middle of the bar is the current position, with the revenue at the x axis and keyword on the y.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://code.markedmondson.me/images/see-potential.png&#34; alt=&#34;seo-forecast-estimate&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;ggplot2-code&#34;&gt;ggplot2 code&lt;/h3&gt;
+
+&lt;p&gt;To create the plots in this post, please see the ggplot2 code below.  Feel free to modify for your own needs:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(ggplot2)
+
+## CTR per position
+ctr_plot &amp;lt;- ggplot(tidy_data, aes(x = position, 
+                                  y = ctr
+                                  ))
+ctr_plot &amp;lt;- ctr_plot + theme_minimal()
+ctr_plot &amp;lt;- ctr_plot + coord_cartesian(xlim = c(1,30), 
+                                       ylim = c(0, 0.5))
+ctr_plot &amp;lt;- ctr_plot + geom_point(aes(alpha = log(clicks),
+                                      color = serp, 
+                                      size = clicks))
+ctr_plot &amp;lt;- ctr_plot + geom_smooth(aes(weight = clicks), 
+                                   size = 0.2)
+ctr_plot + scale_y_continuous(labels = scales::percent)
+ctr_plot
+
+hh &amp;lt;- ggplot(click_curve, aes(positionRound, CTRmean)) 
+hh &amp;lt;- hh + theme_minimal()
+hh &amp;lt;- hh + geom_line(linetype = 2) + coord_cartesian(xlim = c(1, 30), 
+                                                     ylim = c(0,0.5))
+hh &amp;lt;- hh + geom_ribbon(aes(positionRound, ymin = lower, ymax = upper), 
+                       alpha = 0.2, 
+                       fill = &amp;quot;orange&amp;quot;)
+hh &amp;lt;- hh + scale_y_continuous(labels = scales::percent)
+hh &amp;lt;- hh + geom_point() 
+hh &amp;lt;- hh + geom_label(aes(label = scales::percent(CTRmean)))
+hh
+
+
+est_plot &amp;lt;- ggplot(estimates[1:30,], 
+                   aes(reorder(query, revenueEst1), 
+                       revenueEst1, 
+                       ymax = revenueEst1.upper, 
+                       ymin =  revenueEst1.lower))
+est_plot &amp;lt;- est_plot + theme_minimal() + coord_flip()
+
+est_plot &amp;lt;- est_plot + geom_crossbar(aes(fill = cut(accuracyEst, 
+                                                    3, 
+                                                    labels = c(&amp;quot;Good&amp;quot;,
+                                                               &amp;quot;Ok&amp;quot;,
+                                                               &amp;quot;Poor&amp;quot;))
+                                                               ), 
+                                     alpha = 0.7, 
+                                     show.legend = FALSE)
+                                     
+est_plot &amp;lt;- est_plot + scale_x_discrete(name = &amp;quot;Query&amp;quot;)
+est_plot &amp;lt;- est_plot + scale_y_continuous(name = &amp;quot;Estimated SEO Revenue Increase for Google #1&amp;quot;, 
+                                          labels = scales::dollar_format(prefix = &amp;quot;£&amp;quot;))
+est_plot &amp;lt;- est_plot + geom_label(aes(label = round(position)), 
+                                  hjust = &amp;quot;center&amp;quot;)
+est_plot &amp;lt;- est_plot + ggtitle(&amp;quot;SEO Potential Revenue (Current position)&amp;quot;)
+est_plot
+
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

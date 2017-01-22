@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Big Query on Mark Edmondson</title>
+    <link>http://code.markedmondson.me/tags/big-query/index.xml</link>
+    <description>Recent content in Big Query on Mark Edmondson</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-GB</language>
+    <copyright>Powered by [Hugo](//gohugo.io). Theme by [PPOffice](http://github.com/ppoffice).</copyright>
+    <atom:link href="http://code.markedmondson.me/tags/big-query/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one</title>
+      <link>http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/</link>
+      <pubDate>Thu, 12 Jan 2017 23:03:57 +0100</pubDate>
+      
+      <guid>http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/</guid>
+      <description>
+
+&lt;p&gt;In part one of this two part series we walk through the steps to stream data from a &lt;a href=&#34;https://www.google.com/analytics/tag-manager/&#34;&gt;Google Tag Manager&lt;/a&gt; (GTM) implementation into a &lt;a href=&#34;https://cloud.google.com/appengine/&#34;&gt;Google App Engine&lt;/a&gt; (GAE) web app, which then adds data to a &lt;a href=&#34;https://cloud.google.com/bigquery/&#34;&gt;BigQuery&lt;/a&gt; table via BigQuery&amp;rsquo;s data streaming capability.  In part two, we then go into how to query that table in realtime from R, make a forecast use &lt;a href=&#34;https://shiny.rstudio.com/&#34;&gt;Shiny&lt;/a&gt; and use the JavaScript visualisation library &lt;a href=&#34;http://jkunst.com/highcharter/&#34;&gt;Highcharts&lt;/a&gt; to visualise the data.&lt;/p&gt;
+
+&lt;p&gt;The project combines several languages where their advantages lie: Python for its interaction with Google APIs and its quick start creating your own API on App Engine, SQL to query the BigQuery data itself, R for its forecasting libraries and the reactive Shiny framework, and JavaScript for the visualisation and data capture at the Google Tag Manager end.&lt;/p&gt;
+
+&lt;h2 id=&#34;thanks&#34;&gt;Thanks&lt;/h2&gt;
+
+&lt;p&gt;This project wouldn&amp;rsquo;t have been possible without the help of the excellent work gone beforehand by &lt;a href=&#34;https://www.analyticspros.com/blog/data-science/streaming-prebid-data-google-bigquery/&#34;&gt;Luke Cempre&amp;rsquo;s post on AnalyticsPros&lt;/a&gt; for streaming data from Google Tag Manager to BigQuery, and &lt;a href=&#34;http://jkunst.com/&#34;&gt;Joshua Kunst&lt;/a&gt; for his help with the Highcharts JavaScript.&lt;/p&gt;
+
+&lt;h2 id=&#34;data-flows&#34;&gt;Data flows&lt;/h2&gt;
+
+&lt;p&gt;There are two data flows in this project.  The first adds data to BigQuery:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;GTM collects data into its dataLayer from a web visit.&lt;/li&gt;
+&lt;li&gt;A custom HTML tag in GTM collects the data you want to stream then calls an App Engine URL with its data payload.&lt;/li&gt;
+&lt;li&gt;The app engine URL is sent to a queue to add the data to BigQuery.&lt;/li&gt;
+&lt;li&gt;The data plus a timestamp is put into a BigQuery row.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Then to read the data:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;The Shiny app calls an App Engine URL.&lt;/li&gt;
+&lt;li&gt;App Engine queries the BigQuery table and returns the most recent rows as JSON.&lt;/li&gt;
+&lt;li&gt;Shiny reads the JSON and puts it into a reactive dataset.&lt;/li&gt;
+&lt;li&gt;A forecast is made with the updated data.&lt;/li&gt;
+&lt;li&gt;The Highcharts visualisation reads the changing dataset, and adds it to the visualisation.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;This blog will cover the first, putting data into BigQuery.&lt;/p&gt;
+
+&lt;h2 id=&#34;bigquery-configuration&#34;&gt;BigQuery configuration&lt;/h2&gt;
+
+&lt;p&gt;Starting with BigQuery, you need to create a project, dataset and a table where the data will stream to.  The script we will use on App Engine assumes you have one field called &amp;ldquo;ts&amp;rdquo; which will hold a timestamp, other than that add the fields you will add in the Google Tag Manager script.&lt;/p&gt;
+
+&lt;p&gt;Select &amp;ldquo;partitioned&amp;rdquo; table when creating, which is useful if holding more than one days worth of data.&lt;/p&gt;
+
+&lt;p&gt;A demo is shown below, where the &lt;code&gt;ts&lt;/code&gt; field is joined by the page URL and referrer for that page:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;../images/BQconfig.png&#34; alt=&#34;bqconfig&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;google-app-engine&#34;&gt;Google App Engine&lt;/h2&gt;
+
+&lt;p&gt;Next we get to the meat with the Google App Engine app. The code for the finished app is available on Github here:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/ga-bq-stream&#34;&gt;https://github.com/MarkEdmondson1234/ga-bq-stream&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;There is a guide on how to install and configure the app there too on its &lt;a href=&#34;https://github.com/MarkEdmondson1234/ga-bq-stream/blob/master/README.md&#34;&gt;README&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In this example the app both reads and writes the data to BigQuery, but in production this should be separated out to avoid hitting quotas.&lt;/p&gt;
+
+&lt;p&gt;App Engine is useful in providing a way to run a script (in this case Python) whenever a URL is called, and also providing the infrastructure that lets you scale those hits from a free small amount to billions if you pay up.&lt;/p&gt;
+
+&lt;p&gt;In essence we upload a Python script and tell App Engine to run the script when certain URL endpoints are called, and then we shall call that URL from Google Tag Manager with the data we want to stream.&lt;/p&gt;
+
+&lt;p&gt;We now walk through the important functions of the app:&lt;/p&gt;
+
+&lt;h3 id=&#34;adding-data-to-bigquery&#34;&gt;Adding data to BigQuery&lt;/h3&gt;
+
+&lt;p&gt;You can read more about &lt;a href=&#34;https://cloud.google.com/bigquery/streaming-data-into-bigquery&#34;&gt;streaming data into BigQuery here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The first function is modified from the &lt;a href=&#34;https://github.com/GoogleCloudPlatform/python-docs-samples/blob/master/bigquery/cloud-client/stream_data.py&#34;&gt;python BigQuery examples&lt;/a&gt; and takes care of authentication, loading the JSON sent to the app into a Python list and sending to BigQuery:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;def stream_data(dataset_name, table_name, json_data, time_stamp = time.time()):
+    bigquery_client = bigquery.Client()
+    dataset = bigquery_client.dataset(dataset_name)
+    table = dataset.table(table_name)
+    data = json_data
+
+    data[&#39;ts&#39;] = time_stamp
+
+    # Reload the table to get the schema.
+    table.reload()
+
+    ## get the names of schema
+    schema = table.schema
+    schema_names = [o.name for o in schema]
+
+    logging.debug(&#39;BQ Schema: {}&#39;.format(schema_names))
+
+    # from schema names get list of tuples of the values
+    rows = [(data[x] for x in schema_names)]
+
+    # Send data to bigquery, returning any errors
+    errors = table.insert_data(rows, row_ids = str(uuid.uuid4()))
+
+    if not errors:
+    	logging.debug(&#39;Loaded 1 row into {}:{}&#39;.format(dataset_name, table_name))
+    else:
+        logging.error(errors)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The next class reads the data from a GET or POST request to the URL we specify later, and puts the job into a task queue, along with the timestamp.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class MainHandler(webapp2.RequestHandler):
+
+	## for debugging
+	def get(self):
+		## allows CORS
+		self.response.headers.add_header(&amp;quot;Access-Control-Allow-Origin&amp;quot;, &amp;quot;*&amp;quot;)
+
+		## get example.com?bq=blah
+		b = self.request.get(&amp;quot;bq&amp;quot;)
+
+		## send to async task URL
+		task = taskqueue.add(url=&#39;/bq-task&#39;, params={&#39;bq&#39;: b, &#39;ts&#39;: str(time.time())})
+
+	# use in prod
+	def post(self):
+		## allows CORS
+		self.response.headers.add_header(&amp;quot;Access-Control-Allow-Origin&amp;quot;, &amp;quot;*&amp;quot;)
+
+		## get example.com?bq=blah
+		b = self.request.get(&amp;quot;bq&amp;quot;)
+
+		## send to task URL
+		task = taskqueue.add(url=&#39;/bq-task&#39;, params={&#39;bq&#39;: b, &#39;ts&#39;: str(time.time())})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The task queue then reads the JSON data and calls the function to send data into BigQuery.  App Engine task queues will rerun if any connection problems and act as a buffer, so you can configure them to suit the needs and volumes of your app.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class BqHandler(webapp2.RequestHandler):
+	def post(self):
+
+		## get example.com/bq-task?bq=blah
+		b = self.request.get(&amp;quot;bq&amp;quot;)
+		ts = self.request.get(&amp;quot;ts&amp;quot;)
+
+		b = json.loads(b)
+
+		logging.debug(&#39;json load: {}&#39;.format(b))
+
+		if len(b) &amp;gt; 0:
+			datasetId = os.environ[&#39;DATASET_ID&#39;]
+			tableId   = os.environ[&#39;TABLE_ID&#39;]
+
+			today = date.today().strftime(&amp;quot;%Y%m%d&amp;quot;)
+
+			tableId = &amp;quot;%s$%s&amp;quot;%(tableId, today)
+
+			stream_data(datasetId, tableId, b, ts)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;full-app-engine-script&#34;&gt;Full App Engine Script&lt;/h3&gt;
+
+&lt;p&gt;The full script uploaded is available in the Github repository here: &lt;a href=&#34;https://github.com/MarkEdmondson1234/ga-bq-stream/blob/master/main.py&#34;&gt;main.py&lt;/a&gt; which also includes the read functions used in the next blogpost.&lt;/p&gt;
+
+&lt;p&gt;With this script you then need some configuration files for the app and upload it to your Google Project.  A guide on how to deploy this is and more is available from the &lt;a href=&#34;https://github.com/MarkEdmondson1234/ga-bq-stream/blob/master/README.md&#34;&gt;Github repository README&lt;/a&gt;, but once done the app will be available at &lt;code&gt;https://YOUR-PROJECT-ID.appspot.com&lt;/code&gt; and you will call the &lt;code&gt;/bq-streamer&lt;/code&gt; and &lt;code&gt;/bq-get&lt;/code&gt; URLs to send and get data.&lt;/p&gt;
+
+&lt;h2 id=&#34;google-tag-manager&#34;&gt;Google Tag Manager&lt;/h2&gt;
+
+&lt;p&gt;With the app ready, we now move to sending it data via Google Tag Manager.  This is relatively simple, since we just need to decide which data to add to the endpoint URL:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;script&amp;gt;
+
+  var bqArray = {};
+        
+  // put the variables you want realtime here      
+  bqArray[&amp;quot;fieldname&amp;quot;] = &amp;quot;{{dataLayer}}&amp;quot;;
+  bqArray[&amp;quot;fieldname2&amp;quot;] = &amp;quot;{{dataLayer2}}&amp;quot;;
+  	
+  jQuery.post(&amp;quot;https://YOUR-PROJECT-ID.appspot.com/bq-streamer&amp;quot;, {&amp;quot;bq&amp;quot;:JSON.stringify(bqArray)});
+
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The script assumes you have jQuery defined on your website, if you haven&amp;rsquo;t you will need to load it either on the page or hack it a bit by loading above the script via:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;script src=&amp;quot;//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For my blog example, here is a screenshot from GTM all configured:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;../images/GTMconfig.png&#34; alt=&#34;gtm&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The app engine supports GET or POST hits, GET is useful for testing in the browser yourself but its better to POST in production as it supports more data.&lt;/p&gt;
+
+&lt;p&gt;Add this as a custom HTML tag and deploy on a trigger that occurs after the data you want to collect is there.  Thats pretty much it.&lt;/p&gt;
+
+&lt;p&gt;Once the tag is published, make sure you have deployed the App Engine app and you are using the exact same field names as the BigQuery table.&lt;/p&gt;
+
+&lt;h1 id=&#34;checking-its-all-working&#34;&gt;Checking its all working&lt;/h1&gt;
+
+&lt;p&gt;You should then be able to start seeing hits in the App Engine logs and in BigQuery (don&amp;rsquo;t forget to turn off caching of results).  By default the BQ queries in the UI cache the results, so don&amp;rsquo;t forget to turn those off, but then as new hits are made to the GTM container you should be able to refresh and see the results in BigQuery within a few seconds.  Here is the example from my blog:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;../images/itsalive.png&#34; alt=&#34;its-alive&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And thats it!  You could now query this table from various solutions such as Tableau or Data Studio, but in part two of this post I&amp;rsquo;ll go in to how to query this table from an R Shiny application, updating a forecast and displaying using the Highcharts library.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>A digital analytics workflow through the Google Cloud using R</title>
+      <link>http://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/</link>
+      <pubDate>Mon, 10 Oct 2016 23:03:57 +0100</pubDate>
+      
+      <guid>http://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/</guid>
+      <description>
+
+&lt;p&gt;There are now several packages built upon the &lt;code&gt;googleAuthR&lt;/code&gt; framework which are helpful to a digital analyst who uses R, so this post looks to demonstrate how they all work together.  If you&amp;rsquo;re new to R, and would like to know how it helps with your digital analytics, &lt;a href=&#34;http://analyticsdemystified.com/blog/tim-wilson/&#34;&gt;Tim Wilson&lt;/a&gt; and I ran a workshop last month aimed at getting a digital analyst up and running.  The course material is online at &lt;a href=&#34;http://www.dartistics.com/&#34;&gt;www.dartistics.com&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;diagram&#34;&gt;Diagram&lt;/h2&gt;
+
+&lt;p&gt;A top level overview is shown below:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;../images/r-infrastructure.png&#34; alt=&#34;R-infrastructure-digital-analytics&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The diagram shows &lt;a href=&#34;http://code.markedmondson.me/googleAuthR/&#34;&gt;&lt;code&gt;googleAuthR&lt;/code&gt;&lt;/a&gt; packages, other packages, servers and APIs all of which interact to turn data into actionable analytics.&lt;/p&gt;
+
+&lt;p&gt;The most recent addition is &lt;a href=&#34;https://cloudyr.github.io/googleComputeEngineR/&#34;&gt;&lt;code&gt;googleComputeEngineR&lt;/code&gt;&lt;/a&gt; which has helped make great savings in the time it takes to set up servers.  I have in the past blogged about &lt;a href=&#34;http://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/&#34;&gt;setting up R servers in the Google Cloud&lt;/a&gt;, but it was still more dev-ops than I really wanted to be doing.  Now, I can do setups similar to those I have written about in a couple of lines of R.&lt;/p&gt;
+
+&lt;h2 id=&#34;data-workflow&#34;&gt;Data workflow&lt;/h2&gt;
+
+&lt;p&gt;A suggested workflow for working with data is:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;em&gt;Infrastructure&lt;/em&gt; - Creating a computer to run your analysis.  This can be either your own laptop, or a server in the cloud.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Collection&lt;/em&gt; - Downloading your raw data from one or multiple sources, such as APIs or your CRM database.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Transformation&lt;/em&gt; - Turning your raw data into useful information via ETL, modelling or statistics.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Storage&lt;/em&gt; - Storing the information you have created so that it can be automatically updated and used.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Output&lt;/em&gt; - Displaying or using the information into an end user application.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The components of the diagram can be combined into the workflow above.  You can swap out various bits for your own needs, but its possible to use R for all of these steps.&lt;/p&gt;
+
+&lt;p&gt;You could do all of this with an Excel workbook on your laptop.  However, as data analysis becomes more complicated, it makes sense to start breaking out the components into more specialised tools, since Excel will start to strain when you increase the data volume or want reproducibility.&lt;/p&gt;
+
+&lt;h3 id=&#34;infrastructure&#34;&gt;Infrastructure&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://cloudyr.github.io/googleComputeEngineR/&#34;&gt;&lt;code&gt;googleComputeEngineR&lt;/code&gt;&lt;/a&gt; uses the Google Clouds&amp;rsquo; virtual machine instances to create servers, with specific support for R.&lt;/p&gt;
+
+&lt;p&gt;It uses &lt;a href=&#34;https://www.docker.com/&#34;&gt;Docker containers&lt;/a&gt; to make launching the servers and applications you need quick and simple, without you needing to know too much dev-ops to get started.&lt;/p&gt;
+
+&lt;p&gt;Due to Docker, the applications created can be more easily transferred into other IT environments, such as within internal client intranets or AWS.&lt;/p&gt;
+
+&lt;p&gt;To help with a digital analytics workflow, &lt;code&gt;googleComputeEngineR&lt;/code&gt; includes templates for the below:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;RStudio Server&lt;/strong&gt; - an R IDE you can work with from your browser. The server edition means you can access it from anywhere, and can always ensure the correct packages are installed.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Shiny&lt;/strong&gt; - A server to run your Shiny apps that display your data in dashboards or applications end users can work with.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;OpenCPU&lt;/strong&gt; - A server that turns your R code into a JSON API.  Used for turning R output into a format web development teams can use straight within a website.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For instance, launching an RStudio server is as simple as:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(googleComputeEngineR)
+vm &amp;lt;- gce_vm_template(&amp;quot;rstudio&amp;quot;, 
+                      name = &amp;quot;rstudio-server&amp;quot;, 
+                      predefined_type = &amp;quot;f1-micro&amp;quot;, 
+                      username = &amp;quot;mark&amp;quot;, 
+                      password = &amp;quot;mark1234&amp;quot;)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The instance will launch within a few minutes and give you a URL you can then login with.&lt;/p&gt;
+
+&lt;h3 id=&#34;collection&#34;&gt;Collection&lt;/h3&gt;
+
+&lt;p&gt;Once you are logged in to your RStudio Server, you can use all of R&amp;rsquo;s power to download and work with your data.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;googleAuthR&lt;/code&gt; packages can all be authenticated under the same OAuth2 token, to simplify access.&lt;/p&gt;
+
+&lt;p&gt;Other packages useful to digital analytics include APIs such as &lt;a href=&#34;https://github.com/randyzwitch/RSiteCatalyst&#34;&gt;&lt;code&gt;RSiteCatalyst&lt;/code&gt;&lt;/a&gt; and &lt;code&gt;twitteR&lt;/code&gt;.  A full list of digital analytics R packages can be found in the &lt;a href=&#34;https://cran.r-project.org/web/views/WebTechnologies.html&#34;&gt;web technologies section of CRAN Task Views&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Another option is the R package &lt;a href=&#34;https://github.com/jennybc/googlesheets&#34;&gt;&lt;code&gt;googlesheets&lt;/code&gt;&lt;/a&gt; by Jenny Bryan, which could either be used as a data source or as a data storage for reports, to be processed onwards later.&lt;/p&gt;
+
+&lt;p&gt;The below example R script fetches data from Google Analytics, SEO data from Google Search Console and CRM data from BigQuery.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(googleAnalyticsR)
+library(searchConsoleR)
+library(bigQueryR)
+library(googleAuthR)
+
+## authenticate with all services 
+gar_auth_service(&amp;quot;auth.json&amp;quot;)
+
+## get search console data
+seo_data &amp;lt;- search_analytics(&amp;quot;http://example.com&amp;quot;, 
+                             &amp;quot;2015-07-01&amp;quot;, &amp;quot;2015-07-31&amp;quot;, 
+                              c(&amp;quot;date&amp;quot;, &amp;quot;query&amp;quot;, &amp;quot;page&amp;quot;))
+
+## get google analytics data
+ga_data &amp;lt;- google_analytics_4(1235678,
+                              c(&amp;quot;2015-07-01&amp;quot;, &amp;quot;2015-07-31&amp;quot;),
+                              metrics = c(&amp;quot;users&amp;quot;),
+                              dimensions = c(&amp;quot;date&amp;quot;, &amp;quot;userID&amp;quot; , &amp;quot;landingPagePath&amp;quot;, &amp;quot;campaign&amp;quot;))
+
+## get CRM data from BigQuery
+crm_data &amp;lt;- bqr_query(&amp;quot;big-query-database&amp;quot;, &amp;quot;my_data&amp;quot;,
+                      &amp;quot;SELECT userID, lifetimeValue FROM [my_dataset]&amp;quot;)
+                              
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;transformation&#34;&gt;Transformation&lt;/h3&gt;
+
+&lt;p&gt;This ground is well covered by existing R packages.  My suggestion here is to embrace the &lt;a href=&#34;https://cran.r-project.org/web/packages/tidyverse/index.html&#34;&gt;&lt;code&gt;tidyverse&lt;/code&gt;&lt;/a&gt; and use that to create and generate your information.&lt;/p&gt;
+
+&lt;p&gt;Applications include anomaly detection, measurement of causal effect, clustering and forecasting. Hadley Wickham&amp;rsquo;s book &lt;a href=&#34;http://r4ds.had.co.nz/index.html&#34;&gt;&amp;ldquo;R for Data Science&amp;rdquo;&lt;/a&gt; is a recent compendium of knowledge on this topic, which includes this suggested work flow:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;../images/tidy-r.png&#34; alt=&#34;tidyr&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;storage&#34;&gt;Storage&lt;/h3&gt;
+
+&lt;p&gt;Once you have your data in the format you want, you often need to keep it somewhere it is easily accessible for other systems.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://cloud.google.com/storage/&#34;&gt;Google Cloud Storage&lt;/a&gt; is a cheap, reliable method of storing any type of data object so that its always available for further use, and is heavily used within Google Cloud applications as a central data store.  I use it for storing &lt;code&gt;RData&lt;/code&gt; files or storing &lt;code&gt;csv&lt;/code&gt; files with a public link that is emailed to users when available.  It is accessible in R via the &lt;a href=&#34;http://code.markedmondson.me/googleCloudStorageR/&#34;&gt;&lt;code&gt;googleCloudStorageR&lt;/code&gt;&lt;/a&gt; package.&lt;/p&gt;
+
+&lt;p&gt;For database style access, &lt;a href=&#34;https://cloud.google.com/bigquery/&#34;&gt;BigQuery&lt;/a&gt; can be queried from many data services, including data visualisation platforms such as Google&amp;rsquo;s Data Studio or Tableau.  BigQuery offers incredibly fast analytical queries for TBs of data, accessible via the &lt;a href=&#34;http://code.markedmondson.me/bigQueryR/&#34;&gt;&lt;code&gt;bigQueryR&lt;/code&gt;&lt;/a&gt; package.&lt;/p&gt;
+
+&lt;p&gt;An example of uploading data is below - again only one authentication is needed.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(googleCloudStorageR)
+library(bigQueryR)
+
+## authenticate with all services 
+gar_auth_service(&amp;quot;auth.json&amp;quot;)
+
+## upload to Big Query
+bqr_upload_data(&amp;quot;projectID&amp;quot;, &amp;quot;datasetID&amp;quot;, &amp;quot;tableID&amp;quot;,
+                my_data_for_sql_queries)
+
+## upload to Google Cloud Storage
+gcs_upload(&amp;quot;my_rdata_file&amp;quot;)
+
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;output&#34;&gt;Output&lt;/h3&gt;
+
+&lt;p&gt;Finally, outputs include &lt;a href=&#34;http://shiny.rstudio.com/&#34;&gt;Shiny&lt;/a&gt; apps, &lt;a href=&#34;http://rmarkdown.rstudio.com/&#34;&gt;RMarkdown&lt;/a&gt;, a &lt;a href=&#34;https://gist.github.com/MarkEdmondson1234/ddcac436cbdfd4557639522573bfc7b6&#34;&gt;scheduled email&lt;/a&gt; or an R API call using &lt;a href=&#34;https://www.opencpu.org/&#34;&gt;OpenCPU&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;All &lt;code&gt;googleAuthR&lt;/code&gt; functions are Shiny and RMarkdown compatible for user authentication - this means a user can login themselves and access their own data whilst using the logic of your app to gain insight, without you needing access to their data at all.  An example of an RMarkdown app taking advantage of this is the demo of the &lt;a href=&#34;https://github.com/MarkEdmondson1234/gentelellaShiny&#34;&gt;GentelellaShiny GA dashboard&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;../images/gentellaShinyGA.png&#34; alt=&#34;gentella-shiny&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You can launch OpenCPU and Shiny servers just as easily as RStudio Server via &lt;code&gt;googleComputeEngineR&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(googleComputeEngineR)
+
+## creates a Shiny server
+vm2 &amp;lt;- gce_vm_template(&amp;quot;shiny&amp;quot;, 
+                      name = &amp;quot;shiny-server&amp;quot;, 
+                      predefined_type = &amp;quot;f1-micro&amp;quot;, 
+                      username = &amp;quot;mark&amp;quot;, 
+                      password = &amp;quot;mark1234&amp;quot;)
+
+## creates an OpenCPU server                      
+vm3 &amp;lt;- gce_vm_template(&amp;quot;opencpu&amp;quot;, 
+                      name = &amp;quot;opencpu-server&amp;quot;, 
+                      predefined_type = &amp;quot;f1-micro&amp;quot;, 
+                      username = &amp;quot;mark&amp;quot;, 
+                      password = &amp;quot;mark1234&amp;quot;)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Shiny Apps or RMarkdown HTML files can then be uploaded for display to the end user.  If the server needs more power, simply save the container and relaunch with a bigger RAM or CPU.&lt;/p&gt;
+
+&lt;p&gt;OpenCPU is the technology demonstrated in my recent EARL London talk on using R to &lt;a href=&#34;http://code.markedmondson.me/predictClickOpenCPU/supercharge.html&#34;&gt;forecast HTML prefetching and deploying through Google Tag Manager&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Your Shiny, RMarkdown or OpenCPU functions can download data via:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(googleCloudStorageR)
+library(bigQueryR)
+
+## authenticate with all services 
+gar_auth_service(&amp;quot;auth.json&amp;quot;)
+
+## download Google Cloud Storage
+my_data &amp;lt;- gce_get_object(&amp;quot;my_rdata_file&amp;quot;)
+
+## query data from Big Query dependent on user input
+query &amp;lt;- bqr_query(&amp;quot;big-query-database&amp;quot;, &amp;quot;my_data&amp;quot;,
+                   &amp;quot;SELECT userID, lifetimeValue FROM [my_dataset]&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
+
+&lt;p&gt;Hopefully this has shown where some efficiencies could be made in your own digital analysis. For me, the reduction of computer servers to atoms of work has expanded the horizons on what is possible: applications such as sending big calculations to the cloud if taking too long locally; being able to send clients entire clusters of computers with a data application ready and working; and having customised R environments for every occasion, such as R workshops.&lt;/p&gt;
+
+&lt;p&gt;For the future, I hope to introduce Spark clusters via &lt;a href=&#34;https://cloud.google.com/dataproc/&#34;&gt;Google Dataproc&lt;/a&gt;, giving the ability to use machine learning directly on a dataset without needing to download locally; scheduled scripts that launch servers as needed; and working with Google&amp;rsquo;s newly launched &lt;a href=&#34;https://cloud.google.com/ml/&#34;&gt;machine learning APIs&lt;/a&gt; that dovetail into the Google Cloud.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
