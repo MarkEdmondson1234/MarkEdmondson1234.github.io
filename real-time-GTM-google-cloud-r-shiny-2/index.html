@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
-    <title>Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one &middot; Mark Edmondson</title>
+    <title>Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two &middot; Mark Edmondson</title>
     <meta name="generator" content="Hugo 0.18.1" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -10,7 +10,7 @@
       <meta name="description" content="The code bit of the blog">
     
     
-    <link rel="canonical" href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/"/>
+    <link rel="canonical" href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/"/>
     <link rel="icon" href="http://code.markedmondson.me/favicon.ico">
     <link rel="apple-touch-icon" href="http://code.markedmondson.me/apple-touch-icon.png"/>
     <link rel="stylesheet" href="http://code.markedmondson.me/css/style.css">
@@ -20,13 +20,13 @@
     
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
-    <meta property="og:title" content="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" />
-<meta property="og:description" content="In part one of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&rsquo;s data streaming capability. In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in Shiny and the JavaScript visualisation library Highcharts." />
+    <meta property="og:title" content="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" />
+<meta property="og:description" content="In part two of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&rsquo;s data streaming capability. In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in Shiny and the JavaScript visualisation library Highcharts." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/" />
+<meta property="og:url" content="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/" />
 
 
-<meta property="og:updated_time" content="2017-01-12T23:03:57&#43;01:00"/>
+<meta property="og:updated_time" content="2017-01-22T14:20:57&#43;01:00"/>
 
 
 
@@ -39,12 +39,12 @@
 
     
     
-<meta itemprop="name" content="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one">
-<meta itemprop="description" content="In part one of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&rsquo;s data streaming capability. In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in Shiny and the JavaScript visualisation library Highcharts.">
+<meta itemprop="name" content="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two">
+<meta itemprop="description" content="In part two of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&rsquo;s data streaming capability. In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in Shiny and the JavaScript visualisation library Highcharts.">
 
 
-<meta itemprop="dateModified" content="2017-01-12T23:03:57&#43;01:00" />
-<meta itemprop="wordCount" content="1264">
+<meta itemprop="dateModified" content="2017-01-22T14:20:57&#43;01:00" />
+<meta itemprop="wordCount" content="2074">
 
 
 
@@ -56,8 +56,8 @@
 
 
 
-<meta name="twitter:title" content="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one"/>
-<meta name="twitter:description" content="In part one of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&rsquo;s data streaming capability. In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in Shiny and the JavaScript visualisation library Highcharts."/>
+<meta name="twitter:title" content="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two"/>
+<meta name="twitter:description" content="In part two of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&rsquo;s data streaming capability. In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in Shiny and the JavaScript visualisation library Highcharts."/>
 <meta name="twitter:site" content="@HoloMarkeD"/>
 <meta name="twitter:domain" content="markedmondson.me"/>
 
@@ -261,24 +261,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
         <div class="article-inner">
             
-                <img src="http://code.markedmondson.me/banners/itsalive.png" class="article-banner">
+                <img src="http://code.markedmondson.me/banners/realtime-forecast.png" class="article-banner">
             
 
             <header class="article-header">
-    <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/">
+    <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/">
     <h1 class="article-title" itemprop="name">
-        Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one
+        Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two
     </h1>
     </a>
     <div class="article-meta">
         <div class="article-date">
             <i class="fa fa-calendar"></i>
-            <time datetime="2017-01-12 23:03:57 &#43;0100 CET" itemprop="datePublished">2017-01-12</time>
+            <time datetime="2017-01-22 14:20:57 &#43;0100 CET" itemprop="datePublished">2017-01-22</time>
             &middot;
-            1264
+            2074
             words
             &middot;
-            6
+            10
             minute read
         </div>
 
@@ -305,6 +305,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 
                 
                 <a class="article-category-link" href="http://code.markedmondson.me/tags/big-query">big-query</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/r">r</a>
                 
                 
             </div>
@@ -316,9 +320,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <div class="article-entry" itemprop="articleBody">
                 
 
-<p>In part one of this two part series we walk through the steps to stream data from a <a href="https://www.google.com/analytics/tag-manager/">Google Tag Manager</a> (GTM) implementation into a <a href="https://cloud.google.com/appengine/">Google App Engine</a> (GAE) web app, which then adds data to a <a href="https://cloud.google.com/bigquery/">BigQuery</a> table via BigQuery&rsquo;s data streaming capability.  In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in <a href="https://shiny.rstudio.com/">Shiny</a> and the JavaScript visualisation library <a href="http://jkunst.com/highcharter/">Highcharts</a>.</p>
+<p>In part two of this two part series we walk through the steps to stream data from a <a href="https://www.google.com/analytics/tag-manager/">Google Tag Manager</a> (GTM) implementation into a <a href="https://cloud.google.com/appengine/">Google App Engine</a> (GAE) web app, which then adds data to a <a href="https://cloud.google.com/bigquery/">BigQuery</a> table via BigQuery&rsquo;s data streaming capability.  In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in <a href="https://shiny.rstudio.com/">Shiny</a> and the JavaScript visualisation library <a href="http://jkunst.com/highcharter/">Highcharts</a>.</p>
 
-<p>Read <a href="/real-time-GTM-google-cloud-r-shiny-2/">part two here</a>.</p>
+<p>Read <a href="/real-time-GTM-google-cloud-r-shiny-1/">part one here</a>.</p>
 
 <p>The project combines several languages where their advantages lie: Python for its interaction with Google APIs and its quick start creating your own API on App Engine, SQL to query the BigQuery data itself, R for its forecasting libraries and the reactive Shiny framework, and JavaScript for the visualisation and data capture at the Google Tag Manager end.</p>
 
@@ -346,173 +350,305 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li>The Highcharts visualisation reads the changing dataset, and updates the visualisation.</li>
 </ol>
 
-<p>This blog will cover the first, putting data into BigQuery. The code for the finished app is available on Github here:  <a href="https://github.com/MarkEdmondson1234/ga-bq-stream">https://github.com/MarkEdmondson1234/ga-bq-stream</a></p>
+<p>This blog will cover the second. A demo <a href="https://github.com/MarkEdmondson1234/realtimeShiny">Github repo for the Shiny app is available here</a>.</p>
 
-<h2 id="bigquery-configuration">BigQuery configuration</h2>
+<h2 id="calling-data-your-options">Calling data: your options</h2>
 
-<p>Starting with BigQuery, you need to create a project, dataset and a table where the data will stream to.  The script we will use on App Engine assumes you have one field called &ldquo;ts&rdquo; which will hold a timestamp, other than that add the fields you will add in the Google Tag Manager script.</p>
+<p>The Google App Engine app on Github includes functions to both read and write data from BigQuery.  You can either call the data via the app engine app, which in turn reads the data via the Python BigQuery library, or if you are using a platofrm that supports reading the data directly from BigQuery then you can use that directly.</p>
 
-<p>Select &ldquo;partitioned&rdquo; table when creating, which is useful if holding more than one days worth of data.</p>
+<p>In most cases, you will be better off reading the data directly, as you will be cutting out the middle man.  In some cases the app engine will time out so if you are using it you should make sure your app can handle null results.  But it is useful to have, for those platforms that do not have Big query SDKs, such as visualisation BI tools.</p>
 
-<p>A demo is shown below, where the <code>ts</code> field is joined by the page URL and referrer for that page:</p>
+<h3 id="option-1-google-app-engine-reading-realtime-data-from-bigquery">Option 1 - Google App Engine: Reading realtime data from BigQuery</h3>
 
-<p><img src="../images/BQconfig.png" alt="bqconfig" /></p>
+<p>The full code for reading and writing data is available at the <a href="https://github.com/MarkEdmondson1234/ga-bq-stream">supporting Github repo here</a>.</p>
 
-<h2 id="google-app-engine">Google App Engine</h2>
+<p>The first blog in this series went through its data input, we now look at the data output.  In production this may be separated out into a different app, but for brevity its here in the same application.</p>
 
-<p>Next we get to the meat with the Google App Engine app.</p>
+<p>We first define some environmental variables in the <code>app.yaml</code> setup file, with the dataset and table and a secret code word:</p>
 
-<p>There is a guide on how to install and configure the app there too on its <a href="https://github.com/MarkEdmondson1234/ga-bq-stream/blob/master/README.md">README</a>.</p>
-
-<p>In this example the app both reads and writes the data to BigQuery, but in production this should be separated out to avoid hitting quotas.</p>
-
-<p>App Engine is useful in providing a way to run a script (in this case Python) whenever a URL is called, and also providing the infrastructure that lets you scale those hits from a free small amount to billions if you pay up.</p>
-
-<p>In essence we upload a Python script and tell App Engine to run the script when certain URL endpoints are called, and then we shall call that URL from Google Tag Manager with the data we want to stream.</p>
-
-<p>We now walk through the important functions of the app:</p>
-
-<h3 id="adding-data-to-bigquery">Adding data to BigQuery</h3>
-
-<p>You can read more about <a href="https://cloud.google.com/bigquery/streaming-data-into-bigquery">streaming data into BigQuery here</a>.</p>
-
-<p>The first function is modified from the <a href="https://github.com/GoogleCloudPlatform/python-docs-samples/blob/master/bigquery/cloud-client/stream_data.py">python BigQuery examples</a> and takes care of authentication, loading the JSON sent to the app into a Python list and sending to BigQuery:</p>
-
-<pre><code class="language-python">def stream_data(dataset_name, table_name, json_data, time_stamp = time.time()):
-    bigquery_client = bigquery.Client()
-    dataset = bigquery_client.dataset(dataset_name)
-    table = dataset.table(table_name)
-    data = json_data
-
-    data['ts'] = time_stamp
-
-    # Reload the table to get the schema.
-    table.reload()
-
-    ## get the names of schema
-    schema = table.schema
-    schema_names = [o.name for o in schema]
-
-    logging.debug('BQ Schema: {}'.format(schema_names))
-
-    # from schema names get list of tuples of the values
-    rows = [(data[x] for x in schema_names)]
-
-    # Send data to bigquery, returning any errors
-    errors = table.insert_data(rows, row_ids = str(uuid.uuid4()))
-
-    if not errors:
-    	logging.debug('Loaded 1 row into {}:{}'.format(dataset_name, table_name))
-    else:
-        logging.error(errors)
+<pre><code>#[START env]
+env_variables:
+  DATASET_ID: tests
+  TABLE_ID: realtime_markedmondsonme
+  SECRET_SALT: change_this_to_something_unique
+#[END env]
 </code></pre>
 
-<p>The next class reads the data from a GET or POST request to the URL we specify later, and puts the job into a task queue, along with the timestamp.</p>
+<p>The first function below then queries the BigQuery table we defined in the environmental variables, and turns it into JSON.  By default it will get the last row, or you can pass in the <code>limit</code> argument to get more rows, or your own <code>q</code> argument with custom SQL to query the table directly:</p>
 
-<pre><code class="language-python">class MainHandler(webapp2.RequestHandler):
+<pre><code class="language-python"># queries and turns into JSON
+def get_data(q, limit = 1):
+	datasetId = os.environ['DATASET_ID']
+	tableId   = os.environ['TABLE_ID']
 
-	## for debugging
+	if len(q) &gt; 0:
+		query = q % (datasetId, tableId)
+	else:
+		query = 'SELECT * FROM %s.%s ORDER BY ts DESC LIMIT %s' % (datasetId, tableId, limit)
+
+	bqdata = sync_query(query)
+
+	return json.dumps(bqdata)
+	
+</code></pre>
+
+<p>This next class is called when the &ldquo;get data&rdquo; URL is requested.  A lot of headers are set to ensure no browser caching is done which we don&rsquo;t want since this is a realtime feed.</p>
+
+<p>For security, we also test via a <code>hash</code> parameter to make sure its an authorised request, and decide how much data to return via the <code>limit</code> parameter.</p>
+
+<p>Finally we call the function above and write that out to the URL response.</p>
+
+<pre><code class="language-python">class QueryTable(webapp2.RequestHandler):
+
 	def get(self):
-		## allows CORS
+
+    # no caching
 		self.response.headers.add_header(&quot;Access-Control-Allow-Origin&quot;, &quot;*&quot;)
+		self.response.headers.add_header(&quot;Pragma&quot;, &quot;no-cache&quot;)
+		self.response.headers.add_header(&quot;Cache-Control&quot;, &quot;no-cache, no-store, must-revalidate, pre-check=0, post-check=0&quot;)
+		self.response.headers.add_header(&quot;Expires&quot;, &quot;Thu, 01 Dec 1994 16:00:00&quot;)
+		self.response.headers.add_header(&quot;Content-Type&quot;, &quot;application/json&quot;)
 
-		## get example.com?bq=blah
-		b = self.request.get(&quot;bq&quot;)
+		q      = cgi.escape(self.request.get(&quot;q&quot;))
+		myhash = cgi.escape(self.request.get(&quot;hash&quot;))
+		limit  = cgi.escape(self.request.get(&quot;limit&quot;))
 
-		## send to async task URL
-		task = taskqueue.add(url='/bq-task', params={'bq': b, 'ts': str(time.time())})
+		salt = os.environ['SECRET_SALT']
+		test = hashlib.sha224(q+salt).hexdigest()
 
-	# use in prod
-	def post(self):
-		## allows CORS
-		self.response.headers.add_header(&quot;Access-Control-Allow-Origin&quot;, &quot;*&quot;)
+		if(test != myhash):
+			logging.debug('Expected hash: {}'.format(test))
+			logging.error(&quot;Incorrect hash&quot;)
+			return
 
-		## get example.com?bq=blah
-		b = self.request.get(&quot;bq&quot;)
+		if len(limit) == 0:
+			limit = 1
 
-		## send to task URL
-		task = taskqueue.add(url='/bq-task', params={'bq': b, 'ts': str(time.time())})
-</code></pre>
-
-<p>The task queue then reads the JSON data and calls the function to send data into BigQuery.  App Engine task queues will rerun if any connection problems and act as a buffer, so you can configure them to suit the needs and volumes of your app.</p>
-
-<pre><code class="language-python">class BqHandler(webapp2.RequestHandler):
-	def post(self):
-
-		## get example.com/bq-task?bq=blah
-		b = self.request.get(&quot;bq&quot;)
-		ts = self.request.get(&quot;ts&quot;)
-
-		b = json.loads(b)
-
-		logging.debug('json load: {}'.format(b))
-
-		if len(b) &gt; 0:
-			datasetId = os.environ['DATASET_ID']
-			tableId   = os.environ['TABLE_ID']
-
-			today = date.today().strftime(&quot;%Y%m%d&quot;)
-
-			tableId = &quot;%s$%s&quot;%(tableId, today)
-
-			stream_data(datasetId, tableId, b, ts)
-
+		self.response.out.write(get_data(q, limit))
 </code></pre>
 
 <h3 id="full-app-engine-script">Full App Engine Script</h3>
 
-<p>The full script uploaded is available in the Github repository here: <a href="https://github.com/MarkEdmondson1234/ga-bq-stream/blob/master/main.py">main.py</a> which also includes the read functions used in the next blogpost.</p>
+<p>The full script uploaded is available in the Github repository here:  <a href="https://github.com/MarkEdmondson1234/ga-bq-stream/blob/master/main.py">main.py</a></p>
 
 <p>With this script you then need some configuration files for the app and upload it to your Google Project.  A guide on how to deploy this is and more is available from the <a href="https://github.com/MarkEdmondson1234/ga-bq-stream/blob/master/README.md">Github repository README</a>, but once done the app will be available at <code>https://YOUR-PROJECT-ID.appspot.com</code> and you will call the <code>/bq-streamer</code> and <code>/bq-get</code> URLs to send and get data.</p>
 
-<h2 id="google-tag-manager">Google Tag Manager</h2>
+<h3 id="option-2-calling-bigquery-directly">Option 2 - Calling BigQuery directly</h3>
 
-<p>With the app ready, we now move to sending it data via Google Tag Manager.  This is relatively simple, since we just need to decide which data to add to the endpoint URL:</p>
+<p>This is the preferred method, as it will be on average 5-10 seconds quicker to get your results, and avoid timeouts.</p>
 
-<pre><code class="language-js">&lt;script&gt;
+<p>I&rsquo;m using Shiny as it fits into existing work, but you may prefer to use some of the other <a href="https://cloud.google.com/bigquery/docs/reference/libraries">BigQuery SDKs out there</a>. I&rsquo;ll be using <a href="https://github.com/cloudyr/bigQueryR">Github version of bigQueryR</a> <code>&gt; 0.2.0.9000</code> as it has support for non-cached queries that are needed to see the tables update in realtime.</p>
 
-  var bqArray = {};
-        
-  // put the variables you want realtime here      
-  bqArray[&quot;fieldname&quot;] = &quot;{{dataLayer}}&quot;;
-  bqArray[&quot;fieldname2&quot;] = &quot;{{dataLayer2}}&quot;;
-  	
-  jQuery.post(&quot;https://YOUR-PROJECT-ID.appspot.com/bq-streamer&quot;, {&quot;bq&quot;:JSON.stringify(bqArray)});
+<p>A demo <a href="https://github.com/MarkEdmondson1234/realtimeShiny">Github repo for the Shiny app is available here</a>.</p>
 
-&lt;/script&gt;
+<p>In this case, the function in R that is in the Shiny <code>server.R</code> is below:</p>
+
+<pre><code class="language-r">library(bigQueryR)
+
+
+do_bq &lt;- function(limit){
+
+  ## authenticate offline first, upload the .httr-oauth token
+  bqr_auth()
+  q &lt;- sprintf(&quot;SELECT * FROM [big-query-r:tests.realtime_markedmondsonme] ORDER BY ts DESC LIMIT %s&quot;, 
+               limit)
+  
+  bqr_query(projectId = &quot;big-query-r&quot;, 
+            datasetId = &quot;tests&quot;, 
+            query = q, 
+            useQueryCache = FALSE)  
+}
 </code></pre>
 
-<p>The script assumes you have jQuery defined on your website, if you haven&rsquo;t you will need to load it either on the page or hack it a bit by loading above the script via:</p>
+<p>The <code>bqr_auth()</code> if first run offline to generate the authentication token, which is then uploaded with the app.  Alternatively you can use the <a href="http://code.markedmondson.me/googleAuthR/reference/gar_auth_service.html">JSON service auth</a> or if deploying on Google Compute Engine the automatic Google Cloud auth features of googleAuthR (<code>googleAuthR::gar_gce_auth()</code>)</p>
 
-<pre><code class="language-js">&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js&quot;&gt;&lt;/script&gt;
+<p>The query itself selects all the columns, and orders by the timestamp we supplied in the input post. The function has a parameter so you can select how many rows to collect, which we use later.</p>
+
+<p>Note the use of <code>useQueryCache = FALSE</code> to ensure you always get the freshest results.  If this wasn&rsquo;t selected queries of the same type will return the first result they queried, which is no good for these purposes.</p>
+
+<h2 id="reactivepoll-the-shiny-realtime-function">reactivePoll - the Shiny realtime function</h2>
+
+<p>For realtime applications, <code>shiny::reactivePoll()</code> is a function that periodically checks a datasource for changes.</p>
+
+<p>ow, what constitutes &ldquo;realtime&rdquo; is debatable here - for my applications I really only need an update every ~30 seconds.  Practically the Shiny output dims when updating with data, so for periods less than say 10 seconds it may not be the best approach for you - updating directly via JavaScript libraries may be better, and rely on say OpenCPU to provide the forecasting or another JS library.</p>
+
+<p>However, for my purposes I just need something better than the Google Analytics 4-hour lag in data (for GA360) and this suits well, particularly as you can apply a whole host of R data functions to the output.</p>
+
+<p><code>reactivePoll</code> needs to be supplied with two functions: one to check if the data has changed, the other to make the complete fetch once a change is detected.  For these we just check if the timestamp of the last entry has changed, and if so, then fetch the last 1000 results to make the prediction:</p>
+
+<pre><code class="language-r">## get 1000 rows of data
+get_bq &lt;- function(){
+
+  message(&quot;Getting new data...&quot;)
+  check &lt;- do_bq(1000)
+  
+  rt &lt;- as.data.frame(check, stringsAsFactors = FALSE)
+  names(rt) &lt;- c(&quot;pageURL&quot;,&quot;Referrer&quot;,&quot;ts&quot;)
+  
+  ## turn string into JS timestamp
+  rt$timestamp &lt;- as.POSIXct(as.numeric(as.character(rt$ts)), origin=&quot;1970-01-01&quot;)
+  
+  rt
+}
+
+## get 1 row of data, output its timestamp
+check_bq &lt;- function(){
+  
+  check &lt;- do_bq(1)
+  
+  message(&quot;Checking....check$ts: &quot;, check$ts)
+  check$ts
+  
+}
+
 </code></pre>
 
-<p>For my blog example, here is a screenshot from GTM all configured:</p>
+<p>This is then called in the Shiny server function like so, in this case every 5 seconds:</p>
 
-<p><img src="../images/GTMconfig.png" alt="gtm" /></p>
+<pre><code class="language-r">shinyServer(function(input, output, session) {
+  
+  ## checks every 5 seconds for changes
+  realtime_data &lt;- reactivePoll(5000, 
+                                session, 
+                                checkFunc = check_bq, 
+                                valueFunc = get_bq)
 
-<p>The app engine supports GET or POST hits, GET is useful for testing in the browser yourself but its better to POST in production as it supports more data.</p>
+  ### ... do stuff with realtime_data() ...
 
-<p>Add this as a custom HTML tag and deploy on a trigger that occurs after the data you want to collect is there.  Thats pretty much it.</p>
+}
+</code></pre>
 
-<p>Once the tag is published, make sure you have deployed the App Engine app and you are using the exact same field names as the BigQuery table.</p>
+<h2 id="transforming-data">Transforming data</h2>
 
-<h1 id="checking-its-all-working">Checking its all working</h1>
+<p>We then need to make the forecast, and put the data into the correct format it can be used in the chosen visualisation library, <a href="http://jkunst.com/highcharter/">highcharter</a>.</p>
 
-<p>You should then be able to start seeing hits in the App Engine logs and in BigQuery.  By default the BQ queries in the UI cache the results, so don&rsquo;t forget to turn those off, but then as new hits are made to the GTM container you should be able to refresh and see the results in BigQuery within a few seconds.  Here is the example from my blog:</p>
+<p>The next function takes the output of the <code>realtime_data()</code> function, aggregates per hour (my lowly blog hasn&rsquo;t enough data to make it worth doing per minute, but YNMV), turns the aggregation into time series objects suitable for the forecast and highcharts functions, then outputs a list.</p>
 
-<p><img src="../images/itsalive.png" alt="its-alive" /></p>
+<p>In this case I have chosen a very simple forecast function using all the defaults of <code>forecast::forecast()</code> but this should be tweaked to your particular use cases, such as taking more account of seasonality and so forth.</p>
 
-<p>And thats it!  You could now query this table from various solutions such as Tableau or Data Studio, but in part two of this post I&rsquo;ll go in to how to query this table from an R Shiny application, updating a forecast and displaying using the Highcharts library.</p>
+<pre><code class="language-r">transform_rt &lt;- function(rt){
+  ## aggregate per hour
+  rt_agg &lt;- rt %&gt;% 
+    mutate(hour = format(timestamp, format = &quot;%Y-%m-%d %H:00&quot;)) %&gt;% 
+    count(hour)
+  
+  rt_agg$hour &lt;- as.POSIXct(rt_agg$hour, origin=&quot;1970-01-01&quot;)
+  
+  # ## the number of hits per timestamp
+  rt_xts &lt;- xts::xts(rt_agg$n, frequency = 24, order.by = rt_agg$hour)
+  rt_ts &lt;- ts(rt_agg$n, frequency = 24)
+  
+  list(forecast = forecast::forecast(rt_ts, h = 12),
+       xts = rt_xts)
+}
+</code></pre>
+
+<p>All that remains now is to apply this transformation to new data as it appears (e.g. for each new visit, the hourly aggregate for the last hour increases, and the forecast updates)</p>
+
+<pre><code class="language-r">  plot_data &lt;- reactive({
+    
+    req(realtime_data())
+    rt &lt;- realtime_data()
+    message(&quot;plot_data()&quot;)
+    ## aggregate
+    transform_rt(rt)
+    
+  })
+</code></pre>
+
+<h2 id="output-to-highcharts">Output to Highcharts</h2>
+
+<p>The final output to Highcharts has been tweaked a bit to get the prediction intervals and so forth:</p>
+
+<pre><code class="language-r">  output$hc &lt;- renderHighchart({
+    
+    req(plot_data())
+    ## forcast values object
+    fc &lt;- plot_data()$forecast
+    
+    ## original data
+    raw_data &lt;- plot_data()$xts
+    
+    # plot last 48 hrs only, although forecast accounts for all data
+    raw_data &lt;- tail(raw_data, 48)
+    raw_x_date &lt;- as.numeric(index(raw_data)) * 1000
+    
+    ## start time in JS time
+    forecast_x_start &lt;- as.numeric(index(raw_data)[length(raw_data)])*1000
+    ## each hour after that in seconds, 
+    forecast_x_sequence &lt;- seq(3600000, by = 3600000, length.out = 12)
+    ## everything * 1000 to get to Javascript time
+    forecast_times &lt;- as.numeric(forecast_x_start + forecast_x_sequence)
+    
+    forecast_values &lt;- as.numeric(fc$mean)
+    
+    hc &lt;- highchart() %&gt;%
+      hc_chart(zoomType = &quot;x&quot;) %&gt;%
+      hc_xAxis(type = &quot;datetime&quot;) %&gt;% 
+      hc_add_series(type = &quot;line&quot;,
+                    name = &quot;data&quot;,
+                    data = list_parse2(data.frame(date = raw_x_date, 
+                                                  value = raw_data))) %&gt;%
+      hc_add_series(type = &quot;arearange&quot;, 
+                    name = &quot;80%&quot;,
+                    fillOpacity = 0.3,
+                    data = list_parse2(data.frame(date = forecast_times,
+                                                  upper = as.numeric(fc$upper[,1]),
+                                                  lower = as.numeric(fc$lower[,1])))) %&gt;%
+      hc_add_series(type = &quot;arearange&quot;, 
+                    name = &quot;95%&quot;,
+                    fillOpacity = 0.3,
+                    data = list_parse2(data.frame(date = forecast_times,
+                                                  upper = as.numeric(fc$upper[,2]),
+                                                  lower = as.numeric(fc$lower[,2])))) %&gt;% 
+      hc_add_series(type = &quot;line&quot;,
+                    name = &quot;forecast&quot;,
+                    data = list_parse2(data.frame(date = forecast_times, 
+                                                  value = forecast_values)))
+    
+    hc
+    
+  })
+</code></pre>
+
+<p>This can then be displayed now in a very simple <code>ui.R</code>:</p>
+
+<pre><code class="language-r">library(shiny)
+library(highcharter)
+
+shinyUI(fluidPage(
+  titlePanel(&quot;Realtime Shiny Dashboard from BigQuery&quot;),
+  highchartOutput(&quot;hc&quot;)
+  )
+)
+</code></pre>
+
+<p>&hellip;to be tweaked and put into a template as needed.</p>
+
+<p>The gif doesn&rsquo;t quite do it justice, but you get the idea:</p>
+
+<p><img src="../images/realtime_forcast.gif" alt="Update as visits registered to the blog" /></p>
+
+<h2 id="improvements">Improvements</h2>
+
+<p>Ideally I&rsquo;d like to avoid the Shiny grey-out when new data is fetched and the graph redraw - I fiddled a bit trying to get the JavaScript to take data from an R table and pull it in directly put that didn&rsquo;t work out - I may update it if its figured out later.  However, as I said above for my applicaiton I needed an update only every 60 seconds so it wasn&rsquo;t worth too much trouble over.  If say you needed (and who really <em>needs</em> this?) a smooth update every 5 seconds say, the grey out would be too often to be useable.</p>
+
+<h2 id="summary">Summary</h2>
+
+<p>The full app then can be tested easily as its realtime :-)</p>
+
+<p>As I visit my blog it sends data from Google Tag Manager to BigQuery; that tables is queried every 5 seconds from the Shiny app to see if any new visits have occured; if they have the full data set is downloaded; a new forecast is made and output to the Highcharts.</p>
+
+<p>Whatever your application, the biggest thing I got from trying this project was it was a lot easier than I expected, which I credit the BigQuery platform for, so give it a go and let me know how it goes for you. Improve on the base I have made here, and I&rsquo;d be really interested in the applications beyond reporting you may use it for - real time traffic predictions that modify bids being one example.</p>
 
             </div>
             <footer class="article-footer">
-    <a data-url="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/" data-id="bc1c5d2ec1ebb9518f633821279477ac" class="article-share-link">
+    <a data-url="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/" data-id="d5390adbc957acf80db95a72064b9f58" class="article-share-link">
         <i class="fa fa-share"></i>
         Share
     </a>
     
-    <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1//#disqus_thread" class="article-comment-link">
+    <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2//#disqus_thread" class="article-comment-link">
         Comments
     </a>
     
@@ -588,21 +724,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         
 <nav id="article-nav">
     
-    <a href="http://code.markedmondson.me/quicker-insight-sort-metric-delta/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">
           Older
       </strong>
-      <div class="article-nav-title">Insights sorting by delta metrics in the Google Analytics API v4</div>
+      <div class="article-nav-title">Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one</div>
     </a>
     
 
-    
-    <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">
-          Newer
-      </strong>
-      <div class="article-nav-title">Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two</div>
-    </a>
     
 </nav>
 
@@ -615,9 +744,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_shortname = 'markedmondson';
-    var disqus_identifier = 'http:\/\/code.markedmondson.me\/real-time-GTM-google-cloud-r-shiny-1\/';
-    var disqus_title = 'Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one';
-    var disqus_url = 'http:\/\/code.markedmondson.me\/real-time-GTM-google-cloud-r-shiny-1\/';
+    var disqus_identifier = 'http:\/\/code.markedmondson.me\/real-time-GTM-google-cloud-r-shiny-2\/';
+    var disqus_title = 'Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two';
+    var disqus_url = 'http:\/\/code.markedmondson.me\/real-time-GTM-google-cloud-r-shiny-2\/';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -647,7 +776,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <div class="item-thumbnail">
                     <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/" class="thumbnail">
                     
-                        <span style="background-image:url(http://code.markedmondson.me/banners/realtime-forecast.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
+                        <span style="background-image:url(http://code.markedmondson.me/banners/realtime-forecast.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -664,7 +793,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <div class="item-thumbnail">
                     <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/" class="thumbnail">
                     
-                        <span style="background-image:url(http://code.markedmondson.me/banners/itsalive.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
+                        <span style="background-image:url(http://code.markedmondson.me/banners/itsalive.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -681,7 +810,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <div class="item-thumbnail">
                     <a href="http://code.markedmondson.me/quicker-insight-sort-metric-delta/" class="thumbnail">
                     
-                        <span style="background-image:url(http://code.markedmondson.me/banners/delta.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
+                        <span style="background-image:url(http://code.markedmondson.me/banners/delta.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -698,7 +827,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <div class="item-thumbnail">
                     <a href="http://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/" class="thumbnail">
                     
-                        <span style="background-image:url(http://code.markedmondson.me/banners/rstudio-gce.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
+                        <span style="background-image:url(http://code.markedmondson.me/banners/rstudio-gce.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -715,7 +844,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <div class="item-thumbnail">
                     <a href="http://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/" class="thumbnail">
                     
-                        <span style="background-image:url(http://code.markedmondson.me/images/r-infrastructure.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
+                        <span style="background-image:url(http://code.markedmondson.me/images/r-infrastructure.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
                     
                     </a>
                 </div>

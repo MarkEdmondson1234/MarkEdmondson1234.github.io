@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/</loc>
+    <lastmod>2017-01-22T14:20:57+01:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/</loc>
     <lastmod>2017-01-12T23:03:57+01:00</lastmod>
   </url>
@@ -53,7 +58,7 @@
   
   <url>
     <loc>http://code.markedmondson.me/tags/big-query/</loc>
-    <lastmod>2017-01-12T23:03:57+01:00</lastmod>
+    <lastmod>2017-01-22T14:20:57+01:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -70,19 +75,14 @@
   </url>
   
   <url>
-    <loc>http://code.markedmondson.me/drafts/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>http://code.markedmondson.me/tags/google-analytics/</loc>
-    <lastmod>2017-01-12T23:03:57+01:00</lastmod>
+    <lastmod>2016-12-01T23:03:57+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://code.markedmondson.me/tags/google-app-engine/</loc>
-    <lastmod>2017-01-12T23:03:57+01:00</lastmod>
+    <lastmod>2017-01-22T14:20:57+01:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -106,36 +106,32 @@
   
   <url>
     <loc>http://code.markedmondson.me/tags/google-tag-manager/</loc>
-    <lastmod>2017-01-12T23:03:57+01:00</lastmod>
+    <lastmod>2017-01-22T14:20:57+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://code.markedmondson.me/</loc>
-    <lastmod>2017-01-12T23:03:57+01:00</lastmod>
+    <lastmod>2017-01-22T14:20:57+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://code.markedmondson.me/post/</loc>
-    <lastmod>2017-01-12T23:03:57+01:00</lastmod>
+    <lastmod>2017-01-22T14:20:57+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://code.markedmondson.me/tags/python/</loc>
-    <lastmod>2017-01-12T23:03:57+01:00</lastmod>
+    <lastmod>2017-01-22T14:20:57+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://code.markedmondson.me/tags/r/</loc>
-    <lastmod>2016-12-01T23:03:57+01:00</lastmod>
+    <lastmod>2017-01-22T14:20:57+01:00</lastmod>
     <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://code.markedmondson.me/drafts/2017-01-12-real-time-GTM-google-cloud-r-shiny-2/</loc>
   </url>
   
   <url>

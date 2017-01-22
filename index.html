@@ -29,7 +29,7 @@
 <meta property="og:url" content="http://code.markedmondson.me/" />
 
 
-<meta property="og:updated_time" content="2017-01-12T23:03:57&#43;01:00"/>
+<meta property="og:updated_time" content="2017-01-22T14:20:57&#43;01:00"/>
 
 
 
@@ -157,7 +157,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        9
+        10
         <span>Posts</span>
       </div>
       <div class="article-info-block">
@@ -243,26 +243,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <article class="article article-type-post" itemscope="" itemprop="blogPost">
         <div class="article-inner">
             
-            <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/" itemprop="url">
-                <img src="http://code.markedmondson.me/banners/itsalive.png" class="article-banner">
+            <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/" itemprop="url">
+                <img src="http://code.markedmondson.me/banners/realtime-forecast.png" class="article-banner">
             
             </a>
 
             <header class="article-header">
-    <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/">
+    <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/">
     <h1 class="article-title" itemprop="name">
-        Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one
+        Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two
     </h1>
     </a>
     <div class="article-meta">
         <div class="article-date">
             <i class="fa fa-calendar"></i>
-            <time datetime="2017-01-12 23:03:57 &#43;0100 CET" itemprop="datePublished">2017-01-12</time>
+            <time datetime="2017-01-22 14:20:57 &#43;0100 CET" itemprop="datePublished">2017-01-22</time>
             &middot;
-            1291
+            2074
             words
             &middot;
-            7
+            10
             minute read
         </div>
 
@@ -292,7 +292,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 &middot;
                 
                 
-                <a class="article-category-link" href="http://code.markedmondson.me/tags/google-analytics">google-analytics</a>
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/r">r</a>
                 
                 
             </div>
@@ -303,7 +303,155 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
             <div class="article-entry" itemprop="articleBody">
                 <p>
-                    In part one of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&rsquo;s data streaming capability. In part two, we then go into how to query that table in realtime from R, make a forecast use Shiny and use the JavaScript visualisation library Highcharts to visualise the data.
+                    In part two of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&rsquo;s data streaming capability. In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in Shiny and the JavaScript visualisation library Highcharts.
+                    <br>
+                </p>
+                <p class="article-more-link">
+                    <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/">
+                        Read more
+                    </a>
+                </p>
+            </div>
+            <footer class="article-footer">
+    <a data-url="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/" data-id="d5390adbc957acf80db95a72064b9f58" class="article-share-link">
+        <i class="fa fa-share"></i>
+        Share
+    </a>
+    
+    <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2//#disqus_thread" class="article-comment-link">
+        Comments
+    </a>
+    
+
+    <script>
+    (function ($) {
+        
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+    </script>
+</footer>
+
+        </div>
+    </article>
+    
+    <article class="article article-type-post" itemscope="" itemprop="blogPost">
+        <div class="article-inner">
+            
+            <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/" itemprop="url">
+                <img src="http://code.markedmondson.me/banners/itsalive.png" class="article-banner">
+            
+            </a>
+
+            <header class="article-header">
+    <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/">
+    <h1 class="article-title" itemprop="name">
+        Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one
+    </h1>
+    </a>
+    <div class="article-meta">
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2017-01-12 23:03:57 &#43;0100 CET" itemprop="datePublished">2017-01-12</time>
+            &middot;
+            1264
+            words
+            &middot;
+            6
+            minute read
+        </div>
+
+
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/python">python</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/google-app-engine">google-app-engine</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/google-tag-manager">google-tag-manager</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/big-query">big-query</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody">
+                <p>
+                    In part one of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&rsquo;s data streaming capability. In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in Shiny and the JavaScript visualisation library Highcharts.
                     <br>
                 </p>
                 <p class="article-more-link">
@@ -830,147 +978,6 @@ Things move on, and I now recommend using the process below that uses the RStudi
         </div>
     </article>
     
-    <article class="article article-type-post" itemscope="" itemprop="blogPost">
-        <div class="article-inner">
-            
-            <a href="http://code.markedmondson.me/anti-sampling-google-analytics-api/" itemprop="url">
-                <img src="http://code.markedmondson.me/banners/sampling-ga.png" class="article-banner">
-            
-            </a>
-
-            <header class="article-header">
-    <a href="http://code.markedmondson.me/anti-sampling-google-analytics-api/">
-    <h1 class="article-title" itemprop="name">
-        Efficient anti-sampling with the Google Analytics Reporting API
-    </h1>
-    </a>
-    <div class="article-meta">
-        <div class="article-date">
-            <i class="fa fa-calendar"></i>
-            <time datetime="2016-08-05 23:03:57 &#43;0100 &#43;0100" itemprop="datePublished">2016-08-05</time>
-            &middot;
-            1006
-            words
-            &middot;
-            5
-            minute read
-        </div>
-
-
-        
-
-        
-            
-            
-            <div class="article-category">
-                <i class="fa fa-tags"></i>
-                
-                
-                <a class="article-category-link" href="http://code.markedmondson.me/tags/r">R</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="http://code.markedmondson.me/tags/google-analytics">google-analytics</a>
-                
-                
-            </div>
-            
-        
-    </div>
-</header>
-
-            <div class="article-entry" itemprop="articleBody">
-                <p>
-                    Avoiding sampling is one of the most common reasons people start using the Google Analytics API. This blog lays out some pseudo-code to do so in an efficient manner, avoiding too many unnecessary API calls. The approach is used in the v4 calls for the R package googleAnalyticsR.
-Avoiding the daily walk The most common approach to mitigate sampling is to break down the API calls into one call per day.
-                    <br>
-                </p>
-                <p class="article-more-link">
-                    <a href="http://code.markedmondson.me/anti-sampling-google-analytics-api/">
-                        Read more
-                    </a>
-                </p>
-            </div>
-            <footer class="article-footer">
-    <a data-url="http://code.markedmondson.me/anti-sampling-google-analytics-api/" data-id="89c0057bd103fa490f78f1e408ba3b31" class="article-share-link">
-        <i class="fa fa-share"></i>
-        Share
-    </a>
-    
-    <a href="http://code.markedmondson.me/anti-sampling-google-analytics-api//#disqus_thread" class="article-comment-link">
-        Comments
-    </a>
-    
-
-    <script>
-    (function ($) {
-        
-        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
-            __SHARE_BUTTON_BINDED__ = true;
-        } else {
-            return;
-        }
-        $('body').on('click', function() {
-            $('.article-share-box.on').removeClass('on');
-        }).on('click', '.article-share-link', function(e) {
-            e.stopPropagation();
-
-            var $this = $(this),
-                url = $this.attr('data-url'),
-                encodedUrl = encodeURIComponent(url),
-                id = 'article-share-box-' + $this.attr('data-id'),
-                offset = $this.offset(),
-                box;
-
-            if ($('#' + id).length) {
-                box = $('#' + id);
-
-                if (box.hasClass('on')){
-                    box.removeClass('on');
-                    return;
-                }
-            } else {
-                var html = [
-                    '<div id="' + id + '" class="article-share-box">',
-                        '<input class="article-share-input" value="' + url + '">',
-                        '<div class="article-share-links">',
-                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
-                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
-                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
-                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
-                        '</div>',
-                    '</div>'
-                ].join('');
-
-              box = $(html);
-
-              $('body').append(box);
-            }
-
-            $('.article-share-box.on').hide();
-
-            box.css({
-                top: offset.top + 25,
-                left: offset.left
-            }).addClass('on');
-
-        }).on('click', '.article-share-box', function (e) {
-            e.stopPropagation();
-        }).on('click', '.article-share-box-input', function () {
-            $(this).select();
-        }).on('click', '.article-share-box-link', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
-        });
-    })(jQuery);
-    </script>
-</footer>
-
-        </div>
-    </article>
-    
 
     <nav id="page-nav">
 
@@ -994,6 +1001,23 @@ Avoiding the daily walk The most common approach to mitigate sampling is to brea
     </h3>
     <div class="widget">
         <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/" class="thumbnail">
+                    
+                        <span style="background-image:url(http://code.markedmondson.me/banners/realtime-forecast.png)" alt="Mark Edmondson" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/" class="title">Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two</a></p>
+                    <p class="item-date">
+                        <time datetime="2017-01-22 14:20:57 &#43;0100 CET" itemprop="datePublished">2017-01-22</time>
+                    </p>
+                </div>
+            </li>
             
             <li>
                 <div class="item-thumbnail">
@@ -1063,23 +1087,6 @@ Avoiding the daily walk The most common approach to mitigate sampling is to brea
                 </div>
             </li>
             
-            <li>
-                <div class="item-thumbnail">
-                    <a href="http://code.markedmondson.me/anti-sampling-google-analytics-api/" class="thumbnail">
-                    
-                        <span style="background-image:url(http://code.markedmondson.me/banners/sampling-ga.png)" alt="Mark Edmondson" class="thumbnail-image"></span>
-                    
-                    </a>
-                </div>
-                <div class="item-inner">
-                    
-                    <p class="item-title"><a href="http://code.markedmondson.me/anti-sampling-google-analytics-api/" class="title">Efficient anti-sampling with the Google Analytics Reporting API</a></p>
-                    <p class="item-date">
-                        <time datetime="2016-08-05 23:03:57 &#43;0100 &#43;0100" itemprop="datePublished">2016-08-05</time>
-                    </p>
-                </div>
-            </li>
-            
         </ul>
     </div>
 </div>
@@ -1106,7 +1113,7 @@ Avoiding the daily walk The most common approach to mitigate sampling is to brea
                 <a class="category-list-link" href="http://code.markedmondson.me/tags/big-query">
                     big-query
                 </a>
-                <span class="category-list-count">2</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -1130,7 +1137,7 @@ Avoiding the daily walk The most common approach to mitigate sampling is to brea
                 <a class="category-list-link" href="http://code.markedmondson.me/tags/google-analytics">
                     google-analytics
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -1138,7 +1145,7 @@ Avoiding the daily walk The most common approach to mitigate sampling is to brea
                 <a class="category-list-link" href="http://code.markedmondson.me/tags/google-app-engine">
                     google-app-engine
                 </a>
-                <span class="category-list-count">1</span>
+                <span class="category-list-count">2</span>
             </li>
             
             <li class="category-list-item">
@@ -1170,7 +1177,7 @@ Avoiding the daily walk The most common approach to mitigate sampling is to brea
                 <a class="category-list-link" href="http://code.markedmondson.me/tags/google-tag-manager">
                     google-tag-manager
                 </a>
-                <span class="category-list-count">1</span>
+                <span class="category-list-count">2</span>
             </li>
             
             <li class="category-list-item">
@@ -1178,7 +1185,7 @@ Avoiding the daily walk The most common approach to mitigate sampling is to brea
                 <a class="category-list-link" href="http://code.markedmondson.me/tags/python">
                     python
                 </a>
-                <span class="category-list-count">1</span>
+                <span class="category-list-count">2</span>
             </li>
             
             <li class="category-list-item">
@@ -1186,7 +1193,7 @@ Avoiding the daily walk The most common approach to mitigate sampling is to brea
                 <a class="category-list-link" href="http://code.markedmondson.me/tags/r">
                     r
                 </a>
-                <span class="category-list-count">7</span>
+                <span class="category-list-count">8</span>
             </li>
             
             <li class="category-list-item">
