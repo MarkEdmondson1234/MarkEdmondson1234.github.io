@@ -341,7 +341,9 @@ shinyUI(fluidPage(
 
 &lt;h2 id=&#34;improvements&#34;&gt;Improvements&lt;/h2&gt;
 
-&lt;p&gt;Ideally I&amp;rsquo;d like to avoid the Shiny grey-out when new data is fetched and the graph redraw - I fiddled a bit trying to get the JavaScript to take data from an R table and pull it in directly put that didn&amp;rsquo;t work out - I may update it if its figured out later.  However, as I said above for my applicaiton I needed an update only every 60 seconds so it wasn&amp;rsquo;t worth too much trouble over.  If say you needed (and who really &lt;em&gt;needs&lt;/em&gt; this?) a smooth update every 5 seconds say, the grey out would be too often to be useable.&lt;/p&gt;
+&lt;p&gt;Ideally I&amp;rsquo;d like to avoid the Shiny grey-out when new data is fetched and the graph redraw - I fiddled a bit trying to get the JavaScript to take data from an R table and pull it in directly put that didn&amp;rsquo;t work out - I may update it if its figured out later.&lt;/p&gt;
+
+&lt;p&gt;However, as I said above for my applicaiton I needed an update only every 60 seconds so it wasn&amp;rsquo;t worth too much trouble over.  If say you needed (and who really &lt;em&gt;needs&lt;/em&gt; this?) a smooth update every 5 seconds say, the grey out would be too often to be useable.&lt;/p&gt;
 
 &lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
 
