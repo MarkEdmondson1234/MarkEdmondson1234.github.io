@@ -7,8 +7,18 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
     <copyright>Powered by [Hugo](//gohugo.io). Theme by [PPOffice](http://github.com/ppoffice).</copyright>
-    <lastBuildDate>Sun, 22 Jan 2017 14:20:57 +0100</lastBuildDate>
+    <lastBuildDate>Sun, 22 Jan 2017 22:15:51 -0700</lastBuildDate>
     <atom:link href="http://code.markedmondson.me/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>About</title>
+      <link>http://code.markedmondson.me/about/</link>
+      <pubDate>Sun, 22 Jan 2017 22:15:51 -0700</pubDate>
+      
+      <guid>http://code.markedmondson.me/about/</guid>
+      <description>&lt;p&gt;Mark Edmondson is a Google Developer Expert.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two</title>
@@ -1409,16 +1419,6 @@ est_plot &amp;lt;- est_plot + ggtitle(&amp;quot;SEO Potential Revenue (Current p
 est_plot
 
 &lt;/code&gt;&lt;/pre&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>About</title>
-      <link>http://code.markedmondson.me/about/</link>
-      <pubDate>Thu, 05 May 2016 21:48:51 -0700</pubDate>
-      
-      <guid>http://code.markedmondson.me/about/</guid>
-      <description>&lt;p&gt;This is a &amp;ldquo;hello world&amp;rdquo; example website for the &lt;a href=&#34;https://github.com/rstudio/blogdown&#34;&gt;&lt;strong&gt;blogdown&lt;/strong&gt;&lt;/a&gt; package. The theme was forked from &lt;a href=&#34;https://github.com/jrutheiser/hugo-lithium-theme&#34;&gt;@jrutheiser/hugo-lithium-theme&lt;/a&gt; and modified by &lt;a href=&#34;https://github.com/yihui/hugo-lithium-theme&#34;&gt;Yihui Xie&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>
     

@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://code.markedmondson.me/about/</loc>
+    <lastmod>2017-01-22T22:15:51-07:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/</loc>
     <lastmod>2017-01-22T14:20:57+01:00</lastmod>
   </url>
@@ -34,11 +39,6 @@
   <url>
     <loc>http://code.markedmondson.me/search-console-google-analytics-r-keyword-research/</loc>
     <lastmod>2016-06-21T23:03:57+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://code.markedmondson.me/about/</loc>
-    <lastmod>2016-05-05T21:48:51-07:00</lastmod>
   </url>
   
   <url>
@@ -112,7 +112,7 @@
   
   <url>
     <loc>http://code.markedmondson.me/</loc>
-    <lastmod>2017-01-22T14:20:57+01:00</lastmod>
+    <lastmod>2017-01-22T22:15:51-07:00</lastmod>
     <priority>0</priority>
   </url>
   
