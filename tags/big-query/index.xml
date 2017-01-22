@@ -51,9 +51,9 @@
 
 &lt;h2 id=&#34;calling-data-your-options&#34;&gt;Calling data: your options&lt;/h2&gt;
 
-&lt;p&gt;The Google App Engine app on Github includes functions to both read and write data from BigQuery.  You can either call the data via the app engine app, which in turn reads the data via the Python BigQuery library, or if you are using a platofrm that supports reading the data directly from BigQuery then you can use that directly.&lt;/p&gt;
+&lt;p&gt;The Google App Engine app on Github includes functions to both read and write data from BigQuery.  You can either call the data via the app engine app, which in turn reads the data via the Python BigQuery library, or if you are using a platform that supports reading the data from BigQuery then you can use that directly.&lt;/p&gt;
 
-&lt;p&gt;In most cases, you will be better off reading the data directly, as you will be cutting out the middle man.  In some cases the app engine will time out so if you are using it you should make sure your app can handle null results.  But it is useful to have, for those platforms that do not have Big query SDKs, such as visualisation BI tools.&lt;/p&gt;
+&lt;p&gt;In most cases, you will be better off with the latter, as you will be cutting out the middle man.  In some cases the app engine will time out so if you are using it you should make sure your app can handle null results.  But it is useful to have, for those platforms that do not have Big query SDKs, such as some visualisation BI tools.&lt;/p&gt;
 
 &lt;h3 id=&#34;option-1-google-app-engine-reading-realtime-data-from-bigquery&#34;&gt;Option 1 - Google App Engine: Reading realtime data from BigQuery&lt;/h3&gt;
 
@@ -123,6 +123,19 @@ def get_data(q, limit = 1):
 
 		self.response.out.write(get_data(q, limit))
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To find the hash, you can run this line and copy the result:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;
+q = &amp;quot;&amp;quot; # change to the query you use directly if you donøt use the default
+salt = os.environ[&#39;SECRET_SALT&#39;] # the secret passphrase
+test = hashlib.sha224(q+salt).hexdigest()
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&amp;hellip;or easier is to just run one call, then check the logs for the hash in the debug messages:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://code.markedmondson.me/images/secrethash.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;full-app-engine-script&#34;&gt;Full App Engine Script&lt;/h3&gt;
 

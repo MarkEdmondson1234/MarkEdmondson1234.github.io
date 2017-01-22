@@ -44,7 +44,7 @@
 
 
 <meta itemprop="dateModified" content="2017-01-22T14:20:57&#43;01:00" />
-<meta itemprop="wordCount" content="2074">
+<meta itemprop="wordCount" content="2132">
 
 
 
@@ -275,10 +275,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2017-01-22 14:20:57 &#43;0100 CET" itemprop="datePublished">2017-01-22</time>
             &middot;
-            2074
+            2132
             words
             &middot;
-            10
+            11
             minute read
         </div>
 
@@ -354,9 +354,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <h2 id="calling-data-your-options">Calling data: your options</h2>
 
-<p>The Google App Engine app on Github includes functions to both read and write data from BigQuery.  You can either call the data via the app engine app, which in turn reads the data via the Python BigQuery library, or if you are using a platofrm that supports reading the data directly from BigQuery then you can use that directly.</p>
+<p>The Google App Engine app on Github includes functions to both read and write data from BigQuery.  You can either call the data via the app engine app, which in turn reads the data via the Python BigQuery library, or if you are using a platform that supports reading the data from BigQuery then you can use that directly.</p>
 
-<p>In most cases, you will be better off reading the data directly, as you will be cutting out the middle man.  In some cases the app engine will time out so if you are using it you should make sure your app can handle null results.  But it is useful to have, for those platforms that do not have Big query SDKs, such as visualisation BI tools.</p>
+<p>In most cases, you will be better off with the latter, as you will be cutting out the middle man.  In some cases the app engine will time out so if you are using it you should make sure your app can handle null results.  But it is useful to have, for those platforms that do not have Big query SDKs, such as some visualisation BI tools.</p>
 
 <h3 id="option-1-google-app-engine-reading-realtime-data-from-bigquery">Option 1 - Google App Engine: Reading realtime data from BigQuery</h3>
 
@@ -426,6 +426,19 @@ def get_data(q, limit = 1):
 
 		self.response.out.write(get_data(q, limit))
 </code></pre>
+
+<p>To find the hash, you can run this line and copy the result:</p>
+
+<pre><code class="language-python">
+q = &quot;&quot; # change to the query you use directly if you donøt use the default
+salt = os.environ['SECRET_SALT'] # the secret passphrase
+test = hashlib.sha224(q+salt).hexdigest()
+
+</code></pre>
+
+<p>&hellip;or easier is to just run one call, then check the logs for the hash in the debug messages:</p>
+
+<p><img src="/images/secrethash.png" alt="" /></p>
 
 <h3 id="full-app-engine-script">Full App Engine Script</h3>
 
