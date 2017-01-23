@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://code.markedmondson.me/new-blog-down/</loc>
+    <lastmod>2017-01-23T22:45:03+01:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://code.markedmondson.me/about/</loc>
     <lastmod>2017-01-22T22:15:51-07:00</lastmod>
   </url>
@@ -64,7 +69,7 @@
   
   <url>
     <loc>http://code.markedmondson.me/tags/blogging/</loc>
-    <lastmod>2016-01-14T23:03:57+01:00</lastmod>
+    <lastmod>2017-01-23T22:45:03+01:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -112,13 +117,13 @@
   
   <url>
     <loc>http://code.markedmondson.me/</loc>
-    <lastmod>2017-01-22T22:15:51-07:00</lastmod>
+    <lastmod>2017-01-23T22:45:03+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://code.markedmondson.me/post/</loc>
-    <lastmod>2017-01-22T14:20:57+01:00</lastmod>
+    <lastmod>2017-01-23T22:45:03+01:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -130,7 +135,7 @@
   
   <url>
     <loc>http://code.markedmondson.me/tags/r/</loc>
-    <lastmod>2017-01-22T14:20:57+01:00</lastmod>
+    <lastmod>2017-01-23T22:45:03+01:00</lastmod>
     <priority>0</priority>
   </url>
   
