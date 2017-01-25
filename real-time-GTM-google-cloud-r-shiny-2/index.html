@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <title>Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two &middot; Mark Edmondson</title>
+    <meta name="generator" content="Hugo 0.18.1" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Mark Edmondson">
+    
+      <meta name="description" content="The code bit of the blog">
+    
+    
+    <link rel="canonical" href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/"/>
+    <link rel="icon" href="http://code.markedmondson.me/favicon.ico">
+    <link rel="apple-touch-icon" href="http://code.markedmondson.me/apple-touch-icon.png"/>
+    <link rel="stylesheet" href="http://code.markedmondson.me/css/style.css">
+    <link rel="stylesheet" href="http://code.markedmondson.me/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://code.markedmondson.me/css/monokai.css">
+    <link rel="stylesheet" href="http://code.markedmondson.me/fancybox/jquery.fancybox.css">
+    
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+    <meta property="og:title" content="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" />
+<meta property="og:description" content="In part two of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&rsquo;s data streaming capability. In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in Shiny and the JavaScript visualisation library Highcharts." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/" />
+
+
+<meta property="og:updated_time" content="2017-01-22T14:20:57&#43;01:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two">
+<meta itemprop="description" content="In part two of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&rsquo;s data streaming capability. In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in Shiny and the JavaScript visualisation library Highcharts.">
+
+
+<meta itemprop="dateModified" content="2017-01-22T14:20:57&#43;01:00" />
+<meta itemprop="wordCount" content="2132">
+
+
+
+<meta itemprop="keywords" content="big-query,blogging,docker,google-analytics,google-app-engine,google-auth,google-cloud-storage,google-compute-engine,google-tag-manager,python,r,rstudio-server,search-console," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two"/>
+<meta name="twitter:description" content="In part two of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&rsquo;s data streaming capability. In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in Shiny and the JavaScript visualisation library Highcharts."/>
+<meta name="twitter:site" content="@HoloMarkeD"/>
+<meta name="twitter:domain" content="markedmondson.me"/>
+
+    
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WFFMBH');</script>
+
+
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+
+
+<div id="container">
+	<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://code.markedmondson.me" id="logo">
+          
+          <i class="logo" style="background-image: url('http://code.markedmondson.me/../images/greenhand.png')"></i>
+          
+          <span class="site-title">Mark Edmondson</span>
+      </a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://code.markedmondson.me/">Home</a>
+          
+          
+          
+          
+
+          
+          <a class="main-nav-link" href="/r-packages/">My R Packages</a>
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://markedmondson.me">Non-code blog</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://code.markedmondson.me/../images/gde_avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+              <input type="hidden" name="sitesearch" value="http://code.markedmondson.me" />
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://code.markedmondson.me/">Home</a></td>
+          
+          
+          
+          
+
+          
+          <td><a class="main-nav-link" href="/r-packages/">My R Packages</a></td>
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://markedmondson.me">Non-code blog</a></td>
+          
+          
+          <td>
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" class="search-form-input" placeholder="Search">
+          <input type="hidden" name="sitesearch" value="http://code.markedmondson.me" />
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+   	
+   	<div class="outer">
+   		
+	    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://code.markedmondson.me/../images/gde_avatar.jpg">
+      <h2 id="name">Mark Edmondson</h2>
+      <h3 id="title">Coding in digital analytics</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Copenhagen, Denmark</span>
+      
+          <a id="follow" href="https://github.com/MarkEdmondson1234">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+      <div class="article-info-block">
+        12
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          13
+        
+        <span>
+            Tags
+        </span>
+      </div>
+    </div>
+    <div class="profile-block social-links">
+      <table>
+        <tr>
+          
+<td><a href="//github.com/MarkEdmondson1234" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//linkedin.com/in/markpeteredmondson" target="_blank" title="LinkedIn"><i class="fa fa-linkedin"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/HoloMarkeD" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://code.markedmondson.me/index.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</aside>
+
+	    
+
+	    
+<section id="main">
+
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+        <div class="article-inner">
+            
+                <img src="http://code.markedmondson.me/banners/realtime-forecast.png" class="article-banner">
+            
+
+            <header class="article-header">
+    <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/">
+    <h1 class="article-title" itemprop="name">
+        Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two
+    </h1>
+    </a>
+    <div class="article-meta">
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2017-01-22 14:20:57 &#43;0100 CET" itemprop="datePublished">2017-01-22</time>
+            &middot;
+            2132
+            words
+            &middot;
+            11
+            minute read
+        </div>
+
+
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/python">python</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/google-app-engine">google-app-engine</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/google-tag-manager">google-tag-manager</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/big-query">big-query</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/r">r</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody">
+                
+
+<p>In part two of this two part series we walk through the steps to stream data from a <a href="https://www.google.com/analytics/tag-manager/">Google Tag Manager</a> (GTM) implementation into a <a href="https://cloud.google.com/appengine/">Google App Engine</a> (GAE) web app, which then adds data to a <a href="https://cloud.google.com/bigquery/">BigQuery</a> table via BigQuery&rsquo;s data streaming capability.  In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in <a href="https://shiny.rstudio.com/">Shiny</a> and the JavaScript visualisation library <a href="http://jkunst.com/highcharter/">Highcharts</a>.</p>
+
+<p>Read <a href="/real-time-GTM-google-cloud-r-shiny-1/">part one here</a>.</p>
+
+<p>The project combines several languages where their advantages lie: Python for its interaction with Google APIs and its quick start creating your own API on App Engine, SQL to query the BigQuery data itself, R for its forecasting libraries and the reactive Shiny framework, and JavaScript for the visualisation and data capture at the Google Tag Manager end.</p>
+
+<h2 id="thanks">Thanks</h2>
+
+<p>This project wouldn&rsquo;t have been possible without the help of the excellent work gone beforehand by <a href="https://www.analyticspros.com/blog/data-science/streaming-prebid-data-google-bigquery/">Luke Cempre&rsquo;s post on AnalyticsPros</a> for streaming data from Google Tag Manager to BigQuery, and <a href="http://jkunst.com/">Joshua Kunst</a> for his help with the Highcharts JavaScript.</p>
+
+<h2 id="data-flows">Data flows</h2>
+
+<p>There are two data flows in this project.  The first adds data to BigQuery:</p>
+
+<ol>
+<li>GTM collects data into its dataLayer from a web visit.</li>
+<li>A custom HTML tag in GTM collects the data you want to stream then calls an App Engine URL with its data payload.</li>
+<li>The app engine URL is sent to a queue to add the data to BigQuery.</li>
+<li>The data plus a timestamp is put into a BigQuery row.</li>
+</ol>
+
+<p>Then to read the data:</p>
+
+<ol>
+<li>The Shiny app calls Big Query every X seconds.</li>
+<li>The data is aggregated</li>
+<li>A forecast is made with the updated data.</li>
+<li>The Highcharts visualisation reads the changing dataset, and updates the visualisation.</li>
+</ol>
+
+<p>This blog will cover the second. A demo <a href="https://github.com/MarkEdmondson1234/realtimeShiny">Github repo for the Shiny app is available here</a>.</p>
+
+<h2 id="calling-data-your-options">Calling data: your options</h2>
+
+<p>The Google App Engine app on Github includes functions to both read and write data from BigQuery.  You can either call the data via the app engine app, which in turn reads the data via the Python BigQuery library, or if you are using a platform that supports reading the data from BigQuery then you can use that directly.</p>
+
+<p>In most cases, you will be better off with the latter, as you will be cutting out the middle man.  In some cases the app engine will time out so if you are using it you should make sure your app can handle null results.  But it is useful to have, for those platforms that do not have Big query SDKs, such as some visualisation BI tools.</p>
+
+<h3 id="option-1-google-app-engine-reading-realtime-data-from-bigquery">Option 1 - Google App Engine: Reading realtime data from BigQuery</h3>
+
+<p>The full code for reading and writing data is available at the <a href="https://github.com/MarkEdmondson1234/ga-bq-stream">supporting Github repo here</a>.</p>
+
+<p>The first blog in this series went through its data input, we now look at the data output.  In production this may be separated out into a different app, but for brevity its here in the same application.</p>
+
+<p>We first define some environmental variables in the <code>app.yaml</code> setup file, with the dataset and table and a secret code word:</p>
+
+<pre><code>#[START env]
+env_variables:
+  DATASET_ID: tests
+  TABLE_ID: realtime_markedmondsonme
+  SECRET_SALT: change_this_to_something_unique
+#[END env]
+</code></pre>
+
+<p>The first function below then queries the BigQuery table we defined in the environmental variables, and turns it into JSON.  By default it will get the last row, or you can pass in the <code>limit</code> argument to get more rows, or your own <code>q</code> argument with custom SQL to query the table directly:</p>
+
+<pre><code class="language-python"># queries and turns into JSON
+def get_data(q, limit = 1):
+	datasetId = os.environ['DATASET_ID']
+	tableId   = os.environ['TABLE_ID']
+
+	if len(q) &gt; 0:
+		query = q % (datasetId, tableId)
+	else:
+		query = 'SELECT * FROM %s.%s ORDER BY ts DESC LIMIT %s' % (datasetId, tableId, limit)
+
+	bqdata = sync_query(query)
+
+	return json.dumps(bqdata)
+	
+</code></pre>
+
+<p>This next class is called when the &ldquo;get data&rdquo; URL is requested.  A lot of headers are set to ensure no browser caching is done which we don&rsquo;t want since this is a realtime feed.</p>
+
+<p>For security, we also test via a <code>hash</code> parameter to make sure its an authorised request, and decide how much data to return via the <code>limit</code> parameter.</p>
+
+<p>Finally we call the function above and write that out to the URL response.</p>
+
+<pre><code class="language-python">class QueryTable(webapp2.RequestHandler):
+
+	def get(self):
+
+    # no caching
+		self.response.headers.add_header(&quot;Access-Control-Allow-Origin&quot;, &quot;*&quot;)
+		self.response.headers.add_header(&quot;Pragma&quot;, &quot;no-cache&quot;)
+		self.response.headers.add_header(&quot;Cache-Control&quot;, &quot;no-cache, no-store, must-revalidate, pre-check=0, post-check=0&quot;)
+		self.response.headers.add_header(&quot;Expires&quot;, &quot;Thu, 01 Dec 1994 16:00:00&quot;)
+		self.response.headers.add_header(&quot;Content-Type&quot;, &quot;application/json&quot;)
+
+		q      = cgi.escape(self.request.get(&quot;q&quot;))
+		myhash = cgi.escape(self.request.get(&quot;hash&quot;))
+		limit  = cgi.escape(self.request.get(&quot;limit&quot;))
+
+		salt = os.environ['SECRET_SALT']
+		test = hashlib.sha224(q+salt).hexdigest()
+
+		if(test != myhash):
+			logging.debug('Expected hash: {}'.format(test))
+			logging.error(&quot;Incorrect hash&quot;)
+			return
+
+		if len(limit) == 0:
+			limit = 1
+
+		self.response.out.write(get_data(q, limit))
+</code></pre>
+
+<p>To find the hash, you can run this line and copy the result:</p>
+
+<pre><code class="language-python">
+q = &quot;&quot; # change to the query you use directly if you donøt use the default
+salt = os.environ['SECRET_SALT'] # the secret passphrase
+test = hashlib.sha224(q+salt).hexdigest()
+
+</code></pre>
+
+<p>&hellip;or easier is to just run one call, then check the logs for the hash in the debug messages:</p>
+
+<p><img src="/images/secrethash.png" alt="" /></p>
+
+<h3 id="full-app-engine-script">Full App Engine Script</h3>
+
+<p>The full script uploaded is available in the Github repository here:  <a href="https://github.com/MarkEdmondson1234/ga-bq-stream/blob/master/main.py">main.py</a></p>
+
+<p>With this script you then need some configuration files for the app and upload it to your Google Project.  A guide on how to deploy this is and more is available from the <a href="https://github.com/MarkEdmondson1234/ga-bq-stream/blob/master/README.md">Github repository README</a>, but once done the app will be available at <code>https://YOUR-PROJECT-ID.appspot.com</code> and you will call the <code>/bq-streamer</code> and <code>/bq-get</code> URLs to send and get data.</p>
+
+<h3 id="option-2-calling-bigquery-directly">Option 2 - Calling BigQuery directly</h3>
+
+<p>This is the preferred method, as it will be on average 5-10 seconds quicker to get your results, and avoid timeouts.</p>
+
+<p>I&rsquo;m using Shiny as it fits into existing work, but you may prefer to use some of the other <a href="https://cloud.google.com/bigquery/docs/reference/libraries">BigQuery SDKs out there</a>. I&rsquo;ll be using <a href="https://github.com/cloudyr/bigQueryR">Github version of bigQueryR</a> <code>&gt; 0.2.0.9000</code> as it has support for non-cached queries that are needed to see the tables update in realtime.</p>
+
+<p>A demo <a href="https://github.com/MarkEdmondson1234/realtimeShiny">Github repo for the Shiny app is available here</a>.</p>
+
+<p>In this case, the function in R that is in the Shiny <code>server.R</code> is below:</p>
+
+<pre><code class="language-r">library(bigQueryR)
+
+
+do_bq &lt;- function(limit){
+
+  ## authenticate offline first, upload the .httr-oauth token
+  bqr_auth()
+  q &lt;- sprintf(&quot;SELECT * FROM [big-query-r:tests.realtime_markedmondsonme] ORDER BY ts DESC LIMIT %s&quot;, 
+               limit)
+  
+  bqr_query(projectId = &quot;big-query-r&quot;, 
+            datasetId = &quot;tests&quot;, 
+            query = q, 
+            useQueryCache = FALSE)  
+}
+</code></pre>
+
+<p>The <code>bqr_auth()</code> if first run offline to generate the authentication token, which is then uploaded with the app.  Alternatively you can use the <a href="http://code.markedmondson.me/googleAuthR/reference/gar_auth_service.html">JSON service auth</a> or if deploying on Google Compute Engine the automatic Google Cloud auth features of googleAuthR (<code>googleAuthR::gar_gce_auth()</code>)</p>
+
+<p>The query itself selects all the columns, and orders by the timestamp we supplied in the input post. The function has a parameter so you can select how many rows to collect, which we use later.</p>
+
+<p>Note the use of <code>useQueryCache = FALSE</code> to ensure you always get the freshest results.  If this wasn&rsquo;t selected queries of the same type will return the first result they queried, which is no good for these purposes.</p>
+
+<h2 id="reactivepoll-the-shiny-realtime-function">reactivePoll - the Shiny realtime function</h2>
+
+<p>For realtime applications, <code>shiny::reactivePoll()</code> is a function that periodically checks a datasource for changes.</p>
+
+<p>Now, what constitutes &ldquo;realtime&rdquo; is debatable here - for my applications I really only need an update every ~30 seconds.  Practically the Shiny output dims when updating with data, so for periods less than say 10 seconds it may not be the best approach for you - updating directly via JavaScript libraries may be better, and rely on say OpenCPU to provide the forecasting or another JS library.</p>
+
+<p>However, for my purposes I just need something better than the Google Analytics 4-hour lag in data (for GA360) and this suits well, particularly as you can apply a whole host of R data functions to the output.</p>
+
+<p><code>reactivePoll</code> needs to be supplied with two functions: one to check if the data has changed, the other to make the complete fetch once a change is detected.  For these we just check if the timestamp of the last entry has changed, and if so, then fetch the last 1000 results to make the prediction:</p>
+
+<pre><code class="language-r">## get 1000 rows of data
+get_bq &lt;- function(){
+
+  message(&quot;Getting new data...&quot;)
+  check &lt;- do_bq(1000)
+  
+  rt &lt;- as.data.frame(check, stringsAsFactors = FALSE)
+  names(rt) &lt;- c(&quot;pageURL&quot;,&quot;Referrer&quot;,&quot;ts&quot;)
+  
+  ## turn string into JS timestamp
+  rt$timestamp &lt;- as.POSIXct(as.numeric(as.character(rt$ts)), origin=&quot;1970-01-01&quot;)
+  
+  rt
+}
+
+## get 1 row of data, output its timestamp
+check_bq &lt;- function(){
+  
+  check &lt;- do_bq(1)
+  
+  message(&quot;Checking....check$ts: &quot;, check$ts)
+  check$ts
+  
+}
+
+</code></pre>
+
+<p>This is then called in the Shiny server function like so, in this case every 5 seconds:</p>
+
+<pre><code class="language-r">shinyServer(function(input, output, session) {
+  
+  ## checks every 5 seconds for changes
+  realtime_data &lt;- reactivePoll(5000, 
+                                session, 
+                                checkFunc = check_bq, 
+                                valueFunc = get_bq)
+
+  ### ... do stuff with realtime_data() ...
+
+}
+</code></pre>
+
+<h2 id="transforming-data">Transforming data</h2>
+
+<p>We then need to make the forecast, and put the data into the correct format it can be used in the chosen visualisation library, <a href="http://jkunst.com/highcharter/">highcharter</a>.</p>
+
+<p>The next function takes the output of the <code>realtime_data()</code> function, aggregates per hour (my lowly blog hasn&rsquo;t enough data to make it worth doing per minute, but YNMV), turns the aggregation into time series objects suitable for the forecast and highcharts functions, then outputs a list.</p>
+
+<p>In this case I have chosen a very simple forecast function using all the defaults of <code>forecast::forecast()</code> but this should be tweaked to your particular use cases, such as taking more account of seasonality and so forth.</p>
+
+<pre><code class="language-r">transform_rt &lt;- function(rt){
+  ## aggregate per hour
+  rt_agg &lt;- rt %&gt;% 
+    mutate(hour = format(timestamp, format = &quot;%Y-%m-%d %H:00&quot;)) %&gt;% 
+    count(hour)
+  
+  rt_agg$hour &lt;- as.POSIXct(rt_agg$hour, origin=&quot;1970-01-01&quot;)
+  
+  # ## the number of hits per timestamp
+  rt_xts &lt;- xts::xts(rt_agg$n, frequency = 24, order.by = rt_agg$hour)
+  rt_ts &lt;- ts(rt_agg$n, frequency = 24)
+  
+  list(forecast = forecast::forecast(rt_ts, h = 12),
+       xts = rt_xts)
+}
+</code></pre>
+
+<p>All that remains now is to apply this transformation to new data as it appears (e.g. for each new visit, the hourly aggregate for the last hour increases, and the forecast updates)</p>
+
+<pre><code class="language-r">  plot_data &lt;- reactive({
+    
+    req(realtime_data())
+    rt &lt;- realtime_data()
+    message(&quot;plot_data()&quot;)
+    ## aggregate
+    transform_rt(rt)
+    
+  })
+</code></pre>
+
+<h2 id="output-to-highcharts">Output to Highcharts</h2>
+
+<p>The final output to Highcharts has been tweaked a bit to get the prediction intervals and so forth:</p>
+
+<pre><code class="language-r">  output$hc &lt;- renderHighchart({
+    
+    req(plot_data())
+    ## forcast values object
+    fc &lt;- plot_data()$forecast
+    
+    ## original data
+    raw_data &lt;- plot_data()$xts
+    
+    # plot last 48 hrs only, although forecast accounts for all data
+    raw_data &lt;- tail(raw_data, 48)
+    raw_x_date &lt;- as.numeric(index(raw_data)) * 1000
+    
+    ## start time in JS time
+    forecast_x_start &lt;- as.numeric(index(raw_data)[length(raw_data)])*1000
+    ## each hour after that in seconds, 
+    forecast_x_sequence &lt;- seq(3600000, by = 3600000, length.out = 12)
+    ## everything * 1000 to get to Javascript time
+    forecast_times &lt;- as.numeric(forecast_x_start + forecast_x_sequence)
+    
+    forecast_values &lt;- as.numeric(fc$mean)
+    
+    hc &lt;- highchart() %&gt;%
+      hc_chart(zoomType = &quot;x&quot;) %&gt;%
+      hc_xAxis(type = &quot;datetime&quot;) %&gt;% 
+      hc_add_series(type = &quot;line&quot;,
+                    name = &quot;data&quot;,
+                    data = list_parse2(data.frame(date = raw_x_date, 
+                                                  value = raw_data))) %&gt;%
+      hc_add_series(type = &quot;arearange&quot;, 
+                    name = &quot;80%&quot;,
+                    fillOpacity = 0.3,
+                    data = list_parse2(data.frame(date = forecast_times,
+                                                  upper = as.numeric(fc$upper[,1]),
+                                                  lower = as.numeric(fc$lower[,1])))) %&gt;%
+      hc_add_series(type = &quot;arearange&quot;, 
+                    name = &quot;95%&quot;,
+                    fillOpacity = 0.3,
+                    data = list_parse2(data.frame(date = forecast_times,
+                                                  upper = as.numeric(fc$upper[,2]),
+                                                  lower = as.numeric(fc$lower[,2])))) %&gt;% 
+      hc_add_series(type = &quot;line&quot;,
+                    name = &quot;forecast&quot;,
+                    data = list_parse2(data.frame(date = forecast_times, 
+                                                  value = forecast_values)))
+    
+    hc
+    
+  })
+</code></pre>
+
+<p>This can then be displayed now in a very simple <code>ui.R</code>:</p>
+
+<pre><code class="language-r">library(shiny)
+library(highcharter)
+
+shinyUI(fluidPage(
+  titlePanel(&quot;Realtime Shiny Dashboard from BigQuery&quot;),
+  highchartOutput(&quot;hc&quot;)
+  )
+)
+</code></pre>
+
+<p>&hellip;to be tweaked and put into a template as needed.</p>
+
+<p>The gif doesn&rsquo;t quite do it justice, but you get the idea:</p>
+
+<p><img src="../images/realtime_forcast.gif" alt="Update as visits registered to the blog" /></p>
+
+<h2 id="improvements">Improvements</h2>
+
+<p>Ideally I&rsquo;d like to avoid the Shiny grey-out when new data is fetched and the graph redraw - I fiddled a bit trying to get the JavaScript to take data from an R table and pull it in directly put that didn&rsquo;t work out - I may update it if its figured out later.</p>
+
+<p>However, as I said above for my application I needed an update only every 60 seconds so it wasn&rsquo;t worth too much trouble over.  But if say you needed (and who really <em>needs</em> this?) a smooth update every 5 seconds, the grey out would be too often to be useable.</p>
+
+<h2 id="summary">Summary</h2>
+
+<p>The full app then can be tested easily as its realtime :-)</p>
+
+<p>As I visit my blog it sends data from Google Tag Manager to BigQuery; that tables is queried every 5 seconds from the Shiny app to see if any new visits have occured; if they have the full data set is downloaded; a new forecast is made and output to the Highcharts.</p>
+
+<p>Whatever your application, the biggest thing I got from trying this project was it was a lot easier than I expected, which I credit the BigQuery platform for, so give it a go and let me know how it goes for you. Improve on the base I have made here, and I&rsquo;d be really interested in the applications beyond reporting you may use it for - real time traffic predictions that modify bids being one example.</p>
+
+            </div>
+            <footer class="article-footer">
+    <a data-url="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/" data-id="d5390adbc957acf80db95a72064b9f58" class="article-share-link">
+        <i class="fa fa-share"></i>
+        Share
+    </a>
+    
+    <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2//#disqus_thread" class="article-comment-link">
+        Comments
+    </a>
+    
+
+    <script>
+    (function ($) {
+        
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+    </script>
+</footer>
+
+        </div>
+
+        
+<nav id="article-nav">
+    
+    <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">
+          Older
+      </strong>
+      <div class="article-nav-title">Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one</div>
+    </a>
+    
+
+    
+    <a href="http://code.markedmondson.me/new-blog-down/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">
+          Newer
+      </strong>
+      <div class="article-nav-title">New Blog Down</div>
+    </a>
+    
+</nav>
+
+
+    </article>
+
+    
+    <section id="comments">
+        <div id="disqus_thread">
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'markedmondson';
+    var disqus_identifier = 'http:\/\/code.markedmondson.me\/real-time-GTM-google-cloud-r-shiny-2\/';
+    var disqus_title = 'Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two';
+    var disqus_url = 'http:\/\/code.markedmondson.me\/real-time-GTM-google-cloud-r-shiny-2\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </div>
+    </section>
+    
+</section>
+
+
+	    
+	    <aside id="sidebar">
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://code.markedmondson.me/r-packages/" class="thumbnail">
+                    
+                        <span style="background-image:url(http://code.markedmondson.me/banners/packages.jpeg)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="http://code.markedmondson.me/r-packages/" class="title">My R Packages</a></p>
+                    <p class="item-date">
+                        <time datetime="2017-01-24 21:20:50 &#43;0100 CET" itemprop="datePublished">2017-01-24</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://code.markedmondson.me/new-blog-down/" class="thumbnail">
+                    
+                        <span style="background-image:url(http://code.markedmondson.me/banners/hugo.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="http://code.markedmondson.me/new-blog-down/" class="title">New Blog Down</a></p>
+                    <p class="item-date">
+                        <time datetime="2017-01-23 22:45:03 &#43;0100 CET" itemprop="datePublished">2017-01-23</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/" class="thumbnail">
+                    
+                        <span style="background-image:url(http://code.markedmondson.me/banners/realtime-forecast.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/" class="title">Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two</a></p>
+                    <p class="item-date">
+                        <time datetime="2017-01-22 14:20:57 &#43;0100 CET" itemprop="datePublished">2017-01-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/" class="thumbnail">
+                    
+                        <span style="background-image:url(http://code.markedmondson.me/banners/itsalive.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/" class="title">Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one</a></p>
+                    <p class="item-date">
+                        <time datetime="2017-01-12 23:03:57 &#43;0100 CET" itemprop="datePublished">2017-01-12</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://code.markedmondson.me/quicker-insight-sort-metric-delta/" class="thumbnail">
+                    
+                        <span style="background-image:url(http://code.markedmondson.me/banners/delta.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="http://code.markedmondson.me/quicker-insight-sort-metric-delta/" class="title">Insights sorting by delta metrics in the Google Analytics API v4</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-12-01 23:03:57 &#43;0100 CET" itemprop="datePublished">2016-12-01</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/big-query">
+                    big-query
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/blogging">
+                    blogging
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/docker">
+                    docker
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/google-analytics">
+                    google-analytics
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/google-app-engine">
+                    google-app-engine
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/google-auth">
+                    google-auth
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/google-cloud-storage">
+                    google-cloud-storage
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/google-compute-engine">
+                    google-compute-engine
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/google-tag-manager">
+                    google-tag-manager
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/python">
+                    python
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/r">
+                    r
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/rstudio-server">
+                    rstudio-server
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/search-console">
+                    search-console
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+
+    
+
+
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+	    
+	</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script src="http://code.markedmondson.me/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://code.markedmondson.me/js/script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<!-- MathJax -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+</body>
+</html>
