@@ -9,7 +9,11 @@ title: "My R Packages"
 url: /r-packages/
 ---
 
-A full list of R packages I have published are on [my Github](https://github.com/MarkEdmondson1234), but some notable ones are:
+A full list of R packages I have published are on [my Github](https://github.com/MarkEdmondson1234), but some notable ones are below.
+
+Some are part of the [cloudyR project](http://cloudyr.github.io/), which has many packages useful for using R in the cloud. ![](/images/cloudyr.png) 
+
+I concentrate on the Google cloud below, but be sure to check out the other packages if you're looking to work with AWS or other cloud based services. 
 
 ## CRAN
 
@@ -23,6 +27,8 @@ Status             | URL                      | Description
 [![](http://www.r-pkg.org/badges/version/searchConsoleR)](http://cran.r-project.org/package=searchConsoleR) |  [searchConsoleR](http://code.markedmondson.me/searchConsoleR/) | Download Search Console data into R
 
 As you can tell, most are aimed towards helping R users with help in digital analytics and cloud based services.  You can get some idea of how they can [work together in a digital analytics workflow here](/digital-analytics-workflow-through-google-cloud/).
+
+
 
 
 ## GITHUB
