@@ -11,7 +11,7 @@ url: /r-packages/
 
 A full list of R packages I have published are on [my Github](https://github.com/MarkEdmondson1234), but some notable ones are below.
 
-Some are part of the [cloudyR project](http://cloudyr.github.io/), which has many packages useful for using R in the cloud. ![](/images/cloudyr.png) 
+Some are part of the [cloudyR project](http://cloudyr.github.io/), which has many packages useful for using R in the cloud. ![](/images/cloudyr2.png) 
 
 I concentrate on the Google cloud below, but be sure to check out the other packages if you're looking to work with AWS or other cloud based services. 
 
