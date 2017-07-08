@@ -29,14 +29,13 @@ Status             | URL                      | Description
 As you can tell, most are aimed towards helping R users with help in digital analytics and cloud based services.  You can get some idea of how they can [work together in a digital analytics workflow here](/digital-analytics-workflow-through-google-cloud/).
 
 
-
-
 ## GITHUB
 
 More experimental packages:
 
 Status             | URL                      | Description
 ------------------ | ------------------------ | -----------------------------------------------------
+[![](https://travis-ci.org/MarkEdmondson1234/googleLanguageR.png?branch=master)](https://travis-ci.org/MarkEdmondson1234/googleLanguageR) | [googleLanguageR](https://github.com/MarkEdmondson1234/googleLanguageR) | Access Speech to text, translation and NLP text processing APIs
 [![](https://travis-ci.org/MarkEdmondson1234/googleID.svg?branch=master)](https://travis-ci.org/MarkEdmondson1234/googleID) | [googleID](https://github.com/MarkEdmondson1234/googleID) | In production, but very small so not on CRAN.  Allows user authentication via Google+ API for Shiny and RMarkdown documents. 
 In development | [youtubeAnalyticsR](https://github.com/MarkEdmondson1234/youtubeAnalyticsR) | Access YouTube Analytics data
 In development | [gtmR](https://github.com/MarkEdmondson1234/gtmR) | Access the Google Tag Manager API from R

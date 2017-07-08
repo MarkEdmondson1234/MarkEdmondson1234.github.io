@@ -15,11 +15,7 @@
       <pubDate>Tue, 24 Jan 2017 21:20:50 +0100</pubDate>
       
       <guid>http://code.markedmondson.me/r-packages/</guid>
-      <description>&lt;!-- BLOGDOWN-BODY-BEFORE
-
-/BLOGDOWN-BODY-BEFORE --&gt;
-
-&lt;p&gt;A full list of R packages I have published are on &lt;a href=&#34;https://github.com/MarkEdmondson1234&#34;&gt;my Github&lt;/a&gt;, but some notable ones are below.&lt;/p&gt;
+      <description>&lt;p&gt;A full list of R packages I have published are on &lt;a href=&#34;https://github.com/MarkEdmondson1234&#34;&gt;my Github&lt;/a&gt;, but some notable ones are below.&lt;/p&gt;
 &lt;p&gt;Some are part of the &lt;a href=&#34;http://cloudyr.github.io/&#34;&gt;cloudyR project&lt;/a&gt;, which has many packages useful for using R in the cloud. &lt;img src=&#34;http://code.markedmondson.me/images/cloudyr2.png&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;I concentrate on the Google cloud below, but be sure to check out the other packages if you’re looking to work with AWS or other cloud based services.&lt;/p&gt;
 &lt;div id=&#34;cran&#34; class=&#34;section level2&#34;&gt;
@@ -90,31 +86,36 @@
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;&lt;a href=&#34;https://travis-ci.org/MarkEdmondson1234/googleLanguageR&#34;&gt;&lt;img src=&#34;https://travis-ci.org/MarkEdmondson1234/googleLanguageR.png?branch=master&#34; /&gt;&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/googleLanguageR&#34;&gt;googleLanguageR&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Access Speech to text, translation and NLP text processing APIs&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
 &lt;td&gt;&lt;a href=&#34;https://travis-ci.org/MarkEdmondson1234/googleID&#34;&gt;&lt;img src=&#34;https://travis-ci.org/MarkEdmondson1234/googleID.svg?branch=master&#34; /&gt;&lt;/a&gt;&lt;/td&gt;
 &lt;td&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/googleID&#34;&gt;googleID&lt;/a&gt;&lt;/td&gt;
 &lt;td&gt;In production, but very small so not on CRAN. Allows user authentication via Google+ API for Shiny and RMarkdown documents.&lt;/td&gt;
 &lt;/tr&gt;
-&lt;tr class=&#34;even&#34;&gt;
+&lt;tr class=&#34;odd&#34;&gt;
 &lt;td&gt;In development&lt;/td&gt;
 &lt;td&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/youtubeAnalyticsR&#34;&gt;youtubeAnalyticsR&lt;/a&gt;&lt;/td&gt;
 &lt;td&gt;Access YouTube Analytics data&lt;/td&gt;
 &lt;/tr&gt;
-&lt;tr class=&#34;odd&#34;&gt;
+&lt;tr class=&#34;even&#34;&gt;
 &lt;td&gt;In development&lt;/td&gt;
 &lt;td&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/gtmR&#34;&gt;gtmR&lt;/a&gt;&lt;/td&gt;
 &lt;td&gt;Access the Google Tag Manager API from R&lt;/td&gt;
 &lt;/tr&gt;
-&lt;tr class=&#34;even&#34;&gt;
+&lt;tr class=&#34;odd&#34;&gt;
 &lt;td&gt;Reference&lt;/td&gt;
 &lt;td&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/autoGoogleAPI&#34;&gt;autoGoogleAPI&lt;/a&gt;&lt;/td&gt;
 &lt;td&gt;152 R packages auto generated via &lt;code&gt;googleAuthR&lt;/code&gt;’s discovery API feature&lt;/td&gt;
 &lt;/tr&gt;
-&lt;tr class=&#34;odd&#34;&gt;
+&lt;tr class=&#34;even&#34;&gt;
 &lt;td&gt;Done&lt;/td&gt;
 &lt;td&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/gentelellaShiny&#34;&gt;gentelellaShiny&lt;/a&gt;&lt;/td&gt;
 &lt;td&gt;A custom Shiny theme available in a package&lt;/td&gt;
 &lt;/tr&gt;
-&lt;tr class=&#34;even&#34;&gt;
+&lt;tr class=&#34;odd&#34;&gt;
 &lt;td&gt;Deprecated&lt;/td&gt;
 &lt;td&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/stripeR&#34;&gt;stripeR&lt;/a&gt;&lt;/td&gt;
 &lt;td&gt;Interact with the Stripe payment API, but superseded by another R package, &lt;a href=&#34;https://cran.r-project.org/web/packages/RStripe/index.html&#34;&gt;RStripe&lt;/a&gt;&lt;/td&gt;
@@ -122,14 +123,6 @@
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;/div&gt;
-
-
-&lt;!-- BLOGDOWN-HEAD
-
-
-
-
-/BLOGDOWN-HEAD --&gt;
 </description>
     </item>
     
