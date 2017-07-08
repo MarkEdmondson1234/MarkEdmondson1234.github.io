@@ -53,7 +53,16 @@ My work flow now is:
 1. Click the "Add Post" RStudio addin
 2. Write my markdown or RMarkdown post
 3. Preview the website using the "Live Preview Site" RStudio addin
-4. Publish by pushing the "Build All" button. 
+4. Copy the public folder over to my website hosting GitHub via a "Build All" button triggering this script:
+
+```
+# Build the project.
+RScript -e 'blogdown::build_site()'
+
+# Copy all over to other GitHub repo that holds public files
+cp -a ~/Documents/markedmondson.me-hugo/public/. ~/Documents/MarkEdmondson1234.github.io/
+```
+5. Push the new changes to the website hosting GitHub
 
 For migration I had to go through and add the `url` field to the posts with my old URLs to preserve old links to the blog, and also turn off forced lower case via the `disablePathToLower = true` option in the `config.toml` file. 
 
