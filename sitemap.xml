@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform</loc>
+    <lastmod>2017-07-09T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://code.markedmondson.me/r-packages/</loc>
     <lastmod>2017-01-24T21:20:50+01:00</lastmod>
   </url>
@@ -80,19 +85,19 @@
   
   <url>
     <loc>http://code.markedmondson.me/tags/docker/</loc>
-    <lastmod>2016-10-10T23:03:57+01:00</lastmod>
+    <lastmod>2017-07-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://code.markedmondson.me/tags/google-analytics/</loc>
-    <lastmod>2017-01-24T21:20:50+01:00</lastmod>
+    <lastmod>2017-07-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://code.markedmondson.me/tags/google-app-engine/</loc>
-    <lastmod>2017-01-22T14:20:57+01:00</lastmod>
+    <lastmod>2017-07-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -110,7 +115,7 @@
   
   <url>
     <loc>http://code.markedmondson.me/tags/google-compute-engine/</loc>
-    <lastmod>2017-01-24T21:20:50+01:00</lastmod>
+    <lastmod>2017-07-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -122,13 +127,13 @@
   
   <url>
     <loc>http://code.markedmondson.me/</loc>
-    <lastmod>2017-01-24T21:20:50+01:00</lastmod>
+    <lastmod>2017-07-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://code.markedmondson.me/post/</loc>
-    <lastmod>2017-01-24T21:20:50+01:00</lastmod>
+    <lastmod>2017-07-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -140,13 +145,13 @@
   
   <url>
     <loc>http://code.markedmondson.me/tags/r/</loc>
-    <lastmod>2017-01-24T21:20:50+01:00</lastmod>
+    <lastmod>2017-07-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://code.markedmondson.me/tags/rstudio-server/</loc>
-    <lastmod>2016-10-10T23:03:57+01:00</lastmod>
+    <lastmod>2017-07-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

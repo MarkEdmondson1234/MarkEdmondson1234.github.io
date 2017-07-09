@@ -29,7 +29,7 @@
 <meta property="og:url" content="http://code.markedmondson.me/" />
 
 
-<meta property="og:updated_time" content="2017-01-24T21:20:50&#43;01:00"/>
+<meta property="og:updated_time" content="2017-07-09T00:00:00&#43;00:00"/>
 
 
 
@@ -161,7 +161,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        12
+        13
         <span>Posts</span>
       </div>
       <div class="article-info-block">
@@ -243,6 +243,163 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     <section id="main">
     
+    
+    <article class="article article-type-post" itemscope="" itemprop="blogPost">
+        <div class="article-inner">
+            
+            <a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform" itemprop="url">
+                <img src="http://code.markedmondson.me/banners/scheduledR.png" class="article-banner">
+            
+            </a>
+
+            <header class="article-header">
+    <a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform">
+    <h1 class="article-title" itemprop="name">
+        Four Ways to Schedule R scripts on Google Cloud Platform
+    </h1>
+    </a>
+    <div class="article-meta">
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2017-07-09 00:00:00 &#43;0000 UTC" itemprop="datePublished">2017-07-09</time>
+            &middot;
+            2224
+            words
+            &middot;
+            11
+            minute read
+        </div>
+
+
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/r">r</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/google-app-engine">google-app-engine</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/docker">docker</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/google-analytics">google-analytics</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/google-compute-engine">google-compute-engine</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/rstudio-server">rstudio-server</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody">
+                <p>
+                    A common question I come across is how to automate scheduling of R scripts downloading data. This post goes through some options that I have played around with, which I’ve mostly used for downloading API data such as Google Analytics. I’ve mostly used the Google Cloud platform, so these are options for that service in particular, but the same principles could apply for AWS or Azure.
+ Scheduling scripts advice But first, some notes on the scripts you are scheduling, that I’ve picked up.
+                    <br>
+                </p>
+                <p class="article-more-link">
+                    <a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform">
+                        Read more
+                    </a>
+                </p>
+            </div>
+            <footer class="article-footer">
+    <a data-url="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform" data-id="e5587bb6405ee97f6e1cd83541161548" class="article-share-link">
+        <i class="fa fa-share"></i>
+        Share
+    </a>
+    
+    <a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/#disqus_thread" class="article-comment-link">
+        Comments
+    </a>
+    
+
+    <script>
+    (function ($) {
+        
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+    </script>
+</footer>
+
+        </div>
+    </article>
     
     <article class="article article-type-post" itemscope="" itemprop="blogPost">
         <div class="article-inner">
@@ -2021,6 +2178,23 @@ Using this setup means its all written in Markdown so I get control over everyth
             
             <li>
                 <div class="item-thumbnail">
+                    <a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform" class="thumbnail">
+                    
+                        <span style="background-image:url(http://code.markedmondson.me/banners/scheduledR.png)" alt="Mark Edmondson" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform" class="title">Four Ways to Schedule R scripts on Google Cloud Platform</a></p>
+                    <p class="item-date">
+                        <time datetime="2017-07-09 00:00:00 &#43;0000 UTC" itemprop="datePublished">2017-07-09</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
                     <a href="http://code.markedmondson.me/r-packages/" class="thumbnail">
                     
                         <span style="background-image:url(http://code.markedmondson.me/banners/packages.jpeg)" alt="Mark Edmondson" class="thumbnail-image"></span>
@@ -2087,23 +2261,6 @@ Using this setup means its all written in Markdown so I get control over everyth
                 </div>
             </li>
             
-            <li>
-                <div class="item-thumbnail">
-                    <a href="http://code.markedmondson.me/quicker-insight-sort-metric-delta/" class="thumbnail">
-                    
-                        <span style="background-image:url(http://code.markedmondson.me/banners/delta.png)" alt="Mark Edmondson" class="thumbnail-image"></span>
-                    
-                    </a>
-                </div>
-                <div class="item-inner">
-                    
-                    <p class="item-title"><a href="http://code.markedmondson.me/quicker-insight-sort-metric-delta/" class="title">Insights sorting by delta metrics in the Google Analytics API v4</a></p>
-                    <p class="item-date">
-                        <time datetime="2016-12-01 23:03:57 &#43;0100 CET" itemprop="datePublished">2016-12-01</time>
-                    </p>
-                </div>
-            </li>
-            
         </ul>
     </div>
 </div>
@@ -2146,7 +2303,7 @@ Using this setup means its all written in Markdown so I get control over everyth
                 <a class="category-list-link" href="http://code.markedmondson.me/tags/docker">
                     docker
                 </a>
-                <span class="category-list-count">2</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -2154,7 +2311,7 @@ Using this setup means its all written in Markdown so I get control over everyth
                 <a class="category-list-link" href="http://code.markedmondson.me/tags/google-analytics">
                     google-analytics
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">5</span>
             </li>
             
             <li class="category-list-item">
@@ -2162,7 +2319,7 @@ Using this setup means its all written in Markdown so I get control over everyth
                 <a class="category-list-link" href="http://code.markedmondson.me/tags/google-app-engine">
                     google-app-engine
                 </a>
-                <span class="category-list-count">2</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -2186,7 +2343,7 @@ Using this setup means its all written in Markdown so I get control over everyth
                 <a class="category-list-link" href="http://code.markedmondson.me/tags/google-compute-engine">
                     google-compute-engine
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">5</span>
             </li>
             
             <li class="category-list-item">
@@ -2210,7 +2367,7 @@ Using this setup means its all written in Markdown so I get control over everyth
                 <a class="category-list-link" href="http://code.markedmondson.me/tags/r">
                     r
                 </a>
-                <span class="category-list-count">10</span>
+                <span class="category-list-count">11</span>
             </li>
             
             <li class="category-list-item">
@@ -2218,7 +2375,7 @@ Using this setup means its all written in Markdown so I get control over everyth
                 <a class="category-list-link" href="http://code.markedmondson.me/tags/rstudio-server">
                     rstudio-server
                 </a>
-                <span class="category-list-count">2</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">

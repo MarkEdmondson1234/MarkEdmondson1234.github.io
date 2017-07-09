@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <title>Four Ways to Schedule R scripts on Google Cloud Platform &middot; Mark Edmondson</title>
+    <meta name="generator" content="Hugo 0.18.1" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Mark Edmondson">
+    
+      <meta name="description" content="The code bit of the blog">
+    
+    
+    <link rel="canonical" href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform"/>
+    <link rel="icon" href="http://code.markedmondson.me/favicon.ico">
+    <link rel="apple-touch-icon" href="http://code.markedmondson.me/apple-touch-icon.png"/>
+    <link rel="stylesheet" href="http://code.markedmondson.me/css/style.css">
+    <link rel="stylesheet" href="http://code.markedmondson.me/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://code.markedmondson.me/css/monokai.css">
+    <link rel="stylesheet" href="http://code.markedmondson.me/fancybox/jquery.fancybox.css">
+    
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+    <meta property="og:title" content="Four Ways to Schedule R scripts on Google Cloud Platform" />
+<meta property="og:description" content="A common question I come across is how to automate scheduling of R scripts downloading data. This post goes through some options that I have played around with, which I’ve mostly used for downloading API data such as Google Analytics. I’ve mostly used the Google Cloud platform, so these are options for that service in particular, but the same principles could apply for AWS or Azure.
+ Scheduling scripts advice But first, some notes on the scripts you are scheduling, that I’ve picked up." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform" />
+
+
+<meta property="og:updated_time" content="2017-07-09T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Four Ways to Schedule R scripts on Google Cloud Platform">
+<meta itemprop="description" content="A common question I come across is how to automate scheduling of R scripts downloading data. This post goes through some options that I have played around with, which I’ve mostly used for downloading API data such as Google Analytics. I’ve mostly used the Google Cloud platform, so these are options for that service in particular, but the same principles could apply for AWS or Azure.
+ Scheduling scripts advice But first, some notes on the scripts you are scheduling, that I’ve picked up.">
+
+
+<meta itemprop="dateModified" content="2017-07-09T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="2224">
+
+
+
+<meta itemprop="keywords" content="big-query,blogging,docker,google-analytics,google-app-engine,google-auth,google-cloud-storage,google-compute-engine,google-tag-manager,python,r,rstudio-server,search-console," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Four Ways to Schedule R scripts on Google Cloud Platform"/>
+<meta name="twitter:description" content="A common question I come across is how to automate scheduling of R scripts downloading data. This post goes through some options that I have played around with, which I’ve mostly used for downloading API data such as Google Analytics. I’ve mostly used the Google Cloud platform, so these are options for that service in particular, but the same principles could apply for AWS or Azure.
+ Scheduling scripts advice But first, some notes on the scripts you are scheduling, that I’ve picked up."/>
+<meta name="twitter:site" content="@HoloMarkeD"/>
+<meta name="twitter:domain" content="markedmondson.me"/>
+
+    
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WFFMBH');</script>
+
+
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+
+
+<div id="container">
+	<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://code.markedmondson.me" id="logo">
+          
+          <i class="logo" style="background-image: url('http://code.markedmondson.me/../images/greenhand.png')"></i>
+          
+          <span class="site-title">Mark Edmondson</span>
+      </a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://code.markedmondson.me/">Home</a>
+          
+          
+          
+          
+
+          
+          <a class="main-nav-link" href="/r-packages/">My R Packages</a>
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://markedmondson.me">Non-code blog</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://code.markedmondson.me/../images/gde_avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+              <input type="hidden" name="sitesearch" value="http://code.markedmondson.me" />
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://code.markedmondson.me/">Home</a></td>
+          
+          
+          
+          
+
+          
+          <td><a class="main-nav-link" href="/r-packages/">My R Packages</a></td>
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://markedmondson.me">Non-code blog</a></td>
+          
+          
+          <td>
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" class="search-form-input" placeholder="Search">
+          <input type="hidden" name="sitesearch" value="http://code.markedmondson.me" />
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+   	
+   	<div class="outer">
+   		
+	    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://code.markedmondson.me/../images/gde_avatar.jpg">
+      <h2 id="name">Mark Edmondson</h2>
+      <h3 id="title">Coding in digital analytics</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Copenhagen, Denmark</span>
+      
+          <a id="follow" href="https://github.com/MarkEdmondson1234">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+      <div class="article-info-block">
+        13
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          13
+        
+        <span>
+            Tags
+        </span>
+      </div>
+    </div>
+    <div class="profile-block social-links">
+      <table>
+        <tr>
+          
+<td><a href="//github.com/MarkEdmondson1234" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//linkedin.com/in/markpeteredmondson" target="_blank" title="LinkedIn"><i class="fa fa-linkedin"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/HoloMarkeD" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://code.markedmondson.me/index.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</aside>
+
+	    
+
+	    
+<section id="main">
+
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+        <div class="article-inner">
+            
+                <img src="http://code.markedmondson.me/banners/scheduledR.png" class="article-banner">
+            
+
+            <header class="article-header">
+    <a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform">
+    <h1 class="article-title" itemprop="name">
+        Four Ways to Schedule R scripts on Google Cloud Platform
+    </h1>
+    </a>
+    <div class="article-meta">
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2017-07-09 00:00:00 &#43;0000 UTC" itemprop="datePublished">2017-07-09</time>
+            &middot;
+            2224
+            words
+            &middot;
+            11
+            minute read
+        </div>
+
+
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/r">r</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/google-app-engine">google-app-engine</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/docker">docker</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/google-analytics">google-analytics</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/google-compute-engine">google-compute-engine</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/rstudio-server">rstudio-server</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody">
+                <p>A common question I come across is how to automate scheduling of R scripts downloading data. This post goes through some options that I have played around with, which I’ve mostly used for downloading API data such as Google Analytics. I’ve mostly used the Google Cloud platform, so these are options for that service in particular, but the same principles could apply for AWS or Azure.</p>
+<!--more-->
+<div id="scheduling-scripts-advice" class="section level2">
+<h2>Scheduling scripts advice</h2>
+<p>But first, some notes on the scripts you are scheduling, that I’ve picked up.</p>
+<div id="dont-save-data-to-the-scheduling-server" class="section level3">
+<h3>Don’t save data to the scheduling server</h3>
+<p>I would suggest to not save or use data in the same place you are doing the scheduling. Use a service like BigQuery (<code>bigQueryR</code>) or googleCloudStorageR (<code>googleCloudStorageR</code>) to first load any necessary data, do your work then save it out again. This may be a bit more complicated to set up, but will save you tears if the VM or service goes down - you still have your data.</p>
+<p>To help with this, on Google Cloud you can authenticate with the same details you used to launch a VM to authenticate with the storage services above (as all are covered under the <code>http://www.googleapis.com/auth/cloud-services</code> scope) - you can access this auth when on a GCE VM in R via <code>googleAuthR::gar_gce_auth()</code></p>
+<p>An example skeleton script is shown below that may be something you are scheduling.</p>
+<p>It downloads authentication files, does an API call, then saves it up to the cloud again:</p>
+<pre class="r"><code>library(googleAuthR)
+library(googleCloudStorageR)
+
+gcs_global_bucket(&quot;my-bucket&quot;)
+## auth on the VM
+options(googleAuthR.scopes.selected = &quot;https://www.googleapis.com/auth/cloud-platform&quot;)
+gar_gce_auth()
+
+## use the GCS auth to download the auth files for your API
+auth_file &lt;- &quot;auth/my_auth_file.json&quot;
+gcs_get_object(auth_file, saveToDisk = TRUE)
+
+## now auth with the file you just download
+gar_auth_service(auth_file)
+
+## do your work with APIs etc.
+.....
+
+## upload results back up to GCS (or BigQuery, etc.)
+gcs_upload(my_results, name = &quot;results/my_results.csv&quot;)
+</code></pre>
+</div>
+<div id="set-up-a-schedule-for-logs-too" class="section level3">
+<h3>Set up a schedule for logs too</h3>
+<p>Logs are important for scheduled jobs, so you have some idea on whats happened when things go wrong. To help with scheduling debugging, most <code>googleAuthR</code> packages now have a timestamp on their output messages.</p>
+<p>You can send the output of your scripts to log files, if using cron and RScript it looks something like this:</p>
+<pre><code>RScript /your-r-script.R &gt; your-r-script.log</code></pre>
+<p>…where <code>&gt;</code> sends the output to the new file.</p>
+<p>Over time though, this can get big and (sigh) fill up your disk so you can’t log in to the VM (speaking from experience here!) so I now set up another scheduled job that every week takes the logs and uploads to GCS, then deletes the current ones.</p>
+</div>
+<div id="consider-using-docker-for-environments" class="section level3">
+<h3>Consider using Docker for environments</h3>
+<p>Several of the methods below use <a href="https://www.docker.com/"><code>Docker</code></a>.</p>
+<p>The reasons for that is Docker provides a nice reprodueable way to define exactly what packages and dependencies you need for your script to run, which can run on top of any type of infrastructure as <code>Docker</code> has quickly become a cloud standard.</p>
+<p>For instance, migrating from Google Cloud to AWS is much easier if both can be deployed using Docker, and below Docker is instrumental in allowing you to run on multiple solutions.</p>
+<p>Bear in mind that when a Docker container relaunches it won’t save any data, so any non-saved state will be lost (you should make a new container if you need it to contain data), but you’re not saving your data to the docker container anyway, aren’t you?</p>
+</div>
+</div>
+<div id="scheduling-options---pros-and-cons" class="section level2">
+<h2>Scheduling options - Pros and cons</h2>
+<p>Here is an overview of the pros and cons of the options presented in more detail below:</p>
+<table>
+<colgroup>
+<col width="29%" />
+<col width="35%" />
+<col width="35%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Pros</th>
+<th>Cons</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1. <code>cronR</code> Addin on <code>RStudio Server</code></td>
+<td>Simple and quick</td>
+<td>Not so robust, need to log into server to make changes, versioning packages.</td>
+</tr>
+<tr class="even">
+<td>2. <code>gce_vm_scheduler</code> and <code>Dockerfiles</code></td>
+<td>Robust and can launch from local R session, support versioning</td>
+<td>Need to build Dockerfiles, all scripts on one VM</td>
+</tr>
+<tr class="odd">
+<td>3. Master &amp; Slave VM</td>
+<td>Tailor a fresh VM for each script, cheaper</td>
+<td>Need to build Dockerfiles, more complicated VM setup.</td>
+</tr>
+<tr class="even">
+<td>4. Google AppEngine with flexible containers</td>
+<td>Managed platform</td>
+<td>Need to turn script into web responses, more complicated setup</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="cronr-plus-rstudio-server" class="section level2">
+<h2>1 - cronR plus RStudio Server</h2>
+<p>This is the simplest and the one to start with.</p>
+<ol style="list-style-type: decimal">
+<li>Start up an RStudio Server instance</li>
+<li>Install <a href="https://github.com/bnosac/cronR"><code>cronR</code></a></li>
+<li>Upload your R script</li>
+<li>Schedule your script using <code>cronR</code> RStudio addin</li>
+</ol>
+<p>With <code>googleComputeEngineR</code> and the new <code>gcer-public</code> project containing public images that include one with <code>cronR</code> already installed, this is as simple as the few lines of code below:</p>
+<pre class="r"><code>library(googleComputeEngineR)
+
+## get the tag for prebuilt Docker image with googleAuthRverse, cronR and tidyverse
+tag &lt;- gce_tag_container(&quot;google-auth-r-cron-tidy&quot;, project = &quot;gcer-public&quot;)
+# gcr.io/gcer-public/google-auth-r-cron-tidy
+
+## start a custom Rstudio instance
+vm &lt;- gce_vm(name = &quot;my-rstudio&quot;,
+              predefined_type = &quot;n1-highmem-8&quot;,
+              template = &quot;rstudio&quot;,
+              dynamic_image = tag,
+              username = &quot;me&quot;, password = &quot;mypassword&quot;)
+</code></pre>
+<p>Wait for it to launch and give you an IP, then log in, upload a script and configure the schedule via the <code>cronR</code> addin.</p>
+<p>Some more detail about this workflow can be found at these <a href="https://cloudyr.github.io/googleComputeEngineR/articles/rstudio-team.html">custom RStudio example workflows</a> on the <code>googleComputeEngineR</code> website.</p>
+</div>
+<div id="gce_vm_scheduler-and-dockerfiles" class="section level2">
+<h2>2- <em>gce_vm_scheduler</em> and <em>Dockerfiles</em></h2>
+<p>This method I prefer to the above since it lets you create the exact environment (e.g. package versions, dependencies) to run your script in, that you can trail dev and production versions with. It also works locally without needing to log into the server each time to deploy a script.</p>
+<div id="handy-tools-for-docker---containerit-and-build-triggers" class="section level3">
+<h3>Handy tools for Docker - containerit and Build Triggers</h3>
+<p>Here we introduce Docker images, which may have been more a technical barrier for some before (but worth knowing, I think)</p>
+<div id="containerit" class="section level4">
+<h4>containerit</h4>
+<p>Things are much easier now though, as we have the magic new R package <a href="http://o2r.info/2017/05/30/containerit-package/"><code>containerit</code></a> which can generate these Docker files for you - just send <code>containerit::dockerfile()</code> around the script file.</p>
+</div>
+<div id="build-triggers" class="section level4">
+<h4>Build Triggers</h4>
+<p>Along with auto-generating Dockerfiles, for Google Cloud in particular we now also have <a href="https://cloud.google.com/container-builder/docs/how-to/build-triggers">Build Triggers</a> which automates building the Docker image for you.</p>
+<p>Just make the Dockerfile, then set up a trigger for when you push that file up to GitHub - you can see the ones used to create the public R resources here in the <a href="https://github.com/cloudyr/googleComputeEngineR/tree/master/inst/dockerfiles"><code>googleComputeEngineR</code> repo</a>.</p>
+</div>
+</div>
+<div id="recipe" class="section level3">
+<h3>Recipe</h3>
+<p>Putting it all together then, documentation of this workflow for <a href="https://cloudyr.github.io/googleComputeEngineR/articles/scheduled-rscripts.html">scheduling R scripts is found here</a>.</p>
+<ol style="list-style-type: decimal">
+<li>If you don’t already have one, start up a scheduler VM using <a href="https://cloudyr.github.io/googleComputeEngineR/reference/gce_vm_scheduler.html"><code>gce_vm_scheduler</code></a></li>
+<li>Create a Dockerfile either manually or using <code>containerit</code> that will run your script upon execution</li>
+<li>Upload the Dockerfile to a git repo (private or public)</li>
+<li>Setup a build trigger for that Dockerfile</li>
+<li>Once built, set a script to schedule within that Dockerfile with <a href="https://cloudyr.github.io/googleComputeEngineR/reference/gce_schedule_docker.html"><code>gce_schedule_docker</code></a></li>
+</ol>
+<p>This is still in beta at time of writing but should be stable by the time <code>googlecomputeEngineR</code> hits CRAN <code>0.2.0</code>.</p>
+</div>
+</div>
+<div id="master-and-slave-vms" class="section level2">
+<h2>3 - Master and Slave VMs</h2>
+<p>Some scripts take more resources than others, and since you are using VMs already you can have more control over what specifications of VM to launch based on the script you want to run.</p>
+<p>This means you can have a cheap scheduler server, that launch biggers VMs for the duration of the job. As GCP charges per minute, this can save you money over having a schedule server that is as big as what your most expensive script needs running 24/7.</p>
+<p>This method is largely like the scheduled scripts above, except in this case the scheduled script is also launching VMs to run the job upon.</p>
+<p>Using <code>googleCloudStorageR::gcs_source</code> you can run an R script straight from where it is hosted upon GCS, meaning all data, authentication files and scripts can be kept seperate from the computation. An example master script is shown below:</p>
+<pre class="r"><code>## intended to be run on a small instance via cron
+## use this script to launch other VMs with more expensive tasks
+library(googleComputeEngineR)
+library(googleCloudStorageR)
+gce_global_project(&quot;my-project&quot;)
+gce_global_zone(&quot;europe-west1-b&quot;)
+gcs_global_bucket(&quot;your-gcs-bucket&quot;)
+
+## auth to same project we&#39;re on
+googleAuthR::gar_gce_auth()
+
+## launch the premade VM
+vm &lt;- gce_vm(&quot;slave-1&quot;)
+
+## set SSH to use &#39;master&#39; username as configured before
+vm &lt;- gce_ssh_setup(vm, username = &quot;master&quot;, ssh_overwrite = TRUE)
+
+## run the script on the VM that will source from GCS
+runme &lt;- &quot;Rscript -e \&quot;googleAuthR::gar_gce_auth();googleCloudStorageR::gcs_source(&#39;download.R&#39;, bucket = &#39;your-gcs-bucket&#39;)\&quot;&quot;
+out &lt;- docker_cmd(vm, 
+                  cmd = &quot;exec&quot;, 
+                  args = c(&quot;rstudio&quot;, runme), 
+                  wait = TRUE)
+
+## once finished, stop the VM
+gce_vm_stop(vm)</code></pre>
+<p>More detail is again available at the <a href="https://cloudyr.github.io/googleComputeEngineR/articles/scheduled-rscripts.html#master-slave-scheduler"><code>googleComputeEngineR</code> website</a>.</p>
+</div>
+<div id="google-app-engine-with-flexible-custom-runtimes" class="section level2">
+<h2>4 - Google App Engine with flexible custom runtimes</h2>
+<p><a href="https://cloud.google.com/appengine/docs/">Google App Engine</a> has always had schedule options, but only for its supported languages of Python, Java, PHP etc. Now with the <a href="https://cloud.google.com/appengine/docs/flexible/custom-runtimes/">introduction of flexible containers</a>, any Docker container running any language (including R) can also be run.</p>
+<p>This is potentially the best solution since it runs upon a 100% managed platform, meaning you don’t need to worry about servers at all, and it takes care of things like server maintence, logging etc.</p>
+<div id="setting-up-your-script-for-app-engine" class="section level3">
+<h3>Setting up your script for App Engine</h3>
+<p>There are some <a href="https://cloud.google.com/appengine/docs/flexible/custom-runtimes/build">requirements for the container</a> that need configuring so it can run:</p>
+<ul>
+<li>You can not use <code>googleAuthR::gar_gce_auth()</code> so will need to upload the auth token within the Dockerfile.<br />
+</li>
+<li>AppEngine expects a web service to be listening on port 8080, so your schedule script needs to be triggered via HTTP requests.</li>
+</ul>
+<p>For authentication, I use the system environment arguments (i.e. those usually set in <code>.Renviron</code>) that <code>googleAuthR</code> packages use for auto-authentication. Put the auth file (such as JSON or a <code>.httr-oauth</code> file) into the deployment folder, then point to its location via specifying in the <code>app.yaml</code>. Details below.</p>
+<p>To solve the need for being a webservice on port 8080 (which is then proxied to normal webports 80/443), <a href="https://www.rplumber.io/"><code>plumber</code></a> is a great service by Jeff Allen of RStudio, which already comes with its own Docker solution. You can then modify that <code>Dockerfile</code> slightly so that it works on App Engine.</p>
+</div>
+<div id="recipe-1" class="section level3">
+<h3>Recipe</h3>
+<p>To then schedule your R script on app engine, follow the guide below, first making sure you have setup the <a href="https://cloud.google.com/sdk/gcloud/">gcloud CLI</a>.</p>
+<ol style="list-style-type: decimal">
+<li>Create a Google Appengine project in the US region (only region that supports flexible containers at the moment)</li>
+<li>Create a scheduled script e.g. <code>schedule.R</code> - you can use auth from environment files specified in <code>app.yaml</code>.</li>
+<li>Make an API out of the script by using <code>plumber</code> - example:</li>
+</ol>
+<pre class="r"><code>library(googleAuthR)         ## authentication
+library(googleCloudStorageR)  ## google cloud storage
+library(readr)                ## 
+## gcs auto authenticated via environment file 
+## pointed to via sys.env GCS_AUTH_FILE
+
+#* @get /demoR
+demoScheduleAPI &lt;- function(){
+  
+  ## download or do something
+  something &lt;- tryCatch({
+      gcs_get_object(&quot;schedule/test.csv&quot;, 
+                     bucket = &quot;mark-edmondson-public-files&quot;)
+    }, error = function(ex) {
+      NULL
+    })
+      
+  something_else &lt;- data.frame(X1 = 1,
+                               time = Sys.time(), 
+                               blah = paste(sample(letters, 10, replace = TRUE), collapse = &quot;&quot;))
+  something &lt;- rbind(something, something_else)
+  
+  tmp &lt;- tempfile(fileext = &quot;.csv&quot;)
+  on.exit(unlink(tmp))
+  write.csv(something, file = tmp, row.names = FALSE)
+  ## upload something
+  gcs_upload(tmp, 
+             bucket = &quot;mark-edmondson-public-files&quot;, 
+             name = &quot;schedule/test.csv&quot;)
+  
+  message(&quot;Done&quot;, Sys.time())
+}
+</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>Create Dockerfile. If using <code>containerit</code> then replace FROM with <code>trestletech/plumber</code> and add the below lines to use correct AppEngine port:</li>
+</ol>
+<p>Example:</p>
+<pre class="r"><code>library(containerit)
+
+dockerfile &lt;- dockerfile(&quot;schedule.R&quot;, copy = &quot;script_dir&quot;, soft = TRUE)
+write(dockerfile, file = &quot;Dockerfile&quot;)</code></pre>
+<p>Then change/add these lines to the created Dockerfile:</p>
+<pre><code>EXPOSE 8080
+ENTRYPOINT [&quot;R&quot;, &quot;-e&quot;, &quot;pr &lt;- plumber::plumb(commandArgs()[4]); pr$run(host=&#39;0.0.0.0&#39;, port=8080)&quot;]
+CMD [&quot;schedule.R&quot;]</code></pre>
+<p>Example final Dockerfile below. This doesn’t need to be built in say a build trigger as its built upon app engine deployment.</p>
+<pre><code>FROM trestletech/plumber
+LABEL maintainer=&quot;mark&quot;
+RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
+ &amp;&amp; apt-get install -y libcairo2-dev \
+    libcurl4-openssl-dev \
+    libgmp-dev \
+    libpng-dev \
+    libssl-dev \
+    libxml2-dev \
+    make \
+    pandoc \
+    pandoc-citeproc \
+    zlib1g-dev
+RUN [&quot;install2.r&quot;, &quot;-r &#39;https://cloud.r-project.org&#39;&quot;, &quot;readr&quot;, &quot;googleCloudStorageR&quot;, &quot;Rcpp&quot;, &quot;digest&quot;, &quot;crayon&quot;, &quot;withr&quot;, &quot;mime&quot;, &quot;R6&quot;, &quot;jsonlite&quot;, &quot;xtable&quot;, &quot;magrittr&quot;, &quot;httr&quot;, &quot;curl&quot;, &quot;testthat&quot;, &quot;devtools&quot;, &quot;hms&quot;, &quot;shiny&quot;, &quot;httpuv&quot;, &quot;memoise&quot;, &quot;htmltools&quot;, &quot;openssl&quot;, &quot;tibble&quot;, &quot;remotes&quot;]
+RUN [&quot;installGithub.r&quot;, &quot;MarkEdmondson1234/googleAuthR@7917351&quot;, &quot;hadley/rlang@ff87439&quot;]
+WORKDIR /payload/
+COPY [&quot;.&quot;, &quot;./&quot;]
+
+EXPOSE 8080
+ENTRYPOINT [&quot;R&quot;, &quot;-e&quot;, &quot;pr &lt;- plumber::plumb(commandArgs()[4]); pr$run(host=&#39;0.0.0.0&#39;, port=8080)&quot;]
+CMD [&quot;schedule.R&quot;]</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>Specify <code>app.yaml</code> for flexible containers as <a href="https://cloud.google.com/appengine/docs/flexible/custom-runtimes/">detailed here</a>. Add any environment vars such as auth files, that will be included in same deployment folder.</li>
+</ol>
+<p>Example:</p>
+<pre class="yaml"><code>runtime: custom
+env: flex
+
+env_variables:
+  GCS_AUTH_FILE: auth.json</code></pre>
+<ol start="6" style="list-style-type: decimal">
+<li>Specify <code>cron.yaml</code> for the schedule needed:</li>
+</ol>
+<pre class="yaml"><code>cron:
+- description: &quot;test cron&quot;
+  url: /demoR
+  schedule: every 1 hours</code></pre>
+<ol start="7" style="list-style-type: decimal">
+<li><p>You should now have these files in the deployment folder:</p>
+<ul>
+<li><code>app.yaml</code> - configuration of general app settings</li>
+<li><code>auth.json</code> - an authentication file specified in env arguments or app.yaml</li>
+<li><code>cron.yaml</code> - specification of when your scheduling is</li>
+<li><code>Dockerfile</code> - specification of the environment</li>
+<li><code>schedule.R</code> - the plumber version of your script containing your endpoints</li>
+</ul></li>
+</ol>
+<p>Open the terminal in that folder, and deploy via <code>gcloud app deploy --project your-project</code> and the cron schedule via <code>gcloud app deploy cron.yaml --project your-project</code>.</p>
+<p>It will take a while (up to 10 mins) the first time.</p>
+<ol start="8" style="list-style-type: decimal">
+<li>The App Engine should then be deployed on <a href="https://your-project.appspot.com/" class="uri">https://your-project.appspot.com/</a> - every <code>GET</code> request to <a href="https://your-project.appspot.com/demoR" class="uri">https://your-project.appspot.com/demoR</a> (or other endpoints you have specified in R script) will run the R code. The cron example above will run every hour to this endpoint.</li>
+</ol>
+<p>Logs for the instance are found <a href="https://console.cloud.google.com/logs/viewer">here</a>.</p>
+<p>This approach is the most flexible, and offers a fully managed platform for your scripts. Scheduled scripts are only the beginning, since deploying such actually gives you a way to run R scripts in response to any HTTP request from any language - triggers could also include if someone updates a spreadsheet, adds a file to a folder, pushes to GitHub etc. which opens up a lot of exciting possibilities. You can also scale it up to become a fully functioning R API.</p>
+</div>
+</div>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<p>Hopefully this has given you an idea on your options for R on Google Cloud regarding scheduling. If you have some other easier workflows or suggestions for improvements please put them in the comments below!</p>
+</div>
+
+            </div>
+            <footer class="article-footer">
+    <a data-url="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform" data-id="e5587bb6405ee97f6e1cd83541161548" class="article-share-link">
+        <i class="fa fa-share"></i>
+        Share
+    </a>
+    
+    <a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/#disqus_thread" class="article-comment-link">
+        Comments
+    </a>
+    
+
+    <script>
+    (function ($) {
+        
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+    </script>
+</footer>
+
+        </div>
+
+        
+<nav id="article-nav">
+    
+    <a href="http://code.markedmondson.me/r-packages/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">
+          Older
+      </strong>
+      <div class="article-nav-title">My R Packages</div>
+    </a>
+    
+
+    
+</nav>
+
+
+    </article>
+
+    
+    <section id="comments">
+        <div id="disqus_thread">
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'markedmondson';
+    var disqus_identifier = 'http:\/\/code.markedmondson.me\/4-ways-schedule-r-scripts-on-google-cloud-platform';
+    var disqus_title = 'Four Ways to Schedule R scripts on Google Cloud Platform';
+    var disqus_url = 'http:\/\/code.markedmondson.me\/4-ways-schedule-r-scripts-on-google-cloud-platform';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </div>
+    </section>
+    
+</section>
+
+
+	    
+	    <aside id="sidebar">
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform" class="thumbnail">
+                    
+                        <span style="background-image:url(http://code.markedmondson.me/banners/scheduledR.png)" alt="Four Ways to Schedule R scripts on Google Cloud Platform" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform" class="title">Four Ways to Schedule R scripts on Google Cloud Platform</a></p>
+                    <p class="item-date">
+                        <time datetime="2017-07-09 00:00:00 &#43;0000 UTC" itemprop="datePublished">2017-07-09</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://code.markedmondson.me/r-packages/" class="thumbnail">
+                    
+                        <span style="background-image:url(http://code.markedmondson.me/banners/packages.jpeg)" alt="Four Ways to Schedule R scripts on Google Cloud Platform" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="http://code.markedmondson.me/r-packages/" class="title">My R Packages</a></p>
+                    <p class="item-date">
+                        <time datetime="2017-01-24 21:20:50 &#43;0100 CET" itemprop="datePublished">2017-01-24</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://code.markedmondson.me/new-blog-down/" class="thumbnail">
+                    
+                        <span style="background-image:url(http://code.markedmondson.me/banners/hugo.png)" alt="Four Ways to Schedule R scripts on Google Cloud Platform" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="http://code.markedmondson.me/new-blog-down/" class="title">New Blog Down</a></p>
+                    <p class="item-date">
+                        <time datetime="2017-01-23 22:45:03 &#43;0100 CET" itemprop="datePublished">2017-01-23</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/" class="thumbnail">
+                    
+                        <span style="background-image:url(http://code.markedmondson.me/banners/realtime-forecast.png)" alt="Four Ways to Schedule R scripts on Google Cloud Platform" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/" class="title">Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two</a></p>
+                    <p class="item-date">
+                        <time datetime="2017-01-22 14:20:57 &#43;0100 CET" itemprop="datePublished">2017-01-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/" class="thumbnail">
+                    
+                        <span style="background-image:url(http://code.markedmondson.me/banners/itsalive.png)" alt="Four Ways to Schedule R scripts on Google Cloud Platform" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/" class="title">Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one</a></p>
+                    <p class="item-date">
+                        <time datetime="2017-01-12 23:03:57 &#43;0100 CET" itemprop="datePublished">2017-01-12</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/big-query">
+                    big-query
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/blogging">
+                    blogging
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/docker">
+                    docker
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/google-analytics">
+                    google-analytics
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/google-app-engine">
+                    google-app-engine
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/google-auth">
+                    google-auth
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/google-cloud-storage">
+                    google-cloud-storage
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/google-compute-engine">
+                    google-compute-engine
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/google-tag-manager">
+                    google-tag-manager
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/python">
+                    python
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/r">
+                    r
+                </a>
+                <span class="category-list-count">11</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/rstudio-server">
+                    rstudio-server
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/search-console">
+                    search-console
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+
+    
+
+
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+	    
+	</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script src="http://code.markedmondson.me/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://code.markedmondson.me/js/script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<!-- MathJax -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+</body>
+</html>

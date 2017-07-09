@@ -7,8 +7,324 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
     <copyright>Powered by [Hugo](//gohugo.io). Theme by [PPOffice](http://github.com/ppoffice).</copyright>
-    <lastBuildDate>Tue, 24 Jan 2017 21:20:50 +0100</lastBuildDate>
+    <lastBuildDate>Sun, 09 Jul 2017 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://code.markedmondson.me/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Four Ways to Schedule R scripts on Google Cloud Platform</title>
+      <link>http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform</link>
+      <pubDate>Sun, 09 Jul 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform</guid>
+      <description>&lt;p&gt;A common question I come across is how to automate scheduling of R scripts downloading data. This post goes through some options that I have played around with, which I’ve mostly used for downloading API data such as Google Analytics. I’ve mostly used the Google Cloud platform, so these are options for that service in particular, but the same principles could apply for AWS or Azure.&lt;/p&gt;
+&lt;!--more--&gt;
+&lt;div id=&#34;scheduling-scripts-advice&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Scheduling scripts advice&lt;/h2&gt;
+&lt;p&gt;But first, some notes on the scripts you are scheduling, that I’ve picked up.&lt;/p&gt;
+&lt;div id=&#34;dont-save-data-to-the-scheduling-server&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Don’t save data to the scheduling server&lt;/h3&gt;
+&lt;p&gt;I would suggest to not save or use data in the same place you are doing the scheduling. Use a service like BigQuery (&lt;code&gt;bigQueryR&lt;/code&gt;) or googleCloudStorageR (&lt;code&gt;googleCloudStorageR&lt;/code&gt;) to first load any necessary data, do your work then save it out again. This may be a bit more complicated to set up, but will save you tears if the VM or service goes down - you still have your data.&lt;/p&gt;
+&lt;p&gt;To help with this, on Google Cloud you can authenticate with the same details you used to launch a VM to authenticate with the storage services above (as all are covered under the &lt;code&gt;http://www.googleapis.com/auth/cloud-services&lt;/code&gt; scope) - you can access this auth when on a GCE VM in R via &lt;code&gt;googleAuthR::gar_gce_auth()&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;An example skeleton script is shown below that may be something you are scheduling.&lt;/p&gt;
+&lt;p&gt;It downloads authentication files, does an API call, then saves it up to the cloud again:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(googleAuthR)
+library(googleCloudStorageR)
+
+gcs_global_bucket(&amp;quot;my-bucket&amp;quot;)
+## auth on the VM
+options(googleAuthR.scopes.selected = &amp;quot;https://www.googleapis.com/auth/cloud-platform&amp;quot;)
+gar_gce_auth()
+
+## use the GCS auth to download the auth files for your API
+auth_file &amp;lt;- &amp;quot;auth/my_auth_file.json&amp;quot;
+gcs_get_object(auth_file, saveToDisk = TRUE)
+
+## now auth with the file you just download
+gar_auth_service(auth_file)
+
+## do your work with APIs etc.
+.....
+
+## upload results back up to GCS (or BigQuery, etc.)
+gcs_upload(my_results, name = &amp;quot;results/my_results.csv&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;set-up-a-schedule-for-logs-too&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Set up a schedule for logs too&lt;/h3&gt;
+&lt;p&gt;Logs are important for scheduled jobs, so you have some idea on whats happened when things go wrong. To help with scheduling debugging, most &lt;code&gt;googleAuthR&lt;/code&gt; packages now have a timestamp on their output messages.&lt;/p&gt;
+&lt;p&gt;You can send the output of your scripts to log files, if using cron and RScript it looks something like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;RScript /your-r-script.R &amp;gt; your-r-script.log&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;…where &lt;code&gt;&amp;gt;&lt;/code&gt; sends the output to the new file.&lt;/p&gt;
+&lt;p&gt;Over time though, this can get big and (sigh) fill up your disk so you can’t log in to the VM (speaking from experience here!) so I now set up another scheduled job that every week takes the logs and uploads to GCS, then deletes the current ones.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;consider-using-docker-for-environments&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Consider using Docker for environments&lt;/h3&gt;
+&lt;p&gt;Several of the methods below use &lt;a href=&#34;https://www.docker.com/&#34;&gt;&lt;code&gt;Docker&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The reasons for that is Docker provides a nice reprodueable way to define exactly what packages and dependencies you need for your script to run, which can run on top of any type of infrastructure as &lt;code&gt;Docker&lt;/code&gt; has quickly become a cloud standard.&lt;/p&gt;
+&lt;p&gt;For instance, migrating from Google Cloud to AWS is much easier if both can be deployed using Docker, and below Docker is instrumental in allowing you to run on multiple solutions.&lt;/p&gt;
+&lt;p&gt;Bear in mind that when a Docker container relaunches it won’t save any data, so any non-saved state will be lost (you should make a new container if you need it to contain data), but you’re not saving your data to the docker container anyway, aren’t you?&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;scheduling-options---pros-and-cons&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Scheduling options - Pros and cons&lt;/h2&gt;
+&lt;p&gt;Here is an overview of the pros and cons of the options presented in more detail below:&lt;/p&gt;
+&lt;table&gt;
+&lt;colgroup&gt;
+&lt;col width=&#34;29%&#34; /&gt;
+&lt;col width=&#34;35%&#34; /&gt;
+&lt;col width=&#34;35%&#34; /&gt;
+&lt;/colgroup&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th&gt;Method&lt;/th&gt;
+&lt;th&gt;Pros&lt;/th&gt;
+&lt;th&gt;Cons&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;1. &lt;code&gt;cronR&lt;/code&gt; Addin on &lt;code&gt;RStudio Server&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Simple and quick&lt;/td&gt;
+&lt;td&gt;Not so robust, need to log into server to make changes, versioning packages.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;2. &lt;code&gt;gce_vm_scheduler&lt;/code&gt; and &lt;code&gt;Dockerfiles&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Robust and can launch from local R session, support versioning&lt;/td&gt;
+&lt;td&gt;Need to build Dockerfiles, all scripts on one VM&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;3. Master &amp;amp; Slave VM&lt;/td&gt;
+&lt;td&gt;Tailor a fresh VM for each script, cheaper&lt;/td&gt;
+&lt;td&gt;Need to build Dockerfiles, more complicated VM setup.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;4. Google AppEngine with flexible containers&lt;/td&gt;
+&lt;td&gt;Managed platform&lt;/td&gt;
+&lt;td&gt;Need to turn script into web responses, more complicated setup&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;div id=&#34;cronr-plus-rstudio-server&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;1 - cronR plus RStudio Server&lt;/h2&gt;
+&lt;p&gt;This is the simplest and the one to start with.&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Start up an RStudio Server instance&lt;/li&gt;
+&lt;li&gt;Install &lt;a href=&#34;https://github.com/bnosac/cronR&#34;&gt;&lt;code&gt;cronR&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Upload your R script&lt;/li&gt;
+&lt;li&gt;Schedule your script using &lt;code&gt;cronR&lt;/code&gt; RStudio addin&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;With &lt;code&gt;googleComputeEngineR&lt;/code&gt; and the new &lt;code&gt;gcer-public&lt;/code&gt; project containing public images that include one with &lt;code&gt;cronR&lt;/code&gt; already installed, this is as simple as the few lines of code below:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(googleComputeEngineR)
+
+## get the tag for prebuilt Docker image with googleAuthRverse, cronR and tidyverse
+tag &amp;lt;- gce_tag_container(&amp;quot;google-auth-r-cron-tidy&amp;quot;, project = &amp;quot;gcer-public&amp;quot;)
+# gcr.io/gcer-public/google-auth-r-cron-tidy
+
+## start a custom Rstudio instance
+vm &amp;lt;- gce_vm(name = &amp;quot;my-rstudio&amp;quot;,
+              predefined_type = &amp;quot;n1-highmem-8&amp;quot;,
+              template = &amp;quot;rstudio&amp;quot;,
+              dynamic_image = tag,
+              username = &amp;quot;me&amp;quot;, password = &amp;quot;mypassword&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Wait for it to launch and give you an IP, then log in, upload a script and configure the schedule via the &lt;code&gt;cronR&lt;/code&gt; addin.&lt;/p&gt;
+&lt;p&gt;Some more detail about this workflow can be found at these &lt;a href=&#34;https://cloudyr.github.io/googleComputeEngineR/articles/rstudio-team.html&#34;&gt;custom RStudio example workflows&lt;/a&gt; on the &lt;code&gt;googleComputeEngineR&lt;/code&gt; website.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;gce_vm_scheduler-and-dockerfiles&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;2- &lt;em&gt;gce_vm_scheduler&lt;/em&gt; and &lt;em&gt;Dockerfiles&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;This method I prefer to the above since it lets you create the exact environment (e.g. package versions, dependencies) to run your script in, that you can trail dev and production versions with. It also works locally without needing to log into the server each time to deploy a script.&lt;/p&gt;
+&lt;div id=&#34;handy-tools-for-docker---containerit-and-build-triggers&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Handy tools for Docker - containerit and Build Triggers&lt;/h3&gt;
+&lt;p&gt;Here we introduce Docker images, which may have been more a technical barrier for some before (but worth knowing, I think)&lt;/p&gt;
+&lt;div id=&#34;containerit&#34; class=&#34;section level4&#34;&gt;
+&lt;h4&gt;containerit&lt;/h4&gt;
+&lt;p&gt;Things are much easier now though, as we have the magic new R package &lt;a href=&#34;http://o2r.info/2017/05/30/containerit-package/&#34;&gt;&lt;code&gt;containerit&lt;/code&gt;&lt;/a&gt; which can generate these Docker files for you - just send &lt;code&gt;containerit::dockerfile()&lt;/code&gt; around the script file.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;build-triggers&#34; class=&#34;section level4&#34;&gt;
+&lt;h4&gt;Build Triggers&lt;/h4&gt;
+&lt;p&gt;Along with auto-generating Dockerfiles, for Google Cloud in particular we now also have &lt;a href=&#34;https://cloud.google.com/container-builder/docs/how-to/build-triggers&#34;&gt;Build Triggers&lt;/a&gt; which automates building the Docker image for you.&lt;/p&gt;
+&lt;p&gt;Just make the Dockerfile, then set up a trigger for when you push that file up to GitHub - you can see the ones used to create the public R resources here in the &lt;a href=&#34;https://github.com/cloudyr/googleComputeEngineR/tree/master/inst/dockerfiles&#34;&gt;&lt;code&gt;googleComputeEngineR&lt;/code&gt; repo&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;recipe&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Recipe&lt;/h3&gt;
+&lt;p&gt;Putting it all together then, documentation of this workflow for &lt;a href=&#34;https://cloudyr.github.io/googleComputeEngineR/articles/scheduled-rscripts.html&#34;&gt;scheduling R scripts is found here&lt;/a&gt;.&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;If you don’t already have one, start up a scheduler VM using &lt;a href=&#34;https://cloudyr.github.io/googleComputeEngineR/reference/gce_vm_scheduler.html&#34;&gt;&lt;code&gt;gce_vm_scheduler&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Create a Dockerfile either manually or using &lt;code&gt;containerit&lt;/code&gt; that will run your script upon execution&lt;/li&gt;
+&lt;li&gt;Upload the Dockerfile to a git repo (private or public)&lt;/li&gt;
+&lt;li&gt;Setup a build trigger for that Dockerfile&lt;/li&gt;
+&lt;li&gt;Once built, set a script to schedule within that Dockerfile with &lt;a href=&#34;https://cloudyr.github.io/googleComputeEngineR/reference/gce_schedule_docker.html&#34;&gt;&lt;code&gt;gce_schedule_docker&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;This is still in beta at time of writing but should be stable by the time &lt;code&gt;googlecomputeEngineR&lt;/code&gt; hits CRAN &lt;code&gt;0.2.0&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;master-and-slave-vms&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;3 - Master and Slave VMs&lt;/h2&gt;
+&lt;p&gt;Some scripts take more resources than others, and since you are using VMs already you can have more control over what specifications of VM to launch based on the script you want to run.&lt;/p&gt;
+&lt;p&gt;This means you can have a cheap scheduler server, that launch biggers VMs for the duration of the job. As GCP charges per minute, this can save you money over having a schedule server that is as big as what your most expensive script needs running 24/7.&lt;/p&gt;
+&lt;p&gt;This method is largely like the scheduled scripts above, except in this case the scheduled script is also launching VMs to run the job upon.&lt;/p&gt;
+&lt;p&gt;Using &lt;code&gt;googleCloudStorageR::gcs_source&lt;/code&gt; you can run an R script straight from where it is hosted upon GCS, meaning all data, authentication files and scripts can be kept seperate from the computation. An example master script is shown below:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;## intended to be run on a small instance via cron
+## use this script to launch other VMs with more expensive tasks
+library(googleComputeEngineR)
+library(googleCloudStorageR)
+gce_global_project(&amp;quot;my-project&amp;quot;)
+gce_global_zone(&amp;quot;europe-west1-b&amp;quot;)
+gcs_global_bucket(&amp;quot;your-gcs-bucket&amp;quot;)
+
+## auth to same project we&amp;#39;re on
+googleAuthR::gar_gce_auth()
+
+## launch the premade VM
+vm &amp;lt;- gce_vm(&amp;quot;slave-1&amp;quot;)
+
+## set SSH to use &amp;#39;master&amp;#39; username as configured before
+vm &amp;lt;- gce_ssh_setup(vm, username = &amp;quot;master&amp;quot;, ssh_overwrite = TRUE)
+
+## run the script on the VM that will source from GCS
+runme &amp;lt;- &amp;quot;Rscript -e \&amp;quot;googleAuthR::gar_gce_auth();googleCloudStorageR::gcs_source(&amp;#39;download.R&amp;#39;, bucket = &amp;#39;your-gcs-bucket&amp;#39;)\&amp;quot;&amp;quot;
+out &amp;lt;- docker_cmd(vm, 
+                  cmd = &amp;quot;exec&amp;quot;, 
+                  args = c(&amp;quot;rstudio&amp;quot;, runme), 
+                  wait = TRUE)
+
+## once finished, stop the VM
+gce_vm_stop(vm)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;More detail is again available at the &lt;a href=&#34;https://cloudyr.github.io/googleComputeEngineR/articles/scheduled-rscripts.html#master-slave-scheduler&#34;&gt;&lt;code&gt;googleComputeEngineR&lt;/code&gt; website&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;google-app-engine-with-flexible-custom-runtimes&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;4 - Google App Engine with flexible custom runtimes&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://cloud.google.com/appengine/docs/&#34;&gt;Google App Engine&lt;/a&gt; has always had schedule options, but only for its supported languages of Python, Java, PHP etc. Now with the &lt;a href=&#34;https://cloud.google.com/appengine/docs/flexible/custom-runtimes/&#34;&gt;introduction of flexible containers&lt;/a&gt;, any Docker container running any language (including R) can also be run.&lt;/p&gt;
+&lt;p&gt;This is potentially the best solution since it runs upon a 100% managed platform, meaning you don’t need to worry about servers at all, and it takes care of things like server maintence, logging etc.&lt;/p&gt;
+&lt;div id=&#34;setting-up-your-script-for-app-engine&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Setting up your script for App Engine&lt;/h3&gt;
+&lt;p&gt;There are some &lt;a href=&#34;https://cloud.google.com/appengine/docs/flexible/custom-runtimes/build&#34;&gt;requirements for the container&lt;/a&gt; that need configuring so it can run:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;You can not use &lt;code&gt;googleAuthR::gar_gce_auth()&lt;/code&gt; so will need to upload the auth token within the Dockerfile.&lt;br /&gt;
+&lt;/li&gt;
+&lt;li&gt;AppEngine expects a web service to be listening on port 8080, so your schedule script needs to be triggered via HTTP requests.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For authentication, I use the system environment arguments (i.e. those usually set in &lt;code&gt;.Renviron&lt;/code&gt;) that &lt;code&gt;googleAuthR&lt;/code&gt; packages use for auto-authentication. Put the auth file (such as JSON or a &lt;code&gt;.httr-oauth&lt;/code&gt; file) into the deployment folder, then point to its location via specifying in the &lt;code&gt;app.yaml&lt;/code&gt;. Details below.&lt;/p&gt;
+&lt;p&gt;To solve the need for being a webservice on port 8080 (which is then proxied to normal webports 80/443), &lt;a href=&#34;https://www.rplumber.io/&#34;&gt;&lt;code&gt;plumber&lt;/code&gt;&lt;/a&gt; is a great service by Jeff Allen of RStudio, which already comes with its own Docker solution. You can then modify that &lt;code&gt;Dockerfile&lt;/code&gt; slightly so that it works on App Engine.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;recipe-1&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Recipe&lt;/h3&gt;
+&lt;p&gt;To then schedule your R script on app engine, follow the guide below, first making sure you have setup the &lt;a href=&#34;https://cloud.google.com/sdk/gcloud/&#34;&gt;gcloud CLI&lt;/a&gt;.&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Create a Google Appengine project in the US region (only region that supports flexible containers at the moment)&lt;/li&gt;
+&lt;li&gt;Create a scheduled script e.g. &lt;code&gt;schedule.R&lt;/code&gt; - you can use auth from environment files specified in &lt;code&gt;app.yaml&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Make an API out of the script by using &lt;code&gt;plumber&lt;/code&gt; - example:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(googleAuthR)         ## authentication
+library(googleCloudStorageR)  ## google cloud storage
+library(readr)                ## 
+## gcs auto authenticated via environment file 
+## pointed to via sys.env GCS_AUTH_FILE
+
+#* @get /demoR
+demoScheduleAPI &amp;lt;- function(){
+  
+  ## download or do something
+  something &amp;lt;- tryCatch({
+      gcs_get_object(&amp;quot;schedule/test.csv&amp;quot;, 
+                     bucket = &amp;quot;mark-edmondson-public-files&amp;quot;)
+    }, error = function(ex) {
+      NULL
+    })
+      
+  something_else &amp;lt;- data.frame(X1 = 1,
+                               time = Sys.time(), 
+                               blah = paste(sample(letters, 10, replace = TRUE), collapse = &amp;quot;&amp;quot;))
+  something &amp;lt;- rbind(something, something_else)
+  
+  tmp &amp;lt;- tempfile(fileext = &amp;quot;.csv&amp;quot;)
+  on.exit(unlink(tmp))
+  write.csv(something, file = tmp, row.names = FALSE)
+  ## upload something
+  gcs_upload(tmp, 
+             bucket = &amp;quot;mark-edmondson-public-files&amp;quot;, 
+             name = &amp;quot;schedule/test.csv&amp;quot;)
+  
+  message(&amp;quot;Done&amp;quot;, Sys.time())
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;4&#34; style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Create Dockerfile. If using &lt;code&gt;containerit&lt;/code&gt; then replace FROM with &lt;code&gt;trestletech/plumber&lt;/code&gt; and add the below lines to use correct AppEngine port:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Example:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(containerit)
+
+dockerfile &amp;lt;- dockerfile(&amp;quot;schedule.R&amp;quot;, copy = &amp;quot;script_dir&amp;quot;, soft = TRUE)
+write(dockerfile, file = &amp;quot;Dockerfile&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Then change/add these lines to the created Dockerfile:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;EXPOSE 8080
+ENTRYPOINT [&amp;quot;R&amp;quot;, &amp;quot;-e&amp;quot;, &amp;quot;pr &amp;lt;- plumber::plumb(commandArgs()[4]); pr$run(host=&amp;#39;0.0.0.0&amp;#39;, port=8080)&amp;quot;]
+CMD [&amp;quot;schedule.R&amp;quot;]&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Example final Dockerfile below. This doesn’t need to be built in say a build trigger as its built upon app engine deployment.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;FROM trestletech/plumber
+LABEL maintainer=&amp;quot;mark&amp;quot;
+RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
+ &amp;amp;&amp;amp; apt-get install -y libcairo2-dev \
+    libcurl4-openssl-dev \
+    libgmp-dev \
+    libpng-dev \
+    libssl-dev \
+    libxml2-dev \
+    make \
+    pandoc \
+    pandoc-citeproc \
+    zlib1g-dev
+RUN [&amp;quot;install2.r&amp;quot;, &amp;quot;-r &amp;#39;https://cloud.r-project.org&amp;#39;&amp;quot;, &amp;quot;readr&amp;quot;, &amp;quot;googleCloudStorageR&amp;quot;, &amp;quot;Rcpp&amp;quot;, &amp;quot;digest&amp;quot;, &amp;quot;crayon&amp;quot;, &amp;quot;withr&amp;quot;, &amp;quot;mime&amp;quot;, &amp;quot;R6&amp;quot;, &amp;quot;jsonlite&amp;quot;, &amp;quot;xtable&amp;quot;, &amp;quot;magrittr&amp;quot;, &amp;quot;httr&amp;quot;, &amp;quot;curl&amp;quot;, &amp;quot;testthat&amp;quot;, &amp;quot;devtools&amp;quot;, &amp;quot;hms&amp;quot;, &amp;quot;shiny&amp;quot;, &amp;quot;httpuv&amp;quot;, &amp;quot;memoise&amp;quot;, &amp;quot;htmltools&amp;quot;, &amp;quot;openssl&amp;quot;, &amp;quot;tibble&amp;quot;, &amp;quot;remotes&amp;quot;]
+RUN [&amp;quot;installGithub.r&amp;quot;, &amp;quot;MarkEdmondson1234/googleAuthR@7917351&amp;quot;, &amp;quot;hadley/rlang@ff87439&amp;quot;]
+WORKDIR /payload/
+COPY [&amp;quot;.&amp;quot;, &amp;quot;./&amp;quot;]
+
+EXPOSE 8080
+ENTRYPOINT [&amp;quot;R&amp;quot;, &amp;quot;-e&amp;quot;, &amp;quot;pr &amp;lt;- plumber::plumb(commandArgs()[4]); pr$run(host=&amp;#39;0.0.0.0&amp;#39;, port=8080)&amp;quot;]
+CMD [&amp;quot;schedule.R&amp;quot;]&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;5&#34; style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Specify &lt;code&gt;app.yaml&lt;/code&gt; for flexible containers as &lt;a href=&#34;https://cloud.google.com/appengine/docs/flexible/custom-runtimes/&#34;&gt;detailed here&lt;/a&gt;. Add any environment vars such as auth files, that will be included in same deployment folder.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Example:&lt;/p&gt;
+&lt;pre class=&#34;yaml&#34;&gt;&lt;code&gt;runtime: custom
+env: flex
+
+env_variables:
+  GCS_AUTH_FILE: auth.json&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;6&#34; style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Specify &lt;code&gt;cron.yaml&lt;/code&gt; for the schedule needed:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre class=&#34;yaml&#34;&gt;&lt;code&gt;cron:
+- description: &amp;quot;test cron&amp;quot;
+  url: /demoR
+  schedule: every 1 hours&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;7&#34; style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;&lt;p&gt;You should now have these files in the deployment folder:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;app.yaml&lt;/code&gt; - configuration of general app settings&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;auth.json&lt;/code&gt; - an authentication file specified in env arguments or app.yaml&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;cron.yaml&lt;/code&gt; - specification of when your scheduling is&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Dockerfile&lt;/code&gt; - specification of the environment&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;schedule.R&lt;/code&gt; - the plumber version of your script containing your endpoints&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Open the terminal in that folder, and deploy via &lt;code&gt;gcloud app deploy --project your-project&lt;/code&gt; and the cron schedule via &lt;code&gt;gcloud app deploy cron.yaml --project your-project&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;It will take a while (up to 10 mins) the first time.&lt;/p&gt;
+&lt;ol start=&#34;8&#34; style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;The App Engine should then be deployed on &lt;a href=&#34;https://your-project.appspot.com/&#34; class=&#34;uri&#34;&gt;https://your-project.appspot.com/&lt;/a&gt; - every &lt;code&gt;GET&lt;/code&gt; request to &lt;a href=&#34;https://your-project.appspot.com/demoR&#34; class=&#34;uri&#34;&gt;https://your-project.appspot.com/demoR&lt;/a&gt; (or other endpoints you have specified in R script) will run the R code. The cron example above will run every hour to this endpoint.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Logs for the instance are found &lt;a href=&#34;https://console.cloud.google.com/logs/viewer&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;This approach is the most flexible, and offers a fully managed platform for your scripts. Scheduled scripts are only the beginning, since deploying such actually gives you a way to run R scripts in response to any HTTP request from any language - triggers could also include if someone updates a spreadsheet, adds a file to a folder, pushes to GitHub etc. which opens up a lot of exciting possibilities. You can also scale it up to become a fully functioning R API.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;summary&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Summary&lt;/h2&gt;
+&lt;p&gt;Hopefully this has given you an idea on your options for R on Google Cloud regarding scheduling. If you have some other easier workflows or suggestions for improvements please put them in the comments below!&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
     
     <item>
       <title>My R Packages</title>
@@ -190,7 +506,7 @@ forecast1 &amp;lt;- HoltWinters(ga_ts)
 ## forecast for next 12 months of the blog sessions
 hchart(forecast(forecast1, h = 12))&lt;/code&gt;&lt;/pre&gt;
 &lt;div id=&#34;htmlwidget-1&#34; style=&#34;width:100%;height:500px;&#34; class=&#34;highchart html-widget&#34;&gt;&lt;/div&gt;
-&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-1&#34;&gt;{&#34;x&#34;:{&#34;hc_opts&#34;:{&#34;title&#34;:{&#34;text&#34;:null},&#34;yAxis&#34;:{&#34;title&#34;:{&#34;text&#34;:null}},&#34;credits&#34;:{&#34;enabled&#34;:false},&#34;exporting&#34;:{&#34;enabled&#34;:false},&#34;plotOptions&#34;:{&#34;series&#34;:{&#34;turboThreshold&#34;:0},&#34;treemap&#34;:{&#34;layoutAlgorithm&#34;:&#34;squarified&#34;},&#34;bubble&#34;:{&#34;minSize&#34;:5,&#34;maxSize&#34;:25}},&#34;annotationsOptions&#34;:{&#34;enabledButtons&#34;:false},&#34;tooltip&#34;:{&#34;delayForDisplay&#34;:10},&#34;xAxis&#34;:{&#34;type&#34;:&#34;datetime&#34;},&#34;series&#34;:[{&#34;data&#34;:[[1375315200000,0],[1377993600000,0],[1380585600000,0],[1383264000000,0],[1385856000000,0],[1388534400000,317],[1391212800000,197],[1393632000000,279],[1396310400000,59],[1398902400000,162],[1401580800000,107],[1404172800000,140],[1406851200000,229],[1409529600000,283],[1412121600000,347],[1414800000000,693],[1417392000000,621],[1420070400000,569],[1422748800000,1397],[1425168000000,1309],[1427846400000,1196],[1430438400000,1015],[1433116800000,1260],[1435708800000,2887],[1438387200000,2105],[1441065600000,2607],[1443657600000,3165],[1446336000000,1994],[1448928000000,2228],[1451606400000,2061],[1454284800000,2146],[1456790400000,2406],[1459468800000,2698],[1462060800000,3103],[1464739200000,2909],[1467331200000,3410]],&#34;name&#34;:&#34;Series&#34;,&#34;zIndex&#34;:3},{&#34;data&#34;:[[1470009600000,3207.03689030834],[1472688000000,3315.53950414392],[1475280000000,3409.36016541658],[1477958400000,3497.3839247748],[1480550400000,3552.32175393547],[1483228800000,3447.0002046938],[1485907200000,3914.29380174878],[1488326400000,4061.71393449875],[1491004800000,3977.55978152043],[1493596800000,4090.03983792712],[1496275200000,4058.62598318277],[1498867200000,4372.81761910137]],&#34;name&#34;:&#34;HoltWinters&#34;,&#34;zIndex&#34;:2,&#34;id&#34;:&#34;zktx9aibh0&#34;},{&#34;data&#34;:[[1470009600000,3844.85799408133,2569.21578653534],[1472688000000,4036.04759086489,2595.03141742296],[1475280000000,4206.17794431616,2612.54238651701],[1477958400000,4365.84726648554,2628.92058306405],[1480550400000,4488.86578315238,2615.77772471856],[1483228800000,4448.81346440171,2445.1869449859],[1485907200000,4979.10676567544,2849.48083782211],[1488326400000,5187.66155645004,2935.76631254747],[1491004800000,5163.08785427016,2792.0317087707],[1493596800000,5333.83875499645,2846.24092085779],[1496275200000,5359.58242292622,2757.66954343932],[1498867200000,5729.97838833828,3015.65684986445]],&#34;name&#34;:&#34;HoltWinters level 80&#34;,&#34;type&#34;:&#34;arearange&#34;,&#34;fillOpacity&#34;:0.1,&#34;zIndex&#34;:1,&#34;lineWidth&#34;:0,&#34;linkedTo&#34;:&#34;zktx9aibh0&#34;},{&#34;data&#34;:[[1470009600000,4182.50009099775,2231.57368961893],[1472688000000,4417.46153249621,2213.61747579164],[1475280000000,4627.98779685387,2190.73253397929],[1477958400000,4825.58398898604,2169.18386056355],[1480550400000,4984.64224462219,2120.00126324875],[1483228800000,4979.14136939813,1914.85903998948],[1485907200000,5542.78469956196,2285.80290393559],[1488326400000,5783.7022234095,2339.725645588],[1491004800000,5790.66850669547,2164.45105634538],[1493596800000,5992.26612909462,2187.81354675962],[1496275200000,6048.26716181849,2068.98480454705],[1498867200000,6448.4159020348,2297.21933616793]],&#34;name&#34;:&#34;HoltWinters level 95&#34;,&#34;type&#34;:&#34;arearange&#34;,&#34;fillOpacity&#34;:0.1,&#34;zIndex&#34;:1,&#34;lineWidth&#34;:0,&#34;linkedTo&#34;:&#34;zktx9aibh0&#34;}]},&#34;theme&#34;:{&#34;chart&#34;:{&#34;backgroundColor&#34;:&#34;transparent&#34;}},&#34;conf_opts&#34;:{&#34;global&#34;:{&#34;Date&#34;:null,&#34;VMLRadialGradientURL&#34;:&#34;http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png&#34;,&#34;canvasToolsURL&#34;:&#34;http =//code.highcharts.com/list(version)/modules/canvas-tools.js&#34;,&#34;getTimezoneOffset&#34;:null,&#34;timezoneOffset&#34;:0,&#34;useUTC&#34;:true},&#34;lang&#34;:{&#34;contextButtonTitle&#34;:&#34;Chart context menu&#34;,&#34;decimalPoint&#34;:&#34;.&#34;,&#34;downloadJPEG&#34;:&#34;Download JPEG image&#34;,&#34;downloadPDF&#34;:&#34;Download PDF document&#34;,&#34;downloadPNG&#34;:&#34;Download PNG image&#34;,&#34;downloadSVG&#34;:&#34;Download SVG vector image&#34;,&#34;drillUpText&#34;:&#34;Back to {series.name}&#34;,&#34;invalidDate&#34;:null,&#34;loading&#34;:&#34;Loading...&#34;,&#34;months&#34;:[&#34;January&#34;,&#34;February&#34;,&#34;March&#34;,&#34;April&#34;,&#34;May&#34;,&#34;June&#34;,&#34;July&#34;,&#34;August&#34;,&#34;September&#34;,&#34;October&#34;,&#34;November&#34;,&#34;December&#34;],&#34;noData&#34;:&#34;No data to display&#34;,&#34;numericSymbols&#34;:[&#34;k&#34;,&#34;M&#34;,&#34;G&#34;,&#34;T&#34;,&#34;P&#34;,&#34;E&#34;],&#34;printChart&#34;:&#34;Print chart&#34;,&#34;resetZoom&#34;:&#34;Reset zoom&#34;,&#34;resetZoomTitle&#34;:&#34;Reset zoom level 1:1&#34;,&#34;shortMonths&#34;:[&#34;Jan&#34;,&#34;Feb&#34;,&#34;Mar&#34;,&#34;Apr&#34;,&#34;May&#34;,&#34;Jun&#34;,&#34;Jul&#34;,&#34;Aug&#34;,&#34;Sep&#34;,&#34;Oct&#34;,&#34;Nov&#34;,&#34;Dec&#34;],&#34;thousandsSep&#34;:&#34; &#34;,&#34;weekdays&#34;:[&#34;Sunday&#34;,&#34;Monday&#34;,&#34;Tuesday&#34;,&#34;Wednesday&#34;,&#34;Thursday&#34;,&#34;Friday&#34;,&#34;Saturday&#34;]}},&#34;type&#34;:&#34;chart&#34;,&#34;fonts&#34;:[],&#34;debug&#34;:false},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}&lt;/script&gt;
+&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-1&#34;&gt;{&#34;x&#34;:{&#34;hc_opts&#34;:{&#34;title&#34;:{&#34;text&#34;:null},&#34;yAxis&#34;:{&#34;title&#34;:{&#34;text&#34;:null}},&#34;credits&#34;:{&#34;enabled&#34;:false},&#34;exporting&#34;:{&#34;enabled&#34;:false},&#34;plotOptions&#34;:{&#34;series&#34;:{&#34;turboThreshold&#34;:0},&#34;treemap&#34;:{&#34;layoutAlgorithm&#34;:&#34;squarified&#34;},&#34;bubble&#34;:{&#34;minSize&#34;:5,&#34;maxSize&#34;:25}},&#34;annotationsOptions&#34;:{&#34;enabledButtons&#34;:false},&#34;tooltip&#34;:{&#34;delayForDisplay&#34;:10},&#34;xAxis&#34;:{&#34;type&#34;:&#34;datetime&#34;},&#34;series&#34;:[{&#34;data&#34;:[[1375315200000,0],[1377993600000,0],[1380585600000,0],[1383264000000,0],[1385856000000,0],[1388534400000,317],[1391212800000,197],[1393632000000,279],[1396310400000,59],[1398902400000,162],[1401580800000,107],[1404172800000,140],[1406851200000,229],[1409529600000,283],[1412121600000,347],[1414800000000,693],[1417392000000,621],[1420070400000,569],[1422748800000,1397],[1425168000000,1309],[1427846400000,1196],[1430438400000,1015],[1433116800000,1260],[1435708800000,2887],[1438387200000,2105],[1441065600000,2607],[1443657600000,3165],[1446336000000,1994],[1448928000000,2228],[1451606400000,2061],[1454284800000,2146],[1456790400000,2406],[1459468800000,2698],[1462060800000,3103],[1464739200000,2909],[1467331200000,3410]],&#34;name&#34;:&#34;Series&#34;,&#34;zIndex&#34;:3},{&#34;data&#34;:[[1470009600000,3207.03689030834],[1472688000000,3315.53950414392],[1475280000000,3409.36016541658],[1477958400000,3497.3839247748],[1480550400000,3552.32175393547],[1483228800000,3447.0002046938],[1485907200000,3914.29380174878],[1488326400000,4061.71393449875],[1491004800000,3977.55978152043],[1493596800000,4090.03983792712],[1496275200000,4058.62598318277],[1498867200000,4372.81761910137]],&#34;name&#34;:&#34;HoltWinters&#34;,&#34;zIndex&#34;:2,&#34;id&#34;:&#34;t989u74ug3&#34;},{&#34;data&#34;:[[1470009600000,3844.85799408133,2569.21578653534],[1472688000000,4036.04759086489,2595.03141742296],[1475280000000,4206.17794431616,2612.54238651701],[1477958400000,4365.84726648554,2628.92058306405],[1480550400000,4488.86578315238,2615.77772471856],[1483228800000,4448.81346440171,2445.1869449859],[1485907200000,4979.10676567544,2849.48083782211],[1488326400000,5187.66155645004,2935.76631254747],[1491004800000,5163.08785427016,2792.0317087707],[1493596800000,5333.83875499645,2846.24092085779],[1496275200000,5359.58242292622,2757.66954343932],[1498867200000,5729.97838833828,3015.65684986445]],&#34;name&#34;:&#34;HoltWinters level 80&#34;,&#34;type&#34;:&#34;arearange&#34;,&#34;fillOpacity&#34;:0.1,&#34;zIndex&#34;:1,&#34;lineWidth&#34;:0,&#34;linkedTo&#34;:&#34;t989u74ug3&#34;},{&#34;data&#34;:[[1470009600000,4182.50009099775,2231.57368961893],[1472688000000,4417.46153249621,2213.61747579164],[1475280000000,4627.98779685387,2190.73253397929],[1477958400000,4825.58398898604,2169.18386056355],[1480550400000,4984.64224462219,2120.00126324875],[1483228800000,4979.14136939813,1914.85903998948],[1485907200000,5542.78469956196,2285.80290393559],[1488326400000,5783.7022234095,2339.725645588],[1491004800000,5790.66850669547,2164.45105634538],[1493596800000,5992.26612909462,2187.81354675962],[1496275200000,6048.26716181849,2068.98480454705],[1498867200000,6448.4159020348,2297.21933616793]],&#34;name&#34;:&#34;HoltWinters level 95&#34;,&#34;type&#34;:&#34;arearange&#34;,&#34;fillOpacity&#34;:0.1,&#34;zIndex&#34;:1,&#34;lineWidth&#34;:0,&#34;linkedTo&#34;:&#34;t989u74ug3&#34;}]},&#34;theme&#34;:{&#34;chart&#34;:{&#34;backgroundColor&#34;:&#34;transparent&#34;}},&#34;conf_opts&#34;:{&#34;global&#34;:{&#34;Date&#34;:null,&#34;VMLRadialGradientURL&#34;:&#34;http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png&#34;,&#34;canvasToolsURL&#34;:&#34;http =//code.highcharts.com/list(version)/modules/canvas-tools.js&#34;,&#34;getTimezoneOffset&#34;:null,&#34;timezoneOffset&#34;:0,&#34;useUTC&#34;:true},&#34;lang&#34;:{&#34;contextButtonTitle&#34;:&#34;Chart context menu&#34;,&#34;decimalPoint&#34;:&#34;.&#34;,&#34;downloadJPEG&#34;:&#34;Download JPEG image&#34;,&#34;downloadPDF&#34;:&#34;Download PDF document&#34;,&#34;downloadPNG&#34;:&#34;Download PNG image&#34;,&#34;downloadSVG&#34;:&#34;Download SVG vector image&#34;,&#34;drillUpText&#34;:&#34;Back to {series.name}&#34;,&#34;invalidDate&#34;:null,&#34;loading&#34;:&#34;Loading...&#34;,&#34;months&#34;:[&#34;January&#34;,&#34;February&#34;,&#34;March&#34;,&#34;April&#34;,&#34;May&#34;,&#34;June&#34;,&#34;July&#34;,&#34;August&#34;,&#34;September&#34;,&#34;October&#34;,&#34;November&#34;,&#34;December&#34;],&#34;noData&#34;:&#34;No data to display&#34;,&#34;numericSymbols&#34;:[&#34;k&#34;,&#34;M&#34;,&#34;G&#34;,&#34;T&#34;,&#34;P&#34;,&#34;E&#34;],&#34;printChart&#34;:&#34;Print chart&#34;,&#34;resetZoom&#34;:&#34;Reset zoom&#34;,&#34;resetZoomTitle&#34;:&#34;Reset zoom level 1:1&#34;,&#34;shortMonths&#34;:[&#34;Jan&#34;,&#34;Feb&#34;,&#34;Mar&#34;,&#34;Apr&#34;,&#34;May&#34;,&#34;Jun&#34;,&#34;Jul&#34;,&#34;Aug&#34;,&#34;Sep&#34;,&#34;Oct&#34;,&#34;Nov&#34;,&#34;Dec&#34;],&#34;thousandsSep&#34;:&#34; &#34;,&#34;weekdays&#34;:[&#34;Sunday&#34;,&#34;Monday&#34;,&#34;Tuesday&#34;,&#34;Wednesday&#34;,&#34;Thursday&#34;,&#34;Friday&#34;,&#34;Saturday&#34;]}},&#34;type&#34;:&#34;chart&#34;,&#34;fonts&#34;:[],&#34;debug&#34;:false},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}&lt;/script&gt;
 &lt;p&gt;As I type R code blocks, the code output gets rendered right into the blog.&lt;/p&gt;
 &lt;p&gt;This is the example from the &lt;a href=&#34;http://www.dartistics.com&#34;&gt;Dartistics.com&lt;/a&gt; homepage, and adding interactive HTML widgets to my posts is going to be lovely, with no other hassle other than writing the code.&lt;/p&gt;
 &lt;div id=&#34;setup-blogdown&#34; class=&#34;section level2&#34;&gt;
