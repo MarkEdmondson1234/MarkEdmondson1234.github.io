@@ -15,7 +15,7 @@
       <pubDate>Sun, 09 Jul 2017 00:00:00 +0000</pubDate>
       
       <guid>http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform</guid>
-      <description>&lt;p&gt;A common question I come across is how to automate scheduling of R scripts downloading data. This post goes through some options that I have played around with, which I’ve mostly used for downloading API data such as Google Analytics. I’ve mostly used the Google Cloud platform, so these are options for that service in particular, but the same principles could apply for AWS or Azure.&lt;/p&gt;
+      <description>&lt;p&gt;A common question I come across is how to automate scheduling of R scripts downloading data. This post goes through some options that I have played around with, which I’ve mostly used for downloading API data such as Google Analytics using the Google Cloud platform, but the same principles could apply for AWS or Azure.&lt;/p&gt;
 &lt;!--more--&gt;
 &lt;div id=&#34;scheduling-scripts-advice&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Scheduling scripts advice&lt;/h2&gt;
