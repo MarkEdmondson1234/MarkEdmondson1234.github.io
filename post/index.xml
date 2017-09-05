@@ -14,10 +14,10 @@
     
     <item>
       <title>Run RStudio Server on a Chromebook as a Cloud Native</title>
-      <link>http://code.markedmondson.me/Run-RStudio-Server-on-a-Chromebook-as-a-Cloud-Native/</link>
+      <link>http://code.markedmondson.me/rstudio-server-chromebook/</link>
       <pubDate>Tue, 05 Sep 2017 13:55:57 +0100</pubDate>
       
-      <guid>http://code.markedmondson.me/Run-RStudio-Server-on-a-Chromebook-as-a-Cloud-Native/</guid>
+      <guid>http://code.markedmondson.me/rstudio-server-chromebook/</guid>
       <description>I recently got an Asus Chromebook Flip with which I&amp;rsquo;m very happy, but it did make me realise that if a Chromebook was to replace my normal desktop as my primary workstation, my RStudio Server setup would need to be more cloud native than was available up until now.
 TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically backs up data and configuration settings to Google Cloud Storage is on the googleComputeEngineR website here.</description>
     </item>
