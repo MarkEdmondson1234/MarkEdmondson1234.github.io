@@ -2,7 +2,7 @@
 <html lang="en-GB">
 <head>
     <title>Scheduling R scripts for a team using RStudio Server, Docker, Github and Google Compute Engine &middot; Mark Edmondson</title>
-    <meta name="generator" content="Hugo 0.18.1" />
+    <meta name="generator" content="Hugo 0.26" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
@@ -28,7 +28,10 @@ This blog will give you steps that allows you to run on Google Compute Engine a 
 <meta property="og:url" content="http://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/" />
 
 
-<meta property="og:updated_time" content="2016-04-21T23:03:57&#43;01:00"/>
+
+<meta property="article:published_time" content="2016-04-21T23:03:57&#43;01:00"/>
+<meta property="article:modified_time" content="2016-04-21T23:03:57&#43;01:00"/>
+
 
 
 
@@ -52,20 +55,13 @@ This blog will give you steps that allows you to run on Google Compute Engine a 
 
 
 
-<meta itemprop="keywords" content="big-query,blogging,docker,google-analytics,google-app-engine,google-auth,google-cloud-storage,google-compute-engine,google-tag-manager,python,r,rstudio-server,search-console," />
+<meta itemprop="keywords" content="R,docker,rstudio-server,google-compute-engine," />
 
-    
-
-  <meta name="twitter:card" content="summary"/>
-
-
-
-<meta name="twitter:title" content="Scheduling R scripts for a team using RStudio Server, Docker, Github and Google Compute Engine"/>
+    <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Scheduling R scripts for a team using RStudio Server, Docker, Github and Google Compute Engine"/>
 <meta name="twitter:description" content="edit 20th November, 2016 - now everything in this post is abstracted away and available in the googleComputeEngineR package - I would say its a lot easier to use that. Here is a post on getting started with it. http://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/
 This blog will give you steps that allows you to run on Google Compute Engine a server that has these features:
  RStudio Server instance with multiple login. Apache to host a welcome webpage."/>
 <meta name="twitter:site" content="@HoloMarkeD"/>
-<meta name="twitter:domain" content="markedmondson.me"/>
 
     
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -183,7 +179,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        13
+        14
         <span>Posts</span>
       </div>
       <div class="article-info-block">
@@ -861,7 +857,7 @@ gcloud compute instances start your-r-server-name
 
             </div>
             <footer class="article-footer">
-    <a data-url="http://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/" data-id="c3b5a5d66c15a586afaefbfdaf2461da" class="article-share-link">
+    <a data-url="http://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/" data-id="c0a9cba3cc2834234e7e4b154783b7da" class="article-share-link">
         <i class="fa fa-share"></i>
         Share
     </a>
@@ -967,16 +963,21 @@ gcloud compute instances start your-r-server-name
     <section id="comments">
         <div id="disqus_thread">
             <div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_shortname = 'markedmondson';
-    var disqus_identifier = 'http:\/\/code.markedmondson.me\/setting-up-scheduled-R-scripts-for-an-analytics-team\/';
-    var disqus_title = 'Scheduling R scripts for a team using RStudio Server, Docker, Github and Google Compute Engine';
-    var disqus_url = 'http:\/\/code.markedmondson.me\/setting-up-scheduled-R-scripts-for-an-analytics-team\/';
-
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
     (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "markedmondson" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
     })();
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
@@ -999,7 +1000,7 @@ gcloud compute instances start your-r-server-name
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform" class="thumbnail">
+                    <a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/" class="thumbnail">
                     
                         <span style="background-image:url(http://code.markedmondson.me/banners/scheduledR.png)" alt="Scheduling R scripts for a team using RStudio Server, Docker, Github and Google Compute Engine" class="thumbnail-image"></span>
                     
@@ -1007,7 +1008,7 @@ gcloud compute instances start your-r-server-name
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform" class="title">Four Ways to Schedule R scripts on Google Cloud Platform</a></p>
+                    <p class="item-title"><a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/" class="title">Four Ways to Schedule R scripts on Google Cloud Platform</a></p>
                     <p class="item-date">
                         <time datetime="2017-07-09 00:00:00 &#43;0000 UTC" itemprop="datePublished">2017-07-09</time>
                     </p>

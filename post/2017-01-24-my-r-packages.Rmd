@@ -35,10 +35,11 @@ More experimental packages:
 
 Status             | URL                      | Description
 ------------------ | ------------------------ | -----------------------------------------------------
+Dev | [googleMeasureR](https://github.com/MarkEdmondson1234/googleMeasureR) | Send tracking hits to Google Analytics from R code using the Google Analytics Measurement Protocol 
 [![](https://travis-ci.org/MarkEdmondson1234/googleLanguageR.png?branch=master)](https://travis-ci.org/MarkEdmondson1234/googleLanguageR) | [googleLanguageR](https://github.com/MarkEdmondson1234/googleLanguageR) | Access Speech to text, translation and NLP text processing APIs
 [![](https://travis-ci.org/MarkEdmondson1234/googleID.svg?branch=master)](https://travis-ci.org/MarkEdmondson1234/googleID) | [googleID](https://github.com/MarkEdmondson1234/googleID) | In production, but very small so not on CRAN.  Allows user authentication via Google+ API for Shiny and RMarkdown documents. 
-In development | [youtubeAnalyticsR](https://github.com/MarkEdmondson1234/youtubeAnalyticsR) | Access YouTube Analytics data
-In development | [gtmR](https://github.com/MarkEdmondson1234/gtmR) | Access the Google Tag Manager API from R
+Dev | [youtubeAnalyticsR](https://github.com/MarkEdmondson1234/youtubeAnalyticsR) | Access YouTube Analytics data
+Deprecated | [gtmR](https://github.com/MarkEdmondson1234/gtmR) | Superceded by [googleTagManagerR](https://github.com/IronistM/googleTagManageR)
 Reference  | [autoGoogleAPI](https://github.com/MarkEdmondson1234/autoGoogleAPI) | 152 R packages auto generated via `googleAuthR`'s discovery API feature
 Done | [gentelellaShiny](https://github.com/MarkEdmondson1234/gentelellaShiny) | A custom Shiny theme available in a package
 Deprecated | [stripeR](https://github.com/MarkEdmondson1234/stripeR) | Interact with the Stripe payment API, but superseded by another R package, [RStripe](https://cran.r-project.org/web/packages/RStripe/index.html)

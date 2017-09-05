@@ -2,7 +2,7 @@
 <html lang="en-GB">
 <head>
     <title>New Blog Down &middot; Mark Edmondson</title>
-    <meta name="generator" content="Hugo 0.18.1" />
+    <meta name="generator" content="Hugo 0.26" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
@@ -28,7 +28,10 @@ This keeps the advantages of Jekyll (a static, high performance website; markdow
 <meta property="og:url" content="http://code.markedmondson.me/new-blog-down/" />
 
 
-<meta property="og:updated_time" content="2017-01-23T22:45:03&#43;01:00"/>
+
+<meta property="article:published_time" content="2017-01-23T22:45:03&#43;01:00"/>
+<meta property="article:modified_time" content="2017-01-23T22:45:03&#43;01:00"/>
+
 
 
 
@@ -48,24 +51,17 @@ This keeps the advantages of Jekyll (a static, high performance website; markdow
 
 
 <meta itemprop="dateModified" content="2017-01-23T22:45:03&#43;01:00" />
-<meta itemprop="wordCount" content="469">
+<meta itemprop="wordCount" content="471">
 
 
 
-<meta itemprop="keywords" content="big-query,blogging,docker,google-analytics,google-app-engine,google-auth,google-cloud-storage,google-compute-engine,google-tag-manager,python,r,rstudio-server,search-console," />
+<meta itemprop="keywords" content="blogging,r," />
 
-    
-
-  <meta name="twitter:card" content="summary"/>
-
-
-
-<meta name="twitter:title" content="New Blog Down"/>
+    <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="New Blog Down"/>
 <meta name="twitter:description" content="A new year, a new blogging platform!
 This time I’m moving from Jekyll to RStudio’s new blogdown format.
 This keeps the advantages of Jekyll (a static, high performance website; markdown for editing; free hosting on Github) but with the extra bonus of being able to render in RMarkdown plus adding some nice looking capabilities from the Hugo project."/>
 <meta name="twitter:site" content="@HoloMarkeD"/>
-<meta name="twitter:domain" content="markedmondson.me"/>
 
     
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -183,7 +179,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        13
+        14
         <span>Posts</span>
       </div>
       <div class="article-info-block">
@@ -285,7 +281,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2017-01-23 22:45:03 &#43;0100 CET" itemprop="datePublished">2017-01-23</time>
             &middot;
-            469
+            471
             words
             &middot;
             3
@@ -362,18 +358,18 @@ library(forecast)
 ga_auth()
 gaid &lt;- Sys.getenv(&quot;GA_ID&quot;)
 gadata &lt;- google_analytics_4(gaid, 
-                             date_range = c(&quot;2013-08-01&quot;, &quot;2016-07-31&quot;),
+                             date_range = c(&quot;2013-08-01&quot;, &quot;2017-07-31&quot;),
                              dimensions = c(&quot;yearMonth&quot;),
                              metrics = &quot;sessions&quot;)
 
-ga_ts &lt;- ts(gadata$sessions, start = c(2013,08), end = c(2016,07), frequency = 12)
+ga_ts &lt;- ts(gadata$sessions, start = c(2013,08), end = c(2017,07), frequency = 12)
 
 forecast1 &lt;- HoltWinters(ga_ts)
 
 ## forecast for next 12 months of the blog sessions
 hchart(forecast(forecast1, h = 12))</code></pre>
 <div id="htmlwidget-1" style="width:100%;height:500px;" class="highchart html-widget"></div>
-<script type="application/json" data-for="htmlwidget-1">{"x":{"hc_opts":{"title":{"text":null},"yAxis":{"title":{"text":null}},"credits":{"enabled":false},"exporting":{"enabled":false},"plotOptions":{"series":{"turboThreshold":0},"treemap":{"layoutAlgorithm":"squarified"},"bubble":{"minSize":5,"maxSize":25}},"annotationsOptions":{"enabledButtons":false},"tooltip":{"delayForDisplay":10},"xAxis":{"type":"datetime"},"series":[{"data":[[1375315200000,0],[1377993600000,0],[1380585600000,0],[1383264000000,0],[1385856000000,0],[1388534400000,317],[1391212800000,197],[1393632000000,279],[1396310400000,59],[1398902400000,162],[1401580800000,107],[1404172800000,140],[1406851200000,229],[1409529600000,283],[1412121600000,347],[1414800000000,693],[1417392000000,621],[1420070400000,569],[1422748800000,1397],[1425168000000,1309],[1427846400000,1196],[1430438400000,1015],[1433116800000,1260],[1435708800000,2887],[1438387200000,2105],[1441065600000,2607],[1443657600000,3165],[1446336000000,1994],[1448928000000,2228],[1451606400000,2061],[1454284800000,2146],[1456790400000,2406],[1459468800000,2698],[1462060800000,3103],[1464739200000,2909],[1467331200000,3410]],"name":"Series","zIndex":3},{"data":[[1470009600000,3207.03689030834],[1472688000000,3315.53950414392],[1475280000000,3409.36016541658],[1477958400000,3497.3839247748],[1480550400000,3552.32175393547],[1483228800000,3447.0002046938],[1485907200000,3914.29380174878],[1488326400000,4061.71393449875],[1491004800000,3977.55978152043],[1493596800000,4090.03983792712],[1496275200000,4058.62598318277],[1498867200000,4372.81761910137]],"name":"HoltWinters","zIndex":2,"id":"oi4omrwvdw"},{"data":[[1470009600000,3844.85799408133,2569.21578653534],[1472688000000,4036.04759086489,2595.03141742296],[1475280000000,4206.17794431616,2612.54238651701],[1477958400000,4365.84726648554,2628.92058306405],[1480550400000,4488.86578315238,2615.77772471856],[1483228800000,4448.81346440171,2445.1869449859],[1485907200000,4979.10676567544,2849.48083782211],[1488326400000,5187.66155645004,2935.76631254747],[1491004800000,5163.08785427016,2792.0317087707],[1493596800000,5333.83875499645,2846.24092085779],[1496275200000,5359.58242292622,2757.66954343932],[1498867200000,5729.97838833828,3015.65684986445]],"name":"HoltWinters level 80","type":"arearange","fillOpacity":0.1,"zIndex":1,"lineWidth":0,"linkedTo":"oi4omrwvdw"},{"data":[[1470009600000,4182.50009099775,2231.57368961893],[1472688000000,4417.46153249621,2213.61747579164],[1475280000000,4627.98779685387,2190.73253397929],[1477958400000,4825.58398898604,2169.18386056355],[1480550400000,4984.64224462219,2120.00126324875],[1483228800000,4979.14136939813,1914.85903998948],[1485907200000,5542.78469956196,2285.80290393559],[1488326400000,5783.7022234095,2339.725645588],[1491004800000,5790.66850669547,2164.45105634538],[1493596800000,5992.26612909462,2187.81354675962],[1496275200000,6048.26716181849,2068.98480454705],[1498867200000,6448.4159020348,2297.21933616793]],"name":"HoltWinters level 95","type":"arearange","fillOpacity":0.1,"zIndex":1,"lineWidth":0,"linkedTo":"oi4omrwvdw"}]},"theme":{"chart":{"backgroundColor":"transparent"}},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","drillUpText":"Back to {series.name}","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"thousandsSep":" ","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"hc_opts":{"title":{"text":null},"yAxis":{"title":{"text":null}},"credits":{"enabled":false},"exporting":{"enabled":false},"plotOptions":{"series":{"turboThreshold":0},"treemap":{"layoutAlgorithm":"squarified"},"bubble":{"minSize":5,"maxSize":25}},"annotationsOptions":{"enabledButtons":false},"tooltip":{"delayForDisplay":10},"xAxis":{"type":"datetime"},"series":[{"data":[[1375315200000,0],[1377993600000,0],[1380585600000,0],[1383264000000,0],[1385856000000,0],[1388534400000,317],[1391212800000,197],[1393632000000,279],[1396310400000,59],[1398902400000,162],[1401580800000,107],[1404172800000,140],[1406851200000,229],[1409529600000,283],[1412121600000,347],[1414800000000,693],[1417392000000,621],[1420070400000,569],[1422748800000,1397],[1425168000000,1309],[1427846400000,1196],[1430438400000,1015],[1433116800000,1260],[1435708800000,2887],[1438387200000,2105],[1441065600000,2607],[1443657600000,3165],[1446336000000,1994],[1448928000000,2228],[1451606400000,2061],[1454284800000,2146],[1456790400000,2406],[1459468800000,2698],[1462060800000,3103],[1464739200000,2909],[1467331200000,3410],[1470009600000,3125],[1472688000000,3221],[1475280000000,3917],[1477958400000,3838],[1480550400000,8267],[1483228800000,13818],[1485907200000,6872],[1488326400000,7392],[1491004800000,6566],[1493596800000,6562],[1496275200000,5840],[1498867200000,5989]],"name":"Series","zIndex":3},{"data":[[1501545600000,5799.88296109746],[1504224000000,5953.82702697917],[1506816000000,6286.04960256189],[1509494400000,5919.18174699678],[1512086400000,7512.16192182951],[1514764800000,8349.27443790722],[1517443200000,4701.14915567939],[1519862400000,6100.01802849025],[1522540800000,6101.59851593583],[1525132800000,6404.34402681755],[1527811200000,6192.00418324618],[1530403200000,6785.03321678322]],"name":"HoltWinters","zIndex":2,"id":"cxqld37q3t"},{"data":[[1501545600000,8009.15429421046,3590.61162798446],[1504224000000,8605.30544712378,3302.34860683456],[1506816000000,9315.86738613737,3256.23181898641],[1509494400000,9285.0774362373,2553.28605775626],[1512086400000,11183.4984332413,3840.82541041768],[1514764800000,12302.5224403987,4396.02643541569],[1517443200000,8917.50157908768,484.796732271103],[1519862400000,10563.9944786475,1636.04157833298],[1522540800000,10800.1667804965,1403.0302513752],[1525132800000,11326.3356690203,1482.35238461478],[1527811200000,11327.7085862557,1056.29978023663],[1530403200000,12125.9055897453,1444.16084382116]],"name":"HoltWinters level 80","type":"arearange","fillOpacity":0.1,"zIndex":1,"lineWidth":0,"linkedTo":"cxqld37q3t"},{"data":[[1501545600000,9178.67189272986,2421.09402946506],[1504224000000,10008.9133371896,1898.74071676878],[1506816000000,10919.756037155,1652.34316796876],[1509494400000,11066.874983848,771.488510145552],[1512086400000,13126.9865851167,1897.33725854234],[1514764800000,14395.2455210494,2303.30335476499],[1517443200000,11149.5037269577,-1747.20541559893],[1519862400000,12927.0808680766,-727.044811096055],[1522540800000,13287.438574996,-1084.24154312437],[1525132800000,13931.8806552989,-1123.19260166379],[1527811200000,14046.3862742742,-1662.37790778189],[1530403200000,14953.1926404598,-1383.12620689336]],"name":"HoltWinters level 95","type":"arearange","fillOpacity":0.1,"zIndex":1,"lineWidth":0,"linkedTo":"cxqld37q3t"}]},"theme":{"chart":{"backgroundColor":"transparent"}},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","drillUpText":"Back to {series.name}","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"thousandsSep":" ","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
 <p>As I type R code blocks, the code output gets rendered right into the blog.</p>
 <p>This is the example from the <a href="http://www.dartistics.com">Dartistics.com</a> homepage, and adding interactive HTML widgets to my posts is going to be lovely, with no other hassle other than writing the code.</p>
 <div id="setup-blogdown" class="section level2">
@@ -401,12 +397,12 @@ cp -a ~/Documents/markedmondson.me-hugo/public/. ~/Documents/MarkEdmondson1234.g
 </ol>
 <p>For migration I had to go through and add the <code>url</code> field to the posts with my old URLs to preserve old links to the blog, and also turn off forced lower case via the <code>disablePathToLower = true</code> option in the <code>config.toml</code> file.</p>
 <p>I maintain two Github repos - one with the <a href="https://github.com/MarkEdmondson1234/MarkEdmondson1234.github.io">actual site content</a> and the other holding the <a href="https://github.com/MarkEdmondson1234/markedmondson.me-hugo">Hugo configuration</a>, if you’re interested in my setup.</p>
-<p>I had/have a lot of hassles with git submodules, I found this StackOverflow answer helped a lot to wipe the <a href="http://stackoverflow.com/questions/20929336/git-submodule-add-a-git-directory-is-found-locally-issue">slate clean of git submodules</a> and start again with the Hugo instructions</p>
+<p>I had/have a lot of hassles with git submodules, so much so I now just copy over the files in the Hugo repo’s public folder manually to the GitHub repo that hosts the HTML.</p>
 </div>
 
             </div>
             <footer class="article-footer">
-    <a data-url="http://code.markedmondson.me/new-blog-down/" data-id="4438c82996f5fd5d9c670ade0ad39417" class="article-share-link">
+    <a data-url="http://code.markedmondson.me/new-blog-down/" data-id="565a687394fc951f8fde8dba12fa8952" class="article-share-link">
         <i class="fa fa-share"></i>
         Share
     </a>
@@ -512,16 +508,21 @@ cp -a ~/Documents/markedmondson.me-hugo/public/. ~/Documents/MarkEdmondson1234.g
     <section id="comments">
         <div id="disqus_thread">
             <div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_shortname = 'markedmondson';
-    var disqus_identifier = 'http:\/\/code.markedmondson.me\/new-blog-down\/';
-    var disqus_title = 'New Blog Down';
-    var disqus_url = 'http:\/\/code.markedmondson.me\/new-blog-down\/';
-
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
     (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "markedmondson" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
     })();
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
@@ -544,7 +545,7 @@ cp -a ~/Documents/markedmondson.me-hugo/public/. ~/Documents/MarkEdmondson1234.g
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform" class="thumbnail">
+                    <a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/" class="thumbnail">
                     
                         <span style="background-image:url(http://code.markedmondson.me/banners/scheduledR.png)" alt="New Blog Down" class="thumbnail-image"></span>
                     
@@ -552,7 +553,7 @@ cp -a ~/Documents/markedmondson.me-hugo/public/. ~/Documents/MarkEdmondson1234.g
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform" class="title">Four Ways to Schedule R scripts on Google Cloud Platform</a></p>
+                    <p class="item-title"><a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/" class="title">Four Ways to Schedule R scripts on Google Cloud Platform</a></p>
                     <p class="item-date">
                         <time datetime="2017-07-09 00:00:00 &#43;0000 UTC" itemprop="datePublished">2017-07-09</time>
                     </p>

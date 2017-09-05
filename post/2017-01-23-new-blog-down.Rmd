@@ -24,11 +24,11 @@ library(forecast)
 ga_auth()
 gaid <- Sys.getenv("GA_ID")
 gadata <- google_analytics_4(gaid, 
-                             date_range = c("2013-08-01", "2016-07-31"),
+                             date_range = c("2013-08-01", "2017-07-31"),
                              dimensions = c("yearMonth"),
                              metrics = "sessions")
 
-ga_ts <- ts(gadata$sessions, start = c(2013,08), end = c(2016,07), frequency = 12)
+ga_ts <- ts(gadata$sessions, start = c(2013,08), end = c(2017,07), frequency = 12)
 
 forecast1 <- HoltWinters(ga_ts)
 
@@ -68,4 +68,5 @@ For migration I had to go through and add the `url` field to the posts with my o
 
 I maintain two Github repos - one with the [actual site content](https://github.com/MarkEdmondson1234/MarkEdmondson1234.github.io) and the other holding the [Hugo configuration](https://github.com/MarkEdmondson1234/markedmondson.me-hugo), if you're interested in my setup.
 
-I had/have a lot of hassles with git submodules, I found this StackOverflow answer helped a lot to wipe the [slate clean of git submodules](http://stackoverflow.com/questions/20929336/git-submodule-add-a-git-directory-is-found-locally-issue) and start again with the Hugo instructions
+I had/have a lot of hassles with git submodules, so much so I now just copy over the files in the Hugo repo's public folder manually to the GitHub repo that hosts the HTML.
+

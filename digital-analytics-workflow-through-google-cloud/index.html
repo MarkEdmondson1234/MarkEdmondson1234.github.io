@@ -2,7 +2,7 @@
 <html lang="en-GB">
 <head>
     <title>A digital analytics workflow through the Google Cloud using R &middot; Mark Edmondson</title>
-    <meta name="generator" content="Hugo 0.18.1" />
+    <meta name="generator" content="Hugo 0.26" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
@@ -26,7 +26,10 @@
 <meta property="og:url" content="http://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/" />
 
 
-<meta property="og:updated_time" content="2016-10-10T23:03:57&#43;01:00"/>
+
+<meta property="article:published_time" content="2016-10-10T23:03:57&#43;01:00"/>
+<meta property="article:modified_time" content="2016-10-10T23:03:57&#43;01:00"/>
+
 
 
 
@@ -48,18 +51,11 @@
 
 
 
-<meta itemprop="keywords" content="big-query,blogging,docker,google-analytics,google-app-engine,google-auth,google-cloud-storage,google-compute-engine,google-tag-manager,python,r,rstudio-server,search-console," />
+<meta itemprop="keywords" content="R,google-compute-engine,docker,big-query,google-cloud-storage,rstudio-server," />
 
-    
-
-  <meta name="twitter:card" content="summary"/>
-
-
-
-<meta name="twitter:title" content="A digital analytics workflow through the Google Cloud using R"/>
+    <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="A digital analytics workflow through the Google Cloud using R"/>
 <meta name="twitter:description" content="There are now several packages built upon the googleAuthR framework which are helpful to a digital analyst who uses R, so this post looks to demonstrate how they all work together. If you&rsquo;re new to R, and would like to know how it helps with your digital analytics, Tim Wilson and I ran a workshop last month aimed at getting a digital analyst up and running. The course material is online at www."/>
 <meta name="twitter:site" content="@HoloMarkeD"/>
-<meta name="twitter:domain" content="markedmondson.me"/>
 
     
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -177,7 +173,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        13
+        14
         <span>Posts</span>
       </div>
       <div class="article-info-block">
@@ -512,7 +508,7 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
 
             </div>
             <footer class="article-footer">
-    <a data-url="http://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/" data-id="eec842376a33b236ef25e7ed4b4b9c13" class="article-share-link">
+    <a data-url="http://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/" data-id="e02b32d6b8f66b0e3cf93cb53038b4c5" class="article-share-link">
         <i class="fa fa-share"></i>
         Share
     </a>
@@ -618,16 +614,21 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
     <section id="comments">
         <div id="disqus_thread">
             <div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_shortname = 'markedmondson';
-    var disqus_identifier = 'http:\/\/code.markedmondson.me\/digital-analytics-workflow-through-google-cloud\/';
-    var disqus_title = 'A digital analytics workflow through the Google Cloud using R';
-    var disqus_url = 'http:\/\/code.markedmondson.me\/digital-analytics-workflow-through-google-cloud\/';
-
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
     (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "markedmondson" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
     })();
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
@@ -650,7 +651,7 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform" class="thumbnail">
+                    <a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/" class="thumbnail">
                     
                         <span style="background-image:url(http://code.markedmondson.me/banners/scheduledR.png)" alt="A digital analytics workflow through the Google Cloud using R" class="thumbnail-image"></span>
                     
@@ -658,7 +659,7 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform" class="title">Four Ways to Schedule R scripts on Google Cloud Platform</a></p>
+                    <p class="item-title"><a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/" class="title">Four Ways to Schedule R scripts on Google Cloud Platform</a></p>
                     <p class="item-date">
                         <time datetime="2017-07-09 00:00:00 &#43;0000 UTC" itemprop="datePublished">2017-07-09</time>
                     </p>
