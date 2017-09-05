@@ -49,7 +49,7 @@ TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically
 
 
 <meta itemprop="dateModified" content="2017-09-05T13:55:57&#43;01:00" />
-<meta itemprop="wordCount" content="1423">
+<meta itemprop="wordCount" content="1425">
 
 
 
@@ -278,7 +278,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2017-09-05 13:55:57 &#43;0100 &#43;0100" itemprop="datePublished">2017-09-05</time>
             &middot;
-            1423
+            1425
             words
             &middot;
             7
@@ -405,7 +405,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <p><img src="../images/appengine-rstudio.png" alt="" /></p>
 
-<p>Using R on App Engine is possible due to App Engine&rsquo;s new beta support for flexible containers.  Any language deployed through a Docker container will work, something I recently worked through in a proof of concept to deploy a serverless R API using Plumber.  Shiny may be another beneficiary of App Engine, although at time of writing App Engine doesn&rsquo;t support the necessary websockets.</p>
+<p>Using R on App Engine is possible due to App Engine&rsquo;s new beta support for <a href="https://cloud.google.com/appengine/docs/flexible/custom-runtimes/">flexible custom runtime containers</a>.  Any language deployed through a Docker container will work, something I recently worked through in a proof of concept to deploy a <a href="https://github.com/MarkEdmondson1234/serverless-R-API-appengine">serverless R API using Plumber</a>.  Shiny may be another beneficiary of App Engine, although at time of writing App Engine doesn&rsquo;t support the necessary websockets.</p>
 
 <p>I suspect using <a href="https://kubernetes.io/">Kubernetes</a>, a container orchestrator upon Google Container Engine the above could be achieved, but I haven&rsquo;t quite grok&rsquo;d that yet so perhaps I&rsquo;ll update this in the future.</p>
 
