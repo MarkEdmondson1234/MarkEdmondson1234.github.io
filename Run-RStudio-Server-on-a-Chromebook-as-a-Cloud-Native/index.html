@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
-    <title>My R Packages &middot; Mark Edmondson</title>
+    <title>Run RStudio Server on a Chromebook as a Cloud Native &middot; Mark Edmondson</title>
     <meta name="generator" content="Hugo 0.26" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -10,7 +10,7 @@
       <meta name="description" content="The code bit of the blog">
     
     
-    <link rel="canonical" href="http://code.markedmondson.me/r-packages/"/>
+    <link rel="canonical" href="http://code.markedmondson.me/Run-RStudio-Server-on-a-Chromebook-as-a-Cloud-Native/"/>
     <link rel="icon" href="http://code.markedmondson.me/favicon.ico">
     <link rel="apple-touch-icon" href="http://code.markedmondson.me/apple-touch-icon.png"/>
     <link rel="stylesheet" href="http://code.markedmondson.me/css/style.css">
@@ -20,17 +20,16 @@
     
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
-    <meta property="og:title" content="My R Packages" />
-<meta property="og:description" content="A full list of R packages I have published are on my Github, but some notable ones are below.
-Some are part of the cloudyR project, which has many packages useful for using R in the cloud. I concentrate on the Google cloud below, but be sure to check out the other packages if you’re looking to work with AWS or other cloud based services.
-CRAN     Status URL Description     googleAuthR The central workhorse for authentication on Google APIs   googleAnalyticsR Works with Google Analytics Reporting V3/V4 and Management APIs   googleComputeEngineR Launch Virtual Machines within the Google Cloud, via templates or your own Docker containers." />
+    <meta property="og:title" content="Run RStudio Server on a Chromebook as a Cloud Native" />
+<meta property="og:description" content="I recently got an Asus Chromebook Flip with which I&rsquo;m very happy, but it did make me realise that if a Chromebook was to replace my normal desktop as my primary workstation, my RStudio Server setup would need to be more cloud native than was available up until now.
+TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically backs up data and configuration settings to Google Cloud Storage is on the googleComputeEngineR website here." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://code.markedmondson.me/r-packages/" />
+<meta property="og:url" content="http://code.markedmondson.me/Run-RStudio-Server-on-a-Chromebook-as-a-Cloud-Native/" />
 
 
 
-<meta property="article:published_time" content="2017-01-24T21:20:50&#43;01:00"/>
-<meta property="article:modified_time" content="2017-01-24T21:20:50&#43;01:00"/>
+<meta property="article:published_time" content="2017-09-05T13:55:57&#43;01:00"/>
+<meta property="article:modified_time" content="2017-09-05T13:55:57&#43;01:00"/>
 
 
 
@@ -44,23 +43,21 @@ CRAN     Status URL Description     googleAuthR The central workhorse for authen
 
     
     
-<meta itemprop="name" content="My R Packages">
-<meta itemprop="description" content="A full list of R packages I have published are on my Github, but some notable ones are below.
-Some are part of the cloudyR project, which has many packages useful for using R in the cloud. I concentrate on the Google cloud below, but be sure to check out the other packages if you’re looking to work with AWS or other cloud based services.
-CRAN     Status URL Description     googleAuthR The central workhorse for authentication on Google APIs   googleAnalyticsR Works with Google Analytics Reporting V3/V4 and Management APIs   googleComputeEngineR Launch Virtual Machines within the Google Cloud, via templates or your own Docker containers.">
+<meta itemprop="name" content="Run RStudio Server on a Chromebook as a Cloud Native">
+<meta itemprop="description" content="I recently got an Asus Chromebook Flip with which I&rsquo;m very happy, but it did make me realise that if a Chromebook was to replace my normal desktop as my primary workstation, my RStudio Server setup would need to be more cloud native than was available up until now.
+TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically backs up data and configuration settings to Google Cloud Storage is on the googleComputeEngineR website here.">
 
 
-<meta itemprop="dateModified" content="2017-01-24T21:20:50&#43;01:00" />
-<meta itemprop="wordCount" content="266">
+<meta itemprop="dateModified" content="2017-09-05T13:55:57&#43;01:00" />
+<meta itemprop="wordCount" content="1420">
 
 
 
-<meta itemprop="keywords" content="r,google-auth,big-query,google-analytics,google-cloud-storage,google-compute-engine,google-tag-manager,search-console," />
+<meta itemprop="keywords" content="google-cloud-storage,google-compute-engine,r,rstudio-server,docker,google-app-engine," />
 
-    <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="My R Packages"/>
-<meta name="twitter:description" content="A full list of R packages I have published are on my Github, but some notable ones are below.
-Some are part of the cloudyR project, which has many packages useful for using R in the cloud. I concentrate on the Google cloud below, but be sure to check out the other packages if you’re looking to work with AWS or other cloud based services.
-CRAN     Status URL Description     googleAuthR The central workhorse for authentication on Google APIs   googleAnalyticsR Works with Google Analytics Reporting V3/V4 and Management APIs   googleComputeEngineR Launch Virtual Machines within the Google Cloud, via templates or your own Docker containers."/>
+    <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Run RStudio Server on a Chromebook as a Cloud Native"/>
+<meta name="twitter:description" content="I recently got an Asus Chromebook Flip with which I&rsquo;m very happy, but it did make me realise that if a Chromebook was to replace my normal desktop as my primary workstation, my RStudio Server setup would need to be more cloud native than was available up until now.
+TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically backs up data and configuration settings to Google Cloud Storage is on the googleComputeEngineR website here."/>
 <meta name="twitter:site" content="@HoloMarkeD"/>
 
     
@@ -267,24 +264,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
         <div class="article-inner">
             
-                <img src="http://code.markedmondson.me/banners/packages.jpeg" class="article-banner">
+                <img src="http://code.markedmondson.me/banners/chromebook.png" class="article-banner">
             
 
             <header class="article-header">
-    <a href="http://code.markedmondson.me/r-packages/">
+    <a href="http://code.markedmondson.me/Run-RStudio-Server-on-a-Chromebook-as-a-Cloud-Native/">
     <h1 class="article-title" itemprop="name">
-        My R Packages
+        Run RStudio Server on a Chromebook as a Cloud Native
     </h1>
     </a>
     <div class="article-meta">
         <div class="article-date">
             <i class="fa fa-calendar"></i>
-            <time datetime="2017-01-24 21:20:50 &#43;0100 CET" itemprop="datePublished">2017-01-24</time>
+            <time datetime="2017-09-05 13:55:57 &#43;0100 &#43;0100" itemprop="datePublished">2017-09-05</time>
             &middot;
-            266
+            1420
             words
             &middot;
-            2
+            7
             minute read
         </div>
 
@@ -298,22 +295,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <i class="fa fa-tags"></i>
                 
                 
-                <a class="article-category-link" href="http://code.markedmondson.me/tags/r">r</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="http://code.markedmondson.me/tags/google-auth">google-auth</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="http://code.markedmondson.me/tags/big-query">big-query</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="http://code.markedmondson.me/tags/google-analytics">google-analytics</a>
-                &middot;
-                
-                
                 <a class="article-category-link" href="http://code.markedmondson.me/tags/google-cloud-storage">google-cloud-storage</a>
                 &middot;
                 
@@ -322,11 +303,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 &middot;
                 
                 
-                <a class="article-category-link" href="http://code.markedmondson.me/tags/google-tag-manager">google-tag-manager</a>
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/r">r</a>
                 &middot;
                 
                 
-                <a class="article-category-link" href="http://code.markedmondson.me/tags/search-console">search-console</a>
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/rstudio-server">rstudio-server</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/docker">docker</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/google-app-engine">google-app-engine</a>
                 
                 
             </div>
@@ -336,128 +325,137 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
             <div class="article-entry" itemprop="articleBody">
-                <p>A full list of R packages I have published are on <a href="https://github.com/MarkEdmondson1234">my Github</a>, but some notable ones are below.</p>
-<p>Some are part of the <a href="http://cloudyr.github.io/">cloudyR project</a>, which has many packages useful for using R in the cloud. <img src="/images/cloudyr2.png" /></p>
-<p>I concentrate on the Google cloud below, but be sure to check out the other packages if you’re looking to work with AWS or other cloud based services.</p>
-<div id="cran" class="section level2">
-<h2>CRAN</h2>
-<table>
-<colgroup>
-<col width="19%" />
-<col width="25%" />
-<col width="55%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Status</th>
-<th>URL</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><a href="http://cran.r-project.org/package=googleAuthR"><img src="http://www.r-pkg.org/badges/version/googleAuthR" /></a></td>
-<td><a href="http://code.markedmondson.me/googleAuthR/">googleAuthR</a></td>
-<td>The central workhorse for authentication on Google APIs</td>
-</tr>
-<tr class="even">
-<td><a href="http://cran.r-project.org/package=googleAnalyticsR"><img src="http://www.r-pkg.org/badges/version/googleAnalyticsR" /></a></td>
-<td><a href="http://code.markedmondson.me/googleAnalyticsR/">googleAnalyticsR</a></td>
-<td>Works with Google Analytics Reporting V3/V4 and Management APIs</td>
-</tr>
-<tr class="odd">
-<td><a href="http://cran.r-project.org/package=googleComputeEngineR"><img src="http://www.r-pkg.org/badges/version/googleComputeEngineR" /></a></td>
-<td><a href="https://cloudyr.github.io/googleComputeEngineR/">googleComputeEngineR</a></td>
-<td>Launch Virtual Machines within the Google Cloud, via templates or your own Docker containers.</td>
-</tr>
-<tr class="even">
-<td><a href="http://cran.r-project.org/package=googleCloudStorageR"><img src="http://www.r-pkg.org/badges/version/googleCloudStorageR" /></a></td>
-<td><a href="http://code.markedmondson.me/googleCloudStorageR/">googleCloudStorageR</a></td>
-<td>Interact with Google Cloud Storage via R</td>
-</tr>
-<tr class="odd">
-<td><a href="http://cran.r-project.org/package=bigQueryR"><img src="http://www.r-pkg.org/badges/version/bigQueryR" /></a></td>
-<td><a href="http://code.markedmondson.me/bigQueryR/">bigQueryR</a></td>
-<td>Interact with Google BigQuery via R</td>
-</tr>
-<tr class="even">
-<td><a href="http://cran.r-project.org/package=searchConsoleR"><img src="http://www.r-pkg.org/badges/version/searchConsoleR" /></a></td>
-<td><a href="http://code.markedmondson.me/searchConsoleR/">searchConsoleR</a></td>
-<td>Download Search Console data into R</td>
-</tr>
-</tbody>
-</table>
-<p>As you can tell, most are aimed towards helping R users with help in digital analytics and cloud based services. You can get some idea of how they can <a href="/digital-analytics-workflow-through-google-cloud/">work together in a digital analytics workflow here</a>.</p>
-</div>
-<div id="github" class="section level2">
-<h2>GITHUB</h2>
-<p>More experimental packages:</p>
-<table>
-<colgroup>
-<col width="19%" />
-<col width="25%" />
-<col width="55%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Status</th>
-<th>URL</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Dev</td>
-<td><a href="https://github.com/MarkEdmondson1234/googleMeasureR">googleMeasureR</a></td>
-<td>Send tracking hits to Google Analytics from R code using the Google Analytics Measurement Protocol</td>
-</tr>
-<tr class="even">
-<td><a href="https://travis-ci.org/MarkEdmondson1234/googleLanguageR"><img src="https://travis-ci.org/MarkEdmondson1234/googleLanguageR.png?branch=master" /></a></td>
-<td><a href="https://github.com/MarkEdmondson1234/googleLanguageR">googleLanguageR</a></td>
-<td>Access Speech to text, translation and NLP text processing APIs</td>
-</tr>
-<tr class="odd">
-<td><a href="https://travis-ci.org/MarkEdmondson1234/googleID"><img src="https://travis-ci.org/MarkEdmondson1234/googleID.svg?branch=master" /></a></td>
-<td><a href="https://github.com/MarkEdmondson1234/googleID">googleID</a></td>
-<td>In production, but very small so not on CRAN. Allows user authentication via Google+ API for Shiny and RMarkdown documents.</td>
-</tr>
-<tr class="even">
-<td>Dev</td>
-<td><a href="https://github.com/MarkEdmondson1234/youtubeAnalyticsR">youtubeAnalyticsR</a></td>
-<td>Access YouTube Analytics data</td>
-</tr>
-<tr class="odd">
-<td>Deprecated</td>
-<td><a href="https://github.com/MarkEdmondson1234/gtmR">gtmR</a></td>
-<td>Superceded by <a href="https://github.com/IronistM/googleTagManageR">googleTagManagerR</a></td>
-</tr>
-<tr class="even">
-<td>Reference</td>
-<td><a href="https://github.com/MarkEdmondson1234/autoGoogleAPI">autoGoogleAPI</a></td>
-<td>152 R packages auto generated via <code>googleAuthR</code>’s discovery API feature</td>
-</tr>
-<tr class="odd">
-<td>Done</td>
-<td><a href="https://github.com/MarkEdmondson1234/gentelellaShiny">gentelellaShiny</a></td>
-<td>A custom Shiny theme available in a package</td>
-</tr>
-<tr class="even">
-<td>Deprecated</td>
-<td><a href="https://github.com/MarkEdmondson1234/stripeR">stripeR</a></td>
-<td>Interact with the Stripe payment API, but superseded by another R package, <a href="https://cran.r-project.org/web/packages/RStripe/index.html">RStripe</a></td>
-</tr>
-</tbody>
-</table>
-</div>
+                
+
+<p>I recently got an <a href="https://www.asus.com/us/Laptops/ASUS-Chromebook-Flip-C302CA/">Asus Chromebook Flip</a> with which I&rsquo;m very happy, but it did make me realise that if a Chromebook was to replace my normal desktop as my primary workstation, my RStudio Server setup would need to be more cloud native than was available up until now.</p>
+
+<p><em>TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically backs up data and configuration settings to Google Cloud Storage is on the <a href="https://cloudyr.github.io/googleComputeEngineR/articles/persistent-rstudio.html">googleComputeEngineR website here</a>.</em></p>
+
+<h2 id="broken-promises-of-the-cloud">Broken promises of the cloud?</h2>
+
+<p>Whilst there are lots of other solutions around for hosting RStudio Server in the cloud, <a href="http://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/">including some of my own</a>, I don&rsquo;t believe they are a serious replacement for a desktop station running RStudio.</p>
+
+<p>To date I&rsquo;ve treated RStudio Server as a temporary UI whilst setting up scheduled scripts and so forth, and for running workshops for students with pre-installed packages.  Yes, the convenience of running RStudio in a browser and being able to launch different configurations is great, but it wasn&rsquo;t a total desktop replacement for the following reasons:</p>
+
+<ul>
+<li><em>More expensive</em> - running RStudio Server permanently in the cloud can be done for as little as 5 dollars a month, but for that you get a machine about as powerful as a Raspberry Pi.  For a proper workstation with decent RAM etc, you are looking at more like 30 dollars a month, which if you&rsquo;re running for 2 years is around $700 that you could have spent on a laptop that can do more things.</li>
+<li><em>More risky</em> - keeping the only copy of your data on a cloud server is not a good idea, as I learnt to my cost when a VM&rsquo;s hard disk filled up. Unable to log in, a convoluted panic to increase the disk size occurred.  A physical laptop is a lot easier to troubleshoot if something goes awry.</li>
+<li><em>Not flexible enough</em> - if you run out of RAM or want things to compute quicker, you are going to need to transfer your data and boot up another VM with stronger specs.</li>
+</ul>
+
+<p>But isn&rsquo;t the allure of cheaper, safer, more flexible computing the reason we are using the cloud in the first place?</p>
+
+<h2 id="going-cloud-native">Going Cloud Native</h2>
+
+<p>I believe the reason for the dichotomy between expectation and reality is due to not being &ldquo;Cloud Native&rdquo; enough, something I realised whilst attending this year&rsquo;s <a href="https://cloudnext.withgoogle.com/">Google NEXT event</a>.  There they described three phases of business cloud evolution:</p>
+
+<ol>
+<li>Lift and Shift - moving your existing infrastructure into equivalent cloud versions</li>
+<li>Separation of compute and data - abstracting out the computing away from the data the computing is running on.  Essentially letting the cloud take on the roles of your hard disk vs your CPU.</li>
+<li>Platform-as-a-service (PaaS) - abstracting away the servers the computing and data are running on, so as to run on purely managed services such as BigQuery, Kubernetes and AppEngine</li>
+</ol>
+
+<p>From the above, existing RStudio Server solutions are in the Lift and Shift vein, whilst what we may imagine to be The Cloud are in the more evolved options.</p>
+
+<h2 id="docker-ftw">Docker FTW</h2>
+
+<p>To truly take advantage of the cloud, I believe this means you must become familiar with containers, specifically <a href="https://www.docker.com/">Docker</a>.  Containers are a rapidly evolving standard that makes cloud evolution possible by allowing breakout of computation, and is being embraced by all cloud providers.</p>
+
+<p>Using Docker with R has other benefits.  Reproducibility of R code is enhanced when you can pin the exact environment to run code within, and addresses criticisms of R that it is not production ready: normally R&rsquo;s open source and rapidly evolving nature means R code you wrote two years ago may not work with the most modern R package versions.</p>
+
+<p>I am in a lucky position to work on this as I have developed a niche creating Google API libraries in R.  Starting with my needs from digital marketing to wrap the Search Console and Google Analytics APIs, I then used that experience to move into the more general Cloud APIs such as Cloud Storage and Compute Engine, and now get support through my Google Developer Expert status network to experiment with the Google Cloud platform.</p>
+
+<h2 id="a-persistent-rstudio-server">A Persistent RStudio Server</h2>
+
+<p>Its with two of my R libraries, <a href="http://code.markedmondson.me/googleCloudStorageR/">googleCloudStorageR</a> and <a href="https://cloudyr.github.io/googleComputeEngineR/">googleComputeEngineR</a>, that I&rsquo;ve put together something much closer to the cheap, resilient, and flexible version of the cloud I want to be using when running RStudio in the cloud.</p>
+
+<ul>
+<li>RStudio Server runs within its own Docker container, and can be relaunched with custom package setups</li>
+<li>Data is persistent between Docker containers and cloud compute instances.<br /></li>
+<li>I can turn off the RStudio Server to avoid charges, then turn it on again and start from where I left off without reconfiguring git etc.</li>
+<li>I can work locally in one RStudio project, then switch to the cloud to work on the same project.</li>
+<li>SSH keys and GitHub configurations are set up only once and then automatically available across Docker containers, cloud computers and local RStudio projects.</li>
+</ul>
+
+<p>I have a bookmark to the Google Cloud console to startup/shutdown the instance:</p>
+
+<p><img src="../images/startup-rstudio.png" alt="" /></p>
+
+<p>Once launched, I log in and configurations are auto loaded by the <code>_gcssave.yaml</code> configuration:</p>
+
+<p><img src="../images/startup-rstudio-persistent.png" alt="" /></p>
+
+<p>I don&rsquo;t need to reconfigure Git, even on a fresh instance - downloading a GitHub repo is as simple as copying the SSH GitHub URL..</p>
+
+<p><img src="../images/ssh-clone-github.png" alt="" /></p>
+
+<p>&hellip;and starting a new RStudio project:</p>
+
+<p><img src="../images/rstudio-github.png" alt="" /></p>
+
+<p>This saves me significant cost by letting me stop/start servers as and when I need them via the GCP Web UI. My data is safer than keeping it on my local harddrive, and switching to a bigger VM takes seconds since all data and code upload/download automatically.</p>
+
+<p>The details for the configuration setup is <a href="https://cloudyr.github.io/googleComputeEngineR/articles/persistent-rstudio.html">here on the googleComputeEngineR website</a>, for which you&rsquo;ll need the latest development versions of googleComputeEngineR and googleCloudStorageR.</p>
+
+<h2 id="rstudio-as-a-service">RStudio-as-a-service?</h2>
+
+<p>Whats next?  Could this evolve further into a RStudio-as-a-service offering?  To qualify, we would need to not worry about starting or stopping servers at all, and scale under any load.</p>
+
+<p>Well, prompted by this blog post I had a good look.  It IS possible to deploy RStudio on App Engine and I got excited, but unfortunately the minimum number of permanent instances on a flexible App Engine app is 1, so all told for a solo analyst it is a more expensive solution than running a VM that you stop and start yourself.  However, if you had enough demand to pay for 1 VM <sup>24</sup>&frasl;<sub>7</sub> (~$30 a month),  it does start to make sense to scale on App Engine.  A setup that does that is on this GitHub repo running RStudio on App Engine.</p>
+
+<p><img src="../images/appengine-rstudio.png" alt="" /></p>
+
+<p>Using R on App Engine is possible due to App Engine&rsquo;s new beta support for flexible containers.  Any language deployed through a Docker container will work, something I recently worked through in a proof of concept to deploy a serverless R API using Plumber.  Shiny may be another beneficiary of App Engine, although at time of writing App Engine doesn&rsquo;t support the necessary websockets.</p>
+
+<p>I suspect using <a href="https://kubernetes.io/">Kubernetes</a>, a container orchestrator upon Google Container Engine the above could be achieved, but I haven&rsquo;t quite grok&rsquo;d that yet so perhaps I&rsquo;ll update this in the future.</p>
+
+<p>You can still benefit from PaaS within R if you are using services such as BigQuery.  There, analysis of large datasets is performed without you knowing how many shards of instances are being used to do so, and you can access the results within R via bigrquery/bigQueryR.  I did a presentation of <a href="https://docs.google.com/presentation/d/1510xJzDuWgbLgoNY3Fs5-CGtMCJEYs5msaxIpINt03g/edit?usp=sharing">BigQuery&rsquo;s usefulness for analytics here</a> for MeasureCamp Copenhagen.</p>
+
+<h2 id="summary">Summary</h2>
+
+<p>Of course, all this still doesn&rsquo;t work if you do not have an internet connection. :)  But I&rsquo;m now much more comfortable using my Chromebook to start and maintain R projects, and could imagine it being my main work station.</p>
+
+<p>Typical workflows include:</p>
+
+<ul>
+<li>Work on local RStudio</li>
+<li>create project _gcssave.yaml</li>
+<li>log off, auto-save to GCE</li>
+<li>Move to Chromebook</li>
+<li>Start up VM via the Google Cloud console</li>
+<li>create a new project with same name</li>
+<li>auto-load project</li>
+<li>Do code</li>
+<li>Shutdown (auto-save project)</li>
+<li>switch to local RStudio</li>
+<li>etc. etc.</li>
+</ul>
+
+<p>&hellip;and:</p>
+
+<ul>
+<li>Save project to (private) GitHub</li>
+<li>Move to Chromebook</li>
+<li>Start up VM via the Google Cloud console</li>
+<li>Open RStudio Server IP</li>
+<li>GitHub settings autoload</li>
+<li>Clone GitHub repo via New RStudio Projects</li>
+<li>Do code, commit, push, pull</li>
+<li>etc. etc.</li>
+</ul>
+
+<p>None of this would be possible without the skills of the <a href="https://www.rstudio.com/">RStudio</a> team, <a href="https://cloud.google.com/">Google Cloud</a> and <a href="https://hub.docker.com/u/rocker/">Rocker</a>, so a massive thanks to them.</p>
+
+<p>I&rsquo;d imagine if you want to do this with another cloud provider they should have very similar services that you can build upon, let me know in the comments.</p>
 
             </div>
             <footer class="article-footer">
-    <a data-url="http://code.markedmondson.me/r-packages/" data-id="5e53a7a6681989d05d797d473db51871" class="article-share-link">
+    <a data-url="http://code.markedmondson.me/Run-RStudio-Server-on-a-Chromebook-as-a-Cloud-Native/" data-id="bd8e35a9f7cf11680a6c4507b1f1c4d8" class="article-share-link">
         <i class="fa fa-share"></i>
         Share
     </a>
     
-    <a href="http://code.markedmondson.me/r-packages//#disqus_thread" class="article-comment-link">
+    <a href="http://code.markedmondson.me/Run-RStudio-Server-on-a-Chromebook-as-a-Cloud-Native//#disqus_thread" class="article-comment-link">
         Comments
     </a>
     
@@ -533,21 +531,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         
 <nav id="article-nav">
     
-    <a href="http://code.markedmondson.me/new-blog-down/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">
           Older
       </strong>
-      <div class="article-nav-title">New Blog Down</div>
+      <div class="article-nav-title">Four Ways to Schedule R scripts on Google Cloud Platform</div>
     </a>
     
 
-    
-    <a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">
-          Newer
-      </strong>
-      <div class="article-nav-title">Four Ways to Schedule R scripts on Google Cloud Platform</div>
-    </a>
     
 </nav>
 
@@ -597,7 +588,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <div class="item-thumbnail">
                     <a href="http://code.markedmondson.me/Run-RStudio-Server-on-a-Chromebook-as-a-Cloud-Native/" class="thumbnail">
                     
-                        <span style="background-image:url(http://code.markedmondson.me/banners/chromebook.png)" alt="My R Packages" class="thumbnail-image"></span>
+                        <span style="background-image:url(http://code.markedmondson.me/banners/chromebook.png)" alt="Run RStudio Server on a Chromebook as a Cloud Native" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -614,7 +605,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <div class="item-thumbnail">
                     <a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/" class="thumbnail">
                     
-                        <span style="background-image:url(http://code.markedmondson.me/banners/scheduledR.png)" alt="My R Packages" class="thumbnail-image"></span>
+                        <span style="background-image:url(http://code.markedmondson.me/banners/scheduledR.png)" alt="Run RStudio Server on a Chromebook as a Cloud Native" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -631,7 +622,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <div class="item-thumbnail">
                     <a href="http://code.markedmondson.me/r-packages/" class="thumbnail">
                     
-                        <span style="background-image:url(http://code.markedmondson.me/banners/packages.jpeg)" alt="My R Packages" class="thumbnail-image"></span>
+                        <span style="background-image:url(http://code.markedmondson.me/banners/packages.jpeg)" alt="Run RStudio Server on a Chromebook as a Cloud Native" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -648,7 +639,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <div class="item-thumbnail">
                     <a href="http://code.markedmondson.me/new-blog-down/" class="thumbnail">
                     
-                        <span style="background-image:url(http://code.markedmondson.me/banners/hugo.png)" alt="My R Packages" class="thumbnail-image"></span>
+                        <span style="background-image:url(http://code.markedmondson.me/banners/hugo.png)" alt="Run RStudio Server on a Chromebook as a Cloud Native" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -665,7 +656,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <div class="item-thumbnail">
                     <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/" class="thumbnail">
                     
-                        <span style="background-image:url(http://code.markedmondson.me/banners/realtime-forecast.png)" alt="My R Packages" class="thumbnail-image"></span>
+                        <span style="background-image:url(http://code.markedmondson.me/banners/realtime-forecast.png)" alt="Run RStudio Server on a Chromebook as a Cloud Native" class="thumbnail-image"></span>
                     
                     </a>
                 </div>

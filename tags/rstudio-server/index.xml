@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
     <copyright>Powered by [Hugo](//gohugo.io). Theme by [PPOffice](http://github.com/ppoffice).</copyright>
-    <lastBuildDate>Sun, 09 Jul 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 05 Sep 2017 13:55:57 +0100</lastBuildDate>
     
 	<atom:link href="http://code.markedmondson.me/tags/rstudio-server/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Run RStudio Server on a Chromebook as a Cloud Native</title>
+      <link>http://code.markedmondson.me/Run-RStudio-Server-on-a-Chromebook-as-a-Cloud-Native/</link>
+      <pubDate>Tue, 05 Sep 2017 13:55:57 +0100</pubDate>
+      
+      <guid>http://code.markedmondson.me/Run-RStudio-Server-on-a-Chromebook-as-a-Cloud-Native/</guid>
+      <description>I recently got an Asus Chromebook Flip with which I&amp;rsquo;m very happy, but it did make me realise that if a Chromebook was to replace my normal desktop as my primary workstation, my RStudio Server setup would need to be more cloud native than was available up until now.
+TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically backs up data and configuration settings to Google Cloud Storage is on the googleComputeEngineR website here.</description>
+    </item>
     
     <item>
       <title>Four Ways to Schedule R scripts on Google Cloud Platform</title>
