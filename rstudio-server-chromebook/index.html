@@ -49,7 +49,7 @@ TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically
 
 
 <meta itemprop="dateModified" content="2017-09-05T13:55:57&#43;01:00" />
-<meta itemprop="wordCount" content="1425">
+<meta itemprop="wordCount" content="1534">
 
 
 
@@ -278,10 +278,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2017-09-05 13:55:57 &#43;0100 &#43;0100" itemprop="datePublished">2017-09-05</time>
             &middot;
-            1425
+            1534
             words
             &middot;
-            7
+            8
             minute read
         </div>
 
@@ -369,6 +369,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <p>Its with two of my R libraries, <a href="http://code.markedmondson.me/googleCloudStorageR/">googleCloudStorageR</a> and <a href="https://cloudyr.github.io/googleComputeEngineR/">googleComputeEngineR</a>, that I&rsquo;ve put together something much closer to the cheap, resilient, and flexible version of the cloud I want to be using when running RStudio in the cloud.</p>
 
+<p>The role of a harddrive is delegated to Google Cloud Storage, whilst RStudio is served from within Docker containers.  With some new functions that are in the <code>.Rprofile</code> of a custom RStudio Docker image, Google Cloud Storage is called to download on startup, or upload on exit, all the files to a specific bucket.  These files can include SSH and GitHub settings, or a project folder.  Backups are activated by putting a <code>_gcssave.yaml</code> file in a folder, or via the VM&rsquo;s metadata.</p>
+
+<p>What this all means is:</p>
+
 <ul>
 <li>RStudio Server runs within its own Docker container, and can be relaunched with custom package setups</li>
 <li>Data is persistent between Docker containers and cloud compute instances.<br /></li>
@@ -385,7 +389,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <p><img src="../images/startup-rstudio-persistent.png" alt="" /></p>
 
-<p>I don&rsquo;t need to reconfigure Git, even on a fresh instance - downloading a GitHub repo is as simple as copying the SSH GitHub URL..</p>
+<p>As this includes the home directory, so log as I login with the same username, and point to the same bucket, any RStudio launched (within a Docker/locally, whereever) don&rsquo;t need to reconfigure Git - downloading a GitHub repo is as simple as copying the SSH GitHub URL&hellip;</p>
 
 <p><img src="../images/ssh-clone-github.png" alt="" /></p>
 
