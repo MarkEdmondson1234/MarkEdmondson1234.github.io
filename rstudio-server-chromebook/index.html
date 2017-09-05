@@ -49,7 +49,7 @@ TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically
 
 
 <meta itemprop="dateModified" content="2017-09-05T13:55:57&#43;01:00" />
-<meta itemprop="wordCount" content="1420">
+<meta itemprop="wordCount" content="1423">
 
 
 
@@ -278,7 +278,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2017-09-05 13:55:57 &#43;0100 &#43;0100" itemprop="datePublished">2017-09-05</time>
             &middot;
-            1420
+            1423
             words
             &middot;
             7
@@ -395,13 +395,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <p>This saves me significant cost by letting me stop/start servers as and when I need them via the GCP Web UI. My data is safer than keeping it on my local harddrive, and switching to a bigger VM takes seconds since all data and code upload/download automatically.</p>
 
-<p>The details for the configuration setup is <a href="https://cloudyr.github.io/googleComputeEngineR/articles/persistent-rstudio.html">here on the googleComputeEngineR website</a>, for which you&rsquo;ll need the latest development versions of googleComputeEngineR and googleCloudStorageR.</p>
+<p>The details for the configuration setup is <a href="https://cloudyr.github.io/googleComputeEngineR/articles/persistent-rstudio.html">here on the googleComputeEngineR website</a>, for which you&rsquo;ll need the latest development versions of <code>googleComputeEngineR</code> and <code>googleCloudStorageR</code>.</p>
 
 <h2 id="rstudio-as-a-service">RStudio-as-a-service?</h2>
 
 <p>Whats next?  Could this evolve further into a RStudio-as-a-service offering?  To qualify, we would need to not worry about starting or stopping servers at all, and scale under any load.</p>
 
-<p>Well, prompted by this blog post I had a good look.  It IS possible to deploy RStudio on App Engine and I got excited, but unfortunately the minimum number of permanent instances on a flexible App Engine app is 1, so all told for a solo analyst it is a more expensive solution than running a VM that you stop and start yourself.  However, if you had enough demand to pay for 1 VM <sup>24</sup>&frasl;<sub>7</sub> (~$30 a month),  it does start to make sense to scale on App Engine.  A setup that does that is on this GitHub repo running RStudio on App Engine.</p>
+<p>Well, prompted by this blog post I had a good look.  It IS possible to deploy RStudio on App Engine and I got excited, but unfortunately the minimum number of permanent instances on a flexible App Engine app is 1, so all told for a solo analyst it is a more expensive solution than running a VM that you stop and start yourself.  However, if you had enough demand to pay for 1 VM 24 hours a day (~$30 a month),  it does start to make sense to scale on App Engine.  A setup that does that is on this GitHub repo running RStudio on App Engine.</p>
 
 <p><img src="../images/appengine-rstudio.png" alt="" /></p>
 
