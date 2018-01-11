@@ -225,7 +225,6 @@ library(tidyverse)
 types[[1]] %>% 
   filter(!is.na(wikipedia_url)) %>% 
   distinct(name, wikipedia_url) %>% 
-  select(name, wikipedia_url) %>% 
   head %>% 
   knitr::kable()
   
@@ -310,6 +309,6 @@ A few take aways from the above in the real case, which was an e-commerce page t
 
 ## Summary
 
-Its early days but I am starting to run through new client websites to see what comes up (by writing more custom code to parse out the content) to pass on to the SEO specialists, at the very least its another perspective to inform topic and keyword choices.  If anyone takes this approach and finds it useful, do please comment as I'll be interested in this helps.  It would also be good to compare this with other non-Google NLP APIs such as on Azure and AWS to see if the Google one is espeically useful for Google SEO.
+Its early days but I am starting to run through new client websites to see what comes up (by writing more custom code to parse out the content) to pass on to the SEO specialists, at the very least its another perspective to inform topic and keyword choices.  If anyone takes this approach and finds it useful, do please comment as I'll be interested if this helps.  It would also be good to compare this with other non-Google NLP APIs such as on Azure and AWS to see if the Google one is especially useful for Google SEO.
 
 
