@@ -2,7 +2,7 @@
 <html lang="en-GB">
 <head>
     <title>Efficient anti-sampling with the Google Analytics Reporting API &middot; Mark Edmondson</title>
-    <meta name="generator" content="Hugo 0.26" />
+    <meta name="generator" content="Hugo 0.18.1" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
@@ -27,10 +27,7 @@ Avoiding the daily walk The most common approach to mitigate sampling is to brea
 <meta property="og:url" content="http://code.markedmondson.me/anti-sampling-google-analytics-api/" />
 
 
-
-<meta property="article:published_time" content="2016-08-05T23:03:57&#43;01:00"/>
-<meta property="article:modified_time" content="2016-08-05T23:03:57&#43;01:00"/>
-
+<meta property="og:updated_time" content="2016-08-05T23:03:57&#43;01:00"/>
 
 
 
@@ -53,12 +50,19 @@ Avoiding the daily walk The most common approach to mitigate sampling is to brea
 
 
 
-<meta itemprop="keywords" content="R,google-analytics," />
+<meta itemprop="keywords" content="big-query,blogging,docker,google-analytics,google-app-engine,google-auth,google-cloud-storage,google-compute-engine,google-language,google-tag-manager,python,r,rstudio-server,search-console," />
 
-    <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Efficient anti-sampling with the Google Analytics Reporting API"/>
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Efficient anti-sampling with the Google Analytics Reporting API"/>
 <meta name="twitter:description" content="Avoiding sampling is one of the most common reasons people start using the Google Analytics API. This blog lays out some pseudo-code to do so in an efficient manner, avoiding too many unnecessary API calls. The approach is used in the v4 calls for the R package googleAnalyticsR.
 Avoiding the daily walk The most common approach to mitigate sampling is to break down the API calls into one call per day."/>
 <meta name="twitter:site" content="@HoloMarkeD"/>
+<meta name="twitter:domain" content="markedmondson.me"/>
 
     
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -181,7 +185,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       </div>
       <div class="article-info-block">
         
-          13
+          14
         
         <span>
             Tags
@@ -460,7 +464,7 @@ for i in new_date_ranges:
 
             </div>
             <footer class="article-footer">
-    <a data-url="http://code.markedmondson.me/anti-sampling-google-analytics-api/" data-id="ffeae944c14ec4dbd7ecd61a61207823" class="article-share-link">
+    <a data-url="http://code.markedmondson.me/anti-sampling-google-analytics-api/" data-id="89c0057bd103fa490f78f1e408ba3b31" class="article-share-link">
         <i class="fa fa-share"></i>
         Share
     </a>
@@ -566,21 +570,16 @@ for i in new_date_ranges:
     <section id="comments">
         <div id="disqus_thread">
             <div id="disqus_thread"></div>
-<script>
-    var disqus_config = function () {
-    
-    
-    
-    };
+<script type="text/javascript">
+    var disqus_shortname = 'markedmondson';
+    var disqus_identifier = 'http:\/\/code.markedmondson.me\/anti-sampling-google-analytics-api\/';
+    var disqus_title = 'Efficient anti-sampling with the Google Analytics Reporting API';
+    var disqus_url = 'http:\/\/code.markedmondson.me\/anti-sampling-google-analytics-api\/';
+
     (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "markedmondson" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     })();
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
@@ -603,6 +602,23 @@ for i in new_date_ranges:
             
             <li>
                 <div class="item-thumbnail">
+                    <a href="http://code.markedmondson.me/searchconsoler-vs-googlelanguager" class="thumbnail">
+                    
+                        <span style="background-image:url(http://code.markedmondson.me/banners/nlp_sc.png)" alt="Efficient anti-sampling with the Google Analytics Reporting API" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="http://code.markedmondson.me/searchconsoler-vs-googlelanguager" class="title">Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API</a></p>
+                    <p class="item-date">
+                        <time datetime="2018-01-11 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-01-11</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
                     <a href="http://code.markedmondson.me/rstudio-server-chromebook/" class="thumbnail">
                     
                         <span style="background-image:url(http://code.markedmondson.me/banners/chromebook.png)" alt="Efficient anti-sampling with the Google Analytics Reporting API" class="thumbnail-image"></span>
@@ -620,7 +636,7 @@ for i in new_date_ranges:
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/" class="thumbnail">
+                    <a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform" class="thumbnail">
                     
                         <span style="background-image:url(http://code.markedmondson.me/banners/scheduledR.png)" alt="Efficient anti-sampling with the Google Analytics Reporting API" class="thumbnail-image"></span>
                     
@@ -628,7 +644,7 @@ for i in new_date_ranges:
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/" class="title">Four Ways to Schedule R scripts on Google Cloud Platform</a></p>
+                    <p class="item-title"><a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform" class="title">Four Ways to Schedule R scripts on Google Cloud Platform</a></p>
                     <p class="item-date">
                         <time datetime="2017-07-09 00:00:00 &#43;0000 UTC" itemprop="datePublished">2017-07-09</time>
                     </p>
@@ -665,23 +681,6 @@ for i in new_date_ranges:
                     <p class="item-title"><a href="http://code.markedmondson.me/new-blog-down/" class="title">New Blog Down</a></p>
                     <p class="item-date">
                         <time datetime="2017-01-23 22:45:03 &#43;0100 CET" itemprop="datePublished">2017-01-23</time>
-                    </p>
-                </div>
-            </li>
-            
-            <li>
-                <div class="item-thumbnail">
-                    <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/" class="thumbnail">
-                    
-                        <span style="background-image:url(http://code.markedmondson.me/banners/realtime-forecast.png)" alt="Efficient anti-sampling with the Google Analytics Reporting API" class="thumbnail-image"></span>
-                    
-                    </a>
-                </div>
-                <div class="item-inner">
-                    
-                    <p class="item-title"><a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/" class="title">Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two</a></p>
-                    <p class="item-date">
-                        <time datetime="2017-01-22 14:20:57 &#43;0100 CET" itemprop="datePublished">2017-01-22</time>
                     </p>
                 </div>
             </li>
@@ -773,6 +772,14 @@ for i in new_date_ranges:
             
             <li class="category-list-item">
                 
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/google-language">
+                    google-language
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
                 <a class="category-list-link" href="http://code.markedmondson.me/tags/google-tag-manager">
                     google-tag-manager
                 </a>
@@ -792,7 +799,7 @@ for i in new_date_ranges:
                 <a class="category-list-link" href="http://code.markedmondson.me/tags/r">
                     r
                 </a>
-                <span class="category-list-count">12</span>
+                <span class="category-list-count">13</span>
             </li>
             
             <li class="category-list-item">
@@ -808,7 +815,7 @@ for i in new_date_ranges:
                 <a class="category-list-link" href="http://code.markedmondson.me/tags/search-console">
                     search-console
                 </a>
-                <span class="category-list-count">2</span>
+                <span class="category-list-count">3</span>
             </li>
             
         </ul>
@@ -831,7 +838,7 @@ for i in new_date_ranges:
 <footer id="footer">
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2017
+      &copy; 2018
       Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
     </div>
   </div>

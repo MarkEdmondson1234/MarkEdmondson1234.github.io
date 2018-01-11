@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <title>Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API &middot; Mark Edmondson</title>
+    <meta name="generator" content="Hugo 0.18.1" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Mark Edmondson">
+    
+      <meta name="description" content="The code bit of the blog">
+    
+    
+    <link rel="canonical" href="http://code.markedmondson.me/searchconsoler-vs-googlelanguager"/>
+    <link rel="icon" href="http://code.markedmondson.me/favicon.ico">
+    <link rel="apple-touch-icon" href="http://code.markedmondson.me/apple-touch-icon.png"/>
+    <link rel="stylesheet" href="http://code.markedmondson.me/css/style.css">
+    <link rel="stylesheet" href="http://code.markedmondson.me/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://code.markedmondson.me/css/monokai.css">
+    <link rel="stylesheet" href="http://code.markedmondson.me/fancybox/jquery.fancybox.css">
+    
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+    <meta property="og:title" content="Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API" />
+<meta property="og:description" content="With the launch of the Google Natural Language API (NLP API), and the emphasis of machine learning that is said to account for up to 30% of the SEO algorithmn for Google search, a natural question is whether you can use Google’s own macine learning APIs to help optimise your website for search.
+Whilst I don’t believe they will offer exactly the same results, I can see useful applications that include:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://code.markedmondson.me/searchconsoler-vs-googlelanguager" />
+
+
+<meta property="og:updated_time" content="2018-01-11T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API">
+<meta itemprop="description" content="With the launch of the Google Natural Language API (NLP API), and the emphasis of machine learning that is said to account for up to 30% of the SEO algorithmn for Google search, a natural question is whether you can use Google’s own macine learning APIs to help optimise your website for search.
+Whilst I don’t believe they will offer exactly the same results, I can see useful applications that include:">
+
+
+<meta itemprop="dateModified" content="2018-01-11T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1869">
+
+
+
+<meta itemprop="keywords" content="big-query,blogging,docker,google-analytics,google-app-engine,google-auth,google-cloud-storage,google-compute-engine,google-language,google-tag-manager,python,r,rstudio-server,search-console," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API"/>
+<meta name="twitter:description" content="With the launch of the Google Natural Language API (NLP API), and the emphasis of machine learning that is said to account for up to 30% of the SEO algorithmn for Google search, a natural question is whether you can use Google’s own macine learning APIs to help optimise your website for search.
+Whilst I don’t believe they will offer exactly the same results, I can see useful applications that include:"/>
+<meta name="twitter:site" content="@HoloMarkeD"/>
+<meta name="twitter:domain" content="markedmondson.me"/>
+
+    
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WFFMBH');</script>
+
+
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+
+
+<div id="container">
+	<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://code.markedmondson.me" id="logo">
+          
+          <i class="logo" style="background-image: url('http://code.markedmondson.me/../images/greenhand.png')"></i>
+          
+          <span class="site-title">Mark Edmondson</span>
+      </a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://code.markedmondson.me/">Home</a>
+          
+          
+          
+          
+
+          
+          <a class="main-nav-link" href="/r-packages/">My R Packages</a>
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://markedmondson.me">Non-code blog</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://code.markedmondson.me/../images/gde_avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+              <input type="hidden" name="sitesearch" value="http://code.markedmondson.me" />
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://code.markedmondson.me/">Home</a></td>
+          
+          
+          
+          
+
+          
+          <td><a class="main-nav-link" href="/r-packages/">My R Packages</a></td>
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://markedmondson.me">Non-code blog</a></td>
+          
+          
+          <td>
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" class="search-form-input" placeholder="Search">
+          <input type="hidden" name="sitesearch" value="http://code.markedmondson.me" />
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+   	
+   	<div class="outer">
+   		
+	    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://code.markedmondson.me/../images/gde_avatar.jpg">
+      <h2 id="name">Mark Edmondson</h2>
+      <h3 id="title">Coding in digital analytics</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Copenhagen, Denmark</span>
+      
+          <a id="follow" href="https://github.com/MarkEdmondson1234">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+      <div class="article-info-block">
+        15
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          14
+        
+        <span>
+            Tags
+        </span>
+      </div>
+    </div>
+    <div class="profile-block social-links">
+      <table>
+        <tr>
+          
+<td><a href="//github.com/MarkEdmondson1234" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//linkedin.com/in/markpeteredmondson" target="_blank" title="LinkedIn"><i class="fa fa-linkedin"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/HoloMarkeD" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://code.markedmondson.me/index.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</aside>
+
+	    
+
+	    
+<section id="main">
+
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+        <div class="article-inner">
+            
+                <img src="http://code.markedmondson.me/banners/nlp_sc.png" class="article-banner">
+            
+
+            <header class="article-header">
+    <a href="http://code.markedmondson.me/searchconsoler-vs-googlelanguager">
+    <h1 class="article-title" itemprop="name">
+        Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API
+    </h1>
+    </a>
+    <div class="article-meta">
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2018-01-11 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-01-11</time>
+            &middot;
+            1869
+            words
+            &middot;
+            9
+            minute read
+        </div>
+
+
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/r">r</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/search-console">search-console</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/google-language">google-language</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody">
+                <p>With the launch of the Google Natural Language API (NLP API), and the emphasis of machine learning that is said to account for up to 30% of the SEO algorithmn for Google search, a natural question is whether you can use Google’s own macine learning APIs to help optimise your website for search.</p>
+<p>Whilst I don’t believe they will offer exactly the same results, I can see useful applications that include:</p>
+<ul>
+<li>Identifying what entities are on your website, to see what topics Google Knowledge Graph may categorise your website as</li>
+<li>Running your development website through the API to see if the topics are what you expect your SEO to cover</li>
+<li>Identify content that has very similar topics, that may be competing with one another in search</li>
+<li>Auto-optimisation of content by altering content to desired query targets</li>
+<li>Competitor analysis of SEO website performance</li>
+</ul>
+<p>Both these data sources are available through R via <code>searchConsoleR</code> and <code>googleLanguageR</code>, so below is a workflow on using them together to help answer questions like above.</p>
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>For this proof of concept we will use search console API and the NLP API to generate keywords for the same URLs, then compare the results.</p>
+<p>The general outline is:</p>
+<ol style="list-style-type: decimal">
+<li>Get Search Console data for a website</li>
+<li>For each SEO landing page, generate a corpus of NLP results</li>
+<li>Look for evidence that there is a relationship to a high agreement between NLP and SEO rankings</li>
+<li>Identify optimisation opportunities with suggested topics.</li>
+</ol>
+</div>
+<div id="setup" class="section level2">
+<h2>Setup</h2>
+<p>As we’re authenticating with two <code>googleAuthR</code> libraries, we set the scopes and authenticate directly with <code>googleAuthR::gar_auth()</code> rather than authenticate seperatly. The NLP API requires you to set up your own Google Cloud project, so that projects client ID, secret etc are used to generate one authentication token that covers both. See the <a href="http://code.markedmondson.me/googleAuthR/articles/google-authentication-types.html#multiple-authentication-tokens">googleAuthR website</a> for details.</p>
+<p>The libraries used are also below:</p>
+<pre class="r"><code>library(googleAuthR)     # Authentication
+library(googleLanguageR) # Google NLP API
+library(searchConsoleR)  # Webmasters API
+library(tidyverse)       # Data processing
+library(rvest)           # URL scraping
+library(cld2)            # Offline language detection
+
+# set google project to your own
+# assumes you have downloaded your own client ID JSON and set in environment argument GAR_CLIENT_JSON
+gar_set_client(scopes = c(&quot;https://www.googleapis.com/auth/webmasters&quot;,
+                          &quot;https://www.googleapis.com/auth/cloud-platform&quot;))
+
+# creates an auth token for reuse called &quot;scgl.oauth&quot; that works with search console and Language API
+gar_auth(&quot;scgl.oauth&quot;)</code></pre>
+</div>
+<div id="gather-search-console-data" class="section level2">
+<h2>Gather Search Console data</h2>
+<p>For this we need the keywords and each SEO landing page that appeared in the Google results, so the dimensions <code>query</code> and <code>page</code> are required:</p>
+<pre class="r"><code>library(searchConsoleR)
+
+test_website &lt;- &quot;https://www.example.co.uk&quot;
+sc &lt;- search_analytics(test_website, dimensions = c(&quot;query&quot;,&quot;page&quot;))</code></pre>
+<p>The NLP API supports <a href="https://cloud.google.com/natural-language/docs/languages">these 10 languages</a>, so the queries’ language also need to be on that list.</p>
+<p>For this example, we only use English keywords so we can limit to just those by detecting the query keywords.</p>
+<p>I suggest using the <a href="https://CRAN.R-project.org/package=cld2"><code>cld2</code> library</a>. I use this offline library for language detection as its free and fine for quick processing, whilst if more heavy duty detection and translation needed, then I would use <code>gl_translate()</code> from <code>googleLanguageR</code> although that has a cost.</p>
+<pre class="r"><code>library(cld2)
+
+sc$language &lt;- detect_language(sc$query)</code></pre>
+<p>Keeping the languages that are <code>en</code> or <code>NA</code> (we couldn’t tell)</p>
+<pre class="r"><code>sc_eng &lt;- sc %&gt;% filter(is.na(language) | language == &quot;en&quot;)</code></pre>
+<p>Now we have a clean dataset to send to the NLP API.</p>
+</div>
+<div id="gather-nlp-data" class="section level2">
+<h2>Gather NLP data</h2>
+<p>To avoid running NLP on lots of unnecessary HTML boiler plate, we need to consider what data we want to send in.</p>
+<p>For example, as we’re interested in SEO, the relevant data will include the title tags and the body content. Limiting the data sent to those will mean we have cleaner data out.</p>
+<p>There are two approaches to this:</p>
+<ul>
+<li>Examine the HTML or the website to only extract the useful bits using <code>rvest</code>’s CSS selectors (needs bespoke programming for each website)</li>
+<li>Take the text only cache from Google as the text source instead (cleaner data, but you’ll be blocked by Google if you scrape to many URLs)</li>
+</ul>
+<p>For this example, we take the latter method, but if you are running this beyond proof of concept scale I would advise the first.</p>
+<p>To take the “Text Only” cached version of a page, we use the URL that is supplied by Google Search’s cache:</p>
+<p>e.g.</p>
+<p>If your URL is - <code>http://example.com/your-website</code></p>
+<p>…then the text only webcache will be: <code>http://webcache.googleusercontent.com/search?q=cache:example.com/your-website&amp;num=1&amp;strip=1&amp;vwsrc=0#/</code></p>
+<p>An example function that does the above is shown below:</p>
+<pre class="r"><code>library(rvest)
+library(tidyverse)
+
+## create a function for scraping this website
+scrape &lt;- function(the_url){
+  message(&quot;Scraping &quot;, the_url)
+  
+  read &lt;- read_html(the_url)
+  
+  Sys.sleep(5)   # be nice to website
+  
+  read %&gt;%
+    html_text() %&gt;% 
+    trimws()
+}
+
+scrape_googlecache &lt;- function(the_url){
+  
+  wc &lt;- gsub(&quot;https?://&quot;,&quot;&quot;, the_url)
+  cache_me &lt;- sprintf(
+    &quot;http://webcache.googleusercontent.com/search?q=cache:%s&amp;num=1&amp;strip=1&amp;vwsrc=0#/&quot;,
+    wc
+  )
+  
+  scraped &lt;- scrape(cache_me)
+  
+  # remove whitespace and double whitespace
+  out &lt;- gsub(&quot;(\r|\n|\t)&quot;,&quot; &quot;, scraped)
+  out &lt;- gsub(&quot;\\s\\s+&quot;,&quot; &quot;, out)
+  
+  # remove first 1000 characters of boilerplate
+  out &lt;- substr(out, 1000, nchar(out))
+
+  data.frame(cached = out, url = the_url, stringsAsFactors = FALSE)
+
+}</code></pre>
+<p>Here is a demo of how it works on one URL:</p>
+<pre class="r"><code>the_url &lt;- &quot;http://code.markedmondson.me&quot;
+
+html_url &lt;- scrape_googlecache(the_url)
+
+substr(html_url$cached, 1000, 2000)</code></pre>
+<pre><code>## [1] &quot;le up until now. TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically backs up data and configuration settings to Google Cloud Storage is on the googleComputeEngineR website here. Read more Share Comments Four Ways to Schedule R scripts on Google Cloud Platform 2017-07-09 · 2213 words · 11 minute read r · google-app-engine · docker · google-analytics · google-compute-engine · rstudio-server A common question I come across is how to automate scheduling of R scripts downloading data. This post goes through some options that I have played around with, which I’ve mostly used for downloading API data such as Google Analytics using the Google Cloud platform, but the same principles could apply for AWS or Azure. Scheduling scripts advice But first, some notes on the scripts you are scheduling, that I’ve picked up. Read more Share Comments My R Packages 2017-01-24 · 266 words · 2 minute read r · google-auth · big-query · google-analytics · google-cloud-storage · goog&quot;</code></pre>
+<p>You can now apply this function to all the unique URLs in your search console URLs using a purrr loop, but hit it too fast and you’ll be blocked.</p>
+<pre class="r"><code>library(tidyverse)
+
+all_urls_scrape &lt;- sc_eng %&gt;% 
+  distinct(page) %&gt;% 
+  select(page) %&gt;% 
+  map_df(scrape_googlecache)
+  </code></pre>
+<div id="do-the-nlp-api" class="section level3">
+<h3>Do the NLP API</h3>
+<p>Now we can get results from Google NLP - test this out first with a couple of URLs as it costs money for each API call.</p>
+<pre class="r"><code>library(tidyverse)
+library(googleLanguageR)
+
+nlp_results &lt;- all_urls_scrape %&gt;% 
+  select(cached) %&gt;% 
+  map(gl_nlp) # this line makes the API calls</code></pre>
+<p>The NLP API returns lots of data, for now we are interested in the entities section:</p>
+<pre class="r"><code>library(tidyverse)
+entities &lt;- map(nlp_results, &quot;entities&quot;)
+
+## only get the types that are not &quot;OTHER&quot;
+types &lt;- map(entities, function(x){
+  y &lt;- x[[1]]
+  y &lt;- y[y$type != &quot;OTHER&quot;,]
+  y &lt;- y[!is.na(y$type),]
+  y
+})</code></pre>
+<p>We now have a list of the NLP results for each URL, for all the URLs that were in the search console data.</p>
+</div>
+<div id="nlp-features" class="section level3">
+<h3>NLP features</h3>
+<p>You can see the <a href="http://code.markedmondson.me/googleLanguageR/articles/nlp.html">googleLanguageR website</a> for more details on what is returned, as one example here is what recognised entities the API returned that have Wikipedia links:</p>
+<pre class="r"><code>library(tidyverse)
+
+## only get entries that have wikipedia links
+types[[1]] %&gt;% 
+  filter(!is.na(wikipedia_url)) %&gt;% 
+  distinct(name, wikipedia_url) %&gt;% 
+  select(name, wikipedia_url) %&gt;% 
+  head %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">wikipedia_url</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Afghanistan</td>
+<td align="left"><a href="https://en.wikipedia.org/wiki/Afghanistan" class="uri">https://en.wikipedia.org/wiki/Afghanistan</a></td>
+</tr>
+<tr class="even">
+<td align="left">British</td>
+<td align="left"><a href="https://en.wikipedia.org/wiki/United_Kingdom" class="uri">https://en.wikipedia.org/wiki/United_Kingdom</a></td>
+</tr>
+<tr class="odd">
+<td align="left">Charing Cross</td>
+<td align="left"><a href="https://en.wikipedia.org/wiki/Charing" class="uri">https://en.wikipedia.org/wiki/Charing</a></td>
+</tr>
+<tr class="even">
+<td align="left">England</td>
+<td align="left"><a href="https://en.wikipedia.org/wiki/England" class="uri">https://en.wikipedia.org/wiki/England</a></td>
+</tr>
+<tr class="odd">
+<td align="left">Epilepsy</td>
+<td align="left"><a href="https://en.wikipedia.org/wiki/Epilepsy" class="uri">https://en.wikipedia.org/wiki/Epilepsy</a></td>
+</tr>
+<tr class="even">
+<td align="left">Euro</td>
+<td align="left"><a href="https://en.wikipedia.org/wiki/Euro" class="uri">https://en.wikipedia.org/wiki/Euro</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="comparison-between-search-console-and-nlp" class="section level2">
+<h2>Comparison between Search Console and NLP</h2>
+<p>We can now compare the URL entities in <code>types</code> and the Search Console data in <code>sc_eng</code></p>
+<p>For demo purposes, we only look at the home page for the example website, but you can repeat this by looping over the list of <code>types</code>.</p>
+<pre class="r"><code>homepage_types &lt;- types[[1]]
+homepage_search_console &lt;- sc_eng %&gt;% filter(page = &quot;https://www.example.co.uk/&quot;)</code></pre>
+<div id="data-processing" class="section level3">
+<h3>Data processing</h3>
+<p>We first get the NLP entity names and the search console queries into the same format, lowercase and deduplicated, and for the NLP results the <code>salience</code> score is how important it thinks that entity is to the page, so we’ll sort downwards from that:</p>
+<pre class="r"><code>library(tidyverse)
+page_types &lt;- page_types %&gt;% 
+  distinct(name, .keep_all = TRUE) %&gt;% 
+  mutate(name = tolower(name)) %&gt;% 
+  arrange(desc(salience))</code></pre>
+<p>Now the vector of entity names in <code>page_types$name</code> and the vector of search console queries in <code>sc_eng$query</code> are the two vectors of keywords we want to compare. Are they similar?</p>
+</div>
+<div id="similarity-of-keywords" class="section level3">
+<h3>Similarity of keywords</h3>
+<p>In my example case I have 10 distinct queries from search console, and 464 unique named entites extracted out of the HTML from the NLP API, sorted by salience.</p>
+<p>A simple way of matching strings in R is using its base function <code>agrep()</code> which is an implementation of Levenshtein distance AKA “fuzzy matching”. I’ll run all the queries and compare against the entities:</p>
+<pre class="r"><code>library(tidyverse)
+## named vector
+queries &lt;- page_search_console$query %&gt;% unique()
+queries &lt;- setNames(queries, queries) 
+
+fuzzy_ranks &lt;- queries %&gt;% 
+  map(~ agrep(., page_types$name, value = FALSE)) %&gt;% 
+  enframe(name = &quot;query&quot;, value = &quot;nlp_rank&quot;) %&gt;% 
+  mutate(nlp_hits = map_int(nlp_rank, length)) %&gt;% 
+  filter(nlp_hits &gt; 0)
+
+fuzzy_values &lt;- queries %&gt;% 
+  map(~ agrep(., page_types$name, value = TRUE)) %&gt;% 
+  enframe(name = &quot;query&quot;, value = &quot;nlp_value&quot;)
+
+fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)</code></pre>
+<p>Since its a one-to-many relationship (one query can match several entities on the page), a list-column created by <code>enframe()</code> keeps it all neat and tidy within the tidyverse style.</p>
+<ul>
+<li><code>nlp_rank</code> is a vector of rankings of the salience of the words</li>
+<li><code>nlp_hits</code> is a numeric of how many entities each query had</li>
+<li><code>nlp_value</code> is a vector of what entities are matched</li>
+</ul>
+<p>I’ve had to change a few values to protect client data, but here is an example of the output:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">query</th>
+<th align="left">nlp_rank</th>
+<th align="right">nlp_hits</th>
+<th align="left">nlp_value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">non uk resident handbag cleaning</td>
+<td align="left">8</td>
+<td align="right">1</td>
+<td align="left">non uk residents handbag cleaning</td>
+</tr>
+<tr class="even">
+<td align="left">non uk residents handbag cleaning</td>
+<td align="left">8</td>
+<td align="right">1</td>
+<td align="left">non uk residents handbag cleaning</td>
+</tr>
+<tr class="odd">
+<td align="left">eu resident handbag cleaning</td>
+<td align="left">8</td>
+<td align="right">1</td>
+<td align="left">non uk residents handbag cleaning</td>
+</tr>
+<tr class="even">
+<td align="left">eu residents handbag cleaning</td>
+<td align="left">8</td>
+<td align="right">1</td>
+<td align="left">non uk residents handbag cleaning</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="does-the-nlp-help-with-any-insight" class="section level2">
+<h2>Does the NLP help with any insight?</h2>
+<p>A few take aways from the above in the real case, which was an e-commerce page targeting customers in Europe was:</p>
+<ul>
+<li>The NLP ranked the salience of the top keyword referrer as 8 - meaning it had 7 more entities it thought the page was more relevant to the page. This may mean we should work more on stressing the subject we want to be recognised in Google for.</li>
+<li>One of these was “British” which didn’t appear on the page which only mentioned “UK”, so it looks like it adds synonyms as well into its analysis.</li>
+<li>The NLP ranked “customers” as rank 3, even though it was mentioned only two times on the page. It got that this was an ecommerce page. Likewise it identified “European Econmic area” as important, even though it was only mentioned once. Since this was a sales page aimed at EEC users, this looks fair.</li>
+</ul>
+</div>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<p>Its early days but I am starting to run through new client websites to see what comes up (by writing more custom code to parse out the content) to pass on to the SEO specialists, at the very least its another perspective to inform topic and keyword choices. If anyone takes this approach and finds it useful, do please comment as I’ll be interested in this helps. It would also be good to compare this with other non-Google NLP APIs such as on Azure and AWS to see if the Google one is espeically useful for Google SEO.</p>
+</div>
+
+            </div>
+            <footer class="article-footer">
+    <a data-url="http://code.markedmondson.me/searchconsoler-vs-googlelanguager" data-id="2cb57c96f3fcc7ca9f7ce1253b1d11ff" class="article-share-link">
+        <i class="fa fa-share"></i>
+        Share
+    </a>
+    
+    <a href="http://code.markedmondson.me/searchconsoler-vs-googlelanguager/#disqus_thread" class="article-comment-link">
+        Comments
+    </a>
+    
+
+    <script>
+    (function ($) {
+        
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+    </script>
+</footer>
+
+        </div>
+
+        
+<nav id="article-nav">
+    
+    <a href="http://code.markedmondson.me/rstudio-server-chromebook/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">
+          Older
+      </strong>
+      <div class="article-nav-title">Run RStudio Server on a Chromebook as a Cloud Native</div>
+    </a>
+    
+
+    
+</nav>
+
+
+    </article>
+
+    
+    <section id="comments">
+        <div id="disqus_thread">
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'markedmondson';
+    var disqus_identifier = 'http:\/\/code.markedmondson.me\/searchconsoler-vs-googlelanguager';
+    var disqus_title = 'Comparing Google Search Console queries with Google\x27s Cloud Natural Language API';
+    var disqus_url = 'http:\/\/code.markedmondson.me\/searchconsoler-vs-googlelanguager';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </div>
+    </section>
+    
+</section>
+
+
+	    
+	    <aside id="sidebar">
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://code.markedmondson.me/searchconsoler-vs-googlelanguager" class="thumbnail">
+                    
+                        <span style="background-image:url(http://code.markedmondson.me/banners/nlp_sc.png)" alt="Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="http://code.markedmondson.me/searchconsoler-vs-googlelanguager" class="title">Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API</a></p>
+                    <p class="item-date">
+                        <time datetime="2018-01-11 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-01-11</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://code.markedmondson.me/rstudio-server-chromebook/" class="thumbnail">
+                    
+                        <span style="background-image:url(http://code.markedmondson.me/banners/chromebook.png)" alt="Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="http://code.markedmondson.me/rstudio-server-chromebook/" class="title">Run RStudio Server on a Chromebook as a Cloud Native</a></p>
+                    <p class="item-date">
+                        <time datetime="2017-09-05 13:55:57 &#43;0100 &#43;0100" itemprop="datePublished">2017-09-05</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform" class="thumbnail">
+                    
+                        <span style="background-image:url(http://code.markedmondson.me/banners/scheduledR.png)" alt="Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform" class="title">Four Ways to Schedule R scripts on Google Cloud Platform</a></p>
+                    <p class="item-date">
+                        <time datetime="2017-07-09 00:00:00 &#43;0000 UTC" itemprop="datePublished">2017-07-09</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://code.markedmondson.me/r-packages/" class="thumbnail">
+                    
+                        <span style="background-image:url(http://code.markedmondson.me/banners/packages.jpeg)" alt="Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="http://code.markedmondson.me/r-packages/" class="title">My R Packages</a></p>
+                    <p class="item-date">
+                        <time datetime="2017-01-24 21:20:50 &#43;0100 CET" itemprop="datePublished">2017-01-24</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://code.markedmondson.me/new-blog-down/" class="thumbnail">
+                    
+                        <span style="background-image:url(http://code.markedmondson.me/banners/hugo.png)" alt="Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="http://code.markedmondson.me/new-blog-down/" class="title">New Blog Down</a></p>
+                    <p class="item-date">
+                        <time datetime="2017-01-23 22:45:03 &#43;0100 CET" itemprop="datePublished">2017-01-23</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/big-query">
+                    big-query
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/blogging">
+                    blogging
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/docker">
+                    docker
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/google-analytics">
+                    google-analytics
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/google-app-engine">
+                    google-app-engine
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/google-auth">
+                    google-auth
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/google-cloud-storage">
+                    google-cloud-storage
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/google-compute-engine">
+                    google-compute-engine
+                </a>
+                <span class="category-list-count">6</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/google-language">
+                    google-language
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/google-tag-manager">
+                    google-tag-manager
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/python">
+                    python
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/r">
+                    r
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/rstudio-server">
+                    rstudio-server
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="http://code.markedmondson.me/tags/search-console">
+                    search-console
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+
+    
+
+
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+	    
+	</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script src="http://code.markedmondson.me/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://code.markedmondson.me/js/script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<!-- MathJax -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+</body>
+</html>

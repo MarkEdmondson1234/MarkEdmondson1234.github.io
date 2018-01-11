@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>http://code.markedmondson.me/searchconsoler-vs-googlelanguager</loc>
+    <lastmod>2018-01-11T00:00:00+00:00</lastmod>
+  </url>
   
   <url>
     <loc>http://code.markedmondson.me/rstudio-server-chromebook/</loc>
@@ -8,7 +12,7 @@
   </url>
   
   <url>
-    <loc>http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/</loc>
+    <loc>http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform</loc>
     <lastmod>2017-07-09T00:00:00+00:00</lastmod>
   </url>
   
@@ -90,11 +94,6 @@
   </url>
   
   <url>
-    <loc>http://code.markedmondson.me/categories/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>http://code.markedmondson.me/tags/docker/</loc>
     <lastmod>2017-09-05T13:55:57+01:00</lastmod>
     <priority>0</priority>
@@ -131,6 +130,12 @@
   </url>
   
   <url>
+    <loc>http://code.markedmondson.me/tags/google-language/</loc>
+    <lastmod>2018-01-11T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>http://code.markedmondson.me/tags/google-tag-manager/</loc>
     <lastmod>2017-01-24T21:20:50+01:00</lastmod>
     <priority>0</priority>
@@ -138,13 +143,13 @@
   
   <url>
     <loc>http://code.markedmondson.me/</loc>
-    <lastmod>2017-09-05T13:55:57+01:00</lastmod>
+    <lastmod>2018-01-11T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://code.markedmondson.me/post/</loc>
-    <lastmod>2017-09-05T13:55:57+01:00</lastmod>
+    <lastmod>2018-01-11T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -156,7 +161,7 @@
   
   <url>
     <loc>http://code.markedmondson.me/tags/r/</loc>
-    <lastmod>2017-09-05T13:55:57+01:00</lastmod>
+    <lastmod>2018-01-11T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -168,13 +173,12 @@
   
   <url>
     <loc>http://code.markedmondson.me/tags/search-console/</loc>
-    <lastmod>2017-01-24T21:20:50+01:00</lastmod>
+    <lastmod>2018-01-11T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://code.markedmondson.me/tags/</loc>
-    <lastmod>2017-01-24T21:20:50+01:00</lastmod>
     <priority>0</priority>
   </url>
   

@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Google Language on Mark Edmondson</title>
+    <link>http://code.markedmondson.me/tags/google-language/index.xml</link>
+    <description>Recent content in Google Language on Mark Edmondson</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-GB</language>
+    <copyright>Powered by [Hugo](//gohugo.io). Theme by [PPOffice](http://github.com/ppoffice).</copyright>
+    <atom:link href="http://code.markedmondson.me/tags/google-language/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API</title>
+      <link>http://code.markedmondson.me/searchconsoler-vs-googlelanguager</link>
+      <pubDate>Thu, 11 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://code.markedmondson.me/searchconsoler-vs-googlelanguager</guid>
+      <description>&lt;p&gt;With the launch of the Google Natural Language API (NLP API), and the emphasis of machine learning that is said to account for up to 30% of the SEO algorithmn for Google search, a natural question is whether you can use Google’s own macine learning APIs to help optimise your website for search.&lt;/p&gt;
+&lt;p&gt;Whilst I don’t believe they will offer exactly the same results, I can see useful applications that include:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Identifying what entities are on your website, to see what topics Google Knowledge Graph may categorise your website as&lt;/li&gt;
+&lt;li&gt;Running your development website through the API to see if the topics are what you expect your SEO to cover&lt;/li&gt;
+&lt;li&gt;Identify content that has very similar topics, that may be competing with one another in search&lt;/li&gt;
+&lt;li&gt;Auto-optimisation of content by altering content to desired query targets&lt;/li&gt;
+&lt;li&gt;Competitor analysis of SEO website performance&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Both these data sources are available through R via &lt;code&gt;searchConsoleR&lt;/code&gt; and &lt;code&gt;googleLanguageR&lt;/code&gt;, so below is a workflow on using them together to help answer questions like above.&lt;/p&gt;
+&lt;div id=&#34;overview&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Overview&lt;/h2&gt;
+&lt;p&gt;For this proof of concept we will use search console API and the NLP API to generate keywords for the same URLs, then compare the results.&lt;/p&gt;
+&lt;p&gt;The general outline is:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Get Search Console data for a website&lt;/li&gt;
+&lt;li&gt;For each SEO landing page, generate a corpus of NLP results&lt;/li&gt;
+&lt;li&gt;Look for evidence that there is a relationship to a high agreement between NLP and SEO rankings&lt;/li&gt;
+&lt;li&gt;Identify optimisation opportunities with suggested topics.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;setup&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Setup&lt;/h2&gt;
+&lt;p&gt;As we’re authenticating with two &lt;code&gt;googleAuthR&lt;/code&gt; libraries, we set the scopes and authenticate directly with &lt;code&gt;googleAuthR::gar_auth()&lt;/code&gt; rather than authenticate seperatly. The NLP API requires you to set up your own Google Cloud project, so that projects client ID, secret etc are used to generate one authentication token that covers both. See the &lt;a href=&#34;http://code.markedmondson.me/googleAuthR/articles/google-authentication-types.html#multiple-authentication-tokens&#34;&gt;googleAuthR website&lt;/a&gt; for details.&lt;/p&gt;
+&lt;p&gt;The libraries used are also below:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(googleAuthR)     # Authentication
+library(googleLanguageR) # Google NLP API
+library(searchConsoleR)  # Webmasters API
+library(tidyverse)       # Data processing
+library(rvest)           # URL scraping
+library(cld2)            # Offline language detection
+
+# set google project to your own
+# assumes you have downloaded your own client ID JSON and set in environment argument GAR_CLIENT_JSON
+gar_set_client(scopes = c(&amp;quot;https://www.googleapis.com/auth/webmasters&amp;quot;,
+                          &amp;quot;https://www.googleapis.com/auth/cloud-platform&amp;quot;))
+
+# creates an auth token for reuse called &amp;quot;scgl.oauth&amp;quot; that works with search console and Language API
+gar_auth(&amp;quot;scgl.oauth&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;gather-search-console-data&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Gather Search Console data&lt;/h2&gt;
+&lt;p&gt;For this we need the keywords and each SEO landing page that appeared in the Google results, so the dimensions &lt;code&gt;query&lt;/code&gt; and &lt;code&gt;page&lt;/code&gt; are required:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(searchConsoleR)
+
+test_website &amp;lt;- &amp;quot;https://www.example.co.uk&amp;quot;
+sc &amp;lt;- search_analytics(test_website, dimensions = c(&amp;quot;query&amp;quot;,&amp;quot;page&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The NLP API supports &lt;a href=&#34;https://cloud.google.com/natural-language/docs/languages&#34;&gt;these 10 languages&lt;/a&gt;, so the queries’ language also need to be on that list.&lt;/p&gt;
+&lt;p&gt;For this example, we only use English keywords so we can limit to just those by detecting the query keywords.&lt;/p&gt;
+&lt;p&gt;I suggest using the &lt;a href=&#34;https://CRAN.R-project.org/package=cld2&#34;&gt;&lt;code&gt;cld2&lt;/code&gt; library&lt;/a&gt;. I use this offline library for language detection as its free and fine for quick processing, whilst if more heavy duty detection and translation needed, then I would use &lt;code&gt;gl_translate()&lt;/code&gt; from &lt;code&gt;googleLanguageR&lt;/code&gt; although that has a cost.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(cld2)
+
+sc$language &amp;lt;- detect_language(sc$query)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Keeping the languages that are &lt;code&gt;en&lt;/code&gt; or &lt;code&gt;NA&lt;/code&gt; (we couldn’t tell)&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;sc_eng &amp;lt;- sc %&amp;gt;% filter(is.na(language) | language == &amp;quot;en&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now we have a clean dataset to send to the NLP API.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;gather-nlp-data&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Gather NLP data&lt;/h2&gt;
+&lt;p&gt;To avoid running NLP on lots of unnecessary HTML boiler plate, we need to consider what data we want to send in.&lt;/p&gt;
+&lt;p&gt;For example, as we’re interested in SEO, the relevant data will include the title tags and the body content. Limiting the data sent to those will mean we have cleaner data out.&lt;/p&gt;
+&lt;p&gt;There are two approaches to this:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Examine the HTML or the website to only extract the useful bits using &lt;code&gt;rvest&lt;/code&gt;’s CSS selectors (needs bespoke programming for each website)&lt;/li&gt;
+&lt;li&gt;Take the text only cache from Google as the text source instead (cleaner data, but you’ll be blocked by Google if you scrape to many URLs)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For this example, we take the latter method, but if you are running this beyond proof of concept scale I would advise the first.&lt;/p&gt;
+&lt;p&gt;To take the “Text Only” cached version of a page, we use the URL that is supplied by Google Search’s cache:&lt;/p&gt;
+&lt;p&gt;e.g.&lt;/p&gt;
+&lt;p&gt;If your URL is - &lt;code&gt;http://example.com/your-website&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;…then the text only webcache will be: &lt;code&gt;http://webcache.googleusercontent.com/search?q=cache:example.com/your-website&amp;amp;num=1&amp;amp;strip=1&amp;amp;vwsrc=0#/&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;An example function that does the above is shown below:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(rvest)
+library(tidyverse)
+
+## create a function for scraping this website
+scrape &amp;lt;- function(the_url){
+  message(&amp;quot;Scraping &amp;quot;, the_url)
+  
+  read &amp;lt;- read_html(the_url)
+  
+  Sys.sleep(5)   # be nice to website
+  
+  read %&amp;gt;%
+    html_text() %&amp;gt;% 
+    trimws()
+}
+
+scrape_googlecache &amp;lt;- function(the_url){
+  
+  wc &amp;lt;- gsub(&amp;quot;https?://&amp;quot;,&amp;quot;&amp;quot;, the_url)
+  cache_me &amp;lt;- sprintf(
+    &amp;quot;http://webcache.googleusercontent.com/search?q=cache:%s&amp;amp;num=1&amp;amp;strip=1&amp;amp;vwsrc=0#/&amp;quot;,
+    wc
+  )
+  
+  scraped &amp;lt;- scrape(cache_me)
+  
+  # remove whitespace and double whitespace
+  out &amp;lt;- gsub(&amp;quot;(\r|\n|\t)&amp;quot;,&amp;quot; &amp;quot;, scraped)
+  out &amp;lt;- gsub(&amp;quot;\\s\\s+&amp;quot;,&amp;quot; &amp;quot;, out)
+  
+  # remove first 1000 characters of boilerplate
+  out &amp;lt;- substr(out, 1000, nchar(out))
+
+  data.frame(cached = out, url = the_url, stringsAsFactors = FALSE)
+
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Here is a demo of how it works on one URL:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;the_url &amp;lt;- &amp;quot;http://code.markedmondson.me&amp;quot;
+
+html_url &amp;lt;- scrape_googlecache(the_url)
+
+substr(html_url$cached, 1000, 2000)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;le up until now. TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically backs up data and configuration settings to Google Cloud Storage is on the googleComputeEngineR website here. Read more Share Comments Four Ways to Schedule R scripts on Google Cloud Platform 2017-07-09 · 2213 words · 11 minute read r · google-app-engine · docker · google-analytics · google-compute-engine · rstudio-server A common question I come across is how to automate scheduling of R scripts downloading data. This post goes through some options that I have played around with, which I’ve mostly used for downloading API data such as Google Analytics using the Google Cloud platform, but the same principles could apply for AWS or Azure. Scheduling scripts advice But first, some notes on the scripts you are scheduling, that I’ve picked up. Read more Share Comments My R Packages 2017-01-24 · 266 words · 2 minute read r · google-auth · big-query · google-analytics · google-cloud-storage · goog&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You can now apply this function to all the unique URLs in your search console URLs using a purrr loop, but hit it too fast and you’ll be blocked.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+
+all_urls_scrape &amp;lt;- sc_eng %&amp;gt;% 
+  distinct(page) %&amp;gt;% 
+  select(page) %&amp;gt;% 
+  map_df(scrape_googlecache)
+  &lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;do-the-nlp-api&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Do the NLP API&lt;/h3&gt;
+&lt;p&gt;Now we can get results from Google NLP - test this out first with a couple of URLs as it costs money for each API call.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+library(googleLanguageR)
+
+nlp_results &amp;lt;- all_urls_scrape %&amp;gt;% 
+  select(cached) %&amp;gt;% 
+  map(gl_nlp) # this line makes the API calls&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The NLP API returns lots of data, for now we are interested in the entities section:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+entities &amp;lt;- map(nlp_results, &amp;quot;entities&amp;quot;)
+
+## only get the types that are not &amp;quot;OTHER&amp;quot;
+types &amp;lt;- map(entities, function(x){
+  y &amp;lt;- x[[1]]
+  y &amp;lt;- y[y$type != &amp;quot;OTHER&amp;quot;,]
+  y &amp;lt;- y[!is.na(y$type),]
+  y
+})&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We now have a list of the NLP results for each URL, for all the URLs that were in the search console data.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;nlp-features&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;NLP features&lt;/h3&gt;
+&lt;p&gt;You can see the &lt;a href=&#34;http://code.markedmondson.me/googleLanguageR/articles/nlp.html&#34;&gt;googleLanguageR website&lt;/a&gt; for more details on what is returned, as one example here is what recognised entities the API returned that have Wikipedia links:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+
+## only get entries that have wikipedia links
+types[[1]] %&amp;gt;% 
+  filter(!is.na(wikipedia_url)) %&amp;gt;% 
+  distinct(name, wikipedia_url) %&amp;gt;% 
+  select(name, wikipedia_url) %&amp;gt;% 
+  head %&amp;gt;% 
+  knitr::kable()&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;left&#34;&gt;name&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;wikipedia_url&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Afghanistan&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Afghanistan&#34; class=&#34;uri&#34;&gt;https://en.wikipedia.org/wiki/Afghanistan&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;British&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/United_Kingdom&#34; class=&#34;uri&#34;&gt;https://en.wikipedia.org/wiki/United_Kingdom&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Charing Cross&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Charing&#34; class=&#34;uri&#34;&gt;https://en.wikipedia.org/wiki/Charing&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;England&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/England&#34; class=&#34;uri&#34;&gt;https://en.wikipedia.org/wiki/England&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Epilepsy&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Epilepsy&#34; class=&#34;uri&#34;&gt;https://en.wikipedia.org/wiki/Epilepsy&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Euro&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Euro&#34; class=&#34;uri&#34;&gt;https://en.wikipedia.org/wiki/Euro&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;comparison-between-search-console-and-nlp&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Comparison between Search Console and NLP&lt;/h2&gt;
+&lt;p&gt;We can now compare the URL entities in &lt;code&gt;types&lt;/code&gt; and the Search Console data in &lt;code&gt;sc_eng&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;For demo purposes, we only look at the home page for the example website, but you can repeat this by looping over the list of &lt;code&gt;types&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;homepage_types &amp;lt;- types[[1]]
+homepage_search_console &amp;lt;- sc_eng %&amp;gt;% filter(page = &amp;quot;https://www.example.co.uk/&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;data-processing&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Data processing&lt;/h3&gt;
+&lt;p&gt;We first get the NLP entity names and the search console queries into the same format, lowercase and deduplicated, and for the NLP results the &lt;code&gt;salience&lt;/code&gt; score is how important it thinks that entity is to the page, so we’ll sort downwards from that:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+page_types &amp;lt;- page_types %&amp;gt;% 
+  distinct(name, .keep_all = TRUE) %&amp;gt;% 
+  mutate(name = tolower(name)) %&amp;gt;% 
+  arrange(desc(salience))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now the vector of entity names in &lt;code&gt;page_types$name&lt;/code&gt; and the vector of search console queries in &lt;code&gt;sc_eng$query&lt;/code&gt; are the two vectors of keywords we want to compare. Are they similar?&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;similarity-of-keywords&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Similarity of keywords&lt;/h3&gt;
+&lt;p&gt;In my example case I have 10 distinct queries from search console, and 464 unique named entites extracted out of the HTML from the NLP API, sorted by salience.&lt;/p&gt;
+&lt;p&gt;A simple way of matching strings in R is using its base function &lt;code&gt;agrep()&lt;/code&gt; which is an implementation of Levenshtein distance AKA “fuzzy matching”. I’ll run all the queries and compare against the entities:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+## named vector
+queries &amp;lt;- page_search_console$query %&amp;gt;% unique()
+queries &amp;lt;- setNames(queries, queries) 
+
+fuzzy_ranks &amp;lt;- queries %&amp;gt;% 
+  map(~ agrep(., page_types$name, value = FALSE)) %&amp;gt;% 
+  enframe(name = &amp;quot;query&amp;quot;, value = &amp;quot;nlp_rank&amp;quot;) %&amp;gt;% 
+  mutate(nlp_hits = map_int(nlp_rank, length)) %&amp;gt;% 
+  filter(nlp_hits &amp;gt; 0)
+
+fuzzy_values &amp;lt;- queries %&amp;gt;% 
+  map(~ agrep(., page_types$name, value = TRUE)) %&amp;gt;% 
+  enframe(name = &amp;quot;query&amp;quot;, value = &amp;quot;nlp_value&amp;quot;)
+
+fuzzy &amp;lt;- left_join(fuzzy_ranks, fuzzy_values, by = &amp;quot;query&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Since its a one-to-many relationship (one query can match several entities on the page), a list-column created by &lt;code&gt;enframe()&lt;/code&gt; keeps it all neat and tidy within the tidyverse style.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;nlp_rank&lt;/code&gt; is a vector of rankings of the salience of the words&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;nlp_hits&lt;/code&gt; is a numeric of how many entities each query had&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;nlp_value&lt;/code&gt; is a vector of what entities are matched&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I’ve had to change a few values to protect client data, but here is an example of the output:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;left&#34;&gt;query&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;nlp_rank&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;nlp_hits&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;nlp_value&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;non uk resident handbag cleaning&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;8&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;non uk residents handbag cleaning&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;non uk residents handbag cleaning&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;8&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;non uk residents handbag cleaning&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;eu resident handbag cleaning&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;8&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;non uk residents handbag cleaning&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;eu residents handbag cleaning&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;8&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;non uk residents handbag cleaning&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;does-the-nlp-help-with-any-insight&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Does the NLP help with any insight?&lt;/h2&gt;
+&lt;p&gt;A few take aways from the above in the real case, which was an e-commerce page targeting customers in Europe was:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The NLP ranked the salience of the top keyword referrer as 8 - meaning it had 7 more entities it thought the page was more relevant to the page. This may mean we should work more on stressing the subject we want to be recognised in Google for.&lt;/li&gt;
+&lt;li&gt;One of these was “British” which didn’t appear on the page which only mentioned “UK”, so it looks like it adds synonyms as well into its analysis.&lt;/li&gt;
+&lt;li&gt;The NLP ranked “customers” as rank 3, even though it was mentioned only two times on the page. It got that this was an ecommerce page. Likewise it identified “European Econmic area” as important, even though it was only mentioned once. Since this was a sales page aimed at EEC users, this looks fair.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div id=&#34;summary&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Summary&lt;/h2&gt;
+&lt;p&gt;Its early days but I am starting to run through new client websites to see what comes up (by writing more custom code to parse out the content) to pass on to the SEO specialists, at the very least its another perspective to inform topic and keyword choices. If anyone takes this approach and finds it useful, do please comment as I’ll be interested in this helps. It would also be good to compare this with other non-Google NLP APIs such as on Azure and AWS to see if the Google one is espeically useful for Google SEO.&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

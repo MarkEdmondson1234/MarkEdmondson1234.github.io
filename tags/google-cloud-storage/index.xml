@@ -2,15 +2,12 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Google Cloud Storage on Mark Edmondson</title>
-    <link>http://code.markedmondson.me/tags/google-cloud-storage/</link>
+    <link>http://code.markedmondson.me/tags/google-cloud-storage/index.xml</link>
     <description>Recent content in Google Cloud Storage on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
     <copyright>Powered by [Hugo](//gohugo.io). Theme by [PPOffice](http://github.com/ppoffice).</copyright>
-    <lastBuildDate>Tue, 05 Sep 2017 13:55:57 +0100</lastBuildDate>
-    
-	<atom:link href="http://code.markedmondson.me/tags/google-cloud-storage/index.xml" rel="self" type="application/rss+xml" />
-    
+    <atom:link href="http://code.markedmondson.me/tags/google-cloud-storage/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Run RStudio Server on a Chromebook as a Cloud Native</title>
@@ -18,8 +15,133 @@
       <pubDate>Tue, 05 Sep 2017 13:55:57 +0100</pubDate>
       
       <guid>http://code.markedmondson.me/rstudio-server-chromebook/</guid>
-      <description>I recently got an Asus Chromebook Flip with which I&amp;rsquo;m very happy, but it did make me realise that if a Chromebook was to replace my normal desktop as my primary workstation, my RStudio Server setup would need to be more cloud native than was available up until now.
-TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically backs up data and configuration settings to Google Cloud Storage is on the googleComputeEngineR website here.</description>
+      <description>
+
+&lt;p&gt;I recently got an &lt;a href=&#34;https://www.asus.com/us/Laptops/ASUS-Chromebook-Flip-C302CA/&#34;&gt;Asus Chromebook Flip&lt;/a&gt; with which I&amp;rsquo;m very happy, but it did make me realise that if a Chromebook was to replace my normal desktop as my primary workstation, my RStudio Server setup would need to be more cloud native than was available up until now.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically backs up data and configuration settings to Google Cloud Storage is on the &lt;a href=&#34;https://cloudyr.github.io/googleComputeEngineR/articles/persistent-rstudio.html&#34;&gt;googleComputeEngineR website here&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;broken-promises-of-the-cloud&#34;&gt;Broken promises of the cloud?&lt;/h2&gt;
+
+&lt;p&gt;Whilst there are lots of other solutions around for hosting RStudio Server in the cloud, &lt;a href=&#34;http://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/&#34;&gt;including some of my own&lt;/a&gt;, I don&amp;rsquo;t believe they are a serious replacement for a desktop station running RStudio.&lt;/p&gt;
+
+&lt;p&gt;To date I&amp;rsquo;ve treated RStudio Server as a temporary UI whilst setting up scheduled scripts and so forth, and for running workshops for students with pre-installed packages.  Yes, the convenience of running RStudio in a browser and being able to launch different configurations is great, but it wasn&amp;rsquo;t a total desktop replacement for the following reasons:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;More expensive&lt;/em&gt; - running RStudio Server permanently in the cloud can be done for as little as 5 dollars a month, but for that you get a machine about as powerful as a Raspberry Pi.  For a proper workstation with decent RAM etc, you are looking at more like 30 dollars a month, which if you&amp;rsquo;re running for 2 years is around $700 that you could have spent on a laptop that can do more things.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;More risky&lt;/em&gt; - keeping the only copy of your data on a cloud server is not a good idea, as I learnt to my cost when a VM&amp;rsquo;s hard disk filled up. Unable to log in, a convoluted panic to increase the disk size occurred.  A physical laptop is a lot easier to troubleshoot if something goes awry.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Not flexible enough&lt;/em&gt; - if you run out of RAM or want things to compute quicker, you are going to need to transfer your data and boot up another VM with stronger specs.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;But isn&amp;rsquo;t the allure of cheaper, safer, more flexible computing the reason we are using the cloud in the first place?&lt;/p&gt;
+
+&lt;h2 id=&#34;going-cloud-native&#34;&gt;Going Cloud Native&lt;/h2&gt;
+
+&lt;p&gt;I believe the reason for the dichotomy between expectation and reality is due to not being &amp;ldquo;Cloud Native&amp;rdquo; enough, something I realised whilst attending this year&amp;rsquo;s &lt;a href=&#34;https://cloudnext.withgoogle.com/&#34;&gt;Google NEXT event&lt;/a&gt;.  There they described three phases of business cloud evolution:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Lift and Shift - moving your existing infrastructure into equivalent cloud versions&lt;/li&gt;
+&lt;li&gt;Separation of compute and data - abstracting out the computing away from the data the computing is running on.  Essentially letting the cloud take on the roles of your hard disk vs your CPU.&lt;/li&gt;
+&lt;li&gt;Platform-as-a-service (PaaS) - abstracting away the servers the computing and data are running on, so as to run on purely managed services such as BigQuery, Kubernetes and AppEngine&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;From the above, existing RStudio Server solutions are in the Lift and Shift vein, whilst what we may imagine to be The Cloud are in the more evolved options.&lt;/p&gt;
+
+&lt;h2 id=&#34;docker-ftw&#34;&gt;Docker FTW&lt;/h2&gt;
+
+&lt;p&gt;To truly take advantage of the cloud, I believe this means you must become familiar with containers, specifically &lt;a href=&#34;https://www.docker.com/&#34;&gt;Docker&lt;/a&gt;.  Containers are a rapidly evolving standard that makes cloud evolution possible by allowing breakout of computation, and is being embraced by all cloud providers.&lt;/p&gt;
+
+&lt;p&gt;Using Docker with R has other benefits.  Reproducibility of R code is enhanced when you can pin the exact environment to run code within, and addresses criticisms of R that it is not production ready: normally R&amp;rsquo;s open source and rapidly evolving nature means R code you wrote two years ago may not work with the most modern R package versions.&lt;/p&gt;
+
+&lt;p&gt;I am in a lucky position to work on this as I have developed a niche creating Google API libraries in R.  Starting with my needs from digital marketing to wrap the Search Console and Google Analytics APIs, I then used that experience to move into the more general Cloud APIs such as Cloud Storage and Compute Engine, and now get support through my Google Developer Expert status network to experiment with the Google Cloud platform.&lt;/p&gt;
+
+&lt;h2 id=&#34;a-persistent-rstudio-server&#34;&gt;A Persistent RStudio Server&lt;/h2&gt;
+
+&lt;p&gt;Its with two of my R libraries, &lt;a href=&#34;http://code.markedmondson.me/googleCloudStorageR/&#34;&gt;googleCloudStorageR&lt;/a&gt; and &lt;a href=&#34;https://cloudyr.github.io/googleComputeEngineR/&#34;&gt;googleComputeEngineR&lt;/a&gt;, that I&amp;rsquo;ve put together something much closer to the cheap, resilient, and flexible version of the cloud I want to be using when running RStudio in the cloud.&lt;/p&gt;
+
+&lt;p&gt;The role of a harddrive is delegated to Google Cloud Storage, whilst RStudio is served from within Docker containers.  With some new functions that are in the &lt;code&gt;.Rprofile&lt;/code&gt; of a custom RStudio Docker image, Google Cloud Storage is called to download on startup, or upload on exit, all the files to a specific bucket.  These files can include SSH and GitHub settings, or a project folder.  Backups are activated by putting a &lt;code&gt;_gcssave.yaml&lt;/code&gt; file in a folder, or via the VM&amp;rsquo;s metadata.&lt;/p&gt;
+
+&lt;p&gt;What this all means is:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;RStudio Server runs within its own Docker container, and can be relaunched with custom package setups&lt;/li&gt;
+&lt;li&gt;Data is persistent between Docker containers and cloud compute instances.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;I can turn off the RStudio Server to avoid charges, then turn it on again and start from where I left off without reconfiguring git etc.&lt;/li&gt;
+&lt;li&gt;I can work locally in one RStudio project, then switch to the cloud to work on the same project.&lt;/li&gt;
+&lt;li&gt;SSH keys and GitHub configurations are set up only once and then automatically available across Docker containers, cloud computers and local RStudio projects.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I have a bookmark to the Google Cloud console to startup/shutdown the instance:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;../images/startup-rstudio.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Once launched, I log in and configurations are auto loaded by the &lt;code&gt;_gcssave.yaml&lt;/code&gt; configuration:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;../images/startup-rstudio-persistent.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;As this includes the home directory, so long as I login with the same username, and point to the same bucket, any RStudio launched (within a Docker/locally, whereever) don&amp;rsquo;t need to reconfigure Git - downloading a GitHub repo is as simple as copying the SSH GitHub URL&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;../images/ssh-clone-github.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;hellip;and starting a new RStudio project:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;../images/rstudio-github.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This saves me significant cost by letting me stop/start servers as and when I need them via the GCP Web UI. My data is safer than keeping it on my local harddrive, and switching to a bigger VM takes seconds since all data and code upload/download automatically.&lt;/p&gt;
+
+&lt;p&gt;The details for the configuration setup is &lt;a href=&#34;https://cloudyr.github.io/googleComputeEngineR/articles/persistent-rstudio.html&#34;&gt;here on the googleComputeEngineR website&lt;/a&gt;, for which you&amp;rsquo;ll need the latest development versions of &lt;code&gt;googleComputeEngineR&lt;/code&gt; and &lt;code&gt;googleCloudStorageR&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;rstudio-as-a-service&#34;&gt;RStudio-as-a-service?&lt;/h2&gt;
+
+&lt;p&gt;Whats next?  Could this evolve further into a RStudio-as-a-service offering?  To qualify, we would need to not worry about starting or stopping servers at all, and scale under any load.&lt;/p&gt;
+
+&lt;p&gt;Well, prompted by this blog post I had a good look.  It IS possible to deploy RStudio on App Engine and I got excited, but unfortunately the minimum number of permanent instances on a flexible App Engine app is 1, so all told for a solo analyst it is a more expensive solution than running a VM that you stop and start yourself.  However, if you had enough demand to pay for 1 VM 24 hours a day (~$30 a month),  it does start to make sense to scale on App Engine.  A setup that does that is on this GitHub repo &lt;a href=&#34;https://github.com/MarkEdmondson1234/appengine-rstudio&#34;&gt;running RStudio on App Engine&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;../images/appengine-rstudio.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Using R on App Engine is possible due to App Engine&amp;rsquo;s new beta support for &lt;a href=&#34;https://cloud.google.com/appengine/docs/flexible/custom-runtimes/&#34;&gt;flexible custom runtime containers&lt;/a&gt;.  Any language deployed through a Docker container will work, something I recently worked through in a proof of concept to deploy a &lt;a href=&#34;https://github.com/MarkEdmondson1234/serverless-R-API-appengine&#34;&gt;serverless R API using Plumber&lt;/a&gt;.  Shiny may be another beneficiary of App Engine, although at time of writing App Engine doesn&amp;rsquo;t support the necessary websockets.&lt;/p&gt;
+
+&lt;p&gt;I suspect using &lt;a href=&#34;https://kubernetes.io/&#34;&gt;Kubernetes&lt;/a&gt;, a container orchestrator upon Google Container Engine the above could be achieved, but I haven&amp;rsquo;t quite grok&amp;rsquo;d that yet so perhaps I&amp;rsquo;ll update this in the future.&lt;/p&gt;
+
+&lt;p&gt;You can still benefit from PaaS within R if you are using services such as BigQuery.  There, analysis of large datasets is performed without you knowing how many shards of instances are being used to do so, and you can access the results within R via bigrquery/bigQueryR.  I did a presentation of &lt;a href=&#34;https://docs.google.com/presentation/d/1510xJzDuWgbLgoNY3Fs5-CGtMCJEYs5msaxIpINt03g/edit?usp=sharing&#34;&gt;BigQuery&amp;rsquo;s usefulness for analytics here&lt;/a&gt; for MeasureCamp Copenhagen.&lt;/p&gt;
+
+&lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
+
+&lt;p&gt;Of course, all this still doesn&amp;rsquo;t work if you do not have an internet connection. :)  But I&amp;rsquo;m now much more comfortable using my Chromebook to start and maintain R projects, and could imagine it being my main work station.&lt;/p&gt;
+
+&lt;p&gt;Typical workflows include:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Work on local RStudio&lt;/li&gt;
+&lt;li&gt;create project _gcssave.yaml&lt;/li&gt;
+&lt;li&gt;log off, auto-save to GCE&lt;/li&gt;
+&lt;li&gt;Move to Chromebook&lt;/li&gt;
+&lt;li&gt;Start up VM via the Google Cloud console&lt;/li&gt;
+&lt;li&gt;create a new project with same name&lt;/li&gt;
+&lt;li&gt;auto-load project&lt;/li&gt;
+&lt;li&gt;Do code&lt;/li&gt;
+&lt;li&gt;Shutdown (auto-save project)&lt;/li&gt;
+&lt;li&gt;switch to local RStudio&lt;/li&gt;
+&lt;li&gt;etc. etc.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&amp;hellip;and:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Save project to (private) GitHub&lt;/li&gt;
+&lt;li&gt;Move to Chromebook&lt;/li&gt;
+&lt;li&gt;Start up VM via the Google Cloud console&lt;/li&gt;
+&lt;li&gt;Open RStudio Server IP&lt;/li&gt;
+&lt;li&gt;GitHub settings autoload&lt;/li&gt;
+&lt;li&gt;Clone GitHub repo via New RStudio Projects&lt;/li&gt;
+&lt;li&gt;Do code, commit, push, pull&lt;/li&gt;
+&lt;li&gt;etc. etc.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;None of this would be possible without the skills of the &lt;a href=&#34;https://www.rstudio.com/&#34;&gt;RStudio&lt;/a&gt; team, &lt;a href=&#34;https://cloud.google.com/&#34;&gt;Google Cloud&lt;/a&gt; and &lt;a href=&#34;https://hub.docker.com/u/rocker/&#34;&gt;Rocker&lt;/a&gt;, so a massive thanks to them.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;d imagine if you want to do this with another cloud provider they should have very similar services that you can build upon, let me know in the comments.&lt;/p&gt;
+</description>
     </item>
     
     <item>
@@ -28,9 +150,120 @@ TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically
       <pubDate>Tue, 24 Jan 2017 21:20:50 +0100</pubDate>
       
       <guid>http://code.markedmondson.me/r-packages/</guid>
-      <description>A full list of R packages I have published are on my Github, but some notable ones are below.
-Some are part of the cloudyR project, which has many packages useful for using R in the cloud. I concentrate on the Google cloud below, but be sure to check out the other packages if you’re looking to work with AWS or other cloud based services.
-CRAN     Status URL Description     googleAuthR The central workhorse for authentication on Google APIs   googleAnalyticsR Works with Google Analytics Reporting V3/V4 and Management APIs   googleComputeEngineR Launch Virtual Machines within the Google Cloud, via templates or your own Docker containers.</description>
+      <description>&lt;p&gt;A full list of R packages I have published are on &lt;a href=&#34;https://github.com/MarkEdmondson1234&#34;&gt;my Github&lt;/a&gt;, but some notable ones are below.&lt;/p&gt;
+&lt;p&gt;Some are part of the &lt;a href=&#34;http://cloudyr.github.io/&#34;&gt;cloudyR project&lt;/a&gt;, which has many packages useful for using R in the cloud. &lt;img src=&#34;http://code.markedmondson.me/images/cloudyr2.png&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;I concentrate on the Google cloud below, but be sure to check out the other packages if you’re looking to work with AWS or other cloud based services.&lt;/p&gt;
+&lt;div id=&#34;cran&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;CRAN&lt;/h2&gt;
+&lt;table&gt;
+&lt;colgroup&gt;
+&lt;col width=&#34;19%&#34; /&gt;
+&lt;col width=&#34;25%&#34; /&gt;
+&lt;col width=&#34;55%&#34; /&gt;
+&lt;/colgroup&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th&gt;Status&lt;/th&gt;
+&lt;th&gt;URL&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;&lt;a href=&#34;http://cran.r-project.org/package=googleAuthR&#34;&gt;&lt;img src=&#34;http://www.r-pkg.org/badges/version/googleAuthR&#34; /&gt;&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;a href=&#34;http://code.markedmondson.me/googleAuthR/&#34;&gt;googleAuthR&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;The central workhorse for authentication on Google APIs&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;&lt;a href=&#34;http://cran.r-project.org/package=googleAnalyticsR&#34;&gt;&lt;img src=&#34;http://www.r-pkg.org/badges/version/googleAnalyticsR&#34; /&gt;&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;a href=&#34;http://code.markedmondson.me/googleAnalyticsR/&#34;&gt;googleAnalyticsR&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Works with Google Analytics Reporting V3/V4 and Management APIs&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;&lt;a href=&#34;http://cran.r-project.org/package=googleComputeEngineR&#34;&gt;&lt;img src=&#34;http://www.r-pkg.org/badges/version/googleComputeEngineR&#34; /&gt;&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;a href=&#34;https://cloudyr.github.io/googleComputeEngineR/&#34;&gt;googleComputeEngineR&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Launch Virtual Machines within the Google Cloud, via templates or your own Docker containers.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;&lt;a href=&#34;http://cran.r-project.org/package=googleCloudStorageR&#34;&gt;&lt;img src=&#34;http://www.r-pkg.org/badges/version/googleCloudStorageR&#34; /&gt;&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;a href=&#34;http://code.markedmondson.me/googleCloudStorageR/&#34;&gt;googleCloudStorageR&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Interact with Google Cloud Storage via R&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;&lt;a href=&#34;http://cran.r-project.org/package=bigQueryR&#34;&gt;&lt;img src=&#34;http://www.r-pkg.org/badges/version/bigQueryR&#34; /&gt;&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;a href=&#34;http://code.markedmondson.me/bigQueryR/&#34;&gt;bigQueryR&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Interact with Google BigQuery via R&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;&lt;a href=&#34;http://cran.r-project.org/package=searchConsoleR&#34;&gt;&lt;img src=&#34;http://www.r-pkg.org/badges/version/searchConsoleR&#34; /&gt;&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;a href=&#34;http://code.markedmondson.me/searchConsoleR/&#34;&gt;searchConsoleR&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Download Search Console data into R&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;As you can tell, most are aimed towards helping R users with help in digital analytics and cloud based services. You can get some idea of how they can &lt;a href=&#34;http://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/&#34;&gt;work together in a digital analytics workflow here&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;github&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;GITHUB&lt;/h2&gt;
+&lt;p&gt;More experimental packages:&lt;/p&gt;
+&lt;table&gt;
+&lt;colgroup&gt;
+&lt;col width=&#34;19%&#34; /&gt;
+&lt;col width=&#34;25%&#34; /&gt;
+&lt;col width=&#34;55%&#34; /&gt;
+&lt;/colgroup&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th&gt;Status&lt;/th&gt;
+&lt;th&gt;URL&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;Dev&lt;/td&gt;
+&lt;td&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/googleMeasureR&#34;&gt;googleMeasureR&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Send tracking hits to Google Analytics from R code using the Google Analytics Measurement Protocol&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;&lt;a href=&#34;https://travis-ci.org/MarkEdmondson1234/googleLanguageR&#34;&gt;&lt;img src=&#34;https://travis-ci.org/MarkEdmondson1234/googleLanguageR.png?branch=master&#34; /&gt;&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/googleLanguageR&#34;&gt;googleLanguageR&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Access Speech to text, translation and NLP text processing APIs&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;&lt;a href=&#34;https://travis-ci.org/MarkEdmondson1234/googleID&#34;&gt;&lt;img src=&#34;https://travis-ci.org/MarkEdmondson1234/googleID.svg?branch=master&#34; /&gt;&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/googleID&#34;&gt;googleID&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;In production, but very small so not on CRAN. Allows user authentication via Google+ API for Shiny and RMarkdown documents.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;Dev&lt;/td&gt;
+&lt;td&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/youtubeAnalyticsR&#34;&gt;youtubeAnalyticsR&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Access YouTube Analytics data&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;Deprecated&lt;/td&gt;
+&lt;td&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/gtmR&#34;&gt;gtmR&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Superceded by &lt;a href=&#34;https://github.com/IronistM/googleTagManageR&#34;&gt;googleTagManagerR&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;Reference&lt;/td&gt;
+&lt;td&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/autoGoogleAPI&#34;&gt;autoGoogleAPI&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;152 R packages auto generated via &lt;code&gt;googleAuthR&lt;/code&gt;’s discovery API feature&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;Done&lt;/td&gt;
+&lt;td&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/gentelellaShiny&#34;&gt;gentelellaShiny&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;A custom Shiny theme available in a package&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;Deprecated&lt;/td&gt;
+&lt;td&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/stripeR&#34;&gt;stripeR&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Interact with the Stripe payment API, but superseded by another R package, &lt;a href=&#34;https://cran.r-project.org/web/packages/RStripe/index.html&#34;&gt;RStripe&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+</description>
     </item>
     
     <item>
@@ -39,7 +272,190 @@ CRAN     Status URL Description     googleAuthR The central workhorse for authen
       <pubDate>Mon, 10 Oct 2016 23:03:57 +0100</pubDate>
       
       <guid>http://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/</guid>
-      <description>There are now several packages built upon the googleAuthR framework which are helpful to a digital analyst who uses R, so this post looks to demonstrate how they all work together. If you&amp;rsquo;re new to R, and would like to know how it helps with your digital analytics, Tim Wilson and I ran a workshop last month aimed at getting a digital analyst up and running. The course material is online at www.</description>
+      <description>
+
+&lt;p&gt;There are now several packages built upon the &lt;code&gt;googleAuthR&lt;/code&gt; framework which are helpful to a digital analyst who uses R, so this post looks to demonstrate how they all work together.  If you&amp;rsquo;re new to R, and would like to know how it helps with your digital analytics, &lt;a href=&#34;http://analyticsdemystified.com/blog/tim-wilson/&#34;&gt;Tim Wilson&lt;/a&gt; and I ran a workshop last month aimed at getting a digital analyst up and running.  The course material is online at &lt;a href=&#34;http://www.dartistics.com/&#34;&gt;www.dartistics.com&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;diagram&#34;&gt;Diagram&lt;/h2&gt;
+
+&lt;p&gt;A top level overview is shown below:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;../images/r-infrastructure.png&#34; alt=&#34;R-infrastructure-digital-analytics&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The diagram shows &lt;a href=&#34;http://code.markedmondson.me/googleAuthR/&#34;&gt;&lt;code&gt;googleAuthR&lt;/code&gt;&lt;/a&gt; packages, other packages, servers and APIs all of which interact to turn data into actionable analytics.&lt;/p&gt;
+
+&lt;p&gt;The most recent addition is &lt;a href=&#34;https://cloudyr.github.io/googleComputeEngineR/&#34;&gt;&lt;code&gt;googleComputeEngineR&lt;/code&gt;&lt;/a&gt; which has helped make great savings in the time it takes to set up servers.  I have in the past blogged about &lt;a href=&#34;http://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/&#34;&gt;setting up R servers in the Google Cloud&lt;/a&gt;, but it was still more dev-ops than I really wanted to be doing.  Now, I can do setups similar to those I have written about in a couple of lines of R.&lt;/p&gt;
+
+&lt;h2 id=&#34;data-workflow&#34;&gt;Data workflow&lt;/h2&gt;
+
+&lt;p&gt;A suggested workflow for working with data is:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;em&gt;Infrastructure&lt;/em&gt; - Creating a computer to run your analysis.  This can be either your own laptop, or a server in the cloud.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Collection&lt;/em&gt; - Downloading your raw data from one or multiple sources, such as APIs or your CRM database.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Transformation&lt;/em&gt; - Turning your raw data into useful information via ETL, modelling or statistics.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Storage&lt;/em&gt; - Storing the information you have created so that it can be automatically updated and used.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Output&lt;/em&gt; - Displaying or using the information into an end user application.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The components of the diagram can be combined into the workflow above.  You can swap out various bits for your own needs, but its possible to use R for all of these steps.&lt;/p&gt;
+
+&lt;p&gt;You could do all of this with an Excel workbook on your laptop.  However, as data analysis becomes more complicated, it makes sense to start breaking out the components into more specialised tools, since Excel will start to strain when you increase the data volume or want reproducibility.&lt;/p&gt;
+
+&lt;h3 id=&#34;infrastructure&#34;&gt;Infrastructure&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://cloudyr.github.io/googleComputeEngineR/&#34;&gt;&lt;code&gt;googleComputeEngineR&lt;/code&gt;&lt;/a&gt; uses the Google Clouds&amp;rsquo; virtual machine instances to create servers, with specific support for R.&lt;/p&gt;
+
+&lt;p&gt;It uses &lt;a href=&#34;https://www.docker.com/&#34;&gt;Docker containers&lt;/a&gt; to make launching the servers and applications you need quick and simple, without you needing to know too much dev-ops to get started.&lt;/p&gt;
+
+&lt;p&gt;Due to Docker, the applications created can be more easily transferred into other IT environments, such as within internal client intranets or AWS.&lt;/p&gt;
+
+&lt;p&gt;To help with a digital analytics workflow, &lt;code&gt;googleComputeEngineR&lt;/code&gt; includes templates for the below:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;RStudio Server&lt;/strong&gt; - an R IDE you can work with from your browser. The server edition means you can access it from anywhere, and can always ensure the correct packages are installed.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Shiny&lt;/strong&gt; - A server to run your Shiny apps that display your data in dashboards or applications end users can work with.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;OpenCPU&lt;/strong&gt; - A server that turns your R code into a JSON API.  Used for turning R output into a format web development teams can use straight within a website.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For instance, launching an RStudio server is as simple as:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(googleComputeEngineR)
+vm &amp;lt;- gce_vm_template(&amp;quot;rstudio&amp;quot;, 
+                      name = &amp;quot;rstudio-server&amp;quot;, 
+                      predefined_type = &amp;quot;f1-micro&amp;quot;, 
+                      username = &amp;quot;mark&amp;quot;, 
+                      password = &amp;quot;mark1234&amp;quot;)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The instance will launch within a few minutes and give you a URL you can then login with.&lt;/p&gt;
+
+&lt;h3 id=&#34;collection&#34;&gt;Collection&lt;/h3&gt;
+
+&lt;p&gt;Once you are logged in to your RStudio Server, you can use all of R&amp;rsquo;s power to download and work with your data.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;googleAuthR&lt;/code&gt; packages can all be authenticated under the same OAuth2 token, to simplify access.&lt;/p&gt;
+
+&lt;p&gt;Other packages useful to digital analytics include APIs such as &lt;a href=&#34;https://github.com/randyzwitch/RSiteCatalyst&#34;&gt;&lt;code&gt;RSiteCatalyst&lt;/code&gt;&lt;/a&gt; and &lt;code&gt;twitteR&lt;/code&gt;.  A full list of digital analytics R packages can be found in the &lt;a href=&#34;https://cran.r-project.org/web/views/WebTechnologies.html&#34;&gt;web technologies section of CRAN Task Views&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Another option is the R package &lt;a href=&#34;https://github.com/jennybc/googlesheets&#34;&gt;&lt;code&gt;googlesheets&lt;/code&gt;&lt;/a&gt; by Jenny Bryan, which could either be used as a data source or as a data storage for reports, to be processed onwards later.&lt;/p&gt;
+
+&lt;p&gt;The below example R script fetches data from Google Analytics, SEO data from Google Search Console and CRM data from BigQuery.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(googleAnalyticsR)
+library(searchConsoleR)
+library(bigQueryR)
+library(googleAuthR)
+
+## authenticate with all services 
+gar_auth_service(&amp;quot;auth.json&amp;quot;)
+
+## get search console data
+seo_data &amp;lt;- search_analytics(&amp;quot;http://example.com&amp;quot;, 
+                             &amp;quot;2015-07-01&amp;quot;, &amp;quot;2015-07-31&amp;quot;, 
+                              c(&amp;quot;date&amp;quot;, &amp;quot;query&amp;quot;, &amp;quot;page&amp;quot;))
+
+## get google analytics data
+ga_data &amp;lt;- google_analytics_4(1235678,
+                              c(&amp;quot;2015-07-01&amp;quot;, &amp;quot;2015-07-31&amp;quot;),
+                              metrics = c(&amp;quot;users&amp;quot;),
+                              dimensions = c(&amp;quot;date&amp;quot;, &amp;quot;userID&amp;quot; , &amp;quot;landingPagePath&amp;quot;, &amp;quot;campaign&amp;quot;))
+
+## get CRM data from BigQuery
+crm_data &amp;lt;- bqr_query(&amp;quot;big-query-database&amp;quot;, &amp;quot;my_data&amp;quot;,
+                      &amp;quot;SELECT userID, lifetimeValue FROM [my_dataset]&amp;quot;)
+                              
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;transformation&#34;&gt;Transformation&lt;/h3&gt;
+
+&lt;p&gt;This ground is well covered by existing R packages.  My suggestion here is to embrace the &lt;a href=&#34;https://cran.r-project.org/web/packages/tidyverse/index.html&#34;&gt;&lt;code&gt;tidyverse&lt;/code&gt;&lt;/a&gt; and use that to create and generate your information.&lt;/p&gt;
+
+&lt;p&gt;Applications include anomaly detection, measurement of causal effect, clustering and forecasting. Hadley Wickham&amp;rsquo;s book &lt;a href=&#34;http://r4ds.had.co.nz/index.html&#34;&gt;&amp;ldquo;R for Data Science&amp;rdquo;&lt;/a&gt; is a recent compendium of knowledge on this topic, which includes this suggested work flow:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;../images/tidy-r.png&#34; alt=&#34;tidyr&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;storage&#34;&gt;Storage&lt;/h3&gt;
+
+&lt;p&gt;Once you have your data in the format you want, you often need to keep it somewhere it is easily accessible for other systems.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://cloud.google.com/storage/&#34;&gt;Google Cloud Storage&lt;/a&gt; is a cheap, reliable method of storing any type of data object so that its always available for further use, and is heavily used within Google Cloud applications as a central data store.  I use it for storing &lt;code&gt;RData&lt;/code&gt; files or storing &lt;code&gt;csv&lt;/code&gt; files with a public link that is emailed to users when available.  It is accessible in R via the &lt;a href=&#34;http://code.markedmondson.me/googleCloudStorageR/&#34;&gt;&lt;code&gt;googleCloudStorageR&lt;/code&gt;&lt;/a&gt; package.&lt;/p&gt;
+
+&lt;p&gt;For database style access, &lt;a href=&#34;https://cloud.google.com/bigquery/&#34;&gt;BigQuery&lt;/a&gt; can be queried from many data services, including data visualisation platforms such as Google&amp;rsquo;s Data Studio or Tableau.  BigQuery offers incredibly fast analytical queries for TBs of data, accessible via the &lt;a href=&#34;http://code.markedmondson.me/bigQueryR/&#34;&gt;&lt;code&gt;bigQueryR&lt;/code&gt;&lt;/a&gt; package.&lt;/p&gt;
+
+&lt;p&gt;An example of uploading data is below - again only one authentication is needed.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(googleCloudStorageR)
+library(bigQueryR)
+
+## authenticate with all services 
+gar_auth_service(&amp;quot;auth.json&amp;quot;)
+
+## upload to Big Query
+bqr_upload_data(&amp;quot;projectID&amp;quot;, &amp;quot;datasetID&amp;quot;, &amp;quot;tableID&amp;quot;,
+                my_data_for_sql_queries)
+
+## upload to Google Cloud Storage
+gcs_upload(&amp;quot;my_rdata_file&amp;quot;)
+
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;output&#34;&gt;Output&lt;/h3&gt;
+
+&lt;p&gt;Finally, outputs include &lt;a href=&#34;http://shiny.rstudio.com/&#34;&gt;Shiny&lt;/a&gt; apps, &lt;a href=&#34;http://rmarkdown.rstudio.com/&#34;&gt;RMarkdown&lt;/a&gt;, a &lt;a href=&#34;https://gist.github.com/MarkEdmondson1234/ddcac436cbdfd4557639522573bfc7b6&#34;&gt;scheduled email&lt;/a&gt; or an R API call using &lt;a href=&#34;https://www.opencpu.org/&#34;&gt;OpenCPU&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;All &lt;code&gt;googleAuthR&lt;/code&gt; functions are Shiny and RMarkdown compatible for user authentication - this means a user can login themselves and access their own data whilst using the logic of your app to gain insight, without you needing access to their data at all.  An example of an RMarkdown app taking advantage of this is the demo of the &lt;a href=&#34;https://github.com/MarkEdmondson1234/gentelellaShiny&#34;&gt;GentelellaShiny GA dashboard&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;../images/gentellaShinyGA.png&#34; alt=&#34;gentella-shiny&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You can launch OpenCPU and Shiny servers just as easily as RStudio Server via &lt;code&gt;googleComputeEngineR&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(googleComputeEngineR)
+
+## creates a Shiny server
+vm2 &amp;lt;- gce_vm_template(&amp;quot;shiny&amp;quot;, 
+                      name = &amp;quot;shiny-server&amp;quot;, 
+                      predefined_type = &amp;quot;f1-micro&amp;quot;, 
+                      username = &amp;quot;mark&amp;quot;, 
+                      password = &amp;quot;mark1234&amp;quot;)
+
+## creates an OpenCPU server                      
+vm3 &amp;lt;- gce_vm_template(&amp;quot;opencpu&amp;quot;, 
+                      name = &amp;quot;opencpu-server&amp;quot;, 
+                      predefined_type = &amp;quot;f1-micro&amp;quot;, 
+                      username = &amp;quot;mark&amp;quot;, 
+                      password = &amp;quot;mark1234&amp;quot;)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Shiny Apps or RMarkdown HTML files can then be uploaded for display to the end user.  If the server needs more power, simply save the container and relaunch with a bigger RAM or CPU.&lt;/p&gt;
+
+&lt;p&gt;OpenCPU is the technology demonstrated in my recent EARL London talk on using R to &lt;a href=&#34;http://code.markedmondson.me/predictClickOpenCPU/supercharge.html&#34;&gt;forecast HTML prefetching and deploying through Google Tag Manager&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Your Shiny, RMarkdown or OpenCPU functions can download data via:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(googleCloudStorageR)
+library(bigQueryR)
+
+## authenticate with all services 
+gar_auth_service(&amp;quot;auth.json&amp;quot;)
+
+## download Google Cloud Storage
+my_data &amp;lt;- gce_get_object(&amp;quot;my_rdata_file&amp;quot;)
+
+## query data from Big Query dependent on user input
+query &amp;lt;- bqr_query(&amp;quot;big-query-database&amp;quot;, &amp;quot;my_data&amp;quot;,
+                   &amp;quot;SELECT userID, lifetimeValue FROM [my_dataset]&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
+
+&lt;p&gt;Hopefully this has shown where some efficiencies could be made in your own digital analysis. For me, the reduction of computer servers to atoms of work has expanded the horizons on what is possible: applications such as sending big calculations to the cloud if taking too long locally; being able to send clients entire clusters of computers with a data application ready and working; and having customised R environments for every occasion, such as R workshops.&lt;/p&gt;
+
+&lt;p&gt;For the future, I hope to introduce Spark clusters via &lt;a href=&#34;https://cloud.google.com/dataproc/&#34;&gt;Google Dataproc&lt;/a&gt;, giving the ability to use machine learning directly on a dataset without needing to download locally; scheduled scripts that launch servers as needed; and working with Google&amp;rsquo;s newly launched &lt;a href=&#34;https://cloud.google.com/ml/&#34;&gt;machine learning APIs&lt;/a&gt; that dovetail into the Google Cloud.&lt;/p&gt;
+</description>
     </item>
     
   </channel>
