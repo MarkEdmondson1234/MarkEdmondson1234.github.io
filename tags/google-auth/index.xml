@@ -53,7 +53,7 @@ style=&amp;quot;border:0&amp;quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt
 &lt;p&gt;If you want to make this smoother, you could also use &lt;code&gt;googleAuthR&lt;/code&gt;’s JavaScript authentication function &lt;code&gt;gar_auth_jsUI&lt;/code&gt; within the same document - this will ensure a user can login and view the Data Studio report from the same webpage.&lt;/p&gt;
 &lt;p&gt;e.g. &lt;em&gt;The CSS for this button is not active so its not pretty&lt;/em&gt;&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(googleAuthR)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## 2018-03-15 11:56:04&amp;gt; No scopes have been set, set them via 
+&lt;pre&gt;&lt;code&gt;## 2018-03-15 11:58:28&amp;gt; No scopes have been set, set them via 
 ##               options(googleAuthR.scopes.selected) - 
 ##               no authentication attempted.&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;gar_set_client()&lt;/code&gt;&lt;/pre&gt;
