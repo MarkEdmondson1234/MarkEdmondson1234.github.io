@@ -44,7 +44,7 @@
 
 
 <meta itemprop="dateModified" content="2018-03-15T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="621">
+<meta itemprop="wordCount" content="648">
 
 
 
@@ -280,10 +280,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2018-03-15 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-03-15</time>
             &middot;
-            621
+            648
             words
             &middot;
-            3
+            4
             minute read
         </div>
 
@@ -318,7 +318,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <h2>Adding Google Data Studio Dashboards to RMarkdown</h2>
 <p>This week I learnt you can take <a href="https://datastudio.google.com">Google Data Studio</a> reports and, via their embed feature, paste them straight into an RMarkdown HTML document.</p>
 <p>This is cool as you can then combine the strengths of both for client reports or similar.</p>
-<p>Data Studio I have found to be very quick to get something decent looking and has excellent connectors to data sources that can be difficult to get access to otherwise, such as DoubleClick. For instance, when working with BigQuery I will often quickly link it to Data Studio to examine the data trends.</p>
+<p>Data Studio is a free online solution, that I have found to be very quick to get something decent looking. It also has excellent connectors to data sources that can be difficult to get access to otherwise, such as DoubleClick. I often use it when working with BigQuery by linking via its BigQuery connector (takes 10 seconds) and then plotting to examine the data trends.</p>
 <p>However, Data Studio isn’t suitable for more advanced analysis or custom visualisations, so the fact you can put them in RMarkdown documents means you can then combine its reports alongside more in-depth analysis within R, side by side with advanced R plotting such as <a href="http://ggplot2.org/"><code>ggplot2</code></a>, <a href="http://gallery.htmlwidgets.org/"><code>htmlwidgets</code></a> or <a href="https://plot.ly/r/"><code>plot.ly</code></a>. RMarkdown excels as a way to document your analysis steps, and I often use it as a way to keep a working document I can check into GitHub that contains all the SQL, code and assumptions of an analysis.</p>
 <div id="how-to-add-data-studio-to-rmarkdown" class="section level3">
 <h3>How to add Data Studio to RMarkdown</h3>
@@ -355,7 +355,7 @@ style=&quot;border:0&quot; allowfullscreen&gt;&lt;/iframe&gt;</code></pre>
 </div>
 <div id="summary" class="section level2">
 <h2>Summary</h2>
-<p>If you are in the R world and maybe have not come across Google Data Studio, this may be helpful as another option for visualisation. Its main strength is very quick visualisations, powerful filter controls and lots of nice API connectors (including <a href="https://developers.google.com/datastudio/connector/gallery/">user made community connectors</a> that connect to stuff like Facebook, Bing, LinkedIn etc.) although if you want to do more complex custom visuals you will find it not as fully tweakable as say Tableau.</p>
+<p>If you are in the R world and maybe have not come across Google Data Studio, this may be helpful as another option for visualisation. Its main strengths are that it is free, is quick to get to visualisations, has powerful filter controls and lots of nice API connectors (including <a href="https://developers.google.com/datastudio/connector/gallery/">user made community connectors</a> that connect to stuff like Facebook, Bing, LinkedIn etc.) although if you want to do more complex custom visuals you will find it not as fully tweakable as a paid for solution such as Tableau or Qlikview.</p>
 <p>If you are in the Digital Marketing world you probably already know Data Studio, but perhaps knowing you have the ability to embed Data Studio into RMarkdown provides you with a quick way to combine existing reports with the more advanced data analysis and visuals that R can provide.</p>
 <p>There is to my knowledge no way to connect the two (e.g. change a filter in Data Studio and it affects the R visuals) but that would be cool, if anyone figures out a way to do that let me know!</p>
 </div>
