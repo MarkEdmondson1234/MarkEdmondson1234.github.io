@@ -21,7 +21,7 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
     <meta property="og:title" content="Embedding Google Data Studio into RMarkdown" />
-<meta property="og:description" content="Adding Google Data Studio Dashboards to RMarkdown This week I leant you can embed Data Studio reports the resulting HTML code and paste it into an RMarkdown HTML document.
+<meta property="og:description" content="Adding Google Data Studio Dashboards to RMarkdown This week I leant you can embed Google Data Studio reports the resulting HTML code and paste it into an RMarkdown HTML document.
 This is cool as you can then combine reports and analysis using Data Studio, which is very quick to get something decent looking and can link to data source such as DoubleClick that are harder to get API access for, and have them side by side with advanced R plots such as using ggplot2, htmlwidgets or plot." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown" />
@@ -41,12 +41,12 @@ This is cool as you can then combine reports and analysis using Data Studio, whi
     
     
 <meta itemprop="name" content="Embedding Google Data Studio into RMarkdown">
-<meta itemprop="description" content="Adding Google Data Studio Dashboards to RMarkdown This week I leant you can embed Data Studio reports the resulting HTML code and paste it into an RMarkdown HTML document.
+<meta itemprop="description" content="Adding Google Data Studio Dashboards to RMarkdown This week I leant you can embed Google Data Studio reports the resulting HTML code and paste it into an RMarkdown HTML document.
 This is cool as you can then combine reports and analysis using Data Studio, which is very quick to get something decent looking and can link to data source such as DoubleClick that are harder to get API access for, and have them side by side with advanced R plots such as using ggplot2, htmlwidgets or plot.">
 
 
 <meta itemprop="dateModified" content="2018-03-15T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="467">
+<meta itemprop="wordCount" content="507">
 
 
 
@@ -59,7 +59,7 @@ This is cool as you can then combine reports and analysis using Data Studio, whi
 
 
 <meta name="twitter:title" content="Embedding Google Data Studio into RMarkdown"/>
-<meta name="twitter:description" content="Adding Google Data Studio Dashboards to RMarkdown This week I leant you can embed Data Studio reports the resulting HTML code and paste it into an RMarkdown HTML document.
+<meta name="twitter:description" content="Adding Google Data Studio Dashboards to RMarkdown This week I leant you can embed Google Data Studio reports the resulting HTML code and paste it into an RMarkdown HTML document.
 This is cool as you can then combine reports and analysis using Data Studio, which is very quick to get something decent looking and can link to data source such as DoubleClick that are harder to get API access for, and have them side by side with advanced R plots such as using ggplot2, htmlwidgets or plot."/>
 <meta name="twitter:site" content="@HoloMarkeD"/>
 <meta name="twitter:domain" content="markedmondson.me"/>
@@ -281,7 +281,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2018-03-15 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-03-15</time>
             &middot;
-            467
+            507
             words
             &middot;
             3
@@ -317,11 +317,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <div class="article-entry" itemprop="articleBody">
                 <div id="adding-google-data-studio-dashboards-to-rmarkdown" class="section level2">
 <h2>Adding Google Data Studio Dashboards to RMarkdown</h2>
-<p>This week I leant you can embed Data Studio reports the resulting HTML code and paste it into an RMarkdown HTML document.</p>
-<p>This is cool as you can then combine reports and analysis using Data Studio, which is very quick to get something decent looking and can link to data source such as DoubleClick that are harder to get API access for, and have them side by side with advanced R plots such as using <a href="http://ggplot2.org/"><code>ggplot2</code></a>, <a href="http://gallery.htmlwidgets.org/">htmlwidgets</a> or <a href="https://plot.ly/r/">plot.ly</a>.</p>
+<p>This week I leant you can embed <a href="https://datastudio.google.com">Google Data Studio</a> reports the resulting HTML code and paste it into an RMarkdown HTML document.</p>
+<p>This is cool as you can then combine reports and analysis using Data Studio, which is very quick to get something decent looking and can link to data source such as DoubleClick that are harder to get API access for, and have them side by side with advanced R plots such as using <a href="http://ggplot2.org/"><code>ggplot2</code></a>, <a href="http://gallery.htmlwidgets.org/"><code>htmlwidgets</code></a> or <a href="https://plot.ly/r/"><code>plot.ly</code></a>.</p>
 <div id="how-to-do-it" class="section level3">
 <h3>How to do it</h3>
-<p>First create your Data Studio report, select the <a href="https://support.google.com/datastudio/answer/7450249?hl=en">“Embed” option</a> top left of Google Data Studio:</p>
+<p>First create your Data Studio report, then select the <a href="https://support.google.com/datastudio/answer/7450249?hl=en">“Embed” option</a> top left of Google Data Studio:</p>
 <div class="figure">
 <img src="../images/embed.png" />
 
@@ -342,6 +342,7 @@ style=&quot;border:0&quot; allowfullscreen&gt;&lt;/iframe&gt;</code></pre>
 <h2>Private Data Studio reports</h2>
 <p>The above report is shared publically on the web, but you can do the same with private Data Studio reports.</p>
 <p>Follow the same procedure, but only share privately in your Sharing settings - only people who have private access to this report will see it, others will get the <code>This Data Studio report is private</code> message.</p>
+<p>e.g. You see this:</p>
 <iframe width="600" height="500" src="https://datastudio.google.com/embed/reporting/1O6QttLeXrV7zesk0lNFeWmb5H3aPIhMa/page/wN5O" frameborder="0" style="border:0" allowfullscreen>
 </iframe>
 <p>…but I see this:</p>
@@ -349,44 +350,13 @@ style=&quot;border:0&quot; allowfullscreen&gt;&lt;/iframe&gt;</code></pre>
 <img src="../images/private-embed.png" />
 
 </div>
-<p>The authentication works in the same browser you are logged in with Google, since that is shared - e.g. if you are logged into Google Analytics in the same browser, you should see it. This means however you won’t see it work if viewing in the RStudio View panel.</p>
-<p>If you want to make this smoother, you could also use <code>googleAuthR</code>’s JavaScript authentication function <code>gar_auth_jsUI</code> within the same document - this will ensure a user can login and view the Data Studio report from the same webpage.</p>
-<p>e.g. <em>The CSS for this button is not active so its not pretty</em></p>
-<pre class="r"><code>library(googleAuthR)</code></pre>
-<pre><code>## 2018-03-15 11:58:28&gt; No scopes have been set, set them via 
-##               options(googleAuthR.scopes.selected) - 
-##               no authentication attempted.</code></pre>
-<pre class="r"><code>gar_set_client()</code></pre>
-<pre><code>## [1] &quot;mark-edmondson-gde&quot;</code></pre>
-<pre class="r"><code>gar_auth_jsUI(&quot;auth&quot;, login_text = &quot;Google Login&quot;)</code></pre>
-<script src="https://apis.google.com/js/auth.js"></script>
-<button id="auth-login" onclick="auth();" class="btn btn-primary">Google Login</button>
-<button id="auth-logout" onclick="out();" class="btn btn-danger">Log Out</button>
-<script type="text/javascript">
-      var authorizeButton = document.getElementById('auth-login');
-      var signoutButton = document.getElementById('auth-logout');
-      signoutButton.style.display = 'none';
-      function auth() {
-        var config = {
-          'client_id': '',
-          'scope': '',
-          'approval_prompt':'force'
-        };
-        gapi.auth.authorize(config, function() {
-          token = gapi.auth.getToken();
-          console.log('login complete');
-          Shiny.onInputChange('auth-js_auth_access_token', token.access_token);
-          Shiny.onInputChange('auth-js_auth_token_type', token.token_type);
-          Shiny.onInputChange('auth-js_auth_expires_in', token.expires_in);
-          authorizeButton.style.display = 'none';
-          signoutButton.style.display = 'block';
-        });
-       }
-       function out(){
-          gapi.auth.signOut();
-          location.reload()
-       }
-       </script>
+<p>The authentication works in the same browser you are logged in with Google, since that is shared with a Google login cookie - e.g. if you are logged into Google Analytics in the same browser, you should see it. This means however you won’t see it work if viewing in the RStudio View panel.</p>
+</div>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<p>If you are in the R world and maybe have not come across Google Data Studio, this may be helpful as another option for visualisation. Its main strength is very quick visualisations, powerful filter controls and lots of nice API connectors (including <a href="https://developers.google.com/datastudio/connector/gallery/">user made community connectors</a> that connect to stuff like Facebook, Bing, LinkedIn etc.) although if you want to do more complex custom visuals you will find it not as fully tweakable as say Tableau.</p>
+<p>If you are in the Digital Marketing work you probably already know Data Studio, but having the ability to embed Data Studio into RMarkdown provides you with a quick way to combine existing reports with more advanced data analysis and visuals that R can provide.</p>
+<p>There is to my knowledge no way to connect the two (e.g. change a filter in Data Studio and it affects the R visuals) but that would be cool, if anyone figures out a way to do that let me know!</p>
 </div>
 
             </div>
