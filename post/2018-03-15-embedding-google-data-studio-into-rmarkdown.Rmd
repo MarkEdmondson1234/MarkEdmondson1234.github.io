@@ -30,7 +30,7 @@ First create your Data Studio report, then select  the ["Embed" option](https://
 
 ![](../images/embed.png)
 
-Then you can paste in that code straight in an `.Rmd` document, like I did with this blog:
+Then you can paste in that code straight in an `.Rmd` document, like I did with this blog ([which runs on RMarkdown via Hugo](http://code.markedmondson.me/new-blog-down/)):
 
 ```
 <iframe width="600" height="500" 

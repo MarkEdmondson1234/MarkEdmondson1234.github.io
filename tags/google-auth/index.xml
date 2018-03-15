@@ -28,7 +28,7 @@
 &lt;img src=&#34;../images/embed.png&#34; /&gt;
 
 &lt;/div&gt;
-&lt;p&gt;Then you can paste in that code straight in an &lt;code&gt;.Rmd&lt;/code&gt; document, like I did with this blog:&lt;/p&gt;
+&lt;p&gt;Then you can paste in that code straight in an &lt;code&gt;.Rmd&lt;/code&gt; document, like I did with this blog (&lt;a href=&#34;http://code.markedmondson.me/new-blog-down/&#34;&gt;which runs on RMarkdown via Hugo&lt;/a&gt;):&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;&amp;lt;iframe width=&amp;quot;600&amp;quot; height=&amp;quot;500&amp;quot; 
 src=&amp;quot;https://datastudio.google.com/embed/reporting/1q8dO3-IuGU-YXbgTiW6mchvKCg_kRZ9Y/page/wN5O&amp;quot; 
 frameborder=&amp;quot;0&amp;quot; 
