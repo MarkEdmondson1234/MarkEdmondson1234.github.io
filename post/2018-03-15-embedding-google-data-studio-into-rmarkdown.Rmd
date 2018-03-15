@@ -26,7 +26,7 @@ However, Data Studio isn't suitable for more advanced analysis or custom visuali
 
 ### How to add Data Studio to RMarkdown
 
-First create your Data Studio report, then select  the ["Embed" option](https://support.google.com/datastudio/answer/7450249?hl=en) top left of Google Data Studio:
+First create your Data Studio report, then select  the ["Embed" option](https://support.google.com/datastudio/answer/7450249?hl=en) top right of Google Data Studio:
 
 ![](../images/embed.png)
 
