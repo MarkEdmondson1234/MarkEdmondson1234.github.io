@@ -67,7 +67,7 @@ The authentication works in the same browser you are logged in with Google, sinc
 
 If you are in the R world and maybe have not come across Google Data Studio, this may be helpful as another option for visualisation.  Its main strength is very quick visualisations, powerful filter controls and lots of nice API connectors (including [user made community connectors](https://developers.google.com/datastudio/connector/gallery/) that connect to stuff like Facebook, Bing, LinkedIn etc.) although if you want to do more complex custom visuals you will find it not as fully tweakable as say Tableau.
 
-If you are in the Digital Marketing work you probably already know Data Studio, but having the ability to embed Data Studio into RMarkdown provides you with a quick way to combine existing reports with more advanced data analysis and visuals that R can provide. 
+If you are in the Digital Marketing world you probably already know Data Studio, but perhaps knowing you have the ability to embed Data Studio into RMarkdown provides you with a quick way to combine existing reports with the more advanced data analysis and visuals that R can provide. 
 
 There is to my knowledge no way to connect the two (e.g. change a filter in Data Studio and it affects the R visuals) but that would be cool, if anyone figures out a way to do that let me know!
 
