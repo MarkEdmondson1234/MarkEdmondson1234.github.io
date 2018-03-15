@@ -19,9 +19,9 @@ This week I learnt you can take [Google Data Studio](https://datastudio.google.c
 
 This is cool as you can then combine the strengths of both for client reports or similar.
 
-Data Studio I have found to be very quick to get something decent looking and has excellent connectors to data sources that can be difficult to get access to otherwise, such as DoubleClick.  For instance, when working with BigQuery I will often quickly link it to Data studio to examine the data trends. 
+Data Studio I have found to be very quick to get something decent looking and has excellent connectors to data sources that can be difficult to get access to otherwise, such as DoubleClick.  For instance, when working with BigQuery I will often quickly link it to Data Studio to examine the data trends. 
 
-However, Data Studio isn't suitable for more advanced analysis or custom visualisations, so the fact you can put them in RMarkdown documents means you can then combine its reports alongside more in-depth analysis within R, side by side with advanced R plotting such as [`ggplot2`](http://ggplot2.org/), [`htmlwidgets`](http://gallery.htmlwidgets.org/) or [`plot.ly`](https://plot.ly/r/).  RMarkdown excels as a way to document your analysis steps, and I often use it as a way to keep a working document I can check into GitHub on all the steps to analyse a project's dataset. 
+However, Data Studio isn't suitable for more advanced analysis or custom visualisations, so the fact you can put them in RMarkdown documents means you can then combine its reports alongside more in-depth analysis within R, side by side with advanced R plotting such as [`ggplot2`](http://ggplot2.org/), [`htmlwidgets`](http://gallery.htmlwidgets.org/) or [`plot.ly`](https://plot.ly/r/).  RMarkdown excels as a way to document your analysis steps, and I often use it as a way to keep a working document I can check into GitHub that contains all the SQL, code and assumptions of an analysis. 
 
 
 ### How to add Data Studio to RMarkdown
