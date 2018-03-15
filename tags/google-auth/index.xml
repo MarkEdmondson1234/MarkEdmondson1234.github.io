@@ -17,10 +17,12 @@
       <guid>http://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown</guid>
       <description>&lt;div id=&#34;adding-google-data-studio-dashboards-to-rmarkdown&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Adding Google Data Studio Dashboards to RMarkdown&lt;/h2&gt;
-&lt;p&gt;This week I leant you can embed &lt;a href=&#34;https://datastudio.google.com&#34;&gt;Google Data Studio&lt;/a&gt; reports the resulting HTML code and paste it into an RMarkdown HTML document.&lt;/p&gt;
-&lt;p&gt;This is cool as you can then combine reports and analysis using Data Studio, which is very quick to get something decent looking and can link to data source such as DoubleClick that are harder to get API access for, and have them side by side with advanced R plots such as using &lt;a href=&#34;http://ggplot2.org/&#34;&gt;&lt;code&gt;ggplot2&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://gallery.htmlwidgets.org/&#34;&gt;&lt;code&gt;htmlwidgets&lt;/code&gt;&lt;/a&gt; or &lt;a href=&#34;https://plot.ly/r/&#34;&gt;&lt;code&gt;plot.ly&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
-&lt;div id=&#34;how-to-do-it&#34; class=&#34;section level3&#34;&gt;
-&lt;h3&gt;How to do it&lt;/h3&gt;
+&lt;p&gt;This week I learnt you can take &lt;a href=&#34;https://datastudio.google.com&#34;&gt;Google Data Studio&lt;/a&gt; reports and, via their embed feature, paste them straight into an RMarkdown HTML document.&lt;/p&gt;
+&lt;p&gt;This is cool as you can then combine the strengths of both for client reports or similar.&lt;/p&gt;
+&lt;p&gt;Data Studio I have found to be very quick to get something decent looking and has excellent connectors to data sources that can be difficult to get access to otherwise, such as DoubleClick. For instance, when working with BigQuery I will often quickly link it to Data studio to examine the data trends.&lt;/p&gt;
+&lt;p&gt;However, Data Studio isn’t suitable for more advanced analysis or custom visualisations, so the fact you can put them in RMarkdown documents means you can then combine its reports alongside more in-depth analysis within R, side by side with advanced R plotting such as &lt;a href=&#34;http://ggplot2.org/&#34;&gt;&lt;code&gt;ggplot2&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://gallery.htmlwidgets.org/&#34;&gt;&lt;code&gt;htmlwidgets&lt;/code&gt;&lt;/a&gt; or &lt;a href=&#34;https://plot.ly/r/&#34;&gt;&lt;code&gt;plot.ly&lt;/code&gt;&lt;/a&gt;. RMarkdown excels as a way to document your analysis steps, and I often use it as a way to keep a working document I can check into GitHub on all the steps to analyse a project’s dataset.&lt;/p&gt;
+&lt;div id=&#34;how-to-add-data-studio-to-rmarkdown&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;How to add Data Studio to RMarkdown&lt;/h3&gt;
 &lt;p&gt;First create your Data Studio report, then select the &lt;a href=&#34;https://support.google.com/datastudio/answer/7450249?hl=en&#34;&gt;“Embed” option&lt;/a&gt; top left of Google Data Studio:&lt;/p&gt;
 &lt;div class=&#34;figure&#34;&gt;
 &lt;img src=&#34;../images/embed.png&#34; /&gt;
