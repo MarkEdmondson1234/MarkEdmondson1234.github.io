@@ -29,7 +29,7 @@
 <meta property="og:url" content="http://code.markedmondson.me/" />
 
 
-<meta property="og:updated_time" content="2018-01-11T00:00:00&#43;00:00"/>
+<meta property="og:updated_time" content="2018-03-15T00:00:00&#43;00:00"/>
 
 
 
@@ -162,7 +162,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        15
+        16
         <span>Posts</span>
       </div>
       <div class="article-info-block">
@@ -244,6 +244,147 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     <section id="main">
     
+    
+    <article class="article article-type-post" itemscope="" itemprop="blogPost">
+        <div class="article-inner">
+            
+            </a>
+
+            <header class="article-header">
+    <a href="http://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown">
+    <h1 class="article-title" itemprop="name">
+        Embedding Google Data Studio into RMarkdown
+    </h1>
+    </a>
+    <div class="article-meta">
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2018-03-15 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-03-15</time>
+            &middot;
+            467
+            words
+            &middot;
+            3
+            minute read
+        </div>
+
+
+        
+            
+            
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/r">R</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/google-auth">google-auth</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody">
+                <p>
+                    Adding Google Data Studio Dashboards to RMarkdown This week I leant you can embed Data Studio reports the resulting HTML code and paste it into an RMarkdown HTML document.
+This is cool as you can then combine reports and analysis using Data Studio, which is very quick to get something decent looking and can link to data source such as DoubleClick that are harder to get API access for, and have them side by side with advanced R plots such as using ggplot2, htmlwidgets or plot.
+                    <br>
+                </p>
+                <p class="article-more-link">
+                    <a href="http://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown">
+                        Read more
+                    </a>
+                </p>
+            </div>
+            <footer class="article-footer">
+    <a data-url="http://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown" data-id="f27a15cb38b15dfa565e2633917d28ad" class="article-share-link">
+        <i class="fa fa-share"></i>
+        Share
+    </a>
+    
+    <a href="http://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown/#disqus_thread" class="article-comment-link">
+        Comments
+    </a>
+    
+
+    <script>
+    (function ($) {
+        
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+    </script>
+</footer>
+
+        </div>
+    </article>
     
     <article class="article article-type-post" itemscope="" itemprop="blogPost">
         <div class="article-inner">
@@ -2481,6 +2622,25 @@ Using this setup means its all written in Markdown so I get control over everyth
             
             <li>
                 <div class="item-thumbnail">
+                    <a href="http://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    
+                    
+                    <p class="item-title"><a href="http://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown" class="title">Embedding Google Data Studio into RMarkdown</a></p>
+                    <p class="item-date">
+                        <time datetime="2018-03-15 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-03-15</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
                     <a href="http://code.markedmondson.me/searchconsoler-vs-googlelanguager" class="thumbnail">
                     
                         <span style="background-image:url(http://code.markedmondson.me/banners/nlp_sc.png)" alt="Mark Edmondson" class="thumbnail-image"></span>
@@ -2543,23 +2703,6 @@ Using this setup means its all written in Markdown so I get control over everyth
                     <p class="item-title"><a href="http://code.markedmondson.me/r-packages/" class="title">My R Packages</a></p>
                     <p class="item-date">
                         <time datetime="2017-01-24 21:20:50 &#43;0100 CET" itemprop="datePublished">2017-01-24</time>
-                    </p>
-                </div>
-            </li>
-            
-            <li>
-                <div class="item-thumbnail">
-                    <a href="http://code.markedmondson.me/new-blog-down/" class="thumbnail">
-                    
-                        <span style="background-image:url(http://code.markedmondson.me/banners/hugo.png)" alt="Mark Edmondson" class="thumbnail-image"></span>
-                    
-                    </a>
-                </div>
-                <div class="item-inner">
-                    
-                    <p class="item-title"><a href="http://code.markedmondson.me/new-blog-down/" class="title">New Blog Down</a></p>
-                    <p class="item-date">
-                        <time datetime="2017-01-23 22:45:03 &#43;0100 CET" itemprop="datePublished">2017-01-23</time>
                     </p>
                 </div>
             </li>
@@ -2630,7 +2773,7 @@ Using this setup means its all written in Markdown so I get control over everyth
                 <a class="category-list-link" href="http://code.markedmondson.me/tags/google-auth">
                     google-auth
                 </a>
-                <span class="category-list-count">2</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -2678,7 +2821,7 @@ Using this setup means its all written in Markdown so I get control over everyth
                 <a class="category-list-link" href="http://code.markedmondson.me/tags/r">
                     r
                 </a>
-                <span class="category-list-count">13</span>
+                <span class="category-list-count">14</span>
             </li>
             
             <li class="category-list-item">

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
-    <title>Rstudio Server &middot; Mark Edmondson</title>
+    <title>Embedding Google Data Studio into RMarkdown &middot; Mark Edmondson</title>
     <meta name="generator" content="Hugo 0.18.1" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -10,10 +10,7 @@
       <meta name="description" content="The code bit of the blog">
     
     
-      <link href="http://code.markedmondson.me/tags/rstudio-server/index.xml" rel="alternate" type="application/rss+xml" title="Mark Edmondson" />
-      <link href="http://code.markedmondson.me/tags/rstudio-server/index.xml" rel="feed" type="application/rss+xml" title="Mark Edmondson" />
-    
-    <link rel="canonical" href="http://code.markedmondson.me/tags/rstudio-server/"/>
+    <link rel="canonical" href="http://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown"/>
     <link rel="icon" href="http://code.markedmondson.me/favicon.ico">
     <link rel="apple-touch-icon" href="http://code.markedmondson.me/apple-touch-icon.png"/>
     <link rel="stylesheet" href="http://code.markedmondson.me/css/style.css">
@@ -23,29 +20,50 @@
     
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
-    <meta property="og:title" content="Rstudio Server" />
-<meta property="og:description" content="" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="http://code.markedmondson.me/tags/rstudio-server/" />
+    <meta property="og:title" content="Embedding Google Data Studio into RMarkdown" />
+<meta property="og:description" content="Adding Google Data Studio Dashboards to RMarkdown This week I leant you can embed Data Studio reports the resulting HTML code and paste it into an RMarkdown HTML document.
+This is cool as you can then combine reports and analysis using Data Studio, which is very quick to get something decent looking and can link to data source such as DoubleClick that are harder to get API access for, and have them side by side with advanced R plots such as using ggplot2, htmlwidgets or plot." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown" />
 
 
-<meta property="og:updated_time" content="2017-09-05T13:55:57&#43;01:00"/>
-
-
-
-
+<meta property="og:updated_time" content="2018-03-15T00:00:00&#43;00:00"/>
 
 
 
 
 
-    
-    
-<meta itemprop="name" content="Rstudio Server">
-<meta itemprop="description" content="">
+
+
+
 
 
     
+    
+<meta itemprop="name" content="Embedding Google Data Studio into RMarkdown">
+<meta itemprop="description" content="Adding Google Data Studio Dashboards to RMarkdown This week I leant you can embed Data Studio reports the resulting HTML code and paste it into an RMarkdown HTML document.
+This is cool as you can then combine reports and analysis using Data Studio, which is very quick to get something decent looking and can link to data source such as DoubleClick that are harder to get API access for, and have them side by side with advanced R plots such as using ggplot2, htmlwidgets or plot.">
+
+
+<meta itemprop="dateModified" content="2018-03-15T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="467">
+
+
+
+<meta itemprop="keywords" content="big-query,blogging,docker,google-analytics,google-app-engine,google-auth,google-cloud-storage,google-compute-engine,google-language,google-tag-manager,python,r,rstudio-server,search-console," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Embedding Google Data Studio into RMarkdown"/>
+<meta name="twitter:description" content="Adding Google Data Studio Dashboards to RMarkdown This week I leant you can embed Data Studio reports the resulting HTML code and paste it into an RMarkdown HTML document.
+This is cool as you can then combine reports and analysis using Data Studio, which is very quick to get something decent looking and can link to data source such as DoubleClick that are harder to get API access for, and have them side by side with advanced R plots such as using ggplot2, htmlwidgets or plot."/>
+<meta name="twitter:site" content="@HoloMarkeD"/>
+<meta name="twitter:domain" content="markedmondson.me"/>
+
     
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -65,7 +83,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 
 <div id="container">
-    <header id="header">
+	<header id="header">
   <div id="header-main" class="header-inner">
     <div class="outer">
       <a href="http://code.markedmondson.me" id="logo">
@@ -145,8 +163,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </div>
 </header>
 
-    <div class="outer">
-        <aside id="profile">
+   	
+   	<div class="outer">
+   		
+	    <aside id="profile">
   <div class="inner profile-inner">
     <div class="base-info profile-block">
       <img id="avatar" src="http://code.markedmondson.me/../images/gde_avatar.jpg">
@@ -241,110 +261,257 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </div>
 </aside>
 
-        <section id="main">
-            <section class="archives-wrap">
-                <div class="archive-category-wrap">
-                    <span class="archive-category">Rstudio Server</span>
-                </div>
-                <div class="archives">
-                    
-                    
-                        <article class="archive-article archive-type-post">
-    <div class="archive-article-inner">
-        <div class="archive-article-thumbnail">
-            
-            <a href="http://code.markedmondson.me/rstudio-server-chromebook/" class="thumbnail">
-                <span style="background-image:url(http://code.markedmondson.me/banners/chromebook.png)" alt="Run RStudio Server on a Chromebook as a Cloud Native" class="thumbnail-image"></span>
-            </a>
-            
-        </div>
-        <header class="archive-article-header">
-            <h1 itemprop="name">
-            <a class="archive-article-title" href="http://code.markedmondson.me/rstudio-server-chromebook/">Run RStudio Server on a Chromebook as a Cloud Native</a>
-            </h1>
-            <div class="archive-article-date">
-                <i class="fa fa-calendar"></i>
-                <time datetime="2017-09-05 13:55:57 &#43;0100 &#43;0100" itemprop="datePublished">2017-09-05</time>
-            </div>
-        </header>
-    </div>
-</article>
- 
-                    
-                        <article class="archive-article archive-type-post">
-    <div class="archive-article-inner">
-        <div class="archive-article-thumbnail">
-            
-            <a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform" class="thumbnail">
-                <span style="background-image:url(http://code.markedmondson.me/banners/scheduledR.png)" alt="Four Ways to Schedule R scripts on Google Cloud Platform" class="thumbnail-image"></span>
-            </a>
-            
-        </div>
-        <header class="archive-article-header">
-            <h1 itemprop="name">
-            <a class="archive-article-title" href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform">Four Ways to Schedule R scripts on Google Cloud Platform</a>
-            </h1>
-            <div class="archive-article-date">
-                <i class="fa fa-calendar"></i>
-                <time datetime="2017-07-09 00:00:00 &#43;0000 UTC" itemprop="datePublished">2017-07-09</time>
-            </div>
-        </header>
-    </div>
-</article>
- 
-                    
-                        <article class="archive-article archive-type-post">
-    <div class="archive-article-inner">
-        <div class="archive-article-thumbnail">
-            
-            <a href="http://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/" class="thumbnail">
-                <span style="background-image:url(http://code.markedmondson.me/images/r-infrastructure.png)" alt="A digital analytics workflow through the Google Cloud using R" class="thumbnail-image"></span>
-            </a>
-            
-        </div>
-        <header class="archive-article-header">
-            <h1 itemprop="name">
-            <a class="archive-article-title" href="http://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/">A digital analytics workflow through the Google Cloud using R</a>
-            </h1>
-            <div class="archive-article-date">
-                <i class="fa fa-calendar"></i>
-                <time datetime="2016-10-10 23:03:57 &#43;0100 &#43;0100" itemprop="datePublished">2016-10-10</time>
-            </div>
-        </header>
-    </div>
-</article>
- 
-                    
-                        <article class="archive-article archive-type-post">
-    <div class="archive-article-inner">
-        <div class="archive-article-thumbnail">
-            
-            <a href="http://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/" class="thumbnail">
-                <span style="background-image:url(http://code.markedmondson.me/banners/rstudio-gce.png)" alt="Scheduling R scripts for a team using RStudio Server, Docker, Github and Google Compute Engine" class="thumbnail-image"></span>
-            </a>
-            
-        </div>
-        <header class="archive-article-header">
-            <h1 itemprop="name">
-            <a class="archive-article-title" href="http://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/">Scheduling R scripts for a team using RStudio Server, Docker, Github and Google Compute Engine</a>
-            </h1>
-            <div class="archive-article-date">
-                <i class="fa fa-calendar"></i>
-                <time datetime="2016-04-21 23:03:57 &#43;0100 &#43;0100" itemprop="datePublished">2016-04-21</time>
-            </div>
-        </header>
-    </div>
-</article>
- 
-                    
-                </div>
-            </section>
-            <nav id="page-nav">
+	    
 
+	    
+<section id="main">
+
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown">
+    <h1 class="article-title" itemprop="name">
+        Embedding Google Data Studio into RMarkdown
+    </h1>
+    </a>
+    <div class="article-meta">
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2018-03-15 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-03-15</time>
+            &middot;
+            467
+            words
+            &middot;
+            3
+            minute read
+        </div>
+
+
+        
+            
+            
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/r">R</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/google-auth">google-auth</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody">
+                <div id="adding-google-data-studio-dashboards-to-rmarkdown" class="section level2">
+<h2>Adding Google Data Studio Dashboards to RMarkdown</h2>
+<p>This week I leant you can embed Data Studio reports the resulting HTML code and paste it into an RMarkdown HTML document.</p>
+<p>This is cool as you can then combine reports and analysis using Data Studio, which is very quick to get something decent looking and can link to data source such as DoubleClick that are harder to get API access for, and have them side by side with advanced R plots such as using <a href="http://ggplot2.org/"><code>ggplot2</code></a>, <a href="http://gallery.htmlwidgets.org/">htmlwidgets</a> or <a href="https://plot.ly/r/">plot.ly</a>.</p>
+<div id="how-to-do-it" class="section level3">
+<h3>How to do it</h3>
+<p>First create your Data Studio report, select the <a href="https://support.google.com/datastudio/answer/7450249?hl=en">“Embed” option</a> top left of Google Data Studio:</p>
+<div class="figure">
+<img src="../images/embed.png" />
+
+</div>
+<p>Then you can paste in that code straight in an <code>.Rmd</code> document, like I did with this blog:</p>
+<pre><code>&lt;iframe width=&quot;600&quot; height=&quot;500&quot; 
+src=&quot;https://datastudio.google.com/embed/reporting/1q8dO3-IuGU-YXbgTiW6mchvKCg_kRZ9Y/page/wN5O&quot; 
+frameborder=&quot;0&quot; 
+style=&quot;border:0&quot; allowfullscreen&gt;&lt;/iframe&gt;</code></pre>
+<p><em>Above I put in backticks to demo the code I pasted in, but you don’t need to do that - below is result of the code pasted in as is into the .Rmd doc</em></p>
+<iframe width="600" height="500" src="https://datastudio.google.com/embed/reporting/1q8dO3-IuGU-YXbgTiW6mchvKCg_kRZ9Y/page/wN5O" frameborder="0" style="border:0" allowfullscreen>
+</iframe>
+<p>Tweak the width and height so it fits your layout - I set the height and width of the Data Studio dashboard to the same as the iframe to avoid the scroll bars appearing.</p>
+<p>For standalone <code>.Rmd</code> documents, 800 pixel width looks best, but this blog is narrower so I went for 600 pixel width.</p>
+</div>
+</div>
+<div id="private-data-studio-reports" class="section level2">
+<h2>Private Data Studio reports</h2>
+<p>The above report is shared publically on the web, but you can do the same with private Data Studio reports.</p>
+<p>Follow the same procedure, but only share privately in your Sharing settings - only people who have private access to this report will see it, others will get the <code>This Data Studio report is private</code> message.</p>
+<iframe width="600" height="500" src="https://datastudio.google.com/embed/reporting/1O6QttLeXrV7zesk0lNFeWmb5H3aPIhMa/page/wN5O" frameborder="0" style="border:0" allowfullscreen>
+</iframe>
+<p>…but I see this:</p>
+<div class="figure">
+<img src="../images/private-embed.png" />
+
+</div>
+<p>The authentication works in the same browser you are logged in with Google, since that is shared - e.g. if you are logged into Google Analytics in the same browser, you should see it. This means however you won’t see it work if viewing in the RStudio View panel.</p>
+<p>If you want to make this smoother, you could also use <code>googleAuthR</code>’s JavaScript authentication function <code>gar_auth_jsUI</code> within the same document - this will ensure a user can login and view the Data Studio report from the same webpage.</p>
+<p>e.g. <em>The CSS for this button is not active so its not pretty</em></p>
+<pre class="r"><code>library(googleAuthR)</code></pre>
+<pre><code>## 2018-03-15 11:56:04&gt; No scopes have been set, set them via 
+##               options(googleAuthR.scopes.selected) - 
+##               no authentication attempted.</code></pre>
+<pre class="r"><code>gar_set_client()</code></pre>
+<pre><code>## [1] &quot;mark-edmondson-gde&quot;</code></pre>
+<pre class="r"><code>gar_auth_jsUI(&quot;auth&quot;, login_text = &quot;Google Login&quot;)</code></pre>
+<script src="https://apis.google.com/js/auth.js"></script>
+<button id="auth-login" onclick="auth();" class="btn btn-primary">Google Login</button>
+<button id="auth-logout" onclick="out();" class="btn btn-danger">Log Out</button>
+<script type="text/javascript">
+      var authorizeButton = document.getElementById('auth-login');
+      var signoutButton = document.getElementById('auth-logout');
+      signoutButton.style.display = 'none';
+      function auth() {
+        var config = {
+          'client_id': '',
+          'scope': '',
+          'approval_prompt':'force'
+        };
+        gapi.auth.authorize(config, function() {
+          token = gapi.auth.getToken();
+          console.log('login complete');
+          Shiny.onInputChange('auth-js_auth_access_token', token.access_token);
+          Shiny.onInputChange('auth-js_auth_token_type', token.token_type);
+          Shiny.onInputChange('auth-js_auth_expires_in', token.expires_in);
+          authorizeButton.style.display = 'none';
+          signoutButton.style.display = 'block';
+        });
+       }
+       function out(){
+          gapi.auth.signOut();
+          location.reload()
+       }
+       </script>
+</div>
+
+            </div>
+            <footer class="article-footer">
+    <a data-url="http://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown" data-id="f27a15cb38b15dfa565e2633917d28ad" class="article-share-link">
+        <i class="fa fa-share"></i>
+        Share
+    </a>
+    
+    <a href="http://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown/#disqus_thread" class="article-comment-link">
+        Comments
+    </a>
+    
+
+    <script>
+    (function ($) {
+        
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+    </script>
+</footer>
+
+        </div>
+
+        
+<nav id="article-nav">
+    
+    <a href="http://code.markedmondson.me/searchconsoler-vs-googlelanguager" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">
+          Older
+      </strong>
+      <div class="article-nav-title">Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API</div>
+    </a>
+    
+
+    
 </nav>
 
-        </section>
-        <aside id="sidebar">
+
+    </article>
+
+    
+    <section id="comments">
+        <div id="disqus_thread">
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'markedmondson';
+    var disqus_identifier = 'http:\/\/code.markedmondson.me\/embedding-google-data-studio-into-rmarkdown';
+    var disqus_title = 'Embedding Google Data Studio into RMarkdown';
+    var disqus_url = 'http:\/\/code.markedmondson.me\/embedding-google-data-studio-into-rmarkdown';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </div>
+    </section>
+    
+</section>
+
+
+	    
+	    <aside id="sidebar">
     
 <div class="widget-wrap">
     <h3 class="widget-title">
@@ -376,7 +543,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <div class="item-thumbnail">
                     <a href="http://code.markedmondson.me/searchconsoler-vs-googlelanguager" class="thumbnail">
                     
-                        <span style="background-image:url(http://code.markedmondson.me/banners/nlp_sc.png)" alt="Rstudio Server" class="thumbnail-image"></span>
+                        <span style="background-image:url(http://code.markedmondson.me/banners/nlp_sc.png)" alt="Embedding Google Data Studio into RMarkdown" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -393,7 +560,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <div class="item-thumbnail">
                     <a href="http://code.markedmondson.me/rstudio-server-chromebook/" class="thumbnail">
                     
-                        <span style="background-image:url(http://code.markedmondson.me/banners/chromebook.png)" alt="Rstudio Server" class="thumbnail-image"></span>
+                        <span style="background-image:url(http://code.markedmondson.me/banners/chromebook.png)" alt="Embedding Google Data Studio into RMarkdown" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -410,7 +577,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <div class="item-thumbnail">
                     <a href="http://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform" class="thumbnail">
                     
-                        <span style="background-image:url(http://code.markedmondson.me/banners/scheduledR.png)" alt="Rstudio Server" class="thumbnail-image"></span>
+                        <span style="background-image:url(http://code.markedmondson.me/banners/scheduledR.png)" alt="Embedding Google Data Studio into RMarkdown" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -427,7 +594,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <div class="item-thumbnail">
                     <a href="http://code.markedmondson.me/r-packages/" class="thumbnail">
                     
-                        <span style="background-image:url(http://code.markedmondson.me/banners/packages.jpeg)" alt="Rstudio Server" class="thumbnail-image"></span>
+                        <span style="background-image:url(http://code.markedmondson.me/banners/packages.jpeg)" alt="Embedding Google Data Studio into RMarkdown" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -586,7 +753,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <div id="toTop" class="fa fa-angle-up"></div>
 </aside>
 
-    </div>
+	    
+	</div>
 </div>
 
 <footer id="footer">

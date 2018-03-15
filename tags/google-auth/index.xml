@@ -10,6 +10,88 @@
     <atom:link href="http://code.markedmondson.me/tags/google-auth/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Embedding Google Data Studio into RMarkdown</title>
+      <link>http://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown</link>
+      <pubDate>Thu, 15 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown</guid>
+      <description>&lt;div id=&#34;adding-google-data-studio-dashboards-to-rmarkdown&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Adding Google Data Studio Dashboards to RMarkdown&lt;/h2&gt;
+&lt;p&gt;This week I leant you can embed Data Studio reports the resulting HTML code and paste it into an RMarkdown HTML document.&lt;/p&gt;
+&lt;p&gt;This is cool as you can then combine reports and analysis using Data Studio, which is very quick to get something decent looking and can link to data source such as DoubleClick that are harder to get API access for, and have them side by side with advanced R plots such as using &lt;a href=&#34;http://ggplot2.org/&#34;&gt;&lt;code&gt;ggplot2&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://gallery.htmlwidgets.org/&#34;&gt;htmlwidgets&lt;/a&gt; or &lt;a href=&#34;https://plot.ly/r/&#34;&gt;plot.ly&lt;/a&gt;.&lt;/p&gt;
+&lt;div id=&#34;how-to-do-it&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;How to do it&lt;/h3&gt;
+&lt;p&gt;First create your Data Studio report, select the &lt;a href=&#34;https://support.google.com/datastudio/answer/7450249?hl=en&#34;&gt;“Embed” option&lt;/a&gt; top left of Google Data Studio:&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;../images/embed.png&#34; /&gt;
+
+&lt;/div&gt;
+&lt;p&gt;Then you can paste in that code straight in an &lt;code&gt;.Rmd&lt;/code&gt; document, like I did with this blog:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;iframe width=&amp;quot;600&amp;quot; height=&amp;quot;500&amp;quot; 
+src=&amp;quot;https://datastudio.google.com/embed/reporting/1q8dO3-IuGU-YXbgTiW6mchvKCg_kRZ9Y/page/wN5O&amp;quot; 
+frameborder=&amp;quot;0&amp;quot; 
+style=&amp;quot;border:0&amp;quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;em&gt;Above I put in backticks to demo the code I pasted in, but you don’t need to do that - below is result of the code pasted in as is into the .Rmd doc&lt;/em&gt;&lt;/p&gt;
+&lt;iframe width=&#34;600&#34; height=&#34;500&#34; src=&#34;https://datastudio.google.com/embed/reporting/1q8dO3-IuGU-YXbgTiW6mchvKCg_kRZ9Y/page/wN5O&#34; frameborder=&#34;0&#34; style=&#34;border:0&#34; allowfullscreen&gt;
+&lt;/iframe&gt;
+&lt;p&gt;Tweak the width and height so it fits your layout - I set the height and width of the Data Studio dashboard to the same as the iframe to avoid the scroll bars appearing.&lt;/p&gt;
+&lt;p&gt;For standalone &lt;code&gt;.Rmd&lt;/code&gt; documents, 800 pixel width looks best, but this blog is narrower so I went for 600 pixel width.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;private-data-studio-reports&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Private Data Studio reports&lt;/h2&gt;
+&lt;p&gt;The above report is shared publically on the web, but you can do the same with private Data Studio reports.&lt;/p&gt;
+&lt;p&gt;Follow the same procedure, but only share privately in your Sharing settings - only people who have private access to this report will see it, others will get the &lt;code&gt;This Data Studio report is private&lt;/code&gt; message.&lt;/p&gt;
+&lt;iframe width=&#34;600&#34; height=&#34;500&#34; src=&#34;https://datastudio.google.com/embed/reporting/1O6QttLeXrV7zesk0lNFeWmb5H3aPIhMa/page/wN5O&#34; frameborder=&#34;0&#34; style=&#34;border:0&#34; allowfullscreen&gt;
+&lt;/iframe&gt;
+&lt;p&gt;…but I see this:&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;../images/private-embed.png&#34; /&gt;
+
+&lt;/div&gt;
+&lt;p&gt;The authentication works in the same browser you are logged in with Google, since that is shared - e.g. if you are logged into Google Analytics in the same browser, you should see it. This means however you won’t see it work if viewing in the RStudio View panel.&lt;/p&gt;
+&lt;p&gt;If you want to make this smoother, you could also use &lt;code&gt;googleAuthR&lt;/code&gt;’s JavaScript authentication function &lt;code&gt;gar_auth_jsUI&lt;/code&gt; within the same document - this will ensure a user can login and view the Data Studio report from the same webpage.&lt;/p&gt;
+&lt;p&gt;e.g. &lt;em&gt;The CSS for this button is not active so its not pretty&lt;/em&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(googleAuthR)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 2018-03-15 11:56:04&amp;gt; No scopes have been set, set them via 
+##               options(googleAuthR.scopes.selected) - 
+##               no authentication attempted.&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;gar_set_client()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;mark-edmondson-gde&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;gar_auth_jsUI(&amp;quot;auth&amp;quot;, login_text = &amp;quot;Google Login&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;script src=&#34;https://apis.google.com/js/auth.js&#34;&gt;&lt;/script&gt;
+&lt;button id=&#34;auth-login&#34; onclick=&#34;auth();&#34; class=&#34;btn btn-primary&#34;&gt;Google Login&lt;/button&gt;
+&lt;button id=&#34;auth-logout&#34; onclick=&#34;out();&#34; class=&#34;btn btn-danger&#34;&gt;Log Out&lt;/button&gt;
+&lt;script type=&#34;text/javascript&#34;&gt;
+      var authorizeButton = document.getElementById(&#39;auth-login&#39;);
+      var signoutButton = document.getElementById(&#39;auth-logout&#39;);
+      signoutButton.style.display = &#39;none&#39;;
+      function auth() {
+        var config = {
+          &#39;client_id&#39;: &#39;&#39;,
+          &#39;scope&#39;: &#39;&#39;,
+          &#39;approval_prompt&#39;:&#39;force&#39;
+        };
+        gapi.auth.authorize(config, function() {
+          token = gapi.auth.getToken();
+          console.log(&#39;login complete&#39;);
+          Shiny.onInputChange(&#39;auth-js_auth_access_token&#39;, token.access_token);
+          Shiny.onInputChange(&#39;auth-js_auth_token_type&#39;, token.token_type);
+          Shiny.onInputChange(&#39;auth-js_auth_expires_in&#39;, token.expires_in);
+          authorizeButton.style.display = &#39;none&#39;;
+          signoutButton.style.display = &#39;block&#39;;
+        });
+       }
+       function out(){
+          gapi.auth.signOut();
+          location.reload()
+       }
+       &lt;/script&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
       <title>My R Packages</title>
       <link>http://code.markedmondson.me/r-packages/</link>
       <pubDate>Tue, 24 Jan 2017 21:20:50 +0100</pubDate>
