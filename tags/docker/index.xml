@@ -34,7 +34,7 @@
 
 &lt;p&gt;This article deploys to Google Kubernetes Engine (GKE), but there are many other methods to cover some of Kubernetes functionality, that you may prefer.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;../images/../images/gke_icon.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../images/gke_icon.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Kubernetes itself can run on all the cloud providers aside Google Cloud Platform, as well as your own servers.&lt;/li&gt;
@@ -100,7 +100,7 @@ createCluster(projectId = gcp_get_project(), zone = &amp;quot;europe-west3-b&amp
 
 &lt;p&gt;Here is a screenshot from the web UI of what it should look like:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;../images/../images/r-cluster.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../images/r-cluster.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;part-2-install-the-nginx-ingress-controller&#34;&gt;Part 2 - Install the nginx ingress controller&lt;/h2&gt;
 
@@ -273,11 +273,11 @@ spec:
 
 &lt;p&gt;Here are some screenshots:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;gar_app.png&#34; alt=&#34;googleAuthR app&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../images/gar_app.png&#34; alt=&#34;googleAuthR app&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;wordcloud.png&#34; alt=&#34;Wordcloud app&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../images/wordcloud.png&#34; alt=&#34;Wordcloud app&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;default404.png&#34; alt=&#34;Default webpage if not defined in ingress&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../images/default404.png&#34; alt=&#34;Default webpage if not defined in ingress&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Note it matters where you put the app in your Dockerfile.  The &lt;code&gt;nginx.ingress.kubernetes.io/rewrite-target: /&lt;/code&gt; line in the ingress lets you specify a URL that is relative to your specified URLs.&lt;/p&gt;
 

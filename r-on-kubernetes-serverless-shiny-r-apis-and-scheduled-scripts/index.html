@@ -333,7 +333,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <p>This article deploys to Google Kubernetes Engine (GKE), but there are many other methods to cover some of Kubernetes functionality, that you may prefer.</p>
 
-<p><img src="../images/../images/gke_icon.png" alt="" /></p>
+<p><img src="../images/gke_icon.png" alt="" /></p>
 
 <ul>
 <li>Kubernetes itself can run on all the cloud providers aside Google Cloud Platform, as well as your own servers.</li>
@@ -399,7 +399,7 @@ createCluster(projectId = gcp_get_project(), zone = &quot;europe-west3-b&quot;)
 
 <p>Here is a screenshot from the web UI of what it should look like:</p>
 
-<p><img src="../images/../images/r-cluster.png" alt="" /></p>
+<p><img src="../images/r-cluster.png" alt="" /></p>
 
 <h2 id="part-2-install-the-nginx-ingress-controller">Part 2 - Install the nginx ingress controller</h2>
 
@@ -572,11 +572,11 @@ spec:
 
 <p>Here are some screenshots:</p>
 
-<p><img src="gar_app.png" alt="googleAuthR app" /></p>
+<p><img src="../images/gar_app.png" alt="googleAuthR app" /></p>
 
-<p><img src="wordcloud.png" alt="Wordcloud app" /></p>
+<p><img src="../images/wordcloud.png" alt="Wordcloud app" /></p>
 
-<p><img src="default404.png" alt="Default webpage if not defined in ingress" /></p>
+<p><img src="../images/default404.png" alt="Default webpage if not defined in ingress" /></p>
 
 <p>Note it matters where you put the app in your Dockerfile.  The <code>nginx.ingress.kubernetes.io/rewrite-target: /</code> line in the ingress lets you specify a URL that is relative to your specified URLs.</p>
 
