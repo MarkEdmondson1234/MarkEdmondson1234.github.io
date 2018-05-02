@@ -34,7 +34,7 @@
 
 &lt;p&gt;This article deploys to Google Kubernetes Engine (GKE), but there are many other methods to cover some of Kubernetes functionality, that you may prefer.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;gke_icon.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../images/../images/gke_icon.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Kubernetes itself can run on all the cloud providers aside Google Cloud Platform, as well as your own servers.&lt;/li&gt;
@@ -100,13 +100,13 @@ createCluster(projectId = gcp_get_project(), zone = &amp;quot;europe-west3-b&amp
 
 &lt;p&gt;Here is a screenshot from the web UI of what it should look like:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;r-cluster.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../images/../images/r-cluster.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;part-2-install-the-nginx-ingress-controller&#34;&gt;Part 2 - Install the nginx ingress controller&lt;/h2&gt;
 
 &lt;p&gt;The first recommended setup is to enable an ingress controller.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;ingress_controller.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../images/ingress_controller.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;em&gt;Image from &lt;a href=&#34;https://www.nginx.com/products/nginx/kubernetes-ingress-controller/&#34;&gt;nginx&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
 
@@ -384,7 +384,7 @@ spec:
 
 &lt;p&gt;For our example, the custom package uploaded is available at &lt;code&gt;1.2.3.4/ocpu/library/predictClickOpenCPU&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;open-cpu-running.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../images/open-cpu-running.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;We use the API for this package by creating a POST hit to API endpoint&lt;/p&gt;
 
@@ -485,7 +485,7 @@ spec:
 
 &lt;p&gt;And in the Web UI under &lt;a href=&#34;https://console.cloud.google.com/kubernetes/workload?project=iih-tools-analytics&amp;amp;authuser=0&amp;amp;workload_list_tablesize=50&#34;&gt;Workloads&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;cronJob.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../images/cronJob.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;part-4-going-further&#34;&gt;Part 4 - Going further&lt;/h2&gt;
 
