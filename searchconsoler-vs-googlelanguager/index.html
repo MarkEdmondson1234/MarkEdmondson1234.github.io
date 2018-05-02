@@ -46,7 +46,7 @@ Whilst I don’t believe they will offer exactly the same results, I can see use
 
 
 <meta itemprop="dateModified" content="2018-01-11T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="1867">
+<meta itemprop="wordCount" content="1873">
 
 
 
@@ -181,7 +181,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        16
+        17
         <span>Posts</span>
       </div>
       <div class="article-info-block">
@@ -283,7 +283,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2018-01-11 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-01-11</time>
             &middot;
-            1867
+            1873
             words
             &middot;
             9
@@ -432,7 +432,7 @@ scrape_googlecache &lt;- function(the_url){
 html_url &lt;- scrape_googlecache(the_url)
 
 substr(html_url$cached, 1000, 2000)</code></pre>
-<pre><code>## [1] &quot;site for search. Whilst I don’t believe they will offer exactly the same results, I can see useful applications that include: Read more Share Comments Run RStudio Server on a Chromebook as a Cloud Native 2017-09-05 · 1534 words · 8 minute read google-cloud-storage · google-compute-engine · r · rstudio-server · docker · google-app-engine I recently got an Asus Chromebook Flip with which I’m very happy, but it did make me realise that if a Chromebook was to replace my normal desktop as my primary workstation, my RStudio Server setup would need to be more cloud native than was available up until now. TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically backs up data and configuration settings to Google Cloud Storage is on the googleComputeEngineR website here. Read more Share Comments Four Ways to Schedule R scripts on Google Cloud Platform 2017-07-09 · 2213 words · 11 minute read r · google-app-engine · docker · google-analytics · google-compute-engine · rstudi&quot;</code></pre>
+<pre><code>## [1] &quot;oogle&#39;s Cloud Natural Language API 2018-01-11 · 1867 words · 9 minute read r · search-console · google-language With the launch of the Google Natural Language API (NLP API), and the emphasis of machine learning that is said to account for up to 30% of the SEO algorithmn for Google search, a natural question is whether you can use Google’s own macine learning APIs to help optimise your website for search. Whilst I don’t believe they will offer exactly the same results, I can see useful applications that include: Read more Share Comments Run RStudio Server on a Chromebook as a Cloud Native 2017-09-05 · 1534 words · 8 minute read google-cloud-storage · google-compute-engine · r · rstudio-server · docker · google-app-engine I recently got an Asus Chromebook Flip with which I’m very happy, but it did make me realise that if a Chromebook was to replace my normal desktop as my primary workstation, my RStudio Server setup would need to be more cloud native than was available up until now. TL;DR&quot;</code></pre>
 <p>You can now apply this function to all the unique URLs in your search console URLs using a purrr loop, but hit it too fast and you’ll be blocked.</p>
 <pre class="r"><code>library(tidyverse)
 
@@ -745,6 +745,25 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)</code><
             
             <li>
                 <div class="item-thumbnail">
+                    <a href="http://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts" class="thumbnail">
+                    
+                        <span style="background-image:url(http://code.markedmondson.me/../banners/r-kubernetes.png)" alt="Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    
+                    
+                    <p class="item-title"><a href="http://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts" class="title">R on Kubernetes - serverless Shiny, R APIs and scheduled scripts</a></p>
+                    <p class="item-date">
+                        <time datetime="2018-05-02 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-05-02</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
                     <a href="http://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown" class="thumbnail">
                     
                         <span style="background-image:url(http://code.markedmondson.me/../banners/datastudio.png)" alt="Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API" class="thumbnail-image"></span>
@@ -813,23 +832,6 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)</code><
                 </div>
             </li>
             
-            <li>
-                <div class="item-thumbnail">
-                    <a href="http://code.markedmondson.me/r-packages/" class="thumbnail">
-                    
-                        <span style="background-image:url(http://code.markedmondson.me/banners/packages.jpeg)" alt="Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API" class="thumbnail-image"></span>
-                    
-                    </a>
-                </div>
-                <div class="item-inner">
-                    
-                    <p class="item-title"><a href="http://code.markedmondson.me/r-packages/" class="title">My R Packages</a></p>
-                    <p class="item-date">
-                        <time datetime="2017-01-24 21:20:50 &#43;0100 CET" itemprop="datePublished">2017-01-24</time>
-                    </p>
-                </div>
-            </li>
-            
         </ul>
     </div>
 </div>
@@ -872,7 +874,7 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)</code><
                 <a class="category-list-link" href="http://code.markedmondson.me/tags/docker">
                     docker
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">5</span>
             </li>
             
             <li class="category-list-item">
@@ -944,7 +946,7 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)</code><
                 <a class="category-list-link" href="http://code.markedmondson.me/tags/r">
                     r
                 </a>
-                <span class="category-list-count">14</span>
+                <span class="category-list-count">15</span>
             </li>
             
             <li class="category-list-item">

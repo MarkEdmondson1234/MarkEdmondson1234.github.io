@@ -10,6 +10,544 @@
     <atom:link href="http://code.markedmondson.me/tags/docker/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>R on Kubernetes - serverless Shiny, R APIs and scheduled scripts</title>
+      <link>http://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts</link>
+      <pubDate>Wed, 02 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts</guid>
+      <description>&lt;h2 id=&#34;why-run-r-on-kubernetes&#34;&gt;Why run R on Kubernetes?&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://kubernetes.io/&#34;&gt;Kubernetes&lt;/a&gt; is a free and open-source utility to run jobs within a computer cluster.  It abstracts away the servers the jobs are running on so you need only worry about the code to run.  It has features such as &lt;a href=&#34;https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/&#34;&gt;scheduling&lt;/a&gt;, &lt;a href=&#34;https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler&#34;&gt;auto-scaling&lt;/a&gt;, and auto-healing to replace nodes if they breakdown.&lt;/p&gt;
+
+&lt;p&gt;If you only need to run R on a single machine, then its probably a bit OTT to use Kubernetes, but if you are starting to work with multiple Docker containers and/or VMs it gets more and more attractive to have a way to easily orchestrate them.&lt;/p&gt;
+
+&lt;p&gt;Kubernetes works via &lt;a href=&#34;https://www.docker.com/&#34;&gt;Docker&lt;/a&gt; containers, so if you are already familiar with using Docker for abstracting away code environments, it should be a short step up to abstracting away the computers those Docker containers run upon.
+&lt;/p&gt;
+
+&lt;p&gt;R is a good mix with Docker since it provides a way to have stable production environments in a landscape of shifting dependencies given R&amp;rsquo;s fast changing open source foundation.  There is a growing ecosystem to help R users with Docker including the &lt;a href=&#34;https://www.rocker-project.org/&#34;&gt;Rocker Project&lt;/a&gt;, &lt;a href=&#34;http://o2r.info/2017/05/30/containerit-package/&#34;&gt;containerit&lt;/a&gt; and &lt;a href=&#34;https://github.com/wch/harbor&#34;&gt;harbor&lt;/a&gt;, and Rhys Jackson has also crafted a Kubernetes client for R in &lt;a href=&#34;https://github.com/RhysJackson/googleKubernetesR&#34;&gt;googleKubernetesR&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;If your R scripts are deployed in Docker containers, you can use them in Kubernetes.  This includes applications such as R powered APIs using OpenCPU or plumber, Shiny apps, batch R jobs that can scale horizontally over many CPUs, or scheduled analysis.&lt;/p&gt;
+
+&lt;p&gt;What you gain is reliable, flexible, production ready R applications, that will scale, run on many cloud providers including Google, and once set up easy to deploy - in most cases pushing to GitHub can be the trigger to serve your new code.&lt;/p&gt;
+
+&lt;h3 id=&#34;alternatives&#34;&gt;Alternatives&lt;/h3&gt;
+
+&lt;p&gt;This article deploys to Google Kubernetes Engine (GKE), but there are many other methods to cover some of Kubernetes functionality, that you may prefer.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;gke_icon.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Kubernetes itself can run on all the cloud providers aside Google Cloud Platform, as well as your own servers.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://cloud.google.com/appengine/docs/flexible/&#34;&gt;Google App Engine Flexible&lt;/a&gt; is a more managed platform that takes care of some details, but you lose control of others.  I wrote about this previously for running R APIs and a demo is in this &lt;a href=&#34;https://github.com/MarkEdmondson1234/serverless-R-API-appengine&#34;&gt;GitHub repo&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.docker.com/compose/&#34;&gt;Docker Compose&lt;/a&gt; is an equivalent service that only runs on one host, &lt;a href=&#34;https://docs.docker.com/engine/swarm/&#34;&gt;Docker Swarm&lt;/a&gt; runs on multiple hosts and most comparible to Kubernetes.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://azure.microsoft.com/en-us/services/container-service/&#34;&gt;Azure Container Service&lt;/a&gt; is a more managed Kubernetes platform than GKE&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Regardless which one you use, the principles are similar in that they all build on Docker containers, and one of the advantages of Kubernetes is you can move to other providers a lot more easily, since Docker/Kubernetes is fast becoming the standard for cloud developments.&lt;/p&gt;
+
+&lt;h3 id=&#34;setup-background&#34;&gt;Setup background&lt;/h3&gt;
+
+&lt;p&gt;The below is a setup I have used for the above applications, and may be able to help if you are looking for similar functionality.&lt;/p&gt;
+
+&lt;p&gt;I ran into several gotchas whilst developing it, so hopefully it will help you avoid some of those. Most vexing for me was finding a way to serve different R scripts on one kubernetes cluster on different URL paths (e.g. &lt;code&gt;/r-script1&lt;/code&gt;, &lt;code&gt;/shinyapp2&lt;/code&gt;, &lt;code&gt;/r-api-3&lt;/code&gt;, etc) - many thanks to Rhys&amp;rsquo; help with that.  The answer was that (at the time of writing) the default Google Kubernetes Engine doesn&amp;rsquo;t support rewriting URLs, so instead its better to install another application on your cluster to take care of the above URL serving (termed &lt;code&gt;ingress fanout&lt;/code&gt;), namely using &lt;code&gt;nginx ingress&lt;/code&gt; instead of the default GKE ingress.&lt;/p&gt;
+
+&lt;p&gt;This article then demonstrates:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Creating a Kubernetes cluster for your R applications&lt;/li&gt;
+&lt;li&gt;Installing Helm (and Tiller) to aid with a nginx ingress installation&lt;/li&gt;
+&lt;li&gt;Deploying R containers, with examples for Shiny, an R API and an R scheduled script&lt;/li&gt;
+&lt;li&gt;Serving up those R containers on nice URLs&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;references&#34;&gt;References&lt;/h3&gt;
+
+&lt;p&gt;These were used to help develop the below:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://cloud.google.com/kubernetes-engine/docs/tutorials/http-balancer&#34;&gt;Setting up HTTP load balancing with Ingress&lt;/a&gt; Google tutorial&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://cloud.google.com/community/tutorials/nginx-ingress-gke&#34;&gt;Ingress with nginx&lt;/a&gt; modified with &lt;a href=&#34;https://docs.bitnami.com/kubernetes/how-to/configure-rbac-in-your-kubernetes-cluster/&#34;&gt;this&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;My &lt;a href=&#34;https://stackoverflow.com/questions/48452556/setting-up-a-kuberentes-cluster-with-http-load-balancing-ingress-for-rstudio-and&#34;&gt;StackOverflow question&lt;/a&gt; on http load balancing&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://kubernetes.io/docs/reference/kubectl/overview/&#34;&gt;Kubernetes reference documentation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.bitnami.com/kubernetes/how-to/secure-kubernetes-services-with-ingress-tls-letsencrypt/&#34;&gt;Kubernetes with nginx, TLS and LetsEncrypt&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;part-1-creating-an-r-cluster&#34;&gt;Part 1 - Creating an R cluster&lt;/h2&gt;
+
+&lt;p&gt;Follow the &lt;a href=&#34;https://cloud.google.com/kubernetes-engine/docs/how-to/creating-a-container-cluster&#34;&gt;setup steps to authenticate with gcloud and kuberctl&lt;/a&gt; then create your cluster via:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;gcloud container clusters create r-cluster --num-nodes=3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&amp;hellip;or if using &lt;code&gt;googleKubernetesR&lt;/code&gt; :&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(googleKubernetesR)
+
+## create a 3 node cluster called r-cluster with defaults
+createCluster(projectId = gcp_get_project(), zone = &amp;quot;europe-west3-b&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You&amp;rsquo;ll need to wait a bit as it provisions all the VMs.&lt;/p&gt;
+
+&lt;p&gt;Most of the below will use the terminal/shell for working rather than R, but in the future a lot of this may be possible via &lt;code&gt;googleKubernetesR&lt;/code&gt; within an R session.&lt;/p&gt;
+
+&lt;p&gt;Set up your shell to get the credentials for Kuberctl:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;gcloud container clusters get-credentials r-cluster
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And we are all set to start setting up this cluster for R jobs!&lt;/p&gt;
+
+&lt;p&gt;Here is a screenshot from the web UI of what it should look like:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;r-cluster.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;part-2-install-the-nginx-ingress-controller&#34;&gt;Part 2 - Install the nginx ingress controller&lt;/h2&gt;
+
+&lt;p&gt;The first recommended setup is to enable an ingress controller.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;ingress_controller.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Image from &lt;a href=&#34;https://www.nginx.com/products/nginx/kubernetes-ingress-controller/&#34;&gt;nginx&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;This is a pod that directs internet traffic to the right R container we set up later.&lt;/p&gt;
+
+&lt;p&gt;We install the ingress controller via &lt;a href=&#34;https://helm.sh/&#34;&gt;Helm&lt;/a&gt; and its counterpart Tiller on the cluster.&lt;/p&gt;
+
+&lt;p&gt;Helm is a package manager for Kubernetes.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;You can skip installing Helm/Tiller/ingress controller if you don&amp;rsquo;t need to have R apps on a URL, for instance if its just scheduled cron jobs you want on your cluster, but it is recommended if you want to serve up APIs and Shiny.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The below is mostly copied straight from &lt;a href=&#34;https://docs.bitnami.com/kubernetes/how-to/configure-rbac-in-your-kubernetes-cluster/&#34;&gt;Bitnami&lt;/a&gt;&amp;rsquo;s article.&lt;/p&gt;
+
+&lt;h3 id=&#34;install-helm&#34;&gt;Install Helm&lt;/h3&gt;
+
+&lt;p&gt;&lt;em&gt;The below assumes RBAC rules are enabled, which is true from Kubernetes version 1.8 onwards.&lt;/em&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;curl -o get_helm.sh https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get
+chmod +x get_helm.sh
+./get_helm.sh
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;install-tiller-on-cluster&#34;&gt;Install Tiller on cluster&lt;/h3&gt;
+
+&lt;h4 id=&#34;step-1-create-the-tiller-service-account&#34;&gt;Step 1: Create the Tiller service account&lt;/h4&gt;
+
+&lt;p&gt;Create a tiller-serviceaccount.yaml file using kubectl:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;kubectl create serviceaccount tiller --namespace kube-system
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;step-2-bind-the-tiller-service-account-to-the-cluster-admin-role&#34;&gt;Step 2: Bind the Tiller service account to the cluster-admin role&lt;/h4&gt;
+
+&lt;p&gt;Create a &lt;code&gt;tiller-clusterrolebinding.yaml&lt;/code&gt; file with the following contents:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;      kind: ClusterRoleBinding
+      apiVersion: rbac.authorization.k8s.io/v1beta1
+      metadata:
+        name: tiller-clusterrolebinding
+      subjects:
+      - kind: ServiceAccount
+        name: tiller
+        namespace: kube-system
+      roleRef:
+        kind: ClusterRole
+        name: cluster-admin
+        apiGroup: &amp;quot;&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Deploy the ClusterRoleBinding:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;kubectl create -f tiller-clusterrolebinding.yaml
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;step-3-update-the-existing-tiller-deployment&#34;&gt;Step 3: Update the existing Tiller deployment&lt;/h4&gt;
+
+&lt;p&gt;Update the existing tiller-deploy deployment with the Service Account you created earlier:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;helm init --service-account tiller --upgrade
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Wait a few seconds for the Tiller server to be redeployed.&lt;/p&gt;
+
+&lt;h4 id=&#34;step-4-test-the-new-helm&#34;&gt;Step 4: Test the new Helm&lt;/h4&gt;
+
+&lt;p&gt;All being well, you should be able to execute this command without errors:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;helm ls
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And that&amp;rsquo;s it! You have configured Helm in your Kubernetes cluster.&lt;/p&gt;
+
+&lt;h4 id=&#34;step-5-deploy-ngnix-ingress-controller&#34;&gt;Step 5: Deploy ngnix Ingress Controller&lt;/h4&gt;
+
+&lt;p&gt;Now you can deploy the &lt;a href=&#34;https://kubernetes.github.io/ingress-nginx/&#34;&gt;nginx ingress controller&lt;/a&gt; using Helm to take care of details:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;helm install --name nginx-ingress stable/nginx-ingress --set rbac.create=true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You should see your IP when you issue:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;kubectl get service nginx-ingress-controller
+#&amp;gt; NAME                       CLUSTER-IP    EXTERNAL-IP   PORT(S)                      AGE
+#&amp;gt; nginx-ingress-controller   10.7.253.89   &amp;lt;pending&amp;gt;     80:32713/TCP,443:31061/TCP   23s
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;part-3-deploying-r-workloads&#34;&gt;Part 3 - Deploying R Workloads!&lt;/h2&gt;
+
+&lt;p&gt;Now the cluster is all setup for you to deploy your R containers.  You can install other containers in any other language too, such as normal HTML webapps or utilties.&lt;/p&gt;
+
+&lt;p&gt;We deploy them using the command &lt;code&gt;kubectl run&lt;/code&gt;, and go through some examples below.&lt;/p&gt;
+
+&lt;h3 id=&#34;a-shiny-apps&#34;&gt;A: Shiny apps&lt;/h3&gt;
+
+&lt;p&gt;Below we deploy two Shiny apps, in this case the &lt;a href=&#34;https://github.com/cloudyr/googleComputeEngineR/tree/master/inst/dockerfiles/shiny-googleAuthRdemo&#34;&gt;&lt;code&gt;googleAuthR&lt;/code&gt; demo app&lt;/a&gt; that is configured to run on port 3838, in a &lt;code&gt;/shiny/&lt;/code&gt; folder, and a &lt;a href=&#34;https://github.com/flaviobarros/shiny-wordcloud&#34;&gt;wordcloud Shiny app by Flavio Barros&lt;/a&gt; that has had its Dockerfile configured to run on port 80 in the root folder, to demonstrate how to handle different Docker deployments.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;kubectl run shiny1 --image gcr.io/gcer-public/shiny-googleauthrdemo:latest --port 3838
+kubectl run shiny2 --image=flaviobarros/shiny-wordcloud --port=80
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;expose-containers-as-node-ports&#34;&gt;Expose containers as node ports&lt;/h4&gt;
+
+&lt;p&gt;At the moment we are only selecting which services the cluster will run - we won&amp;rsquo;t be able to see them yet until we expose the apps and configure the ingress rules&lt;/p&gt;
+
+&lt;p&gt;These will be pointed to via the nginx ingress controller.&lt;/p&gt;
+
+&lt;p&gt;We first open up their ports as nodeports, so the ingress can see them:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;kubectl expose deployment shiny1 --target-port=3838  --type=NodePort
+kubectl expose deployment shiny2 --target-port=80  --type=NodePort
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;create-ingress-with-ngninx&#34;&gt;Create Ingress with ngninx&lt;/h4&gt;
+
+&lt;p&gt;This lets you be able to call the different services from one ip address.&lt;/p&gt;
+
+&lt;p&gt;Save this as &lt;code&gt;r-ingress-nginx.yaml&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: r-ingress-nginx
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: / 
+    nginx.ingress.kubernetes.io/ssl-redirect: &amp;quot;false&amp;quot;
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /wordcloud/
+      # app deployed to /wordcloud/
+        backend:
+          serviceName: shiny2
+          servicePort: 80
+      - path: /gar/
+      # app deployed to /gar/shiny/
+        backend:
+          serviceName: shiny1
+          servicePort: 3838
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Deploy via&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;kubectl apply -f r-ingress-nginx.yaml
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Verify and keep refreshing until it has an ip address assigned in the &lt;code&gt;ADDRESS&lt;/code&gt; field (5mins)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;kubectl get ingress r-ingress-nginx
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;see-your-deployed-containers&#34;&gt;See your deployed containers&lt;/h4&gt;
+
+&lt;p&gt;The Nginx ingress controller takes care of any URL path not covered in the &lt;code&gt;r-ingress-nginx&lt;/code&gt; ingress.  By default this should give a &lt;code&gt;default backend - 404&lt;/code&gt; message.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;/gar/shiny/&lt;/code&gt; is served by the googleAuthR demo app.  &lt;code&gt;/gar/&lt;/code&gt; covers the standard Shiny welcome screen, and &lt;code&gt;/shiny/&lt;/code&gt; is the folder that is configured in the Dockerfile&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/wordcloud/&lt;/code&gt; holds the Wordcloud Shiny app. In this case, the Shiny app is configured to appear in the root directory of the &lt;code&gt;/wordcloud/&lt;/code&gt; URL.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Here are some screenshots:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;gar_app.png&#34; alt=&#34;googleAuthR app&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;wordcloud.png&#34; alt=&#34;Wordcloud app&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;default404.png&#34; alt=&#34;Default webpage if not defined in ingress&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Note it matters where you put the app in your Dockerfile.  The &lt;code&gt;nginx.ingress.kubernetes.io/rewrite-target: /&lt;/code&gt; line in the ingress lets you specify a URL that is relative to your specified URLs.&lt;/p&gt;
+
+&lt;p&gt;If you want to have your app served on the absolute URL specified in the Dockerfile, see below for a no-redirect version.&lt;/p&gt;
+
+&lt;h4 id=&#34;no-redirects&#34;&gt;No redirects&lt;/h4&gt;
+
+&lt;p&gt;Without redirects work too, but the Shiny app needs to have the correct URL path configured in its Docker that matches the URLs you are specifying in the Ingress e.g. for our examples as the googleAuthR demo is in path &lt;code&gt;/shiny/&lt;/code&gt; and the Wordcloud demo in the root &lt;code&gt;/&lt;/code&gt;, the Ingress rules need to match those. Beware clashes where two Shiny apps have configured to the same URL path, e.g. root &lt;code&gt;/&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Save this as &lt;code&gt;r-ingress-nginx-noredirect.yaml&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: r-ingress-nginx
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    #nginx.ingress.kubernetes.io/rewrite-target: / # not used in this example
+    nginx.ingress.kubernetes.io/ssl-redirect: &amp;quot;false&amp;quot;
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          serviceName: shiny2
+          servicePort: 80
+      - path: /shiny/
+        backend:
+          serviceName: shiny1
+          servicePort: 3838
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Deploy via&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;kubectl apply -f r-ingress-nginx-noredirect.yaml
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Again, the Nginx ingress controller takes care of any URL path not covered in the &lt;code&gt;r-ingress-nginx&lt;/code&gt; ingress.&lt;/p&gt;
+
+&lt;p&gt;However now:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;/shiny/&lt;/code&gt; is served by the googleAuthR demo app.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/&lt;/code&gt; holds the Wordcloud Shiny app.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;b-r-apis-opencpu&#34;&gt;B: R APIs - OpenCPU&lt;/h3&gt;
+
+&lt;p&gt;Kubernetes is well suited to serving R APIs as they can auto-scale to demand, covering peaks and troughs in demand.&lt;/p&gt;
+
+&lt;p&gt;A demo API is shown below, using &lt;a href=&#34;http://code.markedmondson.me/predictClickOpenCPU/&#34;&gt;&lt;code&gt;openCPU&lt;/code&gt; for predicting website clicks&lt;/a&gt;, but the same principle allies if using &lt;code&gt;plumber&lt;/code&gt; or another framework by swapping out the Dockerfile to serve the API on a port.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;This assumes you have configured the ingress controller above&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;kubectl run opencpu-demo --image gcr.io/gcer-public/opencpu-demo:latest --port 8004
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Expose the port as before:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;kubectl expose deployment opencpu-demo --target-port=8004  --type=NodePort
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now we do another Ingress deployment for the R-API, in addition to the Shiny apps above.&lt;/p&gt;
+
+&lt;p&gt;Save the below as &lt;code&gt;r-ingress-opencpu.yaml&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: r-ingress-nginx-ocpu
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: &amp;quot;false&amp;quot;
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /ocpu/
+        backend:
+          serviceName: opencpu-demo
+          servicePort: 8004
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&amp;hellip;and deploy via:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;kubectl apply -f r-ingress-opencpu.yaml
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Your ip address will be as shown as your &lt;code&gt;ADDRESS&lt;/code&gt; when you issue:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;kubectl get ingress r-ingress-nginx-ocpu
+#&amp;gt; NAME                   HOSTS     ADDRESS         PORTS     AGE
+#&amp;gt; r-ingress-nginx-ocpu   *         35.205.249.34   80        10m
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note no rewriting this time as OpenCPU takes care of itself on &lt;code&gt;/ocpu/&lt;/code&gt; folder.&lt;/p&gt;
+
+&lt;h3 id=&#34;use-your-opencpu-installation&#34;&gt;Use your OpenCPU installation&lt;/h3&gt;
+
+&lt;p&gt;Assuming your IP is &lt;code&gt;1.2.3.4&lt;/code&gt;; we can see the OpenCPU is installed via &lt;code&gt;1.2.3.4/ocpu/info&lt;/code&gt; and the test page at &lt;code&gt;1.2.3.4/ocpu/test/&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;For our example, the custom package uploaded is available at &lt;code&gt;1.2.3.4/ocpu/library/predictClickOpenCPU&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;open-cpu-running.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;We use the API for this package by creating a POST hit to API endpoint&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;1.2.3.4/ocpu/library/predictClickOpenCPU/R/predictMarkov/json&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;hellip;with the parameter &lt;code&gt;pageview_names=[&amp;quot;/example/96&amp;quot;,&amp;quot;/example/213&amp;quot;,&amp;quot;/example/107&amp;quot;]&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Constructing the above in thwe terminal with &lt;code&gt;curl&lt;/code&gt;, we test the API is functioning:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;curl --data &#39;pageview_names=[&amp;quot;/example/96&amp;quot;,&amp;quot;/example/213&amp;quot;,&amp;quot;/example/107&amp;quot;]&#39; http://35.233.42.6/ocpu/library/predictClickOpenCPU/R/predictMarkov/json
+#&amp;gt; {
+#  &amp;quot;page&amp;quot;: [&amp;quot;/example/251&amp;quot;],
+#  &amp;quot;probability&amp;quot;: [0.5657]
+#&amp;gt; }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Web API endpoints can also be used as webhooks, for instance to react and do something when something is pushed to GitHub for continuous integration purposes.&lt;/p&gt;
+
+&lt;h3 id=&#34;c-scheduled-r-tasks-via-cronjobs&#34;&gt;C: Scheduled R - Tasks via cronJobs&lt;/h3&gt;
+
+&lt;p&gt;Kuberenetes has a special option for deploying scheduled tasks, called cronJobs.&lt;/p&gt;
+
+&lt;p&gt;When configuring your Dockerfile, you can choose so it runs entirely self-contained, perhaps calling an API and writing the result to a database.  For each new job you can make a new Dockerfile and build them on something like build triggers.&lt;/p&gt;
+
+&lt;p&gt;In that case the Dockerfile should run with all configuration files included in the Docker build.  One advantage of running on GKE is that the job can be authenticated with the same project via &lt;a href=&#34;http://code.markedmondson.me/googleAuthR/reference/gar_gce_auth.html&#34;&gt;&lt;code&gt;googleAuthR::gar_gce_auth()&lt;/code&gt;&lt;/a&gt; so will have access to Google Cloud Storage, BigQuery etc.&lt;/p&gt;
+
+&lt;p&gt;An alternative is to configure the Dockerfile to rely on a config file, and have that config file mounted as a volume in the pod - that isn&amp;rsquo;t covered here yet.&lt;/p&gt;
+
+&lt;h4 id=&#34;creating-an-executable-r-dockerfile&#34;&gt;Creating an executable R Dockerfile&lt;/h4&gt;
+
+&lt;p&gt;This is an example Dockerfile that installs dependcies and R packages, loads a local configuration file then runs a custom function when it is called upon by the cronJob:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;FROM rocker/verse
+MAINTAINER Mark Edmondson (r@sunholo.com)
+
+# install R package dependencies
+RUN apt-get update &amp;amp;&amp;amp; apt-get install -y \
+    gcc gsl-bin libblas-dev \
+    ## etc....
+    ## clean up
+    &amp;amp;&amp;amp; apt-get clean \ 
+    &amp;amp;&amp;amp; rm -rf /var/lib/apt/lists/ \ 
+    &amp;amp;&amp;amp; rm -rf /tmp/downloaded_packages/ /tmp/*.rds
+
+# any necessary environment arguments
+ENV SECRET_ARG hellomum
+
+# Install packages from CRAN and GitHub
+RUN install2.r --error \ 
+    -r &#39;http://cran.rstudio.com&#39; \
+    googleAuthR googleAnalyticsR bigQueryR \
+    &amp;amp;&amp;amp; Rscript -e &amp;quot;devtools::install_github(&#39;MarkEdmondson1234/youtubeAnalyticsR&#39;)&amp;quot; \
+    &amp;amp;&amp;amp; Rscript -e &amp;quot;devtools::install_github(&#39;yourprivate/customPackage&#39;)&amp;quot; \
+    ## clean up
+    &amp;amp;&amp;amp; rm -rf /tmp/downloaded_packages/ /tmp/*.rds
+
+# my_config.yaml is in same folder as Dockerfile
+COPY my_config.yaml my_config.yaml
+
+## this runs when this Docker container is called
+CMD [&amp;quot;Rscript&amp;quot;, &amp;quot;-e&amp;quot;, &amp;quot;customPackage::do_something(&#39;my_config.yaml&#39;)&amp;quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;running-cronjobs&#34;&gt;Running cronJobs&lt;/h4&gt;
+
+&lt;p&gt;For &lt;a href=&#34;https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/&#34;&gt;cronJobs&lt;/a&gt;, specify the &lt;code&gt;schedule&lt;/code&gt; argument, and we change the restart policy to only do so on failure.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;kubectl run scheduled-r --schedule=&amp;quot;23 4 * * *&amp;quot; --restart=OnFailure --image=gcr.io/xxxxxx/private_docker_image:latest
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That is getting a bit complicated for the terminal , so I prefer to deploy via the file method:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: scheduledr
+spec:
+  schedule: &amp;quot;23 4 * * *&amp;quot;
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: my_image
+            image: gcr.io/xxxxxx/private_docker_image:latest
+          restartPolicy: OnFailure
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Save the file as say &lt;code&gt;cron-r.yaml&lt;/code&gt; and deploy via:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;kubectl create -f ./cron-r.yaml
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You should then see the job has been created via&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;kubectl get cronjob scheduledr
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And in the Web UI under &lt;a href=&#34;https://console.cloud.google.com/kubernetes/workload?project=iih-tools-analytics&amp;amp;authuser=0&amp;amp;workload_list_tablesize=50&#34;&gt;Workloads&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;cronJob.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;part-4-going-further&#34;&gt;Part 4 - Going further&lt;/h2&gt;
+
+&lt;p&gt;This article turned into a lot more words than I intended, so I&amp;rsquo;ll stop now, but see below on some more things I could have written about:&lt;/p&gt;
+
+&lt;h3 id=&#34;updating-your-cluster&#34;&gt;Updating your cluster&lt;/h3&gt;
+
+&lt;p&gt;Its a bit of configuration to get there, but once deployed since the services are running off Docker, and those in turn are built using build triggers that are from GitHub pushes, it means that changes to scripts can all be controlled via GitHub pushes and branches, which you are probably using anyway for version control.&lt;/p&gt;
+
+&lt;p&gt;When you change a configuration file and want to deploy, use &lt;code&gt;kubectl apply&lt;/code&gt; instead of &lt;code&gt;kubectl create&lt;/code&gt; to change the settings.&lt;/p&gt;
+
+&lt;p&gt;Its best practice to specify a dev and production branch to your GitHub Docker images, so you can safely test containers before you break your production.&lt;/p&gt;
+
+&lt;h3 id=&#34;secrets-and-https-ssl-configuration&#34;&gt;Secrets and https / SSL configuration&lt;/h3&gt;
+
+&lt;p&gt;Kubernetes supports more robust methods to guard your secrets that including them in the Dockerfiles - see &lt;a href=&#34;https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets-as-environment-variables&#34;&gt;here&lt;/a&gt; for proper treatment.&lt;/p&gt;
+
+&lt;p&gt;Related to that is serving over https.  In this case I found Bitnami the easiest method to follow, using Helm again to &lt;a href=&#34;https://docs.bitnami.com/kubernetes/how-to/secure-kubernetes-services-with-ingress-tls-letsencrypt/&#34;&gt;configure TLS with LetsEncrypt and Kube-lego&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;auto-scaling&#34;&gt;Auto scaling&lt;/h3&gt;
+
+&lt;p&gt;Launching the cluster with these flags enables auto-scaling&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;gcloud container clusters create r-cluster --num-nodes=0 --enable-autoscaling --min-nodes=0 --max-nodes=3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;On Google Kubernetes Engine this scales down to 0, which should be cheaper than running a few CPUs running &lt;sup&gt;24&lt;/sup&gt;&amp;frasl;&lt;sub&gt;7&lt;/sub&gt;, and you can configure when new nodes are launched such as when it hits 80% CPU.&lt;/p&gt;
+
+&lt;h3 id=&#34;parallel-tasks&#34;&gt;Parallel tasks&lt;/h3&gt;
+
+&lt;p&gt;For big parallel processing tasks, Kubernetes is an option that can launch as many CPUs you need.&lt;/p&gt;
+
+&lt;p&gt;However, you will need to configure your workload so that each service works on a different part of the data, so some form of central ledger is needed that keeps track of which rows on the database or files have been treated, and to remove them from the input files once completed.&lt;/p&gt;
+
+&lt;p&gt;A strategy to handle this is to use message brokers that specify which work needs to be done. An example of using a &lt;a href=&#34;https://kubernetes.io/docs/tasks/job/coarse-parallel-processing-work-queue/&#34;&gt;message broker is here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;and-finally&#34;&gt;And finally&amp;hellip;&lt;/h3&gt;
+
+&lt;p&gt;After all that, do remember to tear down your cluster and/or load balancers when finished with, as you are charged by minute of uptime per node.  Most tutorials include this at the end - you can either delete in the web UI but to be complete here:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Delete the Ingress: This deallocates the ephemeral external IP address and the load balancing resources associated to your application:&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;kubectl delete ingress your-ingress
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Delete the cluster: This deletes the compute nodes of your container cluster and other resources such as the Deployments in the cluster:&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;gcloud container clusters delete r-cluster
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
+
+&lt;p&gt;When working with Kubernetes documentation you can tell that it is a fast changing developing product, which can be a bit frustrating when looking for solutions, but I anticipate the APIs to settle down in the future.&lt;/p&gt;
+
+&lt;p&gt;This should hopefully serve as a good jumping off point for you to develop your own Kubernetes R cluster.  Having got Kubernetes under my belt I now feel fully tooled up for deploying R (and other applications) at scale, and in an exciting and developing framework that should stand in good sted for a few years to come.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>Run RStudio Server on a Chromebook as a Cloud Native</title>
       <link>http://code.markedmondson.me/rstudio-server-chromebook/</link>
       <pubDate>Tue, 05 Sep 2017 13:55:57 +0100</pubDate>

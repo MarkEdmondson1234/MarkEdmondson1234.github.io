@@ -29,7 +29,7 @@
 <meta property="og:url" content="http://code.markedmondson.me/" />
 
 
-<meta property="og:updated_time" content="2018-03-15T00:00:00&#43;00:00"/>
+<meta property="og:updated_time" content="2018-05-02T00:00:00&#43;00:00"/>
 
 
 
@@ -162,7 +162,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        16
+        17
         <span>Posts</span>
       </div>
       <div class="article-info-block">
@@ -244,6 +244,156 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     <section id="main">
     
+    
+    <article class="article article-type-post" itemscope="" itemprop="blogPost">
+        <div class="article-inner">
+            
+            <a href="http://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts" itemprop="url">
+                <img src="http://code.markedmondson.me/../banners/r-kubernetes.png" class="article-banner">
+            
+            </a>
+
+            <header class="article-header">
+    <a href="http://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts">
+    <h1 class="article-title" itemprop="name">
+        R on Kubernetes - serverless Shiny, R APIs and scheduled scripts
+    </h1>
+    </a>
+    <div class="article-meta">
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2018-05-02 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-05-02</time>
+            &middot;
+            2923
+            words
+            &middot;
+            14
+            minute read
+        </div>
+
+
+        
+            
+            
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/docker">docker</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="http://code.markedmondson.me/tags/r">R</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody">
+                <p>
+                    <h2 id="why-run-r-on-kubernetes">Why run R on Kubernetes?</h2>
+
+<p><a href="https://kubernetes.io/">Kubernetes</a> is a free and open-source utility to run jobs within a computer cluster.  It abstracts away the servers the jobs are running on so you need only worry about the code to run.  It has features such as <a href="https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/">scheduling</a>, <a href="https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler">auto-scaling</a>, and auto-healing to replace nodes if they breakdown.</p>
+
+<p>If you only need to run R on a single machine, then its probably a bit OTT to use Kubernetes, but if you are starting to work with multiple Docker containers and/or VMs it gets more and more attractive to have a way to easily orchestrate them.</p>
+
+<p>Kubernetes works via <a href="https://www.docker.com/">Docker</a> containers, so if you are already familiar with using Docker for abstracting away code environments, it should be a short step up to abstracting away the computers those Docker containers run upon.
+
+                    <br>
+                </p>
+                <p class="article-more-link">
+                    <a href="http://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts">
+                        Read more
+                    </a>
+                </p>
+            </div>
+            <footer class="article-footer">
+    <a data-url="http://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts" data-id="ce9e9787d1d38722b93b2a27add3ce01" class="article-share-link">
+        <i class="fa fa-share"></i>
+        Share
+    </a>
+    
+    <a href="http://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts/#disqus_thread" class="article-comment-link">
+        Comments
+    </a>
+    
+
+    <script>
+    (function ($) {
+        
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+    </script>
+</footer>
+
+        </div>
+    </article>
     
     <article class="article article-type-post" itemscope="" itemprop="blogPost">
         <div class="article-inner">
@@ -409,7 +559,7 @@ Data Studio is a free online solution, that I have found to be very quick to get
             <i class="fa fa-calendar"></i>
             <time datetime="2018-01-11 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-01-11</time>
             &middot;
-            1867
+            1873
             words
             &middot;
             9
@@ -2626,6 +2776,25 @@ Using this setup means its all written in Markdown so I get control over everyth
             
             <li>
                 <div class="item-thumbnail">
+                    <a href="http://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts" class="thumbnail">
+                    
+                        <span style="background-image:url(http://code.markedmondson.me/../banners/r-kubernetes.png)" alt="Mark Edmondson" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    
+                    
+                    <p class="item-title"><a href="http://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts" class="title">R on Kubernetes - serverless Shiny, R APIs and scheduled scripts</a></p>
+                    <p class="item-date">
+                        <time datetime="2018-05-02 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-05-02</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
                     <a href="http://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown" class="thumbnail">
                     
                         <span style="background-image:url(http://code.markedmondson.me/../banners/datastudio.png)" alt="Mark Edmondson" class="thumbnail-image"></span>
@@ -2694,23 +2863,6 @@ Using this setup means its all written in Markdown so I get control over everyth
                 </div>
             </li>
             
-            <li>
-                <div class="item-thumbnail">
-                    <a href="http://code.markedmondson.me/r-packages/" class="thumbnail">
-                    
-                        <span style="background-image:url(http://code.markedmondson.me/banners/packages.jpeg)" alt="Mark Edmondson" class="thumbnail-image"></span>
-                    
-                    </a>
-                </div>
-                <div class="item-inner">
-                    
-                    <p class="item-title"><a href="http://code.markedmondson.me/r-packages/" class="title">My R Packages</a></p>
-                    <p class="item-date">
-                        <time datetime="2017-01-24 21:20:50 &#43;0100 CET" itemprop="datePublished">2017-01-24</time>
-                    </p>
-                </div>
-            </li>
-            
         </ul>
     </div>
 </div>
@@ -2753,7 +2905,7 @@ Using this setup means its all written in Markdown so I get control over everyth
                 <a class="category-list-link" href="http://code.markedmondson.me/tags/docker">
                     docker
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">5</span>
             </li>
             
             <li class="category-list-item">
@@ -2825,7 +2977,7 @@ Using this setup means its all written in Markdown so I get control over everyth
                 <a class="category-list-link" href="http://code.markedmondson.me/tags/r">
                     r
                 </a>
-                <span class="category-list-count">14</span>
+                <span class="category-list-count">15</span>
             </li>
             
             <li class="category-list-item">
