@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Google Language on Mark Edmondson</title>
-    <link>http://code.markedmondson.me/tags/google-language/index.xml</link>
+    <link>https://code.markedmondson.me/tags/google-language/index.xml</link>
     <description>Recent content in Google Language on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
     <copyright>Powered by [Hugo](//gohugo.io). Theme by [PPOffice](http://github.com/ppoffice).</copyright>
-    <atom:link href="http://code.markedmondson.me/tags/google-language/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://code.markedmondson.me/tags/google-language/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API</title>
-      <link>http://code.markedmondson.me/searchconsoler-vs-googlelanguager</link>
+      <link>https://code.markedmondson.me/searchconsoler-vs-googlelanguager</link>
       <pubDate>Thu, 11 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://code.markedmondson.me/searchconsoler-vs-googlelanguager</guid>
+      <guid>https://code.markedmondson.me/searchconsoler-vs-googlelanguager</guid>
       <description>&lt;p&gt;With the launch of the Google Natural Language API (NLP API), and the emphasis of machine learning that is said to account for up to 30% of the SEO algorithmn for Google search, a natural question is whether you can use Google’s own macine learning APIs to help optimise your website for search.&lt;/p&gt;
 &lt;p&gt;Whilst I don’t believe they will offer exactly the same results, I can see useful applications that include:&lt;/p&gt;
 &lt;ul&gt;

@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Google Auth on Mark Edmondson</title>
-    <link>http://code.markedmondson.me/tags/google-auth/index.xml</link>
+    <link>https://code.markedmondson.me/tags/google-auth/index.xml</link>
     <description>Recent content in Google Auth on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
     <copyright>Powered by [Hugo](//gohugo.io). Theme by [PPOffice](http://github.com/ppoffice).</copyright>
-    <atom:link href="http://code.markedmondson.me/tags/google-auth/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://code.markedmondson.me/tags/google-auth/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Embedding Google Data Studio into RMarkdown</title>
-      <link>http://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown</link>
+      <link>https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown</link>
       <pubDate>Thu, 15 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown</guid>
+      <guid>https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown</guid>
       <description>&lt;div id=&#34;adding-google-data-studio-dashboards-to-rmarkdown&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Adding Google Data Studio Dashboards to RMarkdown&lt;/h2&gt;
 &lt;p&gt;This week I learnt you can take &lt;a href=&#34;https://datastudio.google.com&#34;&gt;Google Data Studio&lt;/a&gt; reports and, via their embed feature, paste them straight into an RMarkdown HTML document.&lt;/p&gt;
@@ -65,12 +65,12 @@ style=&amp;quot;border:0&amp;quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt
     
     <item>
       <title>My R Packages</title>
-      <link>http://code.markedmondson.me/r-packages/</link>
+      <link>https://code.markedmondson.me/r-packages/</link>
       <pubDate>Tue, 24 Jan 2017 21:20:50 +0100</pubDate>
       
-      <guid>http://code.markedmondson.me/r-packages/</guid>
+      <guid>https://code.markedmondson.me/r-packages/</guid>
       <description>&lt;p&gt;A full list of R packages I have published are on &lt;a href=&#34;https://github.com/MarkEdmondson1234&#34;&gt;my Github&lt;/a&gt;, but some notable ones are below.&lt;/p&gt;
-&lt;p&gt;Some are part of the &lt;a href=&#34;http://cloudyr.github.io/&#34;&gt;cloudyR project&lt;/a&gt;, which has many packages useful for using R in the cloud. &lt;img src=&#34;http://code.markedmondson.me/images/cloudyr2.png&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Some are part of the &lt;a href=&#34;http://cloudyr.github.io/&#34;&gt;cloudyR project&lt;/a&gt;, which has many packages useful for using R in the cloud. &lt;img src=&#34;https://code.markedmondson.me/images/cloudyr2.png&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;I concentrate on the Google cloud below, but be sure to check out the other packages if you’re looking to work with AWS or other cloud based services.&lt;/p&gt;
 &lt;div id=&#34;cran&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;CRAN&lt;/h2&gt;
@@ -120,7 +120,7 @@ style=&amp;quot;border:0&amp;quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;As you can tell, most are aimed towards helping R users with help in digital analytics and cloud based services. You can get some idea of how they can &lt;a href=&#34;http://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/&#34;&gt;work together in a digital analytics workflow here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;As you can tell, most are aimed towards helping R users with help in digital analytics and cloud based services. You can get some idea of how they can &lt;a href=&#34;https://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/&#34;&gt;work together in a digital analytics workflow here&lt;/a&gt;.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;github&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;GITHUB&lt;/h2&gt;
@@ -187,10 +187,10 @@ style=&amp;quot;border:0&amp;quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt
     
     <item>
       <title>googleAuthR 0.2.0</title>
-      <link>http://code.markedmondson.me/googleAuthR-0.2.0/</link>
+      <link>https://code.markedmondson.me/googleAuthR-0.2.0/</link>
       <pubDate>Fri, 05 Feb 2016 23:03:57 +0100</pubDate>
       
-      <guid>http://code.markedmondson.me/googleAuthR-0.2.0/</guid>
+      <guid>https://code.markedmondson.me/googleAuthR-0.2.0/</guid>
       <description>
 
 &lt;p&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/googleAuthR&#34;&gt;googleAuthR&lt;/a&gt; is now on CRAN version 0.2.0.&lt;/p&gt;

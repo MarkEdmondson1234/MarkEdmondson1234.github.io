@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Google Tag Manager on Mark Edmondson</title>
-    <link>http://code.markedmondson.me/tags/google-tag-manager/index.xml</link>
+    <link>https://code.markedmondson.me/tags/google-tag-manager/index.xml</link>
     <description>Recent content in Google Tag Manager on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
     <copyright>Powered by [Hugo](//gohugo.io). Theme by [PPOffice](http://github.com/ppoffice).</copyright>
-    <atom:link href="http://code.markedmondson.me/tags/google-tag-manager/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://code.markedmondson.me/tags/google-tag-manager/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>My R Packages</title>
-      <link>http://code.markedmondson.me/r-packages/</link>
+      <link>https://code.markedmondson.me/r-packages/</link>
       <pubDate>Tue, 24 Jan 2017 21:20:50 +0100</pubDate>
       
-      <guid>http://code.markedmondson.me/r-packages/</guid>
+      <guid>https://code.markedmondson.me/r-packages/</guid>
       <description>&lt;p&gt;A full list of R packages I have published are on &lt;a href=&#34;https://github.com/MarkEdmondson1234&#34;&gt;my Github&lt;/a&gt;, but some notable ones are below.&lt;/p&gt;
-&lt;p&gt;Some are part of the &lt;a href=&#34;http://cloudyr.github.io/&#34;&gt;cloudyR project&lt;/a&gt;, which has many packages useful for using R in the cloud. &lt;img src=&#34;http://code.markedmondson.me/images/cloudyr2.png&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Some are part of the &lt;a href=&#34;http://cloudyr.github.io/&#34;&gt;cloudyR project&lt;/a&gt;, which has many packages useful for using R in the cloud. &lt;img src=&#34;https://code.markedmondson.me/images/cloudyr2.png&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;I concentrate on the Google cloud below, but be sure to check out the other packages if you’re looking to work with AWS or other cloud based services.&lt;/p&gt;
 &lt;div id=&#34;cran&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;CRAN&lt;/h2&gt;
@@ -66,7 +66,7 @@
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;As you can tell, most are aimed towards helping R users with help in digital analytics and cloud based services. You can get some idea of how they can &lt;a href=&#34;http://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/&#34;&gt;work together in a digital analytics workflow here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;As you can tell, most are aimed towards helping R users with help in digital analytics and cloud based services. You can get some idea of how they can &lt;a href=&#34;https://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/&#34;&gt;work together in a digital analytics workflow here&lt;/a&gt;.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;github&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;GITHUB&lt;/h2&gt;
@@ -133,15 +133,15 @@
     
     <item>
       <title>Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two</title>
-      <link>http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/</link>
+      <link>https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/</link>
       <pubDate>Sun, 22 Jan 2017 14:20:57 +0100</pubDate>
       
-      <guid>http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/</guid>
+      <guid>https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/</guid>
       <description>
 
 &lt;p&gt;In part two of this two part series we walk through the steps to stream data from a &lt;a href=&#34;https://www.google.com/analytics/tag-manager/&#34;&gt;Google Tag Manager&lt;/a&gt; (GTM) implementation into a &lt;a href=&#34;https://cloud.google.com/appengine/&#34;&gt;Google App Engine&lt;/a&gt; (GAE) web app, which then adds data to a &lt;a href=&#34;https://cloud.google.com/bigquery/&#34;&gt;BigQuery&lt;/a&gt; table via BigQuery&amp;rsquo;s data streaming capability.  In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in &lt;a href=&#34;https://shiny.rstudio.com/&#34;&gt;Shiny&lt;/a&gt; and the JavaScript visualisation library &lt;a href=&#34;http://jkunst.com/highcharter/&#34;&gt;Highcharts&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;Read &lt;a href=&#34;http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/&#34;&gt;part one here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Read &lt;a href=&#34;https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/&#34;&gt;part one here&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;The project combines several languages where their advantages lie: Python for its interaction with Google APIs and its quick start creating your own API on App Engine, SQL to query the BigQuery data itself, R for its forecasting libraries and the reactive Shiny framework, and JavaScript for the visualisation and data capture at the Google Tag Manager end.&lt;/p&gt;
 
@@ -257,7 +257,7 @@ test = hashlib.sha224(q+salt).hexdigest()
 
 &lt;p&gt;&amp;hellip;or easier is to just run one call, then check the logs for the hash in the debug messages:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://code.markedmondson.me/images/secrethash.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://code.markedmondson.me/images/secrethash.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;full-app-engine-script&#34;&gt;Full App Engine Script&lt;/h3&gt;
 
@@ -479,15 +479,15 @@ shinyUI(fluidPage(
     
     <item>
       <title>Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one</title>
-      <link>http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/</link>
+      <link>https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/</link>
       <pubDate>Thu, 12 Jan 2017 23:03:57 +0100</pubDate>
       
-      <guid>http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/</guid>
+      <guid>https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/</guid>
       <description>
 
 &lt;p&gt;In part one of this two part series we walk through the steps to stream data from a &lt;a href=&#34;https://www.google.com/analytics/tag-manager/&#34;&gt;Google Tag Manager&lt;/a&gt; (GTM) implementation into a &lt;a href=&#34;https://cloud.google.com/appengine/&#34;&gt;Google App Engine&lt;/a&gt; (GAE) web app, which then adds data to a &lt;a href=&#34;https://cloud.google.com/bigquery/&#34;&gt;BigQuery&lt;/a&gt; table via BigQuery&amp;rsquo;s data streaming capability.  In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in &lt;a href=&#34;https://shiny.rstudio.com/&#34;&gt;Shiny&lt;/a&gt; and the JavaScript visualisation library &lt;a href=&#34;http://jkunst.com/highcharter/&#34;&gt;Highcharts&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;Read &lt;a href=&#34;http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/&#34;&gt;part two here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Read &lt;a href=&#34;https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/&#34;&gt;part two here&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;The project combines several languages where their advantages lie: Python for its interaction with Google APIs and its quick start creating your own API on App Engine, SQL to query the BigQuery data itself, R for its forecasting libraries and the reactive Shiny framework, and JavaScript for the visualisation and data capture at the Google Tag Manager end.&lt;/p&gt;
 
