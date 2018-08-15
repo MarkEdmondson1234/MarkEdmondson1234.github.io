@@ -2,19 +2,58 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Google Analytics on Mark Edmondson</title>
-    <link>https://code.markedmondson.me/tags/google-analytics/index.xml</link>
+    <link>/tags/google-analytics/index.xml</link>
     <description>Recent content in Google Analytics on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
     <copyright>Powered by [Hugo](//gohugo.io). Theme by [PPOffice](http://github.com/ppoffice).</copyright>
-    <atom:link href="https://code.markedmondson.me/tags/google-analytics/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/tags/google-analytics/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Talking Google Analytics dashboards via R, Shiny and Text-to-Speech APIs</title>
+      <link>/talking-google-analytics-dashboards</link>
+      <pubDate>Wed, 15 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/talking-google-analytics-dashboards</guid>
+      <description>&lt;p&gt;What really makes Google Analytics stand apart from other analytics solutions for me is its integration with the Google Cloud, such as BigQuery and its machine learning APIs. An example of this integration is given in this workshop video that details how to use the &lt;a href=&#34;https://developers.google.com/analytics/devguides/reporting/core/v4/&#34;&gt;Google Analytics&lt;/a&gt; and &lt;a href=&#34;https://cloud.google.com/text-to-speech/&#34;&gt;Text-to-speech&lt;/a&gt; APIs to create a dashboard that talks through your statistics.&lt;/p&gt;
+&lt;!--more--&gt;
+&lt;div id=&#34;youtube-workshop-video&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;YouTube Workshop video&lt;/h2&gt;
+&lt;p&gt;The whole 40min workshop is available below, which talks through &lt;a href=&#34;https://github.com/MarkEdmondson1234/verbal_ga_shiny&#34;&gt;this GitHub repo&lt;/a&gt;.&lt;/p&gt;
+&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/4Ht_vEXJ4wo&#34; frameborder=&#34;0&#34; allow=&#34;autoplay; encrypted-media&#34; allowfullscreen&gt;
+&lt;/iframe&gt;
+&lt;p&gt;A demo of the speech it creates can be heard in this audio snippet:&lt;/p&gt;
+&lt;audio controls&gt;
+&lt;source src=&#34;../verbal-demo.wav&#34;&gt;
+&lt;/audio&gt;
+&lt;p&gt;I’ve also cut out shorter snippets that focus on concepts if you want to skip in and out:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Part I - basic Shiny app with Google Analytics data: &lt;a href=&#34;https://youtu.be/IqAaCk_3ZKU&#34; class=&#34;uri&#34;&gt;https://youtu.be/IqAaCk_3ZKU&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Part II - adding text-to-speech with googleLanguageR &lt;a href=&#34;https://youtu.be/Ny0e7vHFu6o&#34; class=&#34;uri&#34;&gt;https://youtu.be/Ny0e7vHFu6o&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Part III - custom skin for the Shiny app using gentellelaShiny &lt;a href=&#34;https://youtu.be/Dp6Y6Trn97A&#34; class=&#34;uri&#34;&gt;https://youtu.be/Dp6Y6Trn97A&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div id=&#34;going-further&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Going further&lt;/h2&gt;
+&lt;p&gt;Whilst this proof of concept is a bit of fun to demonstrate how these APIs can work together via the R libraries &lt;a href=&#34;http://code.markedmondson.me/googleAnalyticsR/&#34;&gt;&lt;code&gt;googleAnalyticsR&lt;/code&gt;&lt;/a&gt; and &lt;a href=&#34;http://code.markedmondson.me/googleLanguageR/&#34;&gt;&lt;code&gt;googleLanguageR&lt;/code&gt;&lt;/a&gt;, I hope the applications can go beyond this demo.&lt;/p&gt;
+&lt;p&gt;Accessibility is an obvious first application, giving those that have trouble seeing another way to experience dashboard plots. Equally, the &lt;a href=&#34;http://code.markedmondson.me/googleLanguageR/articles/speech.html&#34;&gt;speech-to-text API&lt;/a&gt; offer a way to control reports without needing a dashboard. Often these services can also help enhance all users by letting them experience reports in other mediums such as by phone or in the car, and may help breathe life into stale dashboards that have a habit of slowly being ignored over time.&lt;/p&gt;
+&lt;p&gt;The &lt;a href=&#34;http://code.markedmondson.me/googleLanguageR/articles/translation.html&#34;&gt;Translation APIs&lt;/a&gt; also allow internationalisation of reports be it in speech or text, the &lt;a href=&#34;https://github.com/ropensci/googleLanguageR/tree/master/inst/shiny/capture_speech&#34;&gt;demo Shiny app of &lt;code&gt;googleLanguageR&lt;/code&gt;&lt;/a&gt; demonstrates talking in several languages.&lt;/p&gt;
+&lt;p&gt;Possibily the most advanced but potentially most powerful application uses the &lt;a href=&#34;http://code.markedmondson.me/googleLanguageR/articles/nlp.html&#34;&gt;Natural Language API&lt;/a&gt; to parse out meaning, entities and sentiment from text. For instance, grading user generated content and then creating data reports on the fly that may address their concerns.&lt;/p&gt;
+&lt;p&gt;Another interesting application may be how text/speech enabled apps can interact with other robots, such as Alexa or Google Home. As more and more apps become voice enabled, voice and computer generated speech could become a universal translator between systems that would take heavy coding otherwise.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;summary&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Summary&lt;/h2&gt;
+&lt;p&gt;Anyhow, I hope the video is of some use. I’m creating more video content these days as I think it helps see how a workflow happens in real life, along with all the umms and errs and mistakes that happen to everyone :) If you have any video requests do let me know, otherwise you can keep track of any new videos on my &lt;a href=&#34;https://www.youtube.com/channel/UC3pF8VqQGmtpjAr_9VUEmTQ/videos&#34;&gt;YouTube channel&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
     
     <item>
       <title>Four Ways to Schedule R scripts on Google Cloud Platform</title>
-      <link>https://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform</link>
+      <link>/4-ways-schedule-r-scripts-on-google-cloud-platform</link>
       <pubDate>Sun, 09 Jul 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform</guid>
+      <guid>/4-ways-schedule-r-scripts-on-google-cloud-platform</guid>
       <description>&lt;p&gt;A common question I come across is how to automate scheduling of R scripts downloading data. This post goes through some options that I have played around with, which I’ve mostly used for downloading API data such as Google Analytics using the Google Cloud platform, but the same principles could apply for AWS or Azure.&lt;/p&gt;
 &lt;!--more--&gt;
 &lt;div id=&#34;scheduling-scripts-advice&#34; class=&#34;section level2&#34;&gt;
@@ -327,12 +366,12 @@ env_variables:
     
     <item>
       <title>My R Packages</title>
-      <link>https://code.markedmondson.me/r-packages/</link>
+      <link>/r-packages/</link>
       <pubDate>Tue, 24 Jan 2017 21:20:50 +0100</pubDate>
       
-      <guid>https://code.markedmondson.me/r-packages/</guid>
+      <guid>/r-packages/</guid>
       <description>&lt;p&gt;A full list of R packages I have published are on &lt;a href=&#34;https://github.com/MarkEdmondson1234&#34;&gt;my Github&lt;/a&gt;, but some notable ones are below.&lt;/p&gt;
-&lt;p&gt;Some are part of the &lt;a href=&#34;http://cloudyr.github.io/&#34;&gt;cloudyR project&lt;/a&gt;, which has many packages useful for using R in the cloud. &lt;img src=&#34;https://code.markedmondson.me/images/cloudyr2.png&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Some are part of the &lt;a href=&#34;http://cloudyr.github.io/&#34;&gt;cloudyR project&lt;/a&gt;, which has many packages useful for using R in the cloud. &lt;img src=&#34;/images/cloudyr2.png&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;I concentrate on the Google cloud below, but be sure to check out the other packages if you’re looking to work with AWS or other cloud based services.&lt;/p&gt;
 &lt;div id=&#34;cran&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;CRAN&lt;/h2&gt;
@@ -382,7 +421,7 @@ env_variables:
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;As you can tell, most are aimed towards helping R users with help in digital analytics and cloud based services. You can get some idea of how they can &lt;a href=&#34;https://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/&#34;&gt;work together in a digital analytics workflow here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;As you can tell, most are aimed towards helping R users with help in digital analytics and cloud based services. You can get some idea of how they can &lt;a href=&#34;/digital-analytics-workflow-through-google-cloud/&#34;&gt;work together in a digital analytics workflow here&lt;/a&gt;.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;github&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;GITHUB&lt;/h2&gt;
@@ -449,10 +488,10 @@ env_variables:
     
     <item>
       <title>Insights sorting by delta metrics in the Google Analytics API v4</title>
-      <link>https://code.markedmondson.me/quicker-insight-sort-metric-delta/</link>
+      <link>/quicker-insight-sort-metric-delta/</link>
       <pubDate>Thu, 01 Dec 2016 23:03:57 +0100</pubDate>
       
-      <guid>https://code.markedmondson.me/quicker-insight-sort-metric-delta/</guid>
+      <guid>/quicker-insight-sort-metric-delta/</guid>
       <description>
 
 &lt;p&gt;As analysts, we are often called upon to see how website metrics have improved or declined over time.  This is easy enough when looking at trends, but if you are looking to break down over other dimensions, it can involve a lot of ETL to get to what you need.&lt;/p&gt;
@@ -551,10 +590,10 @@ delta_trans &amp;lt;- order_type(&amp;quot;transactions&amp;quot;,&amp;quot;DESC
     
     <item>
       <title>Efficient anti-sampling with the Google Analytics Reporting API</title>
-      <link>https://code.markedmondson.me/anti-sampling-google-analytics-api/</link>
+      <link>/anti-sampling-google-analytics-api/</link>
       <pubDate>Fri, 05 Aug 2016 23:03:57 +0100</pubDate>
       
-      <guid>https://code.markedmondson.me/anti-sampling-google-analytics-api/</guid>
+      <guid>/anti-sampling-google-analytics-api/</guid>
       <description>
 
 &lt;p&gt;Avoiding sampling is one of the most common reasons people start using the Google Analytics API.  This blog lays out some pseudo-code to do so in an efficient manner, avoiding too many unnecessary API calls.  The approach is used in the v4 calls for the R package &lt;a href=&#34;http://code.markedmondson.me/googleAnalyticsR/v4.html&#34;&gt;&lt;code&gt;googleAnalyticsR&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
@@ -708,10 +747,10 @@ for i in new_date_ranges:
     
     <item>
       <title>SEO keyword research using searchConsoleR and googleAnalyticsR</title>
-      <link>https://code.markedmondson.me/search-console-google-analytics-r-keyword-research/</link>
+      <link>/search-console-google-analytics-r-keyword-research/</link>
       <pubDate>Tue, 21 Jun 2016 23:03:57 +0100</pubDate>
       
-      <guid>https://code.markedmondson.me/search-console-google-analytics-r-keyword-research/</guid>
+      <guid>/search-console-google-analytics-r-keyword-research/</guid>
       <description>
 
 &lt;p&gt;In this blog we look at a method to estimate where to prioritise your SEO resources, estimating which keywords will give the greatest increase in revenue if you could improve their Google rank.&lt;/p&gt;
@@ -732,7 +771,7 @@ for i in new_date_ranges:
 
 &lt;p&gt;The method produced a targeted keyword list of 226 from an original seed list of ~21,000.  The top 30 revenue targets are shown in the plot below:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://code.markedmondson.me/images/see-potential.png&#34; alt=&#34;seo-forecast-estimate&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/see-potential.png&#34; alt=&#34;seo-forecast-estimate&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Read below on how the plot was generated and what the figures mean.&lt;/p&gt;
 
@@ -864,7 +903,7 @@ tidy_data &amp;lt;- joined_data %&amp;gt;%
 
 &lt;p&gt;A histogram of the accuracy estimate shows we consistently over estimate but the clicks and estimated sessions are within a magnitude:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://code.markedmondson.me/images/histogram1.png&#34; alt=&#34;keyword-sessio-click-estimate-histogram&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/histogram1.png&#34; alt=&#34;keyword-sessio-click-estimate-histogram&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Most of the session estimates were intrestingly around 1.3 times more than the clicks.  This may be because Search Console clicks act more like Google SEO users, but any other ideas please say in comments!&lt;/p&gt;
 
@@ -878,7 +917,7 @@ tidy_data &amp;lt;- joined_data %&amp;gt;%
 
 &lt;p&gt;The diagram below uses a weighted &lt;code&gt;loess&lt;/code&gt; within &lt;code&gt;ggplot2&lt;/code&gt; which is good to show trend but not for making predictions.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://code.markedmondson.me/images/ctr_scatter.png&#34; alt=&#34;ctr-scatter-plot&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/ctr_scatter.png&#34; alt=&#34;ctr-scatter-plot&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;a-click-curve-to-use&#34;&gt;A click curve to use&lt;/h3&gt;
 
@@ -907,7 +946,7 @@ click_curve &amp;lt;- click_curve %&amp;gt;%
 
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://code.markedmondson.me/images/ctr-curve.png&#34; alt=&#34;ctr-curve-seo&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/ctr-curve.png&#34; alt=&#34;ctr-curve-seo&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;These CTR rates are then used to predict how much more traffic/revenue etc. a keyword could get if they moved up to position 1.&lt;/p&gt;
 
@@ -953,7 +992,7 @@ estimates &amp;lt;- predict_click %&amp;gt;%
 
 &lt;p&gt;The number in the middle of the bar is the current position, with the revenue at the x axis and keyword on the y.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://code.markedmondson.me/images/see-potential.png&#34; alt=&#34;seo-forecast-estimate&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/see-potential.png&#34; alt=&#34;seo-forecast-estimate&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;ggplot2-code&#34;&gt;ggplot2 code&lt;/h3&gt;
 

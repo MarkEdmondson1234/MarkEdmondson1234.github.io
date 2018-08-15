@@ -2,19 +2,58 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Google Language on Mark Edmondson</title>
-    <link>https://code.markedmondson.me/tags/google-language/index.xml</link>
+    <link>/tags/google-language/index.xml</link>
     <description>Recent content in Google Language on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
     <copyright>Powered by [Hugo](//gohugo.io). Theme by [PPOffice](http://github.com/ppoffice).</copyright>
-    <atom:link href="https://code.markedmondson.me/tags/google-language/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/tags/google-language/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Talking Google Analytics dashboards via R, Shiny and Text-to-Speech APIs</title>
+      <link>/talking-google-analytics-dashboards</link>
+      <pubDate>Wed, 15 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/talking-google-analytics-dashboards</guid>
+      <description>&lt;p&gt;What really makes Google Analytics stand apart from other analytics solutions for me is its integration with the Google Cloud, such as BigQuery and its machine learning APIs. An example of this integration is given in this workshop video that details how to use the &lt;a href=&#34;https://developers.google.com/analytics/devguides/reporting/core/v4/&#34;&gt;Google Analytics&lt;/a&gt; and &lt;a href=&#34;https://cloud.google.com/text-to-speech/&#34;&gt;Text-to-speech&lt;/a&gt; APIs to create a dashboard that talks through your statistics.&lt;/p&gt;
+&lt;!--more--&gt;
+&lt;div id=&#34;youtube-workshop-video&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;YouTube Workshop video&lt;/h2&gt;
+&lt;p&gt;The whole 40min workshop is available below, which talks through &lt;a href=&#34;https://github.com/MarkEdmondson1234/verbal_ga_shiny&#34;&gt;this GitHub repo&lt;/a&gt;.&lt;/p&gt;
+&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/4Ht_vEXJ4wo&#34; frameborder=&#34;0&#34; allow=&#34;autoplay; encrypted-media&#34; allowfullscreen&gt;
+&lt;/iframe&gt;
+&lt;p&gt;A demo of the speech it creates can be heard in this audio snippet:&lt;/p&gt;
+&lt;audio controls&gt;
+&lt;source src=&#34;../verbal-demo.wav&#34;&gt;
+&lt;/audio&gt;
+&lt;p&gt;I’ve also cut out shorter snippets that focus on concepts if you want to skip in and out:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Part I - basic Shiny app with Google Analytics data: &lt;a href=&#34;https://youtu.be/IqAaCk_3ZKU&#34; class=&#34;uri&#34;&gt;https://youtu.be/IqAaCk_3ZKU&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Part II - adding text-to-speech with googleLanguageR &lt;a href=&#34;https://youtu.be/Ny0e7vHFu6o&#34; class=&#34;uri&#34;&gt;https://youtu.be/Ny0e7vHFu6o&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Part III - custom skin for the Shiny app using gentellelaShiny &lt;a href=&#34;https://youtu.be/Dp6Y6Trn97A&#34; class=&#34;uri&#34;&gt;https://youtu.be/Dp6Y6Trn97A&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div id=&#34;going-further&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Going further&lt;/h2&gt;
+&lt;p&gt;Whilst this proof of concept is a bit of fun to demonstrate how these APIs can work together via the R libraries &lt;a href=&#34;http://code.markedmondson.me/googleAnalyticsR/&#34;&gt;&lt;code&gt;googleAnalyticsR&lt;/code&gt;&lt;/a&gt; and &lt;a href=&#34;http://code.markedmondson.me/googleLanguageR/&#34;&gt;&lt;code&gt;googleLanguageR&lt;/code&gt;&lt;/a&gt;, I hope the applications can go beyond this demo.&lt;/p&gt;
+&lt;p&gt;Accessibility is an obvious first application, giving those that have trouble seeing another way to experience dashboard plots. Equally, the &lt;a href=&#34;http://code.markedmondson.me/googleLanguageR/articles/speech.html&#34;&gt;speech-to-text API&lt;/a&gt; offer a way to control reports without needing a dashboard. Often these services can also help enhance all users by letting them experience reports in other mediums such as by phone or in the car, and may help breathe life into stale dashboards that have a habit of slowly being ignored over time.&lt;/p&gt;
+&lt;p&gt;The &lt;a href=&#34;http://code.markedmondson.me/googleLanguageR/articles/translation.html&#34;&gt;Translation APIs&lt;/a&gt; also allow internationalisation of reports be it in speech or text, the &lt;a href=&#34;https://github.com/ropensci/googleLanguageR/tree/master/inst/shiny/capture_speech&#34;&gt;demo Shiny app of &lt;code&gt;googleLanguageR&lt;/code&gt;&lt;/a&gt; demonstrates talking in several languages.&lt;/p&gt;
+&lt;p&gt;Possibily the most advanced but potentially most powerful application uses the &lt;a href=&#34;http://code.markedmondson.me/googleLanguageR/articles/nlp.html&#34;&gt;Natural Language API&lt;/a&gt; to parse out meaning, entities and sentiment from text. For instance, grading user generated content and then creating data reports on the fly that may address their concerns.&lt;/p&gt;
+&lt;p&gt;Another interesting application may be how text/speech enabled apps can interact with other robots, such as Alexa or Google Home. As more and more apps become voice enabled, voice and computer generated speech could become a universal translator between systems that would take heavy coding otherwise.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;summary&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Summary&lt;/h2&gt;
+&lt;p&gt;Anyhow, I hope the video is of some use. I’m creating more video content these days as I think it helps see how a workflow happens in real life, along with all the umms and errs and mistakes that happen to everyone :) If you have any video requests do let me know, otherwise you can keep track of any new videos on my &lt;a href=&#34;https://www.youtube.com/channel/UC3pF8VqQGmtpjAr_9VUEmTQ/videos&#34;&gt;YouTube channel&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
     
     <item>
       <title>Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API</title>
-      <link>https://code.markedmondson.me/searchconsoler-vs-googlelanguager</link>
+      <link>/searchconsoler-vs-googlelanguager</link>
       <pubDate>Thu, 11 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://code.markedmondson.me/searchconsoler-vs-googlelanguager</guid>
+      <guid>/searchconsoler-vs-googlelanguager</guid>
       <description>&lt;p&gt;With the launch of the Google Natural Language API (NLP API), and the emphasis of machine learning that is said to account for up to 30% of the SEO algorithmn for Google search, a natural question is whether you can use Google’s own macine learning APIs to help optimise your website for search.&lt;/p&gt;
 &lt;p&gt;Whilst I don’t believe they will offer exactly the same results, I can see useful applications that include:&lt;/p&gt;
 &lt;ul&gt;

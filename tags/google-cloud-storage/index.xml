@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Google Cloud Storage on Mark Edmondson</title>
-    <link>https://code.markedmondson.me/tags/google-cloud-storage/index.xml</link>
+    <link>/tags/google-cloud-storage/index.xml</link>
     <description>Recent content in Google Cloud Storage on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
     <copyright>Powered by [Hugo](//gohugo.io). Theme by [PPOffice](http://github.com/ppoffice).</copyright>
-    <atom:link href="https://code.markedmondson.me/tags/google-cloud-storage/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/tags/google-cloud-storage/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Run RStudio Server on a Chromebook as a Cloud Native</title>
-      <link>https://code.markedmondson.me/rstudio-server-chromebook/</link>
+      <link>/rstudio-server-chromebook/</link>
       <pubDate>Tue, 05 Sep 2017 13:55:57 +0100</pubDate>
       
-      <guid>https://code.markedmondson.me/rstudio-server-chromebook/</guid>
+      <guid>/rstudio-server-chromebook/</guid>
       <description>
 
 &lt;p&gt;I recently got an &lt;a href=&#34;https://www.asus.com/us/Laptops/ASUS-Chromebook-Flip-C302CA/&#34;&gt;Asus Chromebook Flip&lt;/a&gt; with which I&amp;rsquo;m very happy, but it did make me realise that if a Chromebook was to replace my normal desktop as my primary workstation, my RStudio Server setup would need to be more cloud native than was available up until now.&lt;/p&gt;
@@ -146,12 +146,12 @@
     
     <item>
       <title>My R Packages</title>
-      <link>https://code.markedmondson.me/r-packages/</link>
+      <link>/r-packages/</link>
       <pubDate>Tue, 24 Jan 2017 21:20:50 +0100</pubDate>
       
-      <guid>https://code.markedmondson.me/r-packages/</guid>
+      <guid>/r-packages/</guid>
       <description>&lt;p&gt;A full list of R packages I have published are on &lt;a href=&#34;https://github.com/MarkEdmondson1234&#34;&gt;my Github&lt;/a&gt;, but some notable ones are below.&lt;/p&gt;
-&lt;p&gt;Some are part of the &lt;a href=&#34;http://cloudyr.github.io/&#34;&gt;cloudyR project&lt;/a&gt;, which has many packages useful for using R in the cloud. &lt;img src=&#34;https://code.markedmondson.me/images/cloudyr2.png&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Some are part of the &lt;a href=&#34;http://cloudyr.github.io/&#34;&gt;cloudyR project&lt;/a&gt;, which has many packages useful for using R in the cloud. &lt;img src=&#34;/images/cloudyr2.png&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;I concentrate on the Google cloud below, but be sure to check out the other packages if you’re looking to work with AWS or other cloud based services.&lt;/p&gt;
 &lt;div id=&#34;cran&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;CRAN&lt;/h2&gt;
@@ -201,7 +201,7 @@
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;As you can tell, most are aimed towards helping R users with help in digital analytics and cloud based services. You can get some idea of how they can &lt;a href=&#34;https://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/&#34;&gt;work together in a digital analytics workflow here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;As you can tell, most are aimed towards helping R users with help in digital analytics and cloud based services. You can get some idea of how they can &lt;a href=&#34;/digital-analytics-workflow-through-google-cloud/&#34;&gt;work together in a digital analytics workflow here&lt;/a&gt;.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;github&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;GITHUB&lt;/h2&gt;
@@ -268,10 +268,10 @@
     
     <item>
       <title>A digital analytics workflow through the Google Cloud using R</title>
-      <link>https://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/</link>
+      <link>/digital-analytics-workflow-through-google-cloud/</link>
       <pubDate>Mon, 10 Oct 2016 23:03:57 +0100</pubDate>
       
-      <guid>https://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/</guid>
+      <guid>/digital-analytics-workflow-through-google-cloud/</guid>
       <description>
 
 &lt;p&gt;There are now several packages built upon the &lt;code&gt;googleAuthR&lt;/code&gt; framework which are helpful to a digital analyst who uses R, so this post looks to demonstrate how they all work together.  If you&amp;rsquo;re new to R, and would like to know how it helps with your digital analytics, &lt;a href=&#34;http://analyticsdemystified.com/blog/tim-wilson/&#34;&gt;Tim Wilson&lt;/a&gt; and I ran a workshop last month aimed at getting a digital analyst up and running.  The course material is online at &lt;a href=&#34;http://www.dartistics.com/&#34;&gt;www.dartistics.com&lt;/a&gt;.&lt;/p&gt;

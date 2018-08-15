@@ -2,19 +2,58 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>R on Mark Edmondson</title>
-    <link>https://code.markedmondson.me/tags/r/index.xml</link>
+    <link>/tags/r/index.xml</link>
     <description>Recent content in R on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
     <copyright>Powered by [Hugo](//gohugo.io). Theme by [PPOffice](http://github.com/ppoffice).</copyright>
-    <atom:link href="https://code.markedmondson.me/tags/r/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/tags/r/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Talking Google Analytics dashboards via R, Shiny and Text-to-Speech APIs</title>
+      <link>/talking-google-analytics-dashboards</link>
+      <pubDate>Wed, 15 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/talking-google-analytics-dashboards</guid>
+      <description>&lt;p&gt;What really makes Google Analytics stand apart from other analytics solutions for me is its integration with the Google Cloud, such as BigQuery and its machine learning APIs. An example of this integration is given in this workshop video that details how to use the &lt;a href=&#34;https://developers.google.com/analytics/devguides/reporting/core/v4/&#34;&gt;Google Analytics&lt;/a&gt; and &lt;a href=&#34;https://cloud.google.com/text-to-speech/&#34;&gt;Text-to-speech&lt;/a&gt; APIs to create a dashboard that talks through your statistics.&lt;/p&gt;
+&lt;!--more--&gt;
+&lt;div id=&#34;youtube-workshop-video&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;YouTube Workshop video&lt;/h2&gt;
+&lt;p&gt;The whole 40min workshop is available below, which talks through &lt;a href=&#34;https://github.com/MarkEdmondson1234/verbal_ga_shiny&#34;&gt;this GitHub repo&lt;/a&gt;.&lt;/p&gt;
+&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/4Ht_vEXJ4wo&#34; frameborder=&#34;0&#34; allow=&#34;autoplay; encrypted-media&#34; allowfullscreen&gt;
+&lt;/iframe&gt;
+&lt;p&gt;A demo of the speech it creates can be heard in this audio snippet:&lt;/p&gt;
+&lt;audio controls&gt;
+&lt;source src=&#34;../verbal-demo.wav&#34;&gt;
+&lt;/audio&gt;
+&lt;p&gt;I’ve also cut out shorter snippets that focus on concepts if you want to skip in and out:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Part I - basic Shiny app with Google Analytics data: &lt;a href=&#34;https://youtu.be/IqAaCk_3ZKU&#34; class=&#34;uri&#34;&gt;https://youtu.be/IqAaCk_3ZKU&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Part II - adding text-to-speech with googleLanguageR &lt;a href=&#34;https://youtu.be/Ny0e7vHFu6o&#34; class=&#34;uri&#34;&gt;https://youtu.be/Ny0e7vHFu6o&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Part III - custom skin for the Shiny app using gentellelaShiny &lt;a href=&#34;https://youtu.be/Dp6Y6Trn97A&#34; class=&#34;uri&#34;&gt;https://youtu.be/Dp6Y6Trn97A&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div id=&#34;going-further&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Going further&lt;/h2&gt;
+&lt;p&gt;Whilst this proof of concept is a bit of fun to demonstrate how these APIs can work together via the R libraries &lt;a href=&#34;http://code.markedmondson.me/googleAnalyticsR/&#34;&gt;&lt;code&gt;googleAnalyticsR&lt;/code&gt;&lt;/a&gt; and &lt;a href=&#34;http://code.markedmondson.me/googleLanguageR/&#34;&gt;&lt;code&gt;googleLanguageR&lt;/code&gt;&lt;/a&gt;, I hope the applications can go beyond this demo.&lt;/p&gt;
+&lt;p&gt;Accessibility is an obvious first application, giving those that have trouble seeing another way to experience dashboard plots. Equally, the &lt;a href=&#34;http://code.markedmondson.me/googleLanguageR/articles/speech.html&#34;&gt;speech-to-text API&lt;/a&gt; offer a way to control reports without needing a dashboard. Often these services can also help enhance all users by letting them experience reports in other mediums such as by phone or in the car, and may help breathe life into stale dashboards that have a habit of slowly being ignored over time.&lt;/p&gt;
+&lt;p&gt;The &lt;a href=&#34;http://code.markedmondson.me/googleLanguageR/articles/translation.html&#34;&gt;Translation APIs&lt;/a&gt; also allow internationalisation of reports be it in speech or text, the &lt;a href=&#34;https://github.com/ropensci/googleLanguageR/tree/master/inst/shiny/capture_speech&#34;&gt;demo Shiny app of &lt;code&gt;googleLanguageR&lt;/code&gt;&lt;/a&gt; demonstrates talking in several languages.&lt;/p&gt;
+&lt;p&gt;Possibily the most advanced but potentially most powerful application uses the &lt;a href=&#34;http://code.markedmondson.me/googleLanguageR/articles/nlp.html&#34;&gt;Natural Language API&lt;/a&gt; to parse out meaning, entities and sentiment from text. For instance, grading user generated content and then creating data reports on the fly that may address their concerns.&lt;/p&gt;
+&lt;p&gt;Another interesting application may be how text/speech enabled apps can interact with other robots, such as Alexa or Google Home. As more and more apps become voice enabled, voice and computer generated speech could become a universal translator between systems that would take heavy coding otherwise.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;summary&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Summary&lt;/h2&gt;
+&lt;p&gt;Anyhow, I hope the video is of some use. I’m creating more video content these days as I think it helps see how a workflow happens in real life, along with all the umms and errs and mistakes that happen to everyone :) If you have any video requests do let me know, otherwise you can keep track of any new videos on my &lt;a href=&#34;https://www.youtube.com/channel/UC3pF8VqQGmtpjAr_9VUEmTQ/videos&#34;&gt;YouTube channel&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
     
     <item>
       <title>R on Kubernetes - serverless Shiny, R APIs and scheduled scripts</title>
-      <link>https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts</link>
+      <link>/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts</link>
       <pubDate>Wed, 02 May 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts</guid>
+      <guid>/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts</guid>
       <description>&lt;h2 id=&#34;why-run-r-on-kubernetes&#34;&gt;Why run R on Kubernetes?&lt;/h2&gt;
 
 &lt;p&gt;&lt;a href=&#34;https://kubernetes.io/&#34;&gt;Kubernetes&lt;/a&gt; is a free and open-source utility to run jobs within a computer cluster.  It abstracts away the servers the jobs are running on so you need only worry about the code to run.  It has features such as &lt;a href=&#34;https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/&#34;&gt;scheduling&lt;/a&gt;, &lt;a href=&#34;https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler&#34;&gt;auto-scaling&lt;/a&gt;, and auto-healing to replace nodes if they breakdown.&lt;/p&gt;
@@ -549,10 +588,10 @@ spec:
     
     <item>
       <title>Embedding Google Data Studio into RMarkdown</title>
-      <link>https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown</link>
+      <link>/embedding-google-data-studio-into-rmarkdown</link>
       <pubDate>Thu, 15 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown</guid>
+      <guid>/embedding-google-data-studio-into-rmarkdown</guid>
       <description>&lt;div id=&#34;adding-google-data-studio-dashboards-to-rmarkdown&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Adding Google Data Studio Dashboards to RMarkdown&lt;/h2&gt;
 &lt;p&gt;This week I learnt you can take &lt;a href=&#34;https://datastudio.google.com&#34;&gt;Google Data Studio&lt;/a&gt; reports and, via their embed feature, paste them straight into an RMarkdown HTML document.&lt;/p&gt;
@@ -603,10 +642,10 @@ style=&amp;quot;border:0&amp;quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt
     
     <item>
       <title>Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API</title>
-      <link>https://code.markedmondson.me/searchconsoler-vs-googlelanguager</link>
+      <link>/searchconsoler-vs-googlelanguager</link>
       <pubDate>Thu, 11 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://code.markedmondson.me/searchconsoler-vs-googlelanguager</guid>
+      <guid>/searchconsoler-vs-googlelanguager</guid>
       <description>&lt;p&gt;With the launch of the Google Natural Language API (NLP API), and the emphasis of machine learning that is said to account for up to 30% of the SEO algorithmn for Google search, a natural question is whether you can use Google’s own macine learning APIs to help optimise your website for search.&lt;/p&gt;
 &lt;p&gt;Whilst I don’t believe they will offer exactly the same results, I can see useful applications that include:&lt;/p&gt;
 &lt;ul&gt;
@@ -898,10 +937,10 @@ fuzzy &amp;lt;- left_join(fuzzy_ranks, fuzzy_values, by = &amp;quot;query&amp;qu
     
     <item>
       <title>Run RStudio Server on a Chromebook as a Cloud Native</title>
-      <link>https://code.markedmondson.me/rstudio-server-chromebook/</link>
+      <link>/rstudio-server-chromebook/</link>
       <pubDate>Tue, 05 Sep 2017 13:55:57 +0100</pubDate>
       
-      <guid>https://code.markedmondson.me/rstudio-server-chromebook/</guid>
+      <guid>/rstudio-server-chromebook/</guid>
       <description>
 
 &lt;p&gt;I recently got an &lt;a href=&#34;https://www.asus.com/us/Laptops/ASUS-Chromebook-Flip-C302CA/&#34;&gt;Asus Chromebook Flip&lt;/a&gt; with which I&amp;rsquo;m very happy, but it did make me realise that if a Chromebook was to replace my normal desktop as my primary workstation, my RStudio Server setup would need to be more cloud native than was available up until now.&lt;/p&gt;
@@ -1033,10 +1072,10 @@ fuzzy &amp;lt;- left_join(fuzzy_ranks, fuzzy_values, by = &amp;quot;query&amp;qu
     
     <item>
       <title>Four Ways to Schedule R scripts on Google Cloud Platform</title>
-      <link>https://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform</link>
+      <link>/4-ways-schedule-r-scripts-on-google-cloud-platform</link>
       <pubDate>Sun, 09 Jul 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform</guid>
+      <guid>/4-ways-schedule-r-scripts-on-google-cloud-platform</guid>
       <description>&lt;p&gt;A common question I come across is how to automate scheduling of R scripts downloading data. This post goes through some options that I have played around with, which I’ve mostly used for downloading API data such as Google Analytics using the Google Cloud platform, but the same principles could apply for AWS or Azure.&lt;/p&gt;
 &lt;!--more--&gt;
 &lt;div id=&#34;scheduling-scripts-advice&#34; class=&#34;section level2&#34;&gt;
@@ -1349,12 +1388,12 @@ env_variables:
     
     <item>
       <title>My R Packages</title>
-      <link>https://code.markedmondson.me/r-packages/</link>
+      <link>/r-packages/</link>
       <pubDate>Tue, 24 Jan 2017 21:20:50 +0100</pubDate>
       
-      <guid>https://code.markedmondson.me/r-packages/</guid>
+      <guid>/r-packages/</guid>
       <description>&lt;p&gt;A full list of R packages I have published are on &lt;a href=&#34;https://github.com/MarkEdmondson1234&#34;&gt;my Github&lt;/a&gt;, but some notable ones are below.&lt;/p&gt;
-&lt;p&gt;Some are part of the &lt;a href=&#34;http://cloudyr.github.io/&#34;&gt;cloudyR project&lt;/a&gt;, which has many packages useful for using R in the cloud. &lt;img src=&#34;https://code.markedmondson.me/images/cloudyr2.png&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Some are part of the &lt;a href=&#34;http://cloudyr.github.io/&#34;&gt;cloudyR project&lt;/a&gt;, which has many packages useful for using R in the cloud. &lt;img src=&#34;/images/cloudyr2.png&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;I concentrate on the Google cloud below, but be sure to check out the other packages if you’re looking to work with AWS or other cloud based services.&lt;/p&gt;
 &lt;div id=&#34;cran&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;CRAN&lt;/h2&gt;
@@ -1404,7 +1443,7 @@ env_variables:
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;As you can tell, most are aimed towards helping R users with help in digital analytics and cloud based services. You can get some idea of how they can &lt;a href=&#34;https://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/&#34;&gt;work together in a digital analytics workflow here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;As you can tell, most are aimed towards helping R users with help in digital analytics and cloud based services. You can get some idea of how they can &lt;a href=&#34;/digital-analytics-workflow-through-google-cloud/&#34;&gt;work together in a digital analytics workflow here&lt;/a&gt;.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;github&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;GITHUB&lt;/h2&gt;
@@ -1471,47 +1510,47 @@ env_variables:
     
     <item>
       <title>New Blog Down</title>
-      <link>https://code.markedmondson.me/new-blog-down/</link>
+      <link>/new-blog-down/</link>
       <pubDate>Mon, 23 Jan 2017 22:45:03 +0100</pubDate>
       
-      <guid>https://code.markedmondson.me/new-blog-down/</guid>
-      <description>&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/htmlwidgets/htmlwidgets.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/jquery/jquery.min.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/proj4js/proj4.js&#34;&gt;&lt;/script&gt;
-&lt;link href=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/css/motion.css&#34; rel=&#34;stylesheet&#34; /&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/highstock.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/highcharts-3d.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/highcharts-more.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/modules/annotations.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/modules/broken-axis.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/modules/data.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/modules/drilldown.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/modules/exporting.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/modules/funnel.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/modules/heatmap.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/modules/map.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/modules/no-data-to-display.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/modules/offline-exporting.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/modules/solid-gauge.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/modules/treemap.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/plugins/annotations.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/plugins/draggable-legend.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/plugins/draggable-points.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/plugins/export-csv.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/plugins/grouped-categories.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/plugins/motion.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/plugins/pattern-fill-v2.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/plugins/tooltip-delay.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/custom/reset.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/custom/symbols-extra.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/custom/text-symbols.js&#34;&gt;&lt;/script&gt;
-&lt;link href=&#34;https://code.markedmondson.me/rmarkdown-libs/fontawesome/font-awesome.min.css&#34; rel=&#34;stylesheet&#34; /&gt;
-&lt;link href=&#34;https://code.markedmondson.me/rmarkdown-libs/htmlwdgtgrid/htmlwdgtgrid.css&#34; rel=&#34;stylesheet&#34; /&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highchart-binding/highchart.js&#34;&gt;&lt;/script&gt;
+      <guid>/new-blog-down/</guid>
+      <description>&lt;script src=&#34;/rmarkdown-libs/htmlwidgets/htmlwidgets.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/jquery/jquery.min.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/proj4js/proj4.js&#34;&gt;&lt;/script&gt;
+&lt;link href=&#34;/rmarkdown-libs/highcharts/css/motion.css&#34; rel=&#34;stylesheet&#34; /&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/highstock.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/highcharts-3d.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/highcharts-more.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/modules/annotations.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/modules/broken-axis.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/modules/data.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/modules/drilldown.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/modules/exporting.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/modules/funnel.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/modules/heatmap.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/modules/map.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/modules/no-data-to-display.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/modules/offline-exporting.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/modules/solid-gauge.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/modules/treemap.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/plugins/annotations.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/plugins/draggable-legend.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/plugins/draggable-points.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/plugins/export-csv.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/plugins/grouped-categories.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/plugins/motion.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/plugins/pattern-fill-v2.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/plugins/tooltip-delay.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/custom/reset.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/custom/symbols-extra.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/custom/text-symbols.js&#34;&gt;&lt;/script&gt;
+&lt;link href=&#34;/rmarkdown-libs/fontawesome/font-awesome.min.css&#34; rel=&#34;stylesheet&#34; /&gt;
+&lt;link href=&#34;/rmarkdown-libs/htmlwdgtgrid/htmlwdgtgrid.css&#34; rel=&#34;stylesheet&#34; /&gt;
+&lt;script src=&#34;/rmarkdown-libs/highchart-binding/highchart.js&#34;&gt;&lt;/script&gt;
 
 
 &lt;p&gt;A new year, a new blogging platform!&lt;/p&gt;
-&lt;p&gt;This time I’m moving from &lt;a href=&#34;https://code.markedmondson.me/hello-world&#34;&gt;Jekyll&lt;/a&gt; to RStudio’s new &lt;a href=&#34;https://github.com/rstudio/blogdown&#34;&gt;blogdown&lt;/a&gt; format.&lt;/p&gt;
+&lt;p&gt;This time I’m moving from &lt;a href=&#34;/hello-world&#34;&gt;Jekyll&lt;/a&gt; to RStudio’s new &lt;a href=&#34;https://github.com/rstudio/blogdown&#34;&gt;blogdown&lt;/a&gt; format.&lt;/p&gt;
 &lt;p&gt;This keeps the advantages of Jekyll (a static, high performance website; markdown for editing; free hosting on Github) but with the extra bonus of being able to render in RMarkdown plus adding some nice looking capabilities from the &lt;a href=&#34;https://gohugo.io/&#34;&gt;Hugo&lt;/a&gt; project.&lt;/p&gt;
 &lt;p&gt;As I blog a lot about R it makes sense to have a platform that is more R-aware, as well as it letting me do things like this:&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(googleAnalyticsR)
@@ -1534,7 +1573,7 @@ forecast1 &amp;lt;- HoltWinters(ga_ts)
 ## forecast for next 12 months of the blog sessions
 hchart(forecast(forecast1, h = 12))&lt;/code&gt;&lt;/pre&gt;
 &lt;div id=&#34;htmlwidget-1&#34; style=&#34;width:100%;height:500px;&#34; class=&#34;highchart html-widget&#34;&gt;&lt;/div&gt;
-&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-1&#34;&gt;{&#34;x&#34;:{&#34;hc_opts&#34;:{&#34;title&#34;:{&#34;text&#34;:null},&#34;yAxis&#34;:{&#34;title&#34;:{&#34;text&#34;:null}},&#34;credits&#34;:{&#34;enabled&#34;:false},&#34;exporting&#34;:{&#34;enabled&#34;:false},&#34;plotOptions&#34;:{&#34;series&#34;:{&#34;turboThreshold&#34;:0},&#34;treemap&#34;:{&#34;layoutAlgorithm&#34;:&#34;squarified&#34;},&#34;bubble&#34;:{&#34;minSize&#34;:5,&#34;maxSize&#34;:25}},&#34;annotationsOptions&#34;:{&#34;enabledButtons&#34;:false},&#34;tooltip&#34;:{&#34;delayForDisplay&#34;:10},&#34;xAxis&#34;:{&#34;type&#34;:&#34;datetime&#34;},&#34;series&#34;:[{&#34;data&#34;:[[1375315200000,0],[1377993600000,0],[1380585600000,0],[1383264000000,0],[1385856000000,0],[1388534400000,317],[1391212800000,197],[1393632000000,279],[1396310400000,59],[1398902400000,162],[1401580800000,107],[1404172800000,140],[1406851200000,229],[1409529600000,283],[1412121600000,347],[1414800000000,693],[1417392000000,621],[1420070400000,569],[1422748800000,1397],[1425168000000,1309],[1427846400000,1196],[1430438400000,1015],[1433116800000,1260],[1435708800000,2887],[1438387200000,2105],[1441065600000,2607],[1443657600000,3165],[1446336000000,1994],[1448928000000,2228],[1451606400000,2061],[1454284800000,2146],[1456790400000,2406],[1459468800000,2698],[1462060800000,3103],[1464739200000,2909],[1467331200000,3410],[1470009600000,3125],[1472688000000,3221],[1475280000000,3917],[1477958400000,3838],[1480550400000,8267],[1483228800000,13818],[1485907200000,6872],[1488326400000,7392],[1491004800000,6566],[1493596800000,6562],[1496275200000,5840],[1498867200000,5989]],&#34;name&#34;:&#34;Series&#34;,&#34;zIndex&#34;:3},{&#34;data&#34;:[[1501545600000,5799.88296109746],[1504224000000,5953.82702697917],[1506816000000,6286.04960256189],[1509494400000,5919.18174699678],[1512086400000,7512.16192182951],[1514764800000,8349.27443790722],[1517443200000,4701.14915567939],[1519862400000,6100.01802849025],[1522540800000,6101.59851593583],[1525132800000,6404.34402681755],[1527811200000,6192.00418324618],[1530403200000,6785.03321678322]],&#34;name&#34;:&#34;HoltWinters&#34;,&#34;zIndex&#34;:2,&#34;id&#34;:&#34;07zp2puio3&#34;},{&#34;data&#34;:[[1501545600000,8009.15429421046,3590.61162798446],[1504224000000,8605.30544712378,3302.34860683456],[1506816000000,9315.86738613737,3256.23181898641],[1509494400000,9285.0774362373,2553.28605775626],[1512086400000,11183.4984332413,3840.82541041768],[1514764800000,12302.5224403987,4396.02643541569],[1517443200000,8917.50157908768,484.796732271103],[1519862400000,10563.9944786475,1636.04157833298],[1522540800000,10800.1667804965,1403.0302513752],[1525132800000,11326.3356690203,1482.35238461478],[1527811200000,11327.7085862557,1056.29978023663],[1530403200000,12125.9055897453,1444.16084382116]],&#34;name&#34;:&#34;HoltWinters level 80&#34;,&#34;type&#34;:&#34;arearange&#34;,&#34;fillOpacity&#34;:0.1,&#34;zIndex&#34;:1,&#34;lineWidth&#34;:0,&#34;linkedTo&#34;:&#34;07zp2puio3&#34;},{&#34;data&#34;:[[1501545600000,9178.67189272986,2421.09402946506],[1504224000000,10008.9133371896,1898.74071676878],[1506816000000,10919.756037155,1652.34316796876],[1509494400000,11066.874983848,771.488510145552],[1512086400000,13126.9865851167,1897.33725854234],[1514764800000,14395.2455210494,2303.30335476499],[1517443200000,11149.5037269577,-1747.20541559893],[1519862400000,12927.0808680766,-727.044811096055],[1522540800000,13287.438574996,-1084.24154312437],[1525132800000,13931.8806552989,-1123.19260166379],[1527811200000,14046.3862742742,-1662.37790778189],[1530403200000,14953.1926404598,-1383.12620689336]],&#34;name&#34;:&#34;HoltWinters level 95&#34;,&#34;type&#34;:&#34;arearange&#34;,&#34;fillOpacity&#34;:0.1,&#34;zIndex&#34;:1,&#34;lineWidth&#34;:0,&#34;linkedTo&#34;:&#34;07zp2puio3&#34;}]},&#34;theme&#34;:{&#34;chart&#34;:{&#34;backgroundColor&#34;:&#34;transparent&#34;}},&#34;conf_opts&#34;:{&#34;global&#34;:{&#34;Date&#34;:null,&#34;VMLRadialGradientURL&#34;:&#34;http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png&#34;,&#34;canvasToolsURL&#34;:&#34;http =//code.highcharts.com/list(version)/modules/canvas-tools.js&#34;,&#34;getTimezoneOffset&#34;:null,&#34;timezoneOffset&#34;:0,&#34;useUTC&#34;:true},&#34;lang&#34;:{&#34;contextButtonTitle&#34;:&#34;Chart context menu&#34;,&#34;decimalPoint&#34;:&#34;.&#34;,&#34;downloadJPEG&#34;:&#34;Download JPEG image&#34;,&#34;downloadPDF&#34;:&#34;Download PDF document&#34;,&#34;downloadPNG&#34;:&#34;Download PNG image&#34;,&#34;downloadSVG&#34;:&#34;Download SVG vector image&#34;,&#34;drillUpText&#34;:&#34;Back to {series.name}&#34;,&#34;invalidDate&#34;:null,&#34;loading&#34;:&#34;Loading...&#34;,&#34;months&#34;:[&#34;January&#34;,&#34;February&#34;,&#34;March&#34;,&#34;April&#34;,&#34;May&#34;,&#34;June&#34;,&#34;July&#34;,&#34;August&#34;,&#34;September&#34;,&#34;October&#34;,&#34;November&#34;,&#34;December&#34;],&#34;noData&#34;:&#34;No data to display&#34;,&#34;numericSymbols&#34;:[&#34;k&#34;,&#34;M&#34;,&#34;G&#34;,&#34;T&#34;,&#34;P&#34;,&#34;E&#34;],&#34;printChart&#34;:&#34;Print chart&#34;,&#34;resetZoom&#34;:&#34;Reset zoom&#34;,&#34;resetZoomTitle&#34;:&#34;Reset zoom level 1:1&#34;,&#34;shortMonths&#34;:[&#34;Jan&#34;,&#34;Feb&#34;,&#34;Mar&#34;,&#34;Apr&#34;,&#34;May&#34;,&#34;Jun&#34;,&#34;Jul&#34;,&#34;Aug&#34;,&#34;Sep&#34;,&#34;Oct&#34;,&#34;Nov&#34;,&#34;Dec&#34;],&#34;thousandsSep&#34;:&#34; &#34;,&#34;weekdays&#34;:[&#34;Sunday&#34;,&#34;Monday&#34;,&#34;Tuesday&#34;,&#34;Wednesday&#34;,&#34;Thursday&#34;,&#34;Friday&#34;,&#34;Saturday&#34;]}},&#34;type&#34;:&#34;chart&#34;,&#34;fonts&#34;:[],&#34;debug&#34;:false},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}&lt;/script&gt;
+&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-1&#34;&gt;{&#34;x&#34;:{&#34;hc_opts&#34;:{&#34;title&#34;:{&#34;text&#34;:null},&#34;yAxis&#34;:{&#34;title&#34;:{&#34;text&#34;:null}},&#34;credits&#34;:{&#34;enabled&#34;:false},&#34;exporting&#34;:{&#34;enabled&#34;:false},&#34;plotOptions&#34;:{&#34;series&#34;:{&#34;turboThreshold&#34;:0},&#34;treemap&#34;:{&#34;layoutAlgorithm&#34;:&#34;squarified&#34;},&#34;bubble&#34;:{&#34;minSize&#34;:5,&#34;maxSize&#34;:25}},&#34;annotationsOptions&#34;:{&#34;enabledButtons&#34;:false},&#34;tooltip&#34;:{&#34;delayForDisplay&#34;:10},&#34;xAxis&#34;:{&#34;type&#34;:&#34;datetime&#34;},&#34;series&#34;:[{&#34;data&#34;:[[1375315200000,0],[1377993600000,0],[1380585600000,0],[1383264000000,0],[1385856000000,0],[1388534400000,317],[1391212800000,197],[1393632000000,279],[1396310400000,59],[1398902400000,162],[1401580800000,107],[1404172800000,140],[1406851200000,229],[1409529600000,283],[1412121600000,347],[1414800000000,693],[1417392000000,621],[1420070400000,569],[1422748800000,1397],[1425168000000,1309],[1427846400000,1196],[1430438400000,1015],[1433116800000,1260],[1435708800000,2887],[1438387200000,2105],[1441065600000,2607],[1443657600000,3165],[1446336000000,1994],[1448928000000,2228],[1451606400000,2061],[1454284800000,2146],[1456790400000,2406],[1459468800000,2698],[1462060800000,3103],[1464739200000,2909],[1467331200000,3410],[1470009600000,3125],[1472688000000,3221],[1475280000000,3917],[1477958400000,3838],[1480550400000,8267],[1483228800000,13818],[1485907200000,6872],[1488326400000,7392],[1491004800000,6566],[1493596800000,6562],[1496275200000,5840],[1498867200000,5989]],&#34;name&#34;:&#34;Series&#34;,&#34;zIndex&#34;:3},{&#34;data&#34;:[[1501545600000,5799.88296109746],[1504224000000,5953.82702697917],[1506816000000,6286.04960256189],[1509494400000,5919.18174699678],[1512086400000,7512.16192182951],[1514764800000,8349.27443790722],[1517443200000,4701.14915567939],[1519862400000,6100.01802849025],[1522540800000,6101.59851593583],[1525132800000,6404.34402681755],[1527811200000,6192.00418324618],[1530403200000,6785.03321678322]],&#34;name&#34;:&#34;HoltWinters&#34;,&#34;zIndex&#34;:2,&#34;id&#34;:&#34;6jdgi0mai3&#34;},{&#34;data&#34;:[[1501545600000,8009.15429421046,3590.61162798446],[1504224000000,8605.30544712378,3302.34860683456],[1506816000000,9315.86738613737,3256.23181898641],[1509494400000,9285.0774362373,2553.28605775626],[1512086400000,11183.4984332413,3840.82541041768],[1514764800000,12302.5224403987,4396.02643541569],[1517443200000,8917.50157908768,484.796732271103],[1519862400000,10563.9944786475,1636.04157833298],[1522540800000,10800.1667804965,1403.0302513752],[1525132800000,11326.3356690203,1482.35238461478],[1527811200000,11327.7085862557,1056.29978023663],[1530403200000,12125.9055897453,1444.16084382116]],&#34;name&#34;:&#34;HoltWinters level 80&#34;,&#34;type&#34;:&#34;arearange&#34;,&#34;fillOpacity&#34;:0.1,&#34;zIndex&#34;:1,&#34;lineWidth&#34;:0,&#34;linkedTo&#34;:&#34;6jdgi0mai3&#34;},{&#34;data&#34;:[[1501545600000,9178.67189272986,2421.09402946506],[1504224000000,10008.9133371896,1898.74071676878],[1506816000000,10919.756037155,1652.34316796876],[1509494400000,11066.874983848,771.488510145552],[1512086400000,13126.9865851167,1897.33725854234],[1514764800000,14395.2455210494,2303.30335476499],[1517443200000,11149.5037269577,-1747.20541559893],[1519862400000,12927.0808680766,-727.044811096055],[1522540800000,13287.438574996,-1084.24154312437],[1525132800000,13931.8806552989,-1123.19260166379],[1527811200000,14046.3862742742,-1662.37790778189],[1530403200000,14953.1926404598,-1383.12620689336]],&#34;name&#34;:&#34;HoltWinters level 95&#34;,&#34;type&#34;:&#34;arearange&#34;,&#34;fillOpacity&#34;:0.1,&#34;zIndex&#34;:1,&#34;lineWidth&#34;:0,&#34;linkedTo&#34;:&#34;6jdgi0mai3&#34;}]},&#34;theme&#34;:{&#34;chart&#34;:{&#34;backgroundColor&#34;:&#34;transparent&#34;}},&#34;conf_opts&#34;:{&#34;global&#34;:{&#34;Date&#34;:null,&#34;VMLRadialGradientURL&#34;:&#34;http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png&#34;,&#34;canvasToolsURL&#34;:&#34;http =//code.highcharts.com/list(version)/modules/canvas-tools.js&#34;,&#34;getTimezoneOffset&#34;:null,&#34;timezoneOffset&#34;:0,&#34;useUTC&#34;:true},&#34;lang&#34;:{&#34;contextButtonTitle&#34;:&#34;Chart context menu&#34;,&#34;decimalPoint&#34;:&#34;.&#34;,&#34;downloadJPEG&#34;:&#34;Download JPEG image&#34;,&#34;downloadPDF&#34;:&#34;Download PDF document&#34;,&#34;downloadPNG&#34;:&#34;Download PNG image&#34;,&#34;downloadSVG&#34;:&#34;Download SVG vector image&#34;,&#34;drillUpText&#34;:&#34;Back to {series.name}&#34;,&#34;invalidDate&#34;:null,&#34;loading&#34;:&#34;Loading...&#34;,&#34;months&#34;:[&#34;January&#34;,&#34;February&#34;,&#34;March&#34;,&#34;April&#34;,&#34;May&#34;,&#34;June&#34;,&#34;July&#34;,&#34;August&#34;,&#34;September&#34;,&#34;October&#34;,&#34;November&#34;,&#34;December&#34;],&#34;noData&#34;:&#34;No data to display&#34;,&#34;numericSymbols&#34;:[&#34;k&#34;,&#34;M&#34;,&#34;G&#34;,&#34;T&#34;,&#34;P&#34;,&#34;E&#34;],&#34;printChart&#34;:&#34;Print chart&#34;,&#34;resetZoom&#34;:&#34;Reset zoom&#34;,&#34;resetZoomTitle&#34;:&#34;Reset zoom level 1:1&#34;,&#34;shortMonths&#34;:[&#34;Jan&#34;,&#34;Feb&#34;,&#34;Mar&#34;,&#34;Apr&#34;,&#34;May&#34;,&#34;Jun&#34;,&#34;Jul&#34;,&#34;Aug&#34;,&#34;Sep&#34;,&#34;Oct&#34;,&#34;Nov&#34;,&#34;Dec&#34;],&#34;thousandsSep&#34;:&#34; &#34;,&#34;weekdays&#34;:[&#34;Sunday&#34;,&#34;Monday&#34;,&#34;Tuesday&#34;,&#34;Wednesday&#34;,&#34;Thursday&#34;,&#34;Friday&#34;,&#34;Saturday&#34;]}},&#34;type&#34;:&#34;chart&#34;,&#34;fonts&#34;:[],&#34;debug&#34;:false},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}&lt;/script&gt;
 &lt;p&gt;As I type R code blocks, the code output gets rendered right into the blog.&lt;/p&gt;
 &lt;p&gt;This is the example from the &lt;a href=&#34;http://www.dartistics.com&#34;&gt;Dartistics.com&lt;/a&gt; homepage, and adding interactive HTML widgets to my posts is going to be lovely, with no other hassle other than writing the code.&lt;/p&gt;
 &lt;div id=&#34;setup-blogdown&#34; class=&#34;section level2&#34;&gt;
@@ -1542,7 +1581,7 @@ hchart(forecast(forecast1, h = 12))&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Now, blogdown is in beta so the documentation is a bit sparse at the moment, and I had some teething troubles migrating across from my old blog, but hopefully I have that all sorted now (although I never want to hear about Git submodules again).&lt;/p&gt;
 &lt;p&gt;I mostly followed the guide on &lt;a href=&#34;https://gohugo.io/tutorials/github-pages-blog/&#34;&gt;Hugo about hosting on Github pages&lt;/a&gt; and then added the deploy script it recommends to RStudio’s custom project settings, meaning I can now publish with a click of a button:&lt;/p&gt;
 &lt;div class=&#34;figure&#34;&gt;
-&lt;img src=&#34;https://code.markedmondson.me/images/hugo-deploy-rstudio.png&#34; /&gt;
+&lt;img src=&#34;/images/hugo-deploy-rstudio.png&#34; /&gt;
 
 &lt;/div&gt;
 &lt;p&gt;My work flow now is:&lt;/p&gt;
@@ -1569,15 +1608,15 @@ cp -a ~/Documents/markedmondson.me-hugo/public/. ~/Documents/MarkEdmondson1234.g
     
     <item>
       <title>Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two</title>
-      <link>https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/</link>
+      <link>/real-time-GTM-google-cloud-r-shiny-2/</link>
       <pubDate>Sun, 22 Jan 2017 14:20:57 +0100</pubDate>
       
-      <guid>https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/</guid>
+      <guid>/real-time-GTM-google-cloud-r-shiny-2/</guid>
       <description>
 
 &lt;p&gt;In part two of this two part series we walk through the steps to stream data from a &lt;a href=&#34;https://www.google.com/analytics/tag-manager/&#34;&gt;Google Tag Manager&lt;/a&gt; (GTM) implementation into a &lt;a href=&#34;https://cloud.google.com/appengine/&#34;&gt;Google App Engine&lt;/a&gt; (GAE) web app, which then adds data to a &lt;a href=&#34;https://cloud.google.com/bigquery/&#34;&gt;BigQuery&lt;/a&gt; table via BigQuery&amp;rsquo;s data streaming capability.  In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in &lt;a href=&#34;https://shiny.rstudio.com/&#34;&gt;Shiny&lt;/a&gt; and the JavaScript visualisation library &lt;a href=&#34;http://jkunst.com/highcharter/&#34;&gt;Highcharts&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;Read &lt;a href=&#34;https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/&#34;&gt;part one here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Read &lt;a href=&#34;/real-time-GTM-google-cloud-r-shiny-1/&#34;&gt;part one here&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;The project combines several languages where their advantages lie: Python for its interaction with Google APIs and its quick start creating your own API on App Engine, SQL to query the BigQuery data itself, R for its forecasting libraries and the reactive Shiny framework, and JavaScript for the visualisation and data capture at the Google Tag Manager end.&lt;/p&gt;
 
@@ -1693,7 +1732,7 @@ test = hashlib.sha224(q+salt).hexdigest()
 
 &lt;p&gt;&amp;hellip;or easier is to just run one call, then check the logs for the hash in the debug messages:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://code.markedmondson.me/images/secrethash.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/secrethash.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;full-app-engine-script&#34;&gt;Full App Engine Script&lt;/h3&gt;
 
@@ -1915,10 +1954,10 @@ shinyUI(fluidPage(
     
     <item>
       <title>Insights sorting by delta metrics in the Google Analytics API v4</title>
-      <link>https://code.markedmondson.me/quicker-insight-sort-metric-delta/</link>
+      <link>/quicker-insight-sort-metric-delta/</link>
       <pubDate>Thu, 01 Dec 2016 23:03:57 +0100</pubDate>
       
-      <guid>https://code.markedmondson.me/quicker-insight-sort-metric-delta/</guid>
+      <guid>/quicker-insight-sort-metric-delta/</guid>
       <description>
 
 &lt;p&gt;As analysts, we are often called upon to see how website metrics have improved or declined over time.  This is easy enough when looking at trends, but if you are looking to break down over other dimensions, it can involve a lot of ETL to get to what you need.&lt;/p&gt;
@@ -2017,10 +2056,10 @@ delta_trans &amp;lt;- order_type(&amp;quot;transactions&amp;quot;,&amp;quot;DESC
     
     <item>
       <title>Launch RStudio Server in the Google Cloud with two lines of R</title>
-      <link>https://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/</link>
+      <link>/launch-rstudio-server-google-cloud-in-two-lines-r/</link>
       <pubDate>Thu, 20 Oct 2016 23:03:57 +0100</pubDate>
       
-      <guid>https://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/</guid>
+      <guid>/launch-rstudio-server-google-cloud-in-two-lines-r/</guid>
       <description>
 
 &lt;p&gt;I&amp;rsquo;ve written previously about how to get &lt;a href=&#34;https://www.rstudio.com/products/rstudio/download-server/&#34;&gt;RStudio Server&lt;/a&gt; running on Google Compute Engine: the &lt;a href=&#34;http://markedmondson.me/run-r-rstudio-and-opencpu-on-google-compute-engine-free-vm-image&#34;&gt;first in July 2014&lt;/a&gt; gave you a snapshot to download then customise, the second in &lt;a href=&#34;http://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/&#34;&gt;April 2016&lt;/a&gt; launched via a Docker container.&lt;/p&gt;
@@ -2042,9 +2081,9 @@ vm &amp;lt;- gce_vm(template = &amp;quot;rstudio&amp;quot;,
 
 &lt;p&gt;And thats it.  Wait a bit, it will output an IP address for you to log in with.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://code.markedmondson.me/images/rstudio-launch-example.png&#34; alt=&#34;rstudio-googleComputeEngineR-launch&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/rstudio-launch-example.png&#34; alt=&#34;rstudio-googleComputeEngineR-launch&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://code.markedmondson.me/images/rstudio-login.png&#34; alt=&#34;rstudio login&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/rstudio-login.png&#34; alt=&#34;rstudio login&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;You can now carry on by logging in and installing packages as you would on RStudio Desktop, then use &lt;a href=&#34;https://cloudyr.github.io/googleComputeEngineR/reference/gce_vm_stop.html&#34;&gt;&lt;code&gt;gce_vm_stop(vm)&lt;/code&gt;&lt;/a&gt; and &lt;a href=&#34;https://cloudyr.github.io/googleComputeEngineR/reference/gce_vm_start.html&#34;&gt;&lt;code&gt;gce_vm_start(vm)&lt;/code&gt;&lt;/a&gt; to stop and start your instance, or if say you are on a Chromebook and cannot run R locally, use the Google Cloud Web UI to start and stop it.&lt;/p&gt;
 
@@ -2112,10 +2151,10 @@ vm3 &amp;lt;- gce_vm(template = &amp;quot;rstudio&amp;quot;,
     
     <item>
       <title>A digital analytics workflow through the Google Cloud using R</title>
-      <link>https://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/</link>
+      <link>/digital-analytics-workflow-through-google-cloud/</link>
       <pubDate>Mon, 10 Oct 2016 23:03:57 +0100</pubDate>
       
-      <guid>https://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/</guid>
+      <guid>/digital-analytics-workflow-through-google-cloud/</guid>
       <description>
 
 &lt;p&gt;There are now several packages built upon the &lt;code&gt;googleAuthR&lt;/code&gt; framework which are helpful to a digital analyst who uses R, so this post looks to demonstrate how they all work together.  If you&amp;rsquo;re new to R, and would like to know how it helps with your digital analytics, &lt;a href=&#34;http://analyticsdemystified.com/blog/tim-wilson/&#34;&gt;Tim Wilson&lt;/a&gt; and I ran a workshop last month aimed at getting a digital analyst up and running.  The course material is online at &lt;a href=&#34;http://www.dartistics.com/&#34;&gt;www.dartistics.com&lt;/a&gt;.&lt;/p&gt;
@@ -2304,10 +2343,10 @@ query &amp;lt;- bqr_query(&amp;quot;big-query-database&amp;quot;, &amp;quot;my_d
     
     <item>
       <title>Efficient anti-sampling with the Google Analytics Reporting API</title>
-      <link>https://code.markedmondson.me/anti-sampling-google-analytics-api/</link>
+      <link>/anti-sampling-google-analytics-api/</link>
       <pubDate>Fri, 05 Aug 2016 23:03:57 +0100</pubDate>
       
-      <guid>https://code.markedmondson.me/anti-sampling-google-analytics-api/</guid>
+      <guid>/anti-sampling-google-analytics-api/</guid>
       <description>
 
 &lt;p&gt;Avoiding sampling is one of the most common reasons people start using the Google Analytics API.  This blog lays out some pseudo-code to do so in an efficient manner, avoiding too many unnecessary API calls.  The approach is used in the v4 calls for the R package &lt;a href=&#34;http://code.markedmondson.me/googleAnalyticsR/v4.html&#34;&gt;&lt;code&gt;googleAnalyticsR&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
@@ -2461,10 +2500,10 @@ for i in new_date_ranges:
     
     <item>
       <title>SEO keyword research using searchConsoleR and googleAnalyticsR</title>
-      <link>https://code.markedmondson.me/search-console-google-analytics-r-keyword-research/</link>
+      <link>/search-console-google-analytics-r-keyword-research/</link>
       <pubDate>Tue, 21 Jun 2016 23:03:57 +0100</pubDate>
       
-      <guid>https://code.markedmondson.me/search-console-google-analytics-r-keyword-research/</guid>
+      <guid>/search-console-google-analytics-r-keyword-research/</guid>
       <description>
 
 &lt;p&gt;In this blog we look at a method to estimate where to prioritise your SEO resources, estimating which keywords will give the greatest increase in revenue if you could improve their Google rank.&lt;/p&gt;
@@ -2485,7 +2524,7 @@ for i in new_date_ranges:
 
 &lt;p&gt;The method produced a targeted keyword list of 226 from an original seed list of ~21,000.  The top 30 revenue targets are shown in the plot below:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://code.markedmondson.me/images/see-potential.png&#34; alt=&#34;seo-forecast-estimate&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/see-potential.png&#34; alt=&#34;seo-forecast-estimate&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Read below on how the plot was generated and what the figures mean.&lt;/p&gt;
 
@@ -2617,7 +2656,7 @@ tidy_data &amp;lt;- joined_data %&amp;gt;%
 
 &lt;p&gt;A histogram of the accuracy estimate shows we consistently over estimate but the clicks and estimated sessions are within a magnitude:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://code.markedmondson.me/images/histogram1.png&#34; alt=&#34;keyword-sessio-click-estimate-histogram&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/histogram1.png&#34; alt=&#34;keyword-sessio-click-estimate-histogram&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Most of the session estimates were intrestingly around 1.3 times more than the clicks.  This may be because Search Console clicks act more like Google SEO users, but any other ideas please say in comments!&lt;/p&gt;
 
@@ -2631,7 +2670,7 @@ tidy_data &amp;lt;- joined_data %&amp;gt;%
 
 &lt;p&gt;The diagram below uses a weighted &lt;code&gt;loess&lt;/code&gt; within &lt;code&gt;ggplot2&lt;/code&gt; which is good to show trend but not for making predictions.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://code.markedmondson.me/images/ctr_scatter.png&#34; alt=&#34;ctr-scatter-plot&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/ctr_scatter.png&#34; alt=&#34;ctr-scatter-plot&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;a-click-curve-to-use&#34;&gt;A click curve to use&lt;/h3&gt;
 
@@ -2660,7 +2699,7 @@ click_curve &amp;lt;- click_curve %&amp;gt;%
 
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://code.markedmondson.me/images/ctr-curve.png&#34; alt=&#34;ctr-curve-seo&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/ctr-curve.png&#34; alt=&#34;ctr-curve-seo&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;These CTR rates are then used to predict how much more traffic/revenue etc. a keyword could get if they moved up to position 1.&lt;/p&gt;
 
@@ -2706,7 +2745,7 @@ estimates &amp;lt;- predict_click %&amp;gt;%
 
 &lt;p&gt;The number in the middle of the bar is the current position, with the revenue at the x axis and keyword on the y.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://code.markedmondson.me/images/see-potential.png&#34; alt=&#34;seo-forecast-estimate&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/see-potential.png&#34; alt=&#34;seo-forecast-estimate&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;ggplot2-code&#34;&gt;ggplot2 code&lt;/h3&gt;
 
@@ -2772,10 +2811,10 @@ est_plot
     
     <item>
       <title>Scheduling R scripts for a team using RStudio Server, Docker, Github and Google Compute Engine</title>
-      <link>https://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/</link>
+      <link>/setting-up-scheduled-R-scripts-for-an-analytics-team/</link>
       <pubDate>Thu, 21 Apr 2016 23:03:57 +0100</pubDate>
       
-      <guid>https://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/</guid>
+      <guid>/setting-up-scheduled-R-scripts-for-an-analytics-team/</guid>
       <description>
 
 &lt;p&gt;&lt;em&gt;edit 20th November, 2016 - now everything in this post is abstracted away and available in the googleComputeEngineR package - I would say its a lot easier to use that.  Here is a post on getting started with it. &lt;a href=&#34;http://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/&#34;&gt;http://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
@@ -3310,68 +3349,6 @@ gcloud compute instances start your-r-server-name
 &lt;p&gt;I would like to start up containers using the container manifest syntax but couldn&amp;rsquo;t get it to work for me yet, but for just one VM it means a few less lines in the start up script.&lt;/p&gt;
 
 &lt;p&gt;We also have &lt;a href=&#34;http://iihnordic.dk/blog/posts/2016/marts/creating-a-content-recommendation-engine-using-r-opencpu-and-gtm&#34;&gt;OpenCPU&lt;/a&gt; and &lt;a href=&#34;https://www.rstudio.com/products/shiny/shiny-server/&#34;&gt;Shiny Server&lt;/a&gt; in the Google project, as we move into providing data output such as visualisations, APIs and dashboards.  They are setup in a similar fashion, just swap out the Docker image for the appropriate version you need.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>googleAuthR 0.2.0</title>
-      <link>https://code.markedmondson.me/googleAuthR-0.2.0/</link>
-      <pubDate>Fri, 05 Feb 2016 23:03:57 +0100</pubDate>
-      
-      <guid>https://code.markedmondson.me/googleAuthR-0.2.0/</guid>
-      <description>
-
-&lt;p&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/googleAuthR&#34;&gt;googleAuthR&lt;/a&gt; is now on CRAN version 0.2.0.&lt;/p&gt;
-
-&lt;p&gt;This release is the result of using the library myself to create three working Google API libraries, and tweaking the googleAuthR code to better support the process.  As a result all of these libraries are now able to be authorised with one Google OAuth2 login flow:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/googleAnalyticsR_public&#34;&gt;googleAnalyticsR&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/searchConsoleR&#34;&gt;searchConsoleR&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/bigQueryR&#34;&gt;bigQueryR&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;batching&#34;&gt;Batching&lt;/h2&gt;
-
-&lt;p&gt;This means the libraries above and any other created with &lt;code&gt;googleAuthR&lt;/code&gt; can take advatage of batching: this uses a Google API feature that means you can send multiple API calls at once.  As the time for big fetches is usually in the wait for API responses, this is a huge time saver for big data fetches.&lt;/p&gt;
-
-&lt;p&gt;For example, it is now implemented within &lt;a href=&#34;https://github.com/MarkEdmondson1234/googleAnalyticsR_public&#34;&gt;googleAnalyticsR&lt;/a&gt; when walking through data per day to mitigate sampling.  Testing on a two year walk through landing page data, it sped up from ~20 mins to ~2 minutes(!)&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;../images/batch_example.png&#34; alt=&#34;batching_example&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;service-accounts&#34;&gt;Service Accounts&lt;/h2&gt;
-
-&lt;p&gt;There is also now support for &lt;a href=&#34;https://developers.google.com/identity/protocols/OAuth2ServiceAccount&#34;&gt;service accounts&lt;/a&gt;, meaning no OAuth2 flow is needed: a user can just upload or use a JSON file they download from their own Google API console.  As some APIs like Big Query don&amp;rsquo;t have read only scope yet, this also gives greater security options for apps, as a user can give limited access to a app via projects.&lt;/p&gt;
-
-&lt;h2 id=&#34;plans-for-the-future&#34;&gt;Plans for the future&lt;/h2&gt;
-
-&lt;p&gt;I hope the library is of use, it is certainly making my workflow a lot quicker.  I love hearing what people are doing with it.  Next on my planned list is a &lt;code&gt;GoogleAuthenticateR&lt;/code&gt; library, that works with pure user authentication of Shiny apps via the G+ API.&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;m also working with offline authentication, meaning apps can work in the background by saving refresh tokens to a database.  Combined with my new &lt;a href=&#34;https://github.com/MarkEdmondson1234/stripeR&#34;&gt;&lt;code&gt;stripeR&lt;/code&gt;&lt;/a&gt; this makes paid Shiny apps that work for users when offline a possibility.&lt;/p&gt;
-
-&lt;h2 id=&#34;full-change-list&#34;&gt;Full change list&lt;/h2&gt;
-
-&lt;p&gt;All changes from news.md is listed below:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Added ability to add your own custom headers to requests via customConfig in &lt;code&gt;gar_api_generator&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Add &amp;lsquo;localhost&amp;rsquo; to shiny URL detection.&lt;/li&gt;
-&lt;li&gt;Google Service accounts now supported. Authenticate via &amp;ldquo;Service Account Key&amp;rdquo; JSON.&lt;/li&gt;
-&lt;li&gt;Exposed &lt;code&gt;gar_shiny_getUrl&lt;/code&gt; and the authentication type (&lt;code&gt;online/offline&lt;/code&gt;) in &lt;code&gt;renderLogin&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;renderLogin&lt;/code&gt; : logout now has option revoke to revoke authentication token&lt;/li&gt;
-&lt;li&gt;Added option for &lt;code&gt;googleAuthR.jsonlite.simplifyVector&lt;/code&gt; for content parsing for compatibility for some APIs&lt;/li&gt;
-&lt;li&gt;Batch Google API requests now implemented. See readme or &lt;code&gt;?gar_batch&lt;/code&gt; and &lt;code&gt;?gar_batch_walk&lt;/code&gt; for details.&lt;/li&gt;
-&lt;li&gt;If data parsing fails, return the raw content so you can test and modify your data parsing function&lt;/li&gt;
-&lt;li&gt;Missed Jenny credit now corrected&lt;/li&gt;
-&lt;li&gt;Add tip about using &lt;code&gt;!is.null(access_token())&lt;/code&gt; to detect login state&lt;/li&gt;
-&lt;li&gt;Add HTTP backoff for certain errors (#6) from Johann&lt;/li&gt;
-&lt;li&gt;Remove possible &lt;code&gt;NULL&lt;/code&gt; entries from path and pars argument lists&lt;/li&gt;
-&lt;li&gt;Reduced some unnecessary message feedback&lt;/li&gt;
-&lt;li&gt;moved &lt;code&gt;with_shiny&lt;/code&gt;environment lookup to within generated function&lt;/li&gt;
-&lt;li&gt;added gzip to headers&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/googleAuthR&#34;&gt;&lt;img src=&#34;https://ga-beacon.appspot.com/UA-73050356-1/115064340704113209584/googleAuthR/v0.2.0&#34; alt=&#34;Analytics&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     

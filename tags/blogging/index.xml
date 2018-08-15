@@ -2,56 +2,56 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Blogging on Mark Edmondson</title>
-    <link>https://code.markedmondson.me/tags/blogging/index.xml</link>
+    <link>/tags/blogging/index.xml</link>
     <description>Recent content in Blogging on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
     <copyright>Powered by [Hugo](//gohugo.io). Theme by [PPOffice](http://github.com/ppoffice).</copyright>
-    <atom:link href="https://code.markedmondson.me/tags/blogging/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/tags/blogging/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>New Blog Down</title>
-      <link>https://code.markedmondson.me/new-blog-down/</link>
+      <link>/new-blog-down/</link>
       <pubDate>Mon, 23 Jan 2017 22:45:03 +0100</pubDate>
       
-      <guid>https://code.markedmondson.me/new-blog-down/</guid>
-      <description>&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/htmlwidgets/htmlwidgets.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/jquery/jquery.min.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/proj4js/proj4.js&#34;&gt;&lt;/script&gt;
-&lt;link href=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/css/motion.css&#34; rel=&#34;stylesheet&#34; /&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/highstock.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/highcharts-3d.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/highcharts-more.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/modules/annotations.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/modules/broken-axis.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/modules/data.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/modules/drilldown.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/modules/exporting.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/modules/funnel.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/modules/heatmap.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/modules/map.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/modules/no-data-to-display.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/modules/offline-exporting.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/modules/solid-gauge.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/modules/treemap.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/plugins/annotations.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/plugins/draggable-legend.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/plugins/draggable-points.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/plugins/export-csv.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/plugins/grouped-categories.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/plugins/motion.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/plugins/pattern-fill-v2.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/plugins/tooltip-delay.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/custom/reset.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/custom/symbols-extra.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highcharts/custom/text-symbols.js&#34;&gt;&lt;/script&gt;
-&lt;link href=&#34;https://code.markedmondson.me/rmarkdown-libs/fontawesome/font-awesome.min.css&#34; rel=&#34;stylesheet&#34; /&gt;
-&lt;link href=&#34;https://code.markedmondson.me/rmarkdown-libs/htmlwdgtgrid/htmlwdgtgrid.css&#34; rel=&#34;stylesheet&#34; /&gt;
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/highchart-binding/highchart.js&#34;&gt;&lt;/script&gt;
+      <guid>/new-blog-down/</guid>
+      <description>&lt;script src=&#34;/rmarkdown-libs/htmlwidgets/htmlwidgets.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/jquery/jquery.min.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/proj4js/proj4.js&#34;&gt;&lt;/script&gt;
+&lt;link href=&#34;/rmarkdown-libs/highcharts/css/motion.css&#34; rel=&#34;stylesheet&#34; /&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/highstock.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/highcharts-3d.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/highcharts-more.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/modules/annotations.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/modules/broken-axis.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/modules/data.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/modules/drilldown.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/modules/exporting.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/modules/funnel.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/modules/heatmap.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/modules/map.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/modules/no-data-to-display.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/modules/offline-exporting.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/modules/solid-gauge.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/modules/treemap.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/plugins/annotations.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/plugins/draggable-legend.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/plugins/draggable-points.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/plugins/export-csv.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/plugins/grouped-categories.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/plugins/motion.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/plugins/pattern-fill-v2.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/plugins/tooltip-delay.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/custom/reset.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/custom/symbols-extra.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/highcharts/custom/text-symbols.js&#34;&gt;&lt;/script&gt;
+&lt;link href=&#34;/rmarkdown-libs/fontawesome/font-awesome.min.css&#34; rel=&#34;stylesheet&#34; /&gt;
+&lt;link href=&#34;/rmarkdown-libs/htmlwdgtgrid/htmlwdgtgrid.css&#34; rel=&#34;stylesheet&#34; /&gt;
+&lt;script src=&#34;/rmarkdown-libs/highchart-binding/highchart.js&#34;&gt;&lt;/script&gt;
 
 
 &lt;p&gt;A new year, a new blogging platform!&lt;/p&gt;
-&lt;p&gt;This time I’m moving from &lt;a href=&#34;https://code.markedmondson.me/hello-world&#34;&gt;Jekyll&lt;/a&gt; to RStudio’s new &lt;a href=&#34;https://github.com/rstudio/blogdown&#34;&gt;blogdown&lt;/a&gt; format.&lt;/p&gt;
+&lt;p&gt;This time I’m moving from &lt;a href=&#34;/hello-world&#34;&gt;Jekyll&lt;/a&gt; to RStudio’s new &lt;a href=&#34;https://github.com/rstudio/blogdown&#34;&gt;blogdown&lt;/a&gt; format.&lt;/p&gt;
 &lt;p&gt;This keeps the advantages of Jekyll (a static, high performance website; markdown for editing; free hosting on Github) but with the extra bonus of being able to render in RMarkdown plus adding some nice looking capabilities from the &lt;a href=&#34;https://gohugo.io/&#34;&gt;Hugo&lt;/a&gt; project.&lt;/p&gt;
 &lt;p&gt;As I blog a lot about R it makes sense to have a platform that is more R-aware, as well as it letting me do things like this:&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(googleAnalyticsR)
@@ -74,7 +74,7 @@ forecast1 &amp;lt;- HoltWinters(ga_ts)
 ## forecast for next 12 months of the blog sessions
 hchart(forecast(forecast1, h = 12))&lt;/code&gt;&lt;/pre&gt;
 &lt;div id=&#34;htmlwidget-1&#34; style=&#34;width:100%;height:500px;&#34; class=&#34;highchart html-widget&#34;&gt;&lt;/div&gt;
-&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-1&#34;&gt;{&#34;x&#34;:{&#34;hc_opts&#34;:{&#34;title&#34;:{&#34;text&#34;:null},&#34;yAxis&#34;:{&#34;title&#34;:{&#34;text&#34;:null}},&#34;credits&#34;:{&#34;enabled&#34;:false},&#34;exporting&#34;:{&#34;enabled&#34;:false},&#34;plotOptions&#34;:{&#34;series&#34;:{&#34;turboThreshold&#34;:0},&#34;treemap&#34;:{&#34;layoutAlgorithm&#34;:&#34;squarified&#34;},&#34;bubble&#34;:{&#34;minSize&#34;:5,&#34;maxSize&#34;:25}},&#34;annotationsOptions&#34;:{&#34;enabledButtons&#34;:false},&#34;tooltip&#34;:{&#34;delayForDisplay&#34;:10},&#34;xAxis&#34;:{&#34;type&#34;:&#34;datetime&#34;},&#34;series&#34;:[{&#34;data&#34;:[[1375315200000,0],[1377993600000,0],[1380585600000,0],[1383264000000,0],[1385856000000,0],[1388534400000,317],[1391212800000,197],[1393632000000,279],[1396310400000,59],[1398902400000,162],[1401580800000,107],[1404172800000,140],[1406851200000,229],[1409529600000,283],[1412121600000,347],[1414800000000,693],[1417392000000,621],[1420070400000,569],[1422748800000,1397],[1425168000000,1309],[1427846400000,1196],[1430438400000,1015],[1433116800000,1260],[1435708800000,2887],[1438387200000,2105],[1441065600000,2607],[1443657600000,3165],[1446336000000,1994],[1448928000000,2228],[1451606400000,2061],[1454284800000,2146],[1456790400000,2406],[1459468800000,2698],[1462060800000,3103],[1464739200000,2909],[1467331200000,3410],[1470009600000,3125],[1472688000000,3221],[1475280000000,3917],[1477958400000,3838],[1480550400000,8267],[1483228800000,13818],[1485907200000,6872],[1488326400000,7392],[1491004800000,6566],[1493596800000,6562],[1496275200000,5840],[1498867200000,5989]],&#34;name&#34;:&#34;Series&#34;,&#34;zIndex&#34;:3},{&#34;data&#34;:[[1501545600000,5799.88296109746],[1504224000000,5953.82702697917],[1506816000000,6286.04960256189],[1509494400000,5919.18174699678],[1512086400000,7512.16192182951],[1514764800000,8349.27443790722],[1517443200000,4701.14915567939],[1519862400000,6100.01802849025],[1522540800000,6101.59851593583],[1525132800000,6404.34402681755],[1527811200000,6192.00418324618],[1530403200000,6785.03321678322]],&#34;name&#34;:&#34;HoltWinters&#34;,&#34;zIndex&#34;:2,&#34;id&#34;:&#34;07zp2puio3&#34;},{&#34;data&#34;:[[1501545600000,8009.15429421046,3590.61162798446],[1504224000000,8605.30544712378,3302.34860683456],[1506816000000,9315.86738613737,3256.23181898641],[1509494400000,9285.0774362373,2553.28605775626],[1512086400000,11183.4984332413,3840.82541041768],[1514764800000,12302.5224403987,4396.02643541569],[1517443200000,8917.50157908768,484.796732271103],[1519862400000,10563.9944786475,1636.04157833298],[1522540800000,10800.1667804965,1403.0302513752],[1525132800000,11326.3356690203,1482.35238461478],[1527811200000,11327.7085862557,1056.29978023663],[1530403200000,12125.9055897453,1444.16084382116]],&#34;name&#34;:&#34;HoltWinters level 80&#34;,&#34;type&#34;:&#34;arearange&#34;,&#34;fillOpacity&#34;:0.1,&#34;zIndex&#34;:1,&#34;lineWidth&#34;:0,&#34;linkedTo&#34;:&#34;07zp2puio3&#34;},{&#34;data&#34;:[[1501545600000,9178.67189272986,2421.09402946506],[1504224000000,10008.9133371896,1898.74071676878],[1506816000000,10919.756037155,1652.34316796876],[1509494400000,11066.874983848,771.488510145552],[1512086400000,13126.9865851167,1897.33725854234],[1514764800000,14395.2455210494,2303.30335476499],[1517443200000,11149.5037269577,-1747.20541559893],[1519862400000,12927.0808680766,-727.044811096055],[1522540800000,13287.438574996,-1084.24154312437],[1525132800000,13931.8806552989,-1123.19260166379],[1527811200000,14046.3862742742,-1662.37790778189],[1530403200000,14953.1926404598,-1383.12620689336]],&#34;name&#34;:&#34;HoltWinters level 95&#34;,&#34;type&#34;:&#34;arearange&#34;,&#34;fillOpacity&#34;:0.1,&#34;zIndex&#34;:1,&#34;lineWidth&#34;:0,&#34;linkedTo&#34;:&#34;07zp2puio3&#34;}]},&#34;theme&#34;:{&#34;chart&#34;:{&#34;backgroundColor&#34;:&#34;transparent&#34;}},&#34;conf_opts&#34;:{&#34;global&#34;:{&#34;Date&#34;:null,&#34;VMLRadialGradientURL&#34;:&#34;http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png&#34;,&#34;canvasToolsURL&#34;:&#34;http =//code.highcharts.com/list(version)/modules/canvas-tools.js&#34;,&#34;getTimezoneOffset&#34;:null,&#34;timezoneOffset&#34;:0,&#34;useUTC&#34;:true},&#34;lang&#34;:{&#34;contextButtonTitle&#34;:&#34;Chart context menu&#34;,&#34;decimalPoint&#34;:&#34;.&#34;,&#34;downloadJPEG&#34;:&#34;Download JPEG image&#34;,&#34;downloadPDF&#34;:&#34;Download PDF document&#34;,&#34;downloadPNG&#34;:&#34;Download PNG image&#34;,&#34;downloadSVG&#34;:&#34;Download SVG vector image&#34;,&#34;drillUpText&#34;:&#34;Back to {series.name}&#34;,&#34;invalidDate&#34;:null,&#34;loading&#34;:&#34;Loading...&#34;,&#34;months&#34;:[&#34;January&#34;,&#34;February&#34;,&#34;March&#34;,&#34;April&#34;,&#34;May&#34;,&#34;June&#34;,&#34;July&#34;,&#34;August&#34;,&#34;September&#34;,&#34;October&#34;,&#34;November&#34;,&#34;December&#34;],&#34;noData&#34;:&#34;No data to display&#34;,&#34;numericSymbols&#34;:[&#34;k&#34;,&#34;M&#34;,&#34;G&#34;,&#34;T&#34;,&#34;P&#34;,&#34;E&#34;],&#34;printChart&#34;:&#34;Print chart&#34;,&#34;resetZoom&#34;:&#34;Reset zoom&#34;,&#34;resetZoomTitle&#34;:&#34;Reset zoom level 1:1&#34;,&#34;shortMonths&#34;:[&#34;Jan&#34;,&#34;Feb&#34;,&#34;Mar&#34;,&#34;Apr&#34;,&#34;May&#34;,&#34;Jun&#34;,&#34;Jul&#34;,&#34;Aug&#34;,&#34;Sep&#34;,&#34;Oct&#34;,&#34;Nov&#34;,&#34;Dec&#34;],&#34;thousandsSep&#34;:&#34; &#34;,&#34;weekdays&#34;:[&#34;Sunday&#34;,&#34;Monday&#34;,&#34;Tuesday&#34;,&#34;Wednesday&#34;,&#34;Thursday&#34;,&#34;Friday&#34;,&#34;Saturday&#34;]}},&#34;type&#34;:&#34;chart&#34;,&#34;fonts&#34;:[],&#34;debug&#34;:false},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}&lt;/script&gt;
+&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-1&#34;&gt;{&#34;x&#34;:{&#34;hc_opts&#34;:{&#34;title&#34;:{&#34;text&#34;:null},&#34;yAxis&#34;:{&#34;title&#34;:{&#34;text&#34;:null}},&#34;credits&#34;:{&#34;enabled&#34;:false},&#34;exporting&#34;:{&#34;enabled&#34;:false},&#34;plotOptions&#34;:{&#34;series&#34;:{&#34;turboThreshold&#34;:0},&#34;treemap&#34;:{&#34;layoutAlgorithm&#34;:&#34;squarified&#34;},&#34;bubble&#34;:{&#34;minSize&#34;:5,&#34;maxSize&#34;:25}},&#34;annotationsOptions&#34;:{&#34;enabledButtons&#34;:false},&#34;tooltip&#34;:{&#34;delayForDisplay&#34;:10},&#34;xAxis&#34;:{&#34;type&#34;:&#34;datetime&#34;},&#34;series&#34;:[{&#34;data&#34;:[[1375315200000,0],[1377993600000,0],[1380585600000,0],[1383264000000,0],[1385856000000,0],[1388534400000,317],[1391212800000,197],[1393632000000,279],[1396310400000,59],[1398902400000,162],[1401580800000,107],[1404172800000,140],[1406851200000,229],[1409529600000,283],[1412121600000,347],[1414800000000,693],[1417392000000,621],[1420070400000,569],[1422748800000,1397],[1425168000000,1309],[1427846400000,1196],[1430438400000,1015],[1433116800000,1260],[1435708800000,2887],[1438387200000,2105],[1441065600000,2607],[1443657600000,3165],[1446336000000,1994],[1448928000000,2228],[1451606400000,2061],[1454284800000,2146],[1456790400000,2406],[1459468800000,2698],[1462060800000,3103],[1464739200000,2909],[1467331200000,3410],[1470009600000,3125],[1472688000000,3221],[1475280000000,3917],[1477958400000,3838],[1480550400000,8267],[1483228800000,13818],[1485907200000,6872],[1488326400000,7392],[1491004800000,6566],[1493596800000,6562],[1496275200000,5840],[1498867200000,5989]],&#34;name&#34;:&#34;Series&#34;,&#34;zIndex&#34;:3},{&#34;data&#34;:[[1501545600000,5799.88296109746],[1504224000000,5953.82702697917],[1506816000000,6286.04960256189],[1509494400000,5919.18174699678],[1512086400000,7512.16192182951],[1514764800000,8349.27443790722],[1517443200000,4701.14915567939],[1519862400000,6100.01802849025],[1522540800000,6101.59851593583],[1525132800000,6404.34402681755],[1527811200000,6192.00418324618],[1530403200000,6785.03321678322]],&#34;name&#34;:&#34;HoltWinters&#34;,&#34;zIndex&#34;:2,&#34;id&#34;:&#34;6jdgi0mai3&#34;},{&#34;data&#34;:[[1501545600000,8009.15429421046,3590.61162798446],[1504224000000,8605.30544712378,3302.34860683456],[1506816000000,9315.86738613737,3256.23181898641],[1509494400000,9285.0774362373,2553.28605775626],[1512086400000,11183.4984332413,3840.82541041768],[1514764800000,12302.5224403987,4396.02643541569],[1517443200000,8917.50157908768,484.796732271103],[1519862400000,10563.9944786475,1636.04157833298],[1522540800000,10800.1667804965,1403.0302513752],[1525132800000,11326.3356690203,1482.35238461478],[1527811200000,11327.7085862557,1056.29978023663],[1530403200000,12125.9055897453,1444.16084382116]],&#34;name&#34;:&#34;HoltWinters level 80&#34;,&#34;type&#34;:&#34;arearange&#34;,&#34;fillOpacity&#34;:0.1,&#34;zIndex&#34;:1,&#34;lineWidth&#34;:0,&#34;linkedTo&#34;:&#34;6jdgi0mai3&#34;},{&#34;data&#34;:[[1501545600000,9178.67189272986,2421.09402946506],[1504224000000,10008.9133371896,1898.74071676878],[1506816000000,10919.756037155,1652.34316796876],[1509494400000,11066.874983848,771.488510145552],[1512086400000,13126.9865851167,1897.33725854234],[1514764800000,14395.2455210494,2303.30335476499],[1517443200000,11149.5037269577,-1747.20541559893],[1519862400000,12927.0808680766,-727.044811096055],[1522540800000,13287.438574996,-1084.24154312437],[1525132800000,13931.8806552989,-1123.19260166379],[1527811200000,14046.3862742742,-1662.37790778189],[1530403200000,14953.1926404598,-1383.12620689336]],&#34;name&#34;:&#34;HoltWinters level 95&#34;,&#34;type&#34;:&#34;arearange&#34;,&#34;fillOpacity&#34;:0.1,&#34;zIndex&#34;:1,&#34;lineWidth&#34;:0,&#34;linkedTo&#34;:&#34;6jdgi0mai3&#34;}]},&#34;theme&#34;:{&#34;chart&#34;:{&#34;backgroundColor&#34;:&#34;transparent&#34;}},&#34;conf_opts&#34;:{&#34;global&#34;:{&#34;Date&#34;:null,&#34;VMLRadialGradientURL&#34;:&#34;http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png&#34;,&#34;canvasToolsURL&#34;:&#34;http =//code.highcharts.com/list(version)/modules/canvas-tools.js&#34;,&#34;getTimezoneOffset&#34;:null,&#34;timezoneOffset&#34;:0,&#34;useUTC&#34;:true},&#34;lang&#34;:{&#34;contextButtonTitle&#34;:&#34;Chart context menu&#34;,&#34;decimalPoint&#34;:&#34;.&#34;,&#34;downloadJPEG&#34;:&#34;Download JPEG image&#34;,&#34;downloadPDF&#34;:&#34;Download PDF document&#34;,&#34;downloadPNG&#34;:&#34;Download PNG image&#34;,&#34;downloadSVG&#34;:&#34;Download SVG vector image&#34;,&#34;drillUpText&#34;:&#34;Back to {series.name}&#34;,&#34;invalidDate&#34;:null,&#34;loading&#34;:&#34;Loading...&#34;,&#34;months&#34;:[&#34;January&#34;,&#34;February&#34;,&#34;March&#34;,&#34;April&#34;,&#34;May&#34;,&#34;June&#34;,&#34;July&#34;,&#34;August&#34;,&#34;September&#34;,&#34;October&#34;,&#34;November&#34;,&#34;December&#34;],&#34;noData&#34;:&#34;No data to display&#34;,&#34;numericSymbols&#34;:[&#34;k&#34;,&#34;M&#34;,&#34;G&#34;,&#34;T&#34;,&#34;P&#34;,&#34;E&#34;],&#34;printChart&#34;:&#34;Print chart&#34;,&#34;resetZoom&#34;:&#34;Reset zoom&#34;,&#34;resetZoomTitle&#34;:&#34;Reset zoom level 1:1&#34;,&#34;shortMonths&#34;:[&#34;Jan&#34;,&#34;Feb&#34;,&#34;Mar&#34;,&#34;Apr&#34;,&#34;May&#34;,&#34;Jun&#34;,&#34;Jul&#34;,&#34;Aug&#34;,&#34;Sep&#34;,&#34;Oct&#34;,&#34;Nov&#34;,&#34;Dec&#34;],&#34;thousandsSep&#34;:&#34; &#34;,&#34;weekdays&#34;:[&#34;Sunday&#34;,&#34;Monday&#34;,&#34;Tuesday&#34;,&#34;Wednesday&#34;,&#34;Thursday&#34;,&#34;Friday&#34;,&#34;Saturday&#34;]}},&#34;type&#34;:&#34;chart&#34;,&#34;fonts&#34;:[],&#34;debug&#34;:false},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}&lt;/script&gt;
 &lt;p&gt;As I type R code blocks, the code output gets rendered right into the blog.&lt;/p&gt;
 &lt;p&gt;This is the example from the &lt;a href=&#34;http://www.dartistics.com&#34;&gt;Dartistics.com&lt;/a&gt; homepage, and adding interactive HTML widgets to my posts is going to be lovely, with no other hassle other than writing the code.&lt;/p&gt;
 &lt;div id=&#34;setup-blogdown&#34; class=&#34;section level2&#34;&gt;
@@ -82,7 +82,7 @@ hchart(forecast(forecast1, h = 12))&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Now, blogdown is in beta so the documentation is a bit sparse at the moment, and I had some teething troubles migrating across from my old blog, but hopefully I have that all sorted now (although I never want to hear about Git submodules again).&lt;/p&gt;
 &lt;p&gt;I mostly followed the guide on &lt;a href=&#34;https://gohugo.io/tutorials/github-pages-blog/&#34;&gt;Hugo about hosting on Github pages&lt;/a&gt; and then added the deploy script it recommends to RStudio’s custom project settings, meaning I can now publish with a click of a button:&lt;/p&gt;
 &lt;div class=&#34;figure&#34;&gt;
-&lt;img src=&#34;https://code.markedmondson.me/images/hugo-deploy-rstudio.png&#34; /&gt;
+&lt;img src=&#34;/images/hugo-deploy-rstudio.png&#34; /&gt;
 
 &lt;/div&gt;
 &lt;p&gt;My work flow now is:&lt;/p&gt;
@@ -109,10 +109,10 @@ cp -a ~/Documents/markedmondson.me-hugo/public/. ~/Documents/MarkEdmondson1234.g
     
     <item>
       <title>Jekyll &#43; Github &#43; Markdown = Blog</title>
-      <link>https://code.markedmondson.me/hello-world/</link>
+      <link>/hello-world/</link>
       <pubDate>Thu, 14 Jan 2016 23:03:57 +0100</pubDate>
       
-      <guid>https://code.markedmondson.me/hello-world/</guid>
+      <guid>/hello-world/</guid>
       <description>
 
 &lt;p&gt;Hello World!  Welcome to my new home for code blogging.  I&amp;rsquo;ll keep the &lt;a href=&#34;http://markedmondson.me&#34;&gt;regular blog&lt;/a&gt; for all the other stuff, running on &lt;a href=&#34;https://posthaven.com/&#34;&gt;Posthaven&lt;/a&gt;.&lt;/p&gt;

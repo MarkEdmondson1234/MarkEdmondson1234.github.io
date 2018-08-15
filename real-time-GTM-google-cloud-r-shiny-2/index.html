@@ -10,20 +10,20 @@
       <meta name="description" content="The code bit of the blog">
     
     
-    <link rel="canonical" href="https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/"/>
-    <link rel="icon" href="https://code.markedmondson.me/favicon.ico">
-    <link rel="apple-touch-icon" href="https://code.markedmondson.me/apple-touch-icon.png"/>
-    <link rel="stylesheet" href="https://code.markedmondson.me/css/style.css">
-    <link rel="stylesheet" href="https://code.markedmondson.me/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://code.markedmondson.me/css/monokai.css">
-    <link rel="stylesheet" href="https://code.markedmondson.me/fancybox/jquery.fancybox.css">
+    <link rel="canonical" href="/real-time-GTM-google-cloud-r-shiny-2/"/>
+    <link rel="icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/monokai.css">
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
     
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
     <meta property="og:title" content="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" />
 <meta property="og:description" content="In part two of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&rsquo;s data streaming capability. In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in Shiny and the JavaScript visualisation library Highcharts." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/" />
+<meta property="og:url" content="/real-time-GTM-google-cloud-r-shiny-2/" />
 
 
 <meta property="og:updated_time" content="2017-01-22T14:20:57&#43;01:00"/>
@@ -83,16 +83,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 	<header id="header">
   <div id="header-main" class="header-inner">
     <div class="outer">
-      <a href="https://code.markedmondson.me" id="logo">
+      <a href="/" id="logo">
           
-          <i class="logo" style="background-image: url('https://code.markedmondson.me/../images/greenhand.png')"></i>
+          <i class="logo" style="background-image: url('/images/greenhand.png')"></i>
           
           <span class="site-title">Mark Edmondson</span>
       </a>
       <nav id="main-nav">
           
           
-          <a class="main-nav-link" href="https://code.markedmondson.me/">Home</a>
+          <a class="main-nav-link" href="/">Home</a>
           
           
           
@@ -112,7 +112,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       </nav>
         <nav id="sub-nav">
           <div class="profile" id="profile-nav">
-            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="https://code.markedmondson.me/../images/gde_avatar.jpg"><i class="fa fa-caret-down"></i></a>
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="/images/gde_avatar.jpg"><i class="fa fa-caret-down"></i></a>
           </div>
         </nav>
         <div id="search-form-wrap">
@@ -120,7 +120,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               <input type="search" name="q" class="search-form-input" placeholder="Search">
               <button type="submit" class="search-form-submit">
               </button>
-              <input type="hidden" name="sitesearch" value="https://code.markedmondson.me" />
+              <input type="hidden" name="sitesearch" value="/" />
          </form>
         </div>
     </div>
@@ -131,7 +131,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <tr>
           
           
-          <td><a class="main-nav-link" href="https://code.markedmondson.me/">Home</a></td>
+          <td><a class="main-nav-link" href="/">Home</a></td>
           
           
           
@@ -151,7 +151,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <td>
           <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
           <input type="search" name="q" class="search-form-input" placeholder="Search">
-          <input type="hidden" name="sitesearch" value="https://code.markedmondson.me" />
+          <input type="hidden" name="sitesearch" value="/" />
           </form>
         </td>
       </tr>
@@ -166,7 +166,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 	    <aside id="profile">
   <div class="inner profile-inner">
     <div class="base-info profile-block">
-      <img id="avatar" src="https://code.markedmondson.me/../images/gde_avatar.jpg">
+      <img id="avatar" src="/images/gde_avatar.jpg">
       <h2 id="name">Mark Edmondson</h2>
       <h3 id="title">Coding in digital analytics</h3>
       <span id="location"><i class="fa fa-map-marker"></i>Copenhagen, Denmark</span>
@@ -178,7 +178,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        17
+        18
         <span>Posts</span>
       </div>
       <div class="article-info-block">
@@ -251,7 +251,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <td><a href="//twitter.com/HoloMarkeD" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
 
 
-          <td><a href="https://code.markedmondson.me/index.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+          <td><a href="/index.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
         </tr>
       </table>
     </div>
@@ -266,11 +266,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
         <div class="article-inner">
             
-                <img src="https://code.markedmondson.me/banners/realtime-forecast.png" class="article-banner">
+                <img src="/banners/realtime-forecast.png" class="article-banner">
             
 
             <header class="article-header">
-    <a href="https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/">
+    <a href="/real-time-GTM-google-cloud-r-shiny-2/">
     <h1 class="article-title" itemprop="name">
         Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two
     </h1>
@@ -297,23 +297,23 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <i class="fa fa-tags"></i>
                 
                 
-                <a class="article-category-link" href="https://code.markedmondson.me/tags/python">python</a>
+                <a class="article-category-link" href="/tags/python">python</a>
                 &middot;
                 
                 
-                <a class="article-category-link" href="https://code.markedmondson.me/tags/google-app-engine">google-app-engine</a>
+                <a class="article-category-link" href="/tags/google-app-engine">google-app-engine</a>
                 &middot;
                 
                 
-                <a class="article-category-link" href="https://code.markedmondson.me/tags/google-tag-manager">google-tag-manager</a>
+                <a class="article-category-link" href="/tags/google-tag-manager">google-tag-manager</a>
                 &middot;
                 
                 
-                <a class="article-category-link" href="https://code.markedmondson.me/tags/big-query">big-query</a>
+                <a class="article-category-link" href="/tags/big-query">big-query</a>
                 &middot;
                 
                 
-                <a class="article-category-link" href="https://code.markedmondson.me/tags/r">r</a>
+                <a class="article-category-link" href="/tags/r">r</a>
                 
                 
             </div>
@@ -663,12 +663,12 @@ shinyUI(fluidPage(
 
             </div>
             <footer class="article-footer">
-    <a data-url="https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/" data-id="d5390adbc957acf80db95a72064b9f58" class="article-share-link">
+    <a data-url="/real-time-GTM-google-cloud-r-shiny-2/" data-id="d5390adbc957acf80db95a72064b9f58" class="article-share-link">
         <i class="fa fa-share"></i>
         Share
     </a>
     
-    <a href="https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2//#disqus_thread" class="article-comment-link">
+    <a href="/real-time-GTM-google-cloud-r-shiny-2//#disqus_thread" class="article-comment-link">
         Comments
     </a>
     
@@ -744,7 +744,7 @@ shinyUI(fluidPage(
         
 <nav id="article-nav">
     
-    <a href="https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/real-time-GTM-google-cloud-r-shiny-1/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">
           Older
       </strong>
@@ -753,7 +753,7 @@ shinyUI(fluidPage(
     
 
     
-    <a href="https://code.markedmondson.me/new-blog-down/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/new-blog-down/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">
           Newer
       </strong>
@@ -771,9 +771,9 @@ shinyUI(fluidPage(
             <div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_shortname = 'markedmondson';
-    var disqus_identifier = 'https:\/\/code.markedmondson.me\/real-time-GTM-google-cloud-r-shiny-2\/';
+    var disqus_identifier = '\/real-time-GTM-google-cloud-r-shiny-2\/';
     var disqus_title = 'Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two';
-    var disqus_url = 'https:\/\/code.markedmondson.me\/real-time-GTM-google-cloud-r-shiny-2\/';
+    var disqus_url = '\/real-time-GTM-google-cloud-r-shiny-2\/';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -801,9 +801,9 @@ shinyUI(fluidPage(
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts" class="thumbnail">
+                    <a href="/talking-google-analytics-dashboards" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/../banners/r-kubernetes.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
+                        <span style="background-image:url(/banners/talking-gas.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -811,7 +811,26 @@ shinyUI(fluidPage(
                     
                     
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts" class="title">R on Kubernetes - serverless Shiny, R APIs and scheduled scripts</a></p>
+                    <p class="item-title"><a href="/talking-google-analytics-dashboards" class="title">Talking Google Analytics dashboards via R, Shiny and Text-to-Speech APIs</a></p>
+                    <p class="item-date">
+                        <time datetime="2018-08-15 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-08-15</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts" class="thumbnail">
+                    
+                        <span style="background-image:url(/banners/r-kubernetes.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    
+                    
+                    <p class="item-title"><a href="/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts" class="title">R on Kubernetes - serverless Shiny, R APIs and scheduled scripts</a></p>
                     <p class="item-date">
                         <time datetime="2018-05-02 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-05-02</time>
                     </p>
@@ -820,9 +839,9 @@ shinyUI(fluidPage(
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown" class="thumbnail">
+                    <a href="/embedding-google-data-studio-into-rmarkdown" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/../banners/datastudio.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
+                        <span style="background-image:url(/banners/datastudio.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -830,7 +849,7 @@ shinyUI(fluidPage(
                     
                     
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown" class="title">Embedding Google Data Studio into RMarkdown</a></p>
+                    <p class="item-title"><a href="/embedding-google-data-studio-into-rmarkdown" class="title">Embedding Google Data Studio into RMarkdown</a></p>
                     <p class="item-date">
                         <time datetime="2018-03-15 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-03-15</time>
                     </p>
@@ -839,15 +858,15 @@ shinyUI(fluidPage(
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/searchconsoler-vs-googlelanguager" class="thumbnail">
+                    <a href="/searchconsoler-vs-googlelanguager" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/nlp_sc.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
+                        <span style="background-image:url(/banners/nlp_sc.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/searchconsoler-vs-googlelanguager" class="title">Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API</a></p>
+                    <p class="item-title"><a href="/searchconsoler-vs-googlelanguager" class="title">Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API</a></p>
                     <p class="item-date">
                         <time datetime="2018-01-11 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-01-11</time>
                     </p>
@@ -856,34 +875,17 @@ shinyUI(fluidPage(
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/rstudio-server-chromebook/" class="thumbnail">
+                    <a href="/rstudio-server-chromebook/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/chromebook.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
+                        <span style="background-image:url(/banners/chromebook.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/rstudio-server-chromebook/" class="title">Run RStudio Server on a Chromebook as a Cloud Native</a></p>
+                    <p class="item-title"><a href="/rstudio-server-chromebook/" class="title">Run RStudio Server on a Chromebook as a Cloud Native</a></p>
                     <p class="item-date">
                         <time datetime="2017-09-05 13:55:57 &#43;0100 &#43;0100" itemprop="datePublished">2017-09-05</time>
-                    </p>
-                </div>
-            </li>
-            
-            <li>
-                <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform" class="thumbnail">
-                    
-                        <span style="background-image:url(https://code.markedmondson.me/banners/scheduledR.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
-                    
-                    </a>
-                </div>
-                <div class="item-inner">
-                    
-                    <p class="item-title"><a href="https://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform" class="title">Four Ways to Schedule R scripts on Google Cloud Platform</a></p>
-                    <p class="item-date">
-                        <time datetime="2017-07-09 00:00:00 &#43;0000 UTC" itemprop="datePublished">2017-07-09</time>
                     </p>
                 </div>
             </li>
@@ -911,7 +913,7 @@ shinyUI(fluidPage(
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/big-query">
+                <a class="category-list-link" href="/tags/big-query">
                     big-query
                 </a>
                 <span class="category-list-count">4</span>
@@ -919,7 +921,7 @@ shinyUI(fluidPage(
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/blogging">
+                <a class="category-list-link" href="/tags/blogging">
                     blogging
                 </a>
                 <span class="category-list-count">2</span>
@@ -927,7 +929,7 @@ shinyUI(fluidPage(
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/docker">
+                <a class="category-list-link" href="/tags/docker">
                     docker
                 </a>
                 <span class="category-list-count">5</span>
@@ -935,15 +937,15 @@ shinyUI(fluidPage(
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-analytics">
+                <a class="category-list-link" href="/tags/google-analytics">
                     google-analytics
                 </a>
-                <span class="category-list-count">5</span>
+                <span class="category-list-count">6</span>
             </li>
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-app-engine">
+                <a class="category-list-link" href="/tags/google-app-engine">
                     google-app-engine
                 </a>
                 <span class="category-list-count">4</span>
@@ -951,7 +953,7 @@ shinyUI(fluidPage(
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-auth">
+                <a class="category-list-link" href="/tags/google-auth">
                     google-auth
                 </a>
                 <span class="category-list-count">3</span>
@@ -959,7 +961,7 @@ shinyUI(fluidPage(
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-cloud-storage">
+                <a class="category-list-link" href="/tags/google-cloud-storage">
                     google-cloud-storage
                 </a>
                 <span class="category-list-count">3</span>
@@ -967,7 +969,7 @@ shinyUI(fluidPage(
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-compute-engine">
+                <a class="category-list-link" href="/tags/google-compute-engine">
                     google-compute-engine
                 </a>
                 <span class="category-list-count">6</span>
@@ -975,15 +977,15 @@ shinyUI(fluidPage(
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-language">
+                <a class="category-list-link" href="/tags/google-language">
                     google-language
                 </a>
-                <span class="category-list-count">1</span>
+                <span class="category-list-count">2</span>
             </li>
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-tag-manager">
+                <a class="category-list-link" href="/tags/google-tag-manager">
                     google-tag-manager
                 </a>
                 <span class="category-list-count">3</span>
@@ -991,7 +993,7 @@ shinyUI(fluidPage(
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/python">
+                <a class="category-list-link" href="/tags/python">
                     python
                 </a>
                 <span class="category-list-count">2</span>
@@ -999,15 +1001,15 @@ shinyUI(fluidPage(
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/r">
+                <a class="category-list-link" href="/tags/r">
                     r
                 </a>
-                <span class="category-list-count">15</span>
+                <span class="category-list-count">16</span>
             </li>
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/rstudio-server">
+                <a class="category-list-link" href="/tags/rstudio-server">
                     rstudio-server
                 </a>
                 <span class="category-list-count">4</span>
@@ -1015,7 +1017,7 @@ shinyUI(fluidPage(
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/search-console">
+                <a class="category-list-link" href="/tags/search-console">
                     search-console
                 </a>
                 <span class="category-list-count">3</span>
@@ -1048,8 +1050,8 @@ shinyUI(fluidPage(
 </footer>
 
 
-<script src="https://code.markedmondson.me/fancybox/jquery.fancybox.pack.js"></script>
-<script src="https://code.markedmondson.me/js/script.js"></script>
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script src="/js/script.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 
