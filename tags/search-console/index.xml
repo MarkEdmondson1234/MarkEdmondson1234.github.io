@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Search Console on Mark Edmondson</title>
-    <link>/tags/search-console/index.xml</link>
+    <link>https://code.markedmondson.me/tags/search-console/index.xml</link>
     <description>Recent content in Search Console on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
     <copyright>Powered by [Hugo](//gohugo.io). Theme by [PPOffice](http://github.com/ppoffice).</copyright>
-    <atom:link href="/tags/search-console/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://code.markedmondson.me/tags/search-console/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API</title>
-      <link>/searchconsoler-vs-googlelanguager</link>
+      <link>https://code.markedmondson.me/searchconsoler-vs-googlelanguager</link>
       <pubDate>Thu, 11 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>/searchconsoler-vs-googlelanguager</guid>
+      <guid>https://code.markedmondson.me/searchconsoler-vs-googlelanguager</guid>
       <description>&lt;p&gt;With the launch of the Google Natural Language API (NLP API), and the emphasis of machine learning that is said to account for up to 30% of the SEO algorithmn for Google search, a natural question is whether you can use Google’s own macine learning APIs to help optimise your website for search.&lt;/p&gt;
 &lt;p&gt;Whilst I don’t believe they will offer exactly the same results, I can see useful applications that include:&lt;/p&gt;
 &lt;ul&gt;
@@ -124,12 +124,11 @@ scrape_googlecache &amp;lt;- function(the_url){
 
 }&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Here is a demo of how it works on one URL:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;the_url &amp;lt;- &amp;quot;http://code.markedmondson.me&amp;quot;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;the_url &amp;lt;- &amp;quot;https://code.markedmondson.me&amp;quot;
 
 html_url &amp;lt;- scrape_googlecache(the_url)
 
 substr(html_url$cached, 1000, 2000)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;oogle&amp;#39;s Cloud Natural Language API 2018-01-11 · 1867 words · 9 minute read r · search-console · google-language With the launch of the Google Natural Language API (NLP API), and the emphasis of machine learning that is said to account for up to 30% of the SEO algorithmn for Google search, a natural question is whether you can use Google’s own macine learning APIs to help optimise your website for search. Whilst I don’t believe they will offer exactly the same results, I can see useful applications that include: Read more Share Comments Run RStudio Server on a Chromebook as a Cloud Native 2017-09-05 · 1534 words · 8 minute read google-cloud-storage · google-compute-engine · r · rstudio-server · docker · google-app-engine I recently got an Asus Chromebook Flip with which I’m very happy, but it did make me realise that if a Chromebook was to replace my normal desktop as my primary workstation, my RStudio Server setup would need to be more cloud native than was available up until now. TL;DR&amp;quot;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;You can now apply this function to all the unique URLs in your search console URLs using a purrr loop, but hit it too fast and you’ll be blocked.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
 
@@ -306,12 +305,12 @@ fuzzy &amp;lt;- left_join(fuzzy_ranks, fuzzy_values, by = &amp;quot;query&amp;qu
     
     <item>
       <title>My R Packages</title>
-      <link>/r-packages/</link>
+      <link>https://code.markedmondson.me/r-packages/</link>
       <pubDate>Tue, 24 Jan 2017 21:20:50 +0100</pubDate>
       
-      <guid>/r-packages/</guid>
+      <guid>https://code.markedmondson.me/r-packages/</guid>
       <description>&lt;p&gt;A full list of R packages I have published are on &lt;a href=&#34;https://github.com/MarkEdmondson1234&#34;&gt;my Github&lt;/a&gt;, but some notable ones are below.&lt;/p&gt;
-&lt;p&gt;Some are part of the &lt;a href=&#34;http://cloudyr.github.io/&#34;&gt;cloudyR project&lt;/a&gt;, which has many packages useful for using R in the cloud. &lt;img src=&#34;/images/cloudyr2.png&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Some are part of the &lt;a href=&#34;http://cloudyr.github.io/&#34;&gt;cloudyR project&lt;/a&gt;, which has many packages useful for using R in the cloud. &lt;img src=&#34;https://code.markedmondson.me/images/cloudyr2.png&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;I concentrate on the Google cloud below, but be sure to check out the other packages if you’re looking to work with AWS or other cloud based services.&lt;/p&gt;
 &lt;div id=&#34;cran&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;CRAN&lt;/h2&gt;
@@ -361,7 +360,7 @@ fuzzy &amp;lt;- left_join(fuzzy_ranks, fuzzy_values, by = &amp;quot;query&amp;qu
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;As you can tell, most are aimed towards helping R users with help in digital analytics and cloud based services. You can get some idea of how they can &lt;a href=&#34;/digital-analytics-workflow-through-google-cloud/&#34;&gt;work together in a digital analytics workflow here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;As you can tell, most are aimed towards helping R users with help in digital analytics and cloud based services. You can get some idea of how they can &lt;a href=&#34;https://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/&#34;&gt;work together in a digital analytics workflow here&lt;/a&gt;.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;github&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;GITHUB&lt;/h2&gt;
@@ -428,10 +427,10 @@ fuzzy &amp;lt;- left_join(fuzzy_ranks, fuzzy_values, by = &amp;quot;query&amp;qu
     
     <item>
       <title>SEO keyword research using searchConsoleR and googleAnalyticsR</title>
-      <link>/search-console-google-analytics-r-keyword-research/</link>
+      <link>https://code.markedmondson.me/search-console-google-analytics-r-keyword-research/</link>
       <pubDate>Tue, 21 Jun 2016 23:03:57 +0100</pubDate>
       
-      <guid>/search-console-google-analytics-r-keyword-research/</guid>
+      <guid>https://code.markedmondson.me/search-console-google-analytics-r-keyword-research/</guid>
       <description>
 
 &lt;p&gt;In this blog we look at a method to estimate where to prioritise your SEO resources, estimating which keywords will give the greatest increase in revenue if you could improve their Google rank.&lt;/p&gt;
@@ -452,7 +451,7 @@ fuzzy &amp;lt;- left_join(fuzzy_ranks, fuzzy_values, by = &amp;quot;query&amp;qu
 
 &lt;p&gt;The method produced a targeted keyword list of 226 from an original seed list of ~21,000.  The top 30 revenue targets are shown in the plot below:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;/images/see-potential.png&#34; alt=&#34;seo-forecast-estimate&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://code.markedmondson.me/images/see-potential.png&#34; alt=&#34;seo-forecast-estimate&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Read below on how the plot was generated and what the figures mean.&lt;/p&gt;
 
@@ -584,7 +583,7 @@ tidy_data &amp;lt;- joined_data %&amp;gt;%
 
 &lt;p&gt;A histogram of the accuracy estimate shows we consistently over estimate but the clicks and estimated sessions are within a magnitude:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;/images/histogram1.png&#34; alt=&#34;keyword-sessio-click-estimate-histogram&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://code.markedmondson.me/images/histogram1.png&#34; alt=&#34;keyword-sessio-click-estimate-histogram&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Most of the session estimates were intrestingly around 1.3 times more than the clicks.  This may be because Search Console clicks act more like Google SEO users, but any other ideas please say in comments!&lt;/p&gt;
 
@@ -598,7 +597,7 @@ tidy_data &amp;lt;- joined_data %&amp;gt;%
 
 &lt;p&gt;The diagram below uses a weighted &lt;code&gt;loess&lt;/code&gt; within &lt;code&gt;ggplot2&lt;/code&gt; which is good to show trend but not for making predictions.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;/images/ctr_scatter.png&#34; alt=&#34;ctr-scatter-plot&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://code.markedmondson.me/images/ctr_scatter.png&#34; alt=&#34;ctr-scatter-plot&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;a-click-curve-to-use&#34;&gt;A click curve to use&lt;/h3&gt;
 
@@ -627,7 +626,7 @@ click_curve &amp;lt;- click_curve %&amp;gt;%
 
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;img src=&#34;/images/ctr-curve.png&#34; alt=&#34;ctr-curve-seo&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://code.markedmondson.me/images/ctr-curve.png&#34; alt=&#34;ctr-curve-seo&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;These CTR rates are then used to predict how much more traffic/revenue etc. a keyword could get if they moved up to position 1.&lt;/p&gt;
 
@@ -673,7 +672,7 @@ estimates &amp;lt;- predict_click %&amp;gt;%
 
 &lt;p&gt;The number in the middle of the bar is the current position, with the revenue at the x axis and keyword on the y.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;/images/see-potential.png&#34; alt=&#34;seo-forecast-estimate&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://code.markedmondson.me/images/see-potential.png&#34; alt=&#34;seo-forecast-estimate&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;ggplot2-code&#34;&gt;ggplot2 code&lt;/h3&gt;
 
