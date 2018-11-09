@@ -2,7 +2,7 @@
 <html lang="en-GB">
 <head>
     <title>Scheduling R scripts for a team using RStudio Server, Docker, Github and Google Compute Engine &middot; Mark Edmondson</title>
-    <meta name="generator" content="Hugo 0.18.1" />
+    <meta name="generator" content="Hugo 0.51" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
@@ -25,19 +25,8 @@
 This blog will give you steps that allows you to run on Google Compute Engine a server that has these features:
  RStudio Server instance with multiple login. Apache to host a welcome webpage." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/" />
-
-
-<meta property="og:updated_time" content="2016-04-21T23:03:57&#43;01:00"/>
-
-
-
-
-
-
-
-
-
+<meta property="og:url" content="https://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/" /><meta property="article:published_time" content="2016-04-21T23:03:57&#43;01:00"/>
+<meta property="article:modified_time" content="2016-04-21T23:03:57&#43;01:00"/>
 
     
     
@@ -47,25 +36,20 @@ This blog will give you steps that allows you to run on Google Compute Engine a 
  RStudio Server instance with multiple login. Apache to host a welcome webpage.">
 
 
+<meta itemprop="datePublished" content="2016-04-21T23:03:57&#43;01:00" />
 <meta itemprop="dateModified" content="2016-04-21T23:03:57&#43;01:00" />
 <meta itemprop="wordCount" content="2955">
 
 
 
-<meta itemprop="keywords" content="big-query,blogging,docker,google-analytics,google-app-engine,google-auth,google-cloud-storage,google-compute-engine,google-language,google-tag-manager,python,r,rstudio-server,search-console," />
+<meta itemprop="keywords" content="R,docker,rstudio-server,google-compute-engine," />
 
-    
-
-  <meta name="twitter:card" content="summary"/>
-
-
-
+    <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Scheduling R scripts for a team using RStudio Server, Docker, Github and Google Compute Engine"/>
 <meta name="twitter:description" content="edit 20th November, 2016 - now everything in this post is abstracted away and available in the googleComputeEngineR package - I would say its a lot easier to use that. Here is a post on getting started with it. http://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/
 This blog will give you steps that allows you to run on Google Compute Engine a server that has these features:
  RStudio Server instance with multiple login. Apache to host a welcome webpage."/>
 <meta name="twitter:site" content="@HoloMarkeD"/>
-<meta name="twitter:domain" content="markedmondson.me"/>
 
     
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -79,7 +63,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <meta name="google-site-verification" content="e8JvngILwz-scbcavSJIg_gDaKMqH3AGWUBlLgLtNk4" />
 </head>
 <body>
 <div class="container">
@@ -168,11 +151,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
    	
    	<div class="outer">
-   		
-	    <aside id="profile">
+   	
+    	<aside id="profile">
   <div class="inner profile-inner">
     <div class="base-info profile-block">
+      
       <img id="avatar" src="https://code.markedmondson.me/images/gde_avatar.jpg">
+      
       <h2 id="name">Mark Edmondson</h2>
       <h3 id="title">Coding in digital analytics</h3>
       <span id="location"><i class="fa fa-map-marker"></i>Copenhagen, Denmark</span>
@@ -184,12 +169,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        18
+        19
         <span>Posts</span>
       </div>
       <div class="article-info-block">
         
-          14
+          15
         
         <span>
             Tags
@@ -266,24 +251,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </div>
 </aside>
 
-	    
+    
 
-	    
-<section id="main">
-
+    <section id="main">
+    
     <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
-        <div class="article-inner">
-            
-                <img src="https://code.markedmondson.me/banners/rstudio-gce.png" class="article-banner">
-            
+    <div class="article-inner">
+        
+            <img src="https://code.markedmondson.me/banners/rstudio-gce.png" class="article-banner">
+        
 
-            <header class="article-header">
+        <header class="article-header">
     <a href="https://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/">
     <h1 class="article-title" itemprop="name">
         Scheduling R scripts for a team using RStudio Server, Docker, Github and Google Compute Engine
     </h1>
     </a>
     <div class="article-meta">
+
+        
         <div class="article-date">
             <i class="fa fa-calendar"></i>
             <time datetime="2016-04-21 23:03:57 &#43;0100 &#43;0100" itemprop="datePublished">2016-04-21</time>
@@ -294,8 +280,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             14
             minute read
         </div>
-
-
+        
         
 
         
@@ -326,8 +311,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
 </header>
 
-            <div class="article-entry" itemprop="articleBody">
-                
+        <div class="article-entry" itemprop="articleBody">
+            
 
 <p><em>edit 20th November, 2016 - now everything in this post is abstracted away and available in the googleComputeEngineR package - I would say its a lot easier to use that.  Here is a post on getting started with it. <a href="http://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/">http://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/</a></em></p>
 
@@ -862,14 +847,14 @@ gcloud compute instances start your-r-server-name
 
 <p>We also have <a href="http://iihnordic.dk/blog/posts/2016/marts/creating-a-content-recommendation-engine-using-r-opencpu-and-gtm">OpenCPU</a> and <a href="https://www.rstudio.com/products/shiny/shiny-server/">Shiny Server</a> in the Google project, as we move into providing data output such as visualisations, APIs and dashboards.  They are setup in a similar fashion, just swap out the Docker image for the appropriate version you need.</p>
 
-            </div>
-            <footer class="article-footer">
-    <a data-url="https://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/" data-id="c3b5a5d66c15a586afaefbfdaf2461da" class="article-share-link">
+        </div>
+        <footer class="article-footer">
+    <a data-url="https://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/" data-id="c0a9cba3cc2834234e7e4b154783b7da" class="article-share-link">
         <i class="fa fa-share"></i>
         Share
     </a>
     
-    <a href="https://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team//#disqus_thread" class="article-comment-link">
+    <a href="https://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/#disqus_thread" class="article-comment-link">
         Comments
     </a>
     
@@ -940,9 +925,9 @@ gcloud compute instances start your-r-server-name
     </script>
 </footer>
 
-        </div>
+    </div>
 
-        
+    
 <nav id="article-nav">
     
     <a href="https://code.markedmondson.me/googleAuthR-0.2.0/" id="article-nav-older" class="article-nav-link-wrap">
@@ -964,34 +949,39 @@ gcloud compute instances start your-r-server-name
 </nav>
 
 
-    </article>
+</article>
 
+
+<section id="comments">
+    <div id="disqus_thread">
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
     
-    <section id="comments">
-        <div id="disqus_thread">
-            <div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_shortname = 'markedmondson';
-    var disqus_identifier = 'https:\/\/code.markedmondson.me\/setting-up-scheduled-R-scripts-for-an-analytics-team\/';
-    var disqus_title = 'Scheduling R scripts for a team using RStudio Server, Docker, Github and Google Compute Engine';
-    var disqus_url = 'https:\/\/code.markedmondson.me\/setting-up-scheduled-R-scripts-for-an-analytics-team\/';
-
+    
+    
+    };
     (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "markedmondson" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
     })();
 </script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-        </div>
-    </section>
-    
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
 </section>
 
 
-	    
-	    <aside id="sidebar">
+    </section>
+
+   	
+    	<aside id="sidebar">
     
 <div class="widget-wrap">
     <h3 class="widget-title">
@@ -1002,7 +992,24 @@ gcloud compute instances start your-r-server-name
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/talking-google-analytics-dashboards" class="thumbnail">
+                    <a href="https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/cloud-functions.png)" alt="Scheduling R scripts for a team using RStudio Server, Docker, Github and Google Compute Engine" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/" class="title">Turning GA360 BigQuery exports into partitioned tables using Cloud Functions</a></p>
+                    <p class="item-date">
+                        <time datetime="2018-10-09 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-10-09</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/talking-google-analytics-dashboards/" class="thumbnail">
                     
                         <span style="background-image:url(https://code.markedmondson.me/banners/talking-gas.png)" alt="Scheduling R scripts for a team using RStudio Server, Docker, Github and Google Compute Engine" class="thumbnail-image"></span>
                     
@@ -1012,7 +1019,7 @@ gcloud compute instances start your-r-server-name
                     
                     
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/talking-google-analytics-dashboards" class="title">Talking Google Analytics dashboards via R, Shiny and Text-to-Speech APIs</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/talking-google-analytics-dashboards/" class="title">Talking Google Analytics dashboards via R, Shiny and Text-to-Speech APIs</a></p>
                     <p class="item-date">
                         <time datetime="2018-08-15 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-08-15</time>
                     </p>
@@ -1021,7 +1028,7 @@ gcloud compute instances start your-r-server-name
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts" class="thumbnail">
+                    <a href="https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts/" class="thumbnail">
                     
                         <span style="background-image:url(https://code.markedmondson.me/banners/r-kubernetes.png)" alt="Scheduling R scripts for a team using RStudio Server, Docker, Github and Google Compute Engine" class="thumbnail-image"></span>
                     
@@ -1031,7 +1038,7 @@ gcloud compute instances start your-r-server-name
                     
                     
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts" class="title">R on Kubernetes - serverless Shiny, R APIs and scheduled scripts</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts/" class="title">R on Kubernetes - serverless Shiny, R APIs and scheduled scripts</a></p>
                     <p class="item-date">
                         <time datetime="2018-05-02 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-05-02</time>
                     </p>
@@ -1040,7 +1047,7 @@ gcloud compute instances start your-r-server-name
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown" class="thumbnail">
+                    <a href="https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown/" class="thumbnail">
                     
                         <span style="background-image:url(https://code.markedmondson.me/banners/datastudio.png)" alt="Scheduling R scripts for a team using RStudio Server, Docker, Github and Google Compute Engine" class="thumbnail-image"></span>
                     
@@ -1050,7 +1057,7 @@ gcloud compute instances start your-r-server-name
                     
                     
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown" class="title">Embedding Google Data Studio into RMarkdown</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown/" class="title">Embedding Google Data Studio into RMarkdown</a></p>
                     <p class="item-date">
                         <time datetime="2018-03-15 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-03-15</time>
                     </p>
@@ -1059,7 +1066,7 @@ gcloud compute instances start your-r-server-name
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/searchconsoler-vs-googlelanguager" class="thumbnail">
+                    <a href="https://code.markedmondson.me/searchconsoler-vs-googlelanguager/" class="thumbnail">
                     
                         <span style="background-image:url(https://code.markedmondson.me/banners/nlp_sc.png)" alt="Scheduling R scripts for a team using RStudio Server, Docker, Github and Google Compute Engine" class="thumbnail-image"></span>
                     
@@ -1067,26 +1074,9 @@ gcloud compute instances start your-r-server-name
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/searchconsoler-vs-googlelanguager" class="title">Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/searchconsoler-vs-googlelanguager/" class="title">Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API</a></p>
                     <p class="item-date">
                         <time datetime="2018-01-11 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-01-11</time>
-                    </p>
-                </div>
-            </li>
-            
-            <li>
-                <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/rstudio-server-chromebook/" class="thumbnail">
-                    
-                        <span style="background-image:url(https://code.markedmondson.me/banners/chromebook.png)" alt="Scheduling R scripts for a team using RStudio Server, Docker, Github and Google Compute Engine" class="thumbnail-image"></span>
-                    
-                    </a>
-                </div>
-                <div class="item-inner">
-                    
-                    <p class="item-title"><a href="https://code.markedmondson.me/rstudio-server-chromebook/" class="title">Run RStudio Server on a Chromebook as a Cloud Native</a></p>
-                    <p class="item-date">
-                        <time datetime="2017-09-05 13:55:57 &#43;0100 &#43;0100" itemprop="datePublished">2017-09-05</time>
                     </p>
                 </div>
             </li>
@@ -1117,7 +1107,7 @@ gcloud compute instances start your-r-server-name
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/big-query">
                     big-query
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">5</span>
             </li>
             
             <li class="category-list-item">
@@ -1126,6 +1116,14 @@ gcloud compute instances start your-r-server-name
                     blogging
                 </a>
                 <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-functions">
+                    cloud-functions
+                </a>
+                <span class="category-list-count">1</span>
             </li>
             
             <li class="category-list-item">
@@ -1141,7 +1139,7 @@ gcloud compute instances start your-r-server-name
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-analytics">
                     google-analytics
                 </a>
-                <span class="category-list-count">6</span>
+                <span class="category-list-count">7</span>
             </li>
             
             <li class="category-list-item">
@@ -1197,7 +1195,7 @@ gcloud compute instances start your-r-server-name
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/python">
                     python
                 </a>
-                <span class="category-list-count">2</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -1237,7 +1235,7 @@ gcloud compute instances start your-r-server-name
     <div id="toTop" class="fa fa-angle-up"></div>
 </aside>
 
-	    
+    
 	</div>
 </div>
 
@@ -1254,17 +1252,19 @@ gcloud compute instances start your-r-server-name
 <script src="https://code.markedmondson.me/fancybox/jquery.fancybox.pack.js"></script>
 <script src="https://code.markedmondson.me/js/script.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+
+
 <script>hljs.initHighlightingOnLoad();</script>
 
 
-<!-- MathJax -->
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
   tex2jax: {
     inlineMath: [['$','$'], ['\\(','\\)']]}
   });
 </script>
-<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
 
 
 

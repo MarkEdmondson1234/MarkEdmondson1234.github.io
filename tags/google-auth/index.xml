@@ -2,65 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Google Auth on Mark Edmondson</title>
-    <link>https://code.markedmondson.me/tags/google-auth/index.xml</link>
+    <link>https://code.markedmondson.me/tags/google-auth/</link>
     <description>Recent content in Google Auth on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
-    <copyright>Powered by [Hugo](//gohugo.io). Theme by [PPOffice](http://github.com/ppoffice).</copyright>
-    <atom:link href="https://code.markedmondson.me/tags/google-auth/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 15 Mar 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://code.markedmondson.me/tags/google-auth/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>Embedding Google Data Studio into RMarkdown</title>
-      <link>https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown</link>
+      <link>https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown/</link>
       <pubDate>Thu, 15 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown</guid>
-      <description>&lt;div id=&#34;adding-google-data-studio-dashboards-to-rmarkdown&#34; class=&#34;section level2&#34;&gt;
-&lt;h2&gt;Adding Google Data Studio Dashboards to RMarkdown&lt;/h2&gt;
-&lt;p&gt;This week I learnt you can take &lt;a href=&#34;https://datastudio.google.com&#34;&gt;Google Data Studio&lt;/a&gt; reports and, via their embed feature, paste them straight into an RMarkdown HTML document.&lt;/p&gt;
-&lt;p&gt;This is cool as you can then combine the strengths of both for client reports or similar.&lt;/p&gt;
-&lt;p&gt;Data Studio is a free online solution, that I have found to be very quick to get something decent looking. It also has excellent connectors to data sources that can be difficult to get access to otherwise, such as DoubleClick. I often use it when working with BigQuery by linking via its BigQuery connector (takes 10 seconds) and then plotting to examine the data trends.&lt;/p&gt;
-&lt;p&gt;However, Data Studio isn’t suitable for more advanced analysis or custom visualisations, so the fact you can put them in RMarkdown documents means you can then combine its reports alongside more in-depth analysis within R, side by side with advanced R plotting such as &lt;a href=&#34;http://ggplot2.org/&#34;&gt;&lt;code&gt;ggplot2&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://gallery.htmlwidgets.org/&#34;&gt;&lt;code&gt;htmlwidgets&lt;/code&gt;&lt;/a&gt; or &lt;a href=&#34;https://plot.ly/r/&#34;&gt;&lt;code&gt;plot.ly&lt;/code&gt;&lt;/a&gt;. RMarkdown excels as a way to document your analysis steps, and I often use it as a way to keep a working document I can check into GitHub that contains all the SQL, code and assumptions of an analysis.&lt;/p&gt;
-&lt;div id=&#34;how-to-add-data-studio-to-rmarkdown&#34; class=&#34;section level3&#34;&gt;
-&lt;h3&gt;How to add Data Studio to RMarkdown&lt;/h3&gt;
-&lt;p&gt;First create your Data Studio report, then select the &lt;a href=&#34;https://support.google.com/datastudio/answer/7450249?hl=en&#34;&gt;“Embed” option&lt;/a&gt; top right of Google Data Studio:&lt;/p&gt;
-&lt;div class=&#34;figure&#34;&gt;
-&lt;img src=&#34;../images/embed.png&#34; /&gt;
-
-&lt;/div&gt;
-&lt;p&gt;Then you can paste in that code straight in an &lt;code&gt;.Rmd&lt;/code&gt; document, like I did with this blog (&lt;a href=&#34;http://code.markedmondson.me/new-blog-down/&#34;&gt;which runs on RMarkdown via Hugo&lt;/a&gt;):&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&amp;lt;iframe width=&amp;quot;600&amp;quot; height=&amp;quot;500&amp;quot; 
-src=&amp;quot;https://datastudio.google.com/embed/reporting/1q8dO3-IuGU-YXbgTiW6mchvKCg_kRZ9Y/page/wN5O&amp;quot; 
-frameborder=&amp;quot;0&amp;quot; 
-style=&amp;quot;border:0&amp;quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;em&gt;Above I put in backticks to demo the code I pasted in, but you don’t need to do that - below is result of the code pasted in as is into the .Rmd doc&lt;/em&gt;&lt;/p&gt;
-&lt;iframe width=&#34;600&#34; height=&#34;500&#34; src=&#34;https://datastudio.google.com/embed/reporting/1q8dO3-IuGU-YXbgTiW6mchvKCg_kRZ9Y/page/wN5O&#34; frameborder=&#34;0&#34; style=&#34;border:0&#34; allowfullscreen&gt;
-&lt;/iframe&gt;
-&lt;p&gt;Tweak the width and height so it fits your layout - I set the height and width of the Data Studio dashboard to the same as the iframe to avoid the scroll bars appearing.&lt;/p&gt;
-&lt;p&gt;For standalone &lt;code&gt;.Rmd&lt;/code&gt; documents, 800 pixel width looks best, but this blog is narrower so I went for 600 pixel width.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;private-data-studio-reports&#34; class=&#34;section level2&#34;&gt;
-&lt;h2&gt;Private Data Studio reports&lt;/h2&gt;
-&lt;p&gt;The above report is shared publically on the web, but you can do the same with private Data Studio reports.&lt;/p&gt;
-&lt;p&gt;Follow the same procedure, but only share privately in your Sharing settings - only people who have private access to this report will see it, others will get the &lt;code&gt;This Data Studio report is private&lt;/code&gt; message.&lt;/p&gt;
-&lt;p&gt;e.g. You see this:&lt;/p&gt;
-&lt;iframe width=&#34;600&#34; height=&#34;500&#34; src=&#34;https://datastudio.google.com/embed/reporting/1O6QttLeXrV7zesk0lNFeWmb5H3aPIhMa/page/wN5O&#34; frameborder=&#34;0&#34; style=&#34;border:0&#34; allowfullscreen&gt;
-&lt;/iframe&gt;
-&lt;p&gt;…but I see this:&lt;/p&gt;
-&lt;div class=&#34;figure&#34;&gt;
-&lt;img src=&#34;../images/private-embed.png&#34; /&gt;
-
-&lt;/div&gt;
-&lt;p&gt;The authentication works in the same browser you are logged in with Google, since that is shared with a Google login cookie - e.g. if you are logged into Google Analytics in the same browser, you should see it. This means however you won’t see it work if viewing in the RStudio View panel.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div id=&#34;summary&#34; class=&#34;section level2&#34;&gt;
-&lt;h2&gt;Summary&lt;/h2&gt;
-&lt;p&gt;If you are in the R world and maybe have not come across Google Data Studio, this may be helpful as another option for visualisation. Its main strengths are that it is free, is quick to get to visualisations, has powerful filter controls and lots of nice API connectors (including &lt;a href=&#34;https://developers.google.com/datastudio/connector/gallery/&#34;&gt;user made community connectors&lt;/a&gt; that connect to stuff like Facebook, Bing, LinkedIn etc.) although if you want to do more complex custom visuals you will find it not as fully tweakable as a paid for solution such as Tableau or Qlikview.&lt;/p&gt;
-&lt;p&gt;If you are in the Digital Marketing world you probably already know Data Studio, but perhaps knowing you have the ability to embed Data Studio into RMarkdown provides you with a quick way to combine existing reports with the more advanced data analysis and visuals that R can provide.&lt;/p&gt;
-&lt;p&gt;There is to my knowledge no way to connect the two (e.g. change a filter in Data Studio and it affects the R visuals) but that would be cool, if anyone figures out a way to do that let me know!&lt;/p&gt;
-&lt;/div&gt;
-</description>
+      <guid>https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown/</guid>
+      <description>Adding Google Data Studio Dashboards to RMarkdown This week I learnt you can take Google Data Studio reports and, via their embed feature, paste them straight into an RMarkdown HTML document.
+This is cool as you can then combine the strengths of both for client reports or similar.
+Data Studio is a free online solution, that I have found to be very quick to get something decent looking. It also has excellent connectors to data sources that can be difficult to get access to otherwise, such as DoubleClick.</description>
     </item>
     
     <item>
@@ -69,120 +28,9 @@ style=&amp;quot;border:0&amp;quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt
       <pubDate>Tue, 24 Jan 2017 21:20:50 +0100</pubDate>
       
       <guid>https://code.markedmondson.me/r-packages/</guid>
-      <description>&lt;p&gt;A full list of R packages I have published are on &lt;a href=&#34;https://github.com/MarkEdmondson1234&#34;&gt;my Github&lt;/a&gt;, but some notable ones are below.&lt;/p&gt;
-&lt;p&gt;Some are part of the &lt;a href=&#34;http://cloudyr.github.io/&#34;&gt;cloudyR project&lt;/a&gt;, which has many packages useful for using R in the cloud. &lt;img src=&#34;https://code.markedmondson.me/images/cloudyr2.png&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;I concentrate on the Google cloud below, but be sure to check out the other packages if you’re looking to work with AWS or other cloud based services.&lt;/p&gt;
-&lt;div id=&#34;cran&#34; class=&#34;section level2&#34;&gt;
-&lt;h2&gt;CRAN&lt;/h2&gt;
-&lt;table&gt;
-&lt;colgroup&gt;
-&lt;col width=&#34;19%&#34; /&gt;
-&lt;col width=&#34;25%&#34; /&gt;
-&lt;col width=&#34;55%&#34; /&gt;
-&lt;/colgroup&gt;
-&lt;thead&gt;
-&lt;tr class=&#34;header&#34;&gt;
-&lt;th&gt;Status&lt;/th&gt;
-&lt;th&gt;URL&lt;/th&gt;
-&lt;th&gt;Description&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr class=&#34;odd&#34;&gt;
-&lt;td&gt;&lt;a href=&#34;http://cran.r-project.org/package=googleAuthR&#34;&gt;&lt;img src=&#34;http://www.r-pkg.org/badges/version/googleAuthR&#34; /&gt;&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;&lt;a href=&#34;http://code.markedmondson.me/googleAuthR/&#34;&gt;googleAuthR&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;The central workhorse for authentication on Google APIs&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr class=&#34;even&#34;&gt;
-&lt;td&gt;&lt;a href=&#34;http://cran.r-project.org/package=googleAnalyticsR&#34;&gt;&lt;img src=&#34;http://www.r-pkg.org/badges/version/googleAnalyticsR&#34; /&gt;&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;&lt;a href=&#34;http://code.markedmondson.me/googleAnalyticsR/&#34;&gt;googleAnalyticsR&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;Works with Google Analytics Reporting V3/V4 and Management APIs&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr class=&#34;odd&#34;&gt;
-&lt;td&gt;&lt;a href=&#34;http://cran.r-project.org/package=googleComputeEngineR&#34;&gt;&lt;img src=&#34;http://www.r-pkg.org/badges/version/googleComputeEngineR&#34; /&gt;&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;&lt;a href=&#34;https://cloudyr.github.io/googleComputeEngineR/&#34;&gt;googleComputeEngineR&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;Launch Virtual Machines within the Google Cloud, via templates or your own Docker containers.&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr class=&#34;even&#34;&gt;
-&lt;td&gt;&lt;a href=&#34;http://cran.r-project.org/package=googleCloudStorageR&#34;&gt;&lt;img src=&#34;http://www.r-pkg.org/badges/version/googleCloudStorageR&#34; /&gt;&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;&lt;a href=&#34;http://code.markedmondson.me/googleCloudStorageR/&#34;&gt;googleCloudStorageR&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;Interact with Google Cloud Storage via R&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr class=&#34;odd&#34;&gt;
-&lt;td&gt;&lt;a href=&#34;http://cran.r-project.org/package=bigQueryR&#34;&gt;&lt;img src=&#34;http://www.r-pkg.org/badges/version/bigQueryR&#34; /&gt;&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;&lt;a href=&#34;http://code.markedmondson.me/bigQueryR/&#34;&gt;bigQueryR&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;Interact with Google BigQuery via R&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr class=&#34;even&#34;&gt;
-&lt;td&gt;&lt;a href=&#34;http://cran.r-project.org/package=searchConsoleR&#34;&gt;&lt;img src=&#34;http://www.r-pkg.org/badges/version/searchConsoleR&#34; /&gt;&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;&lt;a href=&#34;http://code.markedmondson.me/searchConsoleR/&#34;&gt;searchConsoleR&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;Download Search Console data into R&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;As you can tell, most are aimed towards helping R users with help in digital analytics and cloud based services. You can get some idea of how they can &lt;a href=&#34;https://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/&#34;&gt;work together in a digital analytics workflow here&lt;/a&gt;.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div id=&#34;github&#34; class=&#34;section level2&#34;&gt;
-&lt;h2&gt;GITHUB&lt;/h2&gt;
-&lt;p&gt;More experimental packages:&lt;/p&gt;
-&lt;table&gt;
-&lt;colgroup&gt;
-&lt;col width=&#34;19%&#34; /&gt;
-&lt;col width=&#34;25%&#34; /&gt;
-&lt;col width=&#34;55%&#34; /&gt;
-&lt;/colgroup&gt;
-&lt;thead&gt;
-&lt;tr class=&#34;header&#34;&gt;
-&lt;th&gt;Status&lt;/th&gt;
-&lt;th&gt;URL&lt;/th&gt;
-&lt;th&gt;Description&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr class=&#34;odd&#34;&gt;
-&lt;td&gt;Dev&lt;/td&gt;
-&lt;td&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/googleMeasureR&#34;&gt;googleMeasureR&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;Send tracking hits to Google Analytics from R code using the Google Analytics Measurement Protocol&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr class=&#34;even&#34;&gt;
-&lt;td&gt;&lt;a href=&#34;https://travis-ci.org/MarkEdmondson1234/googleLanguageR&#34;&gt;&lt;img src=&#34;https://travis-ci.org/MarkEdmondson1234/googleLanguageR.png?branch=master&#34; /&gt;&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/googleLanguageR&#34;&gt;googleLanguageR&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;Access Speech to text, translation and NLP text processing APIs&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr class=&#34;odd&#34;&gt;
-&lt;td&gt;&lt;a href=&#34;https://travis-ci.org/MarkEdmondson1234/googleID&#34;&gt;&lt;img src=&#34;https://travis-ci.org/MarkEdmondson1234/googleID.svg?branch=master&#34; /&gt;&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/googleID&#34;&gt;googleID&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;In production, but very small so not on CRAN. Allows user authentication via Google+ API for Shiny and RMarkdown documents.&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr class=&#34;even&#34;&gt;
-&lt;td&gt;Dev&lt;/td&gt;
-&lt;td&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/youtubeAnalyticsR&#34;&gt;youtubeAnalyticsR&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;Access YouTube Analytics data&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr class=&#34;odd&#34;&gt;
-&lt;td&gt;Deprecated&lt;/td&gt;
-&lt;td&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/gtmR&#34;&gt;gtmR&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;Superceded by &lt;a href=&#34;https://github.com/IronistM/googleTagManageR&#34;&gt;googleTagManagerR&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr class=&#34;even&#34;&gt;
-&lt;td&gt;Reference&lt;/td&gt;
-&lt;td&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/autoGoogleAPI&#34;&gt;autoGoogleAPI&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;152 R packages auto generated via &lt;code&gt;googleAuthR&lt;/code&gt;’s discovery API feature&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr class=&#34;odd&#34;&gt;
-&lt;td&gt;Done&lt;/td&gt;
-&lt;td&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/gentelellaShiny&#34;&gt;gentelellaShiny&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;A custom Shiny theme available in a package&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr class=&#34;even&#34;&gt;
-&lt;td&gt;Deprecated&lt;/td&gt;
-&lt;td&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/stripeR&#34;&gt;stripeR&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;Interact with the Stripe payment API, but superseded by another R package, &lt;a href=&#34;https://cran.r-project.org/web/packages/RStripe/index.html&#34;&gt;RStripe&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;/div&gt;
-</description>
+      <description>A full list of R packages I have published are on my Github, but some notable ones are below.
+Some are part of the cloudyR project, which has many packages useful for using R in the cloud. I concentrate on the Google cloud below, but be sure to check out the other packages if you’re looking to work with AWS or other cloud based services.
+CRAN     Status URL Description     googleAuthR The central workhorse for authentication on Google APIs   googleAnalyticsR Works with Google Analytics Reporting V3/V4 and Management APIs   googleComputeEngineR Launch Virtual Machines within the Google Cloud, via templates or your own Docker containers.</description>
     </item>
     
     <item>
@@ -191,60 +39,9 @@ style=&amp;quot;border:0&amp;quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt
       <pubDate>Fri, 05 Feb 2016 23:03:57 +0100</pubDate>
       
       <guid>https://code.markedmondson.me/googleAuthR-0.2.0/</guid>
-      <description>
-
-&lt;p&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/googleAuthR&#34;&gt;googleAuthR&lt;/a&gt; is now on CRAN version 0.2.0.&lt;/p&gt;
-
-&lt;p&gt;This release is the result of using the library myself to create three working Google API libraries, and tweaking the googleAuthR code to better support the process.  As a result all of these libraries are now able to be authorised with one Google OAuth2 login flow:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/googleAnalyticsR_public&#34;&gt;googleAnalyticsR&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/searchConsoleR&#34;&gt;searchConsoleR&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/bigQueryR&#34;&gt;bigQueryR&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;batching&#34;&gt;Batching&lt;/h2&gt;
-
-&lt;p&gt;This means the libraries above and any other created with &lt;code&gt;googleAuthR&lt;/code&gt; can take advatage of batching: this uses a Google API feature that means you can send multiple API calls at once.  As the time for big fetches is usually in the wait for API responses, this is a huge time saver for big data fetches.&lt;/p&gt;
-
-&lt;p&gt;For example, it is now implemented within &lt;a href=&#34;https://github.com/MarkEdmondson1234/googleAnalyticsR_public&#34;&gt;googleAnalyticsR&lt;/a&gt; when walking through data per day to mitigate sampling.  Testing on a two year walk through landing page data, it sped up from ~20 mins to ~2 minutes(!)&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;../images/batch_example.png&#34; alt=&#34;batching_example&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;service-accounts&#34;&gt;Service Accounts&lt;/h2&gt;
-
-&lt;p&gt;There is also now support for &lt;a href=&#34;https://developers.google.com/identity/protocols/OAuth2ServiceAccount&#34;&gt;service accounts&lt;/a&gt;, meaning no OAuth2 flow is needed: a user can just upload or use a JSON file they download from their own Google API console.  As some APIs like Big Query don&amp;rsquo;t have read only scope yet, this also gives greater security options for apps, as a user can give limited access to a app via projects.&lt;/p&gt;
-
-&lt;h2 id=&#34;plans-for-the-future&#34;&gt;Plans for the future&lt;/h2&gt;
-
-&lt;p&gt;I hope the library is of use, it is certainly making my workflow a lot quicker.  I love hearing what people are doing with it.  Next on my planned list is a &lt;code&gt;GoogleAuthenticateR&lt;/code&gt; library, that works with pure user authentication of Shiny apps via the G+ API.&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;m also working with offline authentication, meaning apps can work in the background by saving refresh tokens to a database.  Combined with my new &lt;a href=&#34;https://github.com/MarkEdmondson1234/stripeR&#34;&gt;&lt;code&gt;stripeR&lt;/code&gt;&lt;/a&gt; this makes paid Shiny apps that work for users when offline a possibility.&lt;/p&gt;
-
-&lt;h2 id=&#34;full-change-list&#34;&gt;Full change list&lt;/h2&gt;
-
-&lt;p&gt;All changes from news.md is listed below:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Added ability to add your own custom headers to requests via customConfig in &lt;code&gt;gar_api_generator&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Add &amp;lsquo;localhost&amp;rsquo; to shiny URL detection.&lt;/li&gt;
-&lt;li&gt;Google Service accounts now supported. Authenticate via &amp;ldquo;Service Account Key&amp;rdquo; JSON.&lt;/li&gt;
-&lt;li&gt;Exposed &lt;code&gt;gar_shiny_getUrl&lt;/code&gt; and the authentication type (&lt;code&gt;online/offline&lt;/code&gt;) in &lt;code&gt;renderLogin&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;renderLogin&lt;/code&gt; : logout now has option revoke to revoke authentication token&lt;/li&gt;
-&lt;li&gt;Added option for &lt;code&gt;googleAuthR.jsonlite.simplifyVector&lt;/code&gt; for content parsing for compatibility for some APIs&lt;/li&gt;
-&lt;li&gt;Batch Google API requests now implemented. See readme or &lt;code&gt;?gar_batch&lt;/code&gt; and &lt;code&gt;?gar_batch_walk&lt;/code&gt; for details.&lt;/li&gt;
-&lt;li&gt;If data parsing fails, return the raw content so you can test and modify your data parsing function&lt;/li&gt;
-&lt;li&gt;Missed Jenny credit now corrected&lt;/li&gt;
-&lt;li&gt;Add tip about using &lt;code&gt;!is.null(access_token())&lt;/code&gt; to detect login state&lt;/li&gt;
-&lt;li&gt;Add HTTP backoff for certain errors (#6) from Johann&lt;/li&gt;
-&lt;li&gt;Remove possible &lt;code&gt;NULL&lt;/code&gt; entries from path and pars argument lists&lt;/li&gt;
-&lt;li&gt;Reduced some unnecessary message feedback&lt;/li&gt;
-&lt;li&gt;moved &lt;code&gt;with_shiny&lt;/code&gt;environment lookup to within generated function&lt;/li&gt;
-&lt;li&gt;added gzip to headers&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://github.com/MarkEdmondson1234/googleAuthR&#34;&gt;&lt;img src=&#34;https://ga-beacon.appspot.com/UA-73050356-1/115064340704113209584/googleAuthR/v0.2.0&#34; alt=&#34;Analytics&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-</description>
+      <description>googleAuthR is now on CRAN version 0.2.0.
+This release is the result of using the library myself to create three working Google API libraries, and tweaking the googleAuthR code to better support the process. As a result all of these libraries are now able to be authorised with one Google OAuth2 login flow:
+ googleAnalyticsR searchConsoleR bigQueryR  Batching This means the libraries above and any other created with googleAuthR can take advatage of batching: this uses a Google API feature that means you can send multiple API calls at once.</description>
     </item>
     
   </channel>

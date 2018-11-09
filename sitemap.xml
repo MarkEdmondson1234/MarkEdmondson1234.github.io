@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://code.markedmondson.me/talking-google-analytics-dashboards</loc>
+    <loc>https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/</loc>
+    <lastmod>2018-10-09T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://code.markedmondson.me/talking-google-analytics-dashboards/</loc>
     <lastmod>2018-08-15T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts</loc>
+    <loc>https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts/</loc>
     <lastmod>2018-05-02T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown</loc>
+    <loc>https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown/</loc>
     <lastmod>2018-03-15T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/searchconsoler-vs-googlelanguager</loc>
+    <loc>https://code.markedmondson.me/searchconsoler-vs-googlelanguager/</loc>
     <lastmod>2018-01-11T00:00:00+00:00</lastmod>
   </url>
   
@@ -27,7 +33,7 @@
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform</loc>
+    <loc>https://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/</loc>
     <lastmod>2017-07-09T00:00:00+00:00</lastmod>
   </url>
   
@@ -98,13 +104,24 @@
   
   <url>
     <loc>https://code.markedmondson.me/tags/big-query/</loc>
-    <lastmod>2017-01-24T21:20:50+01:00</lastmod>
+    <lastmod>2018-10-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://code.markedmondson.me/tags/blogging/</loc>
     <lastmod>2017-01-23T22:45:03+01:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://code.markedmondson.me/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://code.markedmondson.me/tags/cloud-functions/</loc>
+    <lastmod>2018-10-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -116,7 +133,7 @@
   
   <url>
     <loc>https://code.markedmondson.me/tags/google-analytics/</loc>
-    <lastmod>2018-08-15T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -158,19 +175,19 @@
   
   <url>
     <loc>https://code.markedmondson.me/</loc>
-    <lastmod>2018-08-15T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://code.markedmondson.me/post/</loc>
-    <lastmod>2018-08-15T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://code.markedmondson.me/tags/python/</loc>
-    <lastmod>2017-01-22T14:20:57+01:00</lastmod>
+    <lastmod>2018-10-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -194,6 +211,7 @@
   
   <url>
     <loc>https://code.markedmondson.me/tags/</loc>
+    <lastmod>2018-10-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

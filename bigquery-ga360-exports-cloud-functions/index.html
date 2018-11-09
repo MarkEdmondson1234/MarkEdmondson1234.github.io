@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
-    <title>SEO keyword research using searchConsoleR and googleAnalyticsR &middot; Mark Edmondson</title>
+    <title>Turning GA360 BigQuery exports into partitioned tables using Cloud Functions &middot; Mark Edmondson</title>
     <meta name="generator" content="Hugo 0.51" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
     
-      <meta name="description" content="The code bit of the blog">
+      <meta name="description" content="A guide to using Cloud Functions with GA360 exports, including a demo on creating a partitioned table out of the raw exports.">
     
     
-    <link rel="canonical" href="https://code.markedmondson.me/search-console-google-analytics-r-keyword-research/"/>
+    <link rel="canonical" href="https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/"/>
     <link rel="icon" href="https://code.markedmondson.me/favicon.ico">
     <link rel="apple-touch-icon" href="https://code.markedmondson.me/apple-touch-icon.png"/>
     <link rel="stylesheet" href="https://code.markedmondson.me/css/style.css">
@@ -20,38 +20,29 @@
     
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
-    <meta property="og:title" content="SEO keyword research using searchConsoleR and googleAnalyticsR" />
-<meta property="og:description" content="In this blog we look at a method to estimate where to prioritise your SEO resources, estimating which keywords will give the greatest increase in revenue if you could improve their Google rank.
-Overview Thanks to Vincent at data-seo.com who proof read and corrected some errors in the first draft
-Data comes from Google Search Console and Google Analytics.
-Search Console is used to provide the keywords in these days post (not provided)." />
+    <meta property="og:title" content="Turning GA360 BigQuery exports into partitioned tables using Cloud Functions" />
+<meta property="og:description" content="A guide to using Cloud Functions with GA360 exports, including a demo on creating a partitioned table out of the raw exports." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://code.markedmondson.me/search-console-google-analytics-r-keyword-research/" /><meta property="article:published_time" content="2016-06-21T23:03:57&#43;01:00"/>
-<meta property="article:modified_time" content="2016-06-21T23:03:57&#43;01:00"/>
+<meta property="og:url" content="https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/" /><meta property="article:published_time" content="2018-10-09T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-10-09T00:00:00&#43;00:00"/>
 
     
     
-<meta itemprop="name" content="SEO keyword research using searchConsoleR and googleAnalyticsR">
-<meta itemprop="description" content="In this blog we look at a method to estimate where to prioritise your SEO resources, estimating which keywords will give the greatest increase in revenue if you could improve their Google rank.
-Overview Thanks to Vincent at data-seo.com who proof read and corrected some errors in the first draft
-Data comes from Google Search Console and Google Analytics.
-Search Console is used to provide the keywords in these days post (not provided).">
+<meta itemprop="name" content="Turning GA360 BigQuery exports into partitioned tables using Cloud Functions">
+<meta itemprop="description" content="A guide to using Cloud Functions with GA360 exports, including a demo on creating a partitioned table out of the raw exports.">
 
 
-<meta itemprop="datePublished" content="2016-06-21T23:03:57&#43;01:00" />
-<meta itemprop="dateModified" content="2016-06-21T23:03:57&#43;01:00" />
-<meta itemprop="wordCount" content="1657">
+<meta itemprop="datePublished" content="2018-10-09T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-10-09T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1679">
 
 
 
-<meta itemprop="keywords" content="R,google-analytics,search-console," />
+<meta itemprop="keywords" content="big-query,python,google-analytics,cloud-functions," />
 
     <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="SEO keyword research using searchConsoleR and googleAnalyticsR"/>
-<meta name="twitter:description" content="In this blog we look at a method to estimate where to prioritise your SEO resources, estimating which keywords will give the greatest increase in revenue if you could improve their Google rank.
-Overview Thanks to Vincent at data-seo.com who proof read and corrected some errors in the first draft
-Data comes from Google Search Console and Google Analytics.
-Search Console is used to provide the keywords in these days post (not provided)."/>
+<meta name="twitter:title" content="Turning GA360 BigQuery exports into partitioned tables using Cloud Functions"/>
+<meta name="twitter:description" content="A guide to using Cloud Functions with GA360 exports, including a demo on creating a partitioned table out of the raw exports."/>
 <meta name="twitter:site" content="@HoloMarkeD"/>
 
     
@@ -261,13 +252,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
     <div class="article-inner">
         
-            <img src="https://code.markedmondson.me/banners/searchConsole.png" class="article-banner">
+            <img src="https://code.markedmondson.me/banners/cloud-functions.png" class="article-banner">
         
 
         <header class="article-header">
-    <a href="https://code.markedmondson.me/search-console-google-analytics-r-keyword-research/">
+    <a href="https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/">
     <h1 class="article-title" itemprop="name">
-        SEO keyword research using searchConsoleR and googleAnalyticsR
+        Turning GA360 BigQuery exports into partitioned tables using Cloud Functions
     </h1>
     </a>
     <div class="article-meta">
@@ -275,9 +266,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         
         <div class="article-date">
             <i class="fa fa-calendar"></i>
-            <time datetime="2016-06-21 23:03:57 &#43;0100 &#43;0100" itemprop="datePublished">2016-06-21</time>
+            <time datetime="2018-10-09 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-10-09</time>
             &middot;
-            1657
+            1679
             words
             &middot;
             8
@@ -293,7 +284,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <i class="fa fa-tags"></i>
                 
                 
-                <a class="article-category-link" href="https://code.markedmondson.me/tags/r">R</a>
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/big-query">big-query</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/python">python</a>
                 &middot;
                 
                 
@@ -301,7 +296,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 &middot;
                 
                 
-                <a class="article-category-link" href="https://code.markedmondson.me/tags/search-console">search-console</a>
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/cloud-functions">cloud-functions</a>
                 
                 
             </div>
@@ -313,315 +308,206 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="article-entry" itemprop="articleBody">
             
 
-<p>In this blog we look at a method to estimate where to prioritise your SEO resources, estimating which keywords will give the greatest increase in revenue if you could improve their Google rank.</p>
 
-<h2 id="overview">Overview</h2>
-
-<p><em>Thanks to <a href="https://data-seo.com/">Vincent at data-seo.com</a> who proof read and corrected some errors in the first draft</em></p>
-
-<p>Data comes from <a href="https://www.google.com/webmasters/tools/home">Google Search Console</a> and <a href="https://www.google.com/webmasters/tools/home?hl=en">Google Analytics</a>.</p>
-
-<p>Search Console is used to provide the keywords in these days post <a href="http://www.notprovidedcount.com/">(not provided)</a>.  We then link the two data sets by using the URLs as a key, and estimate how much each keyword made in revenue by splitting them in the same proportion as the traffic they have sent to the page.</p>
-
-<p>This approach assumes each keyword converts at the same rate once on the page, and will work better with some websites more than others - the best results I have seen are those websites with a lot of content on seperate URLs, such that they capture long-tail queries.  This is because the amount of keywords per URL is small, but with enough volume to make the estimates trustworthy.</p>
-
-<p>We also try to incorporate magins of error in the results.  This avoids situations where one click on position 40 gets a massive weighting in potential revenue, which in reality could have been a freak event.</p>
-
-<h2 id="summary">Summary</h2>
-
-<p>The method produced a targeted keyword list of 226 from an original seed list of ~21,000.  The top 30 revenue targets are shown in the plot below:</p>
-
-<p><img src="/images/see-potential.png" alt="seo-forecast-estimate" /></p>
-
-<p>Read below on how the plot was generated and what the figures mean.</p>
-
-<h2 id="getting-the-data">Getting the data</h2>
-
-<p>Google Analytics recently provided more integration between the Search Console imports and the web session data, of which <a href="http://online-behavior.com/analytics/search-console">Daniel Waisberg has an excellent walk-through</a>, which could mean you can skip the first part of this script.</p>
-
-<p>However, there are circumstances where the integration won&rsquo;t work, such as when the URLs in Google Analytics are a different format to Search Console - with the below script you have control on how to link the URLs, by formatting them to look the same.</p>
-
-<p>Data is provided via my <a href="https://cran.r-project.org/web/packages/searchConsoleR/index.html">searchConsoleR</a> and <a href="http://code.markedmondson.me/googleAnalyticsR/">googleAnalyticsR</a> R packages.</p>
-
-<pre><code class="language-r">library(searchConsoleR)
-library(googleAnalyticsR)
-
-## authentication with both GA and SC
-options(googleAuthR.scopes.selected = 
-  c(&quot;https://www.googleapis.com/auth/webmasters&quot;,
-    &quot;https://www.googleapis.com/auth/analytics&quot;,
-    &quot;https://www.googleapis.com/auth/analytics.readonly&quot;))
-    
-googleAuthR::gar_auth()
-
-## replace with your GA ID
-ga_id &lt;- 1111111 
-
-## date range to fetch
-start &lt;- as.character(Sys.Date() - 93)
-end &lt;- &quot;2016-06-01&quot;
-
-## Using new GA v4 API
-## GAv4 filters
-google_seo &lt;- 
-  filter_clause_ga4(list(dim_filter(&quot;medium&quot;, 
-                                     &quot;EXACT&quot;, 
-                                     &quot;organic&quot;),
-                          dim_filter(&quot;source&quot;, 
-                                     &quot;EXACT&quot;, 
-                                     &quot;google&quot;)),
-                     operator = &quot;AND&quot;)
-
-## Getting the GA data
-gadata &lt;-
-  google_analytics_4(ga_id,
-                     date_range = c(start,end),
-                     metrics = c(&quot;sessions&quot;,
-                                 &quot;transactions&quot;,
-                                 &quot;transactionRevenue&quot;),
-                     dimensions = c(&quot;landingPagePath&quot;),
-                     dim_filters = google_seo,
-                     order = order_type(&quot;transactions&quot;, 
-                                        sort_order = &quot;DESC&quot;, 
-                                        orderType = &quot;VALUE&quot;),
-                     max = 20000)
-
-## Getting the Search Console data
-## The development version &gt;0.2.0.9000 lets you get more than 5000 rows
-scdata &lt;- search_analytics(&quot;http://www.example.co.uk&quot;, 
-                           startDate = start, endDate = end,
-                           dimensions = c(&quot;page&quot;,&quot;query&quot;),
-                           rowLimit = 20000)
-
-</code></pre>
-
-<h2 id="transforming-the-data">Transforming the data</h2>
-
-<p>First we change the Search Console URLs into the same format as Google Analytics.  In this example, the hostname is appended to the GA URLs already (a reason why the native support won&rsquo;t work), but you may also need to append the hostname to the GA URLs via <code>paste0(&quot;www.yourdomain.com&quot;, gadata$page)</code>.</p>
-
-<p>We also get the search page result (e.g. Page 1 = 1-10, Page 2 = 11-20) as it may be useful.</p>
-
-<p>For the split of revenue later, the last call calculates the % of clicks going to each URL.</p>
-
-<h3 id="search-console-data-transformation">Search Console data transformation</h3>
-
-<pre><code class="language-r">library(dplyr)
-
-## get urls in same format
-
-## this will differ from website to website, 
-## but in most cases you will need to add the domain to the GA urls:
-## gadata$page &lt;- paste0(&quot;www.yourdomain.com&quot;, gadata$landingPagePath)
-## gadata has urls www.example.com/pagePath
-## scdata has urls in http://www.example.com/pagePath
-scdata$page2 &lt;- gsub(&quot;http://&quot;,&quot;&quot;, scdata$page)
-
-## get SERP
-scdata$serp &lt;- cut(scdata$position, 
-                   breaks = seq(1, 100, 10), 
-                   labels = as.character(1:9),
-                   include.lowest = TRUE, 
-                   ordered_result = TRUE)
-
-## % of SEO traffic to each page per keyword
-scdata &lt;- scdata %&gt;% 
-  group_by(page2) %&gt;% 
-  mutate(clickP = clicks / sum(clicks)) %&gt;%
-  ungroup()
-
-</code></pre>
-
-<h3 id="merging-with-google-analytics">Merging with Google Analytics</h3>
-
-<p>Now we merge the data, and calculate the estimates of revenue, transactions and sessions.</p>
-
-<p>Why estimate sessions when we already have them?  This is how we assess how accurate this approach is - if the clicks is roughly the same as the estimated sessions, we can go further.</p>
-
-<p>The accuracy metric is assessed as the ratio between the estiamted sessions and the clicks, minus 1.  This will be 0 when 100% accuracy, and then the further away from 0 the figure is the less we trust the results.</p>
-
-<p>We also round the avergae position to the nearest whole number.</p>
-
-<pre><code class="language-r">library(dplyr)
-
-## join data on page
-joined_data &lt;- gadata %&gt;% 
-  left_join(scdata, by = c(landingPagePath = &quot;page2&quot;)) %&gt;%
-  mutate(transactionsEst = clickP*transactions,
-         revenueEst = clickP*transactionRevenue,
-         sessionEst = clickP*sessions,
-         accuracyEst = ((sessionEst / clicks) - 1),
-         positionRound = round(position))
-
-## we only want clicks over 0, and get rid of a few columns.
-tidy_data &lt;- joined_data %&gt;% 
-  filter(clicks &gt; 0) %&gt;% 
-  select(-page, -sessions, -transactions, -transactionRevenue) 
-
-</code></pre>
-
-<h3 id="is-it-reliable">Is it reliable?</h3>
-
-<p>A histogram of the accuracy estimate shows we consistently over estimate but the clicks and estimated sessions are within a magnitude:</p>
-
-<p><img src="/images/histogram1.png" alt="keyword-sessio-click-estimate-histogram" /></p>
-
-<p>Most of the session estimates were intrestingly around 1.3 times more than the clicks.  This may be because Search Console clicks act more like Google SEO users, but any other ideas please say in comments!</p>
-
-<p>From above I discarded all rows with an accuracy &gt; 10 as unreliable, although you may want to be stricter in your criteria.  All figures are to be taken with a pinch of salt with this many assumptions, but if the relative performance looked ok then I feel there is still enough to get some action from the data.</p>
-
-<h2 id="creating-the-seo-forecasts">Creating the SEO forecasts</h2>
-
-<p>We now use the data to create a click curve table, with estimates on the CTR for each position, and the confidence in those results.</p>
-
-<p>I first attempted some models on making predictions of click curves for a website, but didn&rsquo;t find any general satisifactory regressions.</p>
-
-<p>The diagram below uses a weighted <code>loess</code> within <code>ggplot2</code> which is good to show trend but not for making predictions.</p>
-
-<p><img src="/images/ctr_scatter.png" alt="ctr-scatter-plot" /></p>
-
-<h3 id="a-click-curve-to-use">A click curve to use</h3>
-
-<p>However, 99% of the time we will only be concerned with the top 10, so it wasn&rsquo;t too taxing to calculate the click through rates per website based on the data they had:</p>
-
-<pre><code class="language-r">library(dplyr)
-
-click_curve &lt;- tidy_data %&gt;% 
-  group_by(positionRound) %&gt;% 
-  summarise(CTRmean = sum(clicks) / sum(impressions),
-            n = n(),
-            click.sum = sum(clicks),
-            impressions.sum = sum(impressions),
-            sd = sd(ctr),
-            E = poisson.test(click.sum)$conf.int[2] / poisson.test(impressions.sum)$conf.int[1],
-            lower = CTRmean - E/2,
-            upper = CTRmean + E/2) %&gt;% ungroup()
-
-## add % increase to position 1
-## could also include other positions
-click_curve &lt;- click_curve %&gt;% 
-  mutate(CTR1 = CTRmean[1] / CTRmean,
-         CTR1.upper = upper[1] / upper,
-         CTR1.lower = lower[1] / lower)
-
-
-</code></pre>
-
-<p><img src="/images/ctr-curve.png" alt="ctr-curve-seo" /></p>
-
-<p>These CTR rates are then used to predict how much more traffic/revenue etc. a keyword could get if they moved up to position 1.</p>
-
-<h3 id="how-valuable-is-a-keyword-if-position-1">How valuable is a keyword if position 1?</h3>
-
-<p>Once happy with the click curve, we now apply it to the original data, and work out estimates on SEO revenue for each keyword if they were at position 1.</p>
-
-<p>I trust results more if they have had more than 10 clicks, and the accuracy estimate figure is within 10 of 0. I would play around with this limits a little yourself to get something you can work with.</p>
-
-<pre><code class="language-r">library(dplyr)
-## combine with data
-
-predict_click &lt;- tidy_data1 %&gt;% 
-  mutate(positionRound = round(position)) %&gt;%
-  left_join(click_curve, by=c(positionRound = &quot;positionRound&quot;)) %&gt;%
-  mutate(revenueEst1 = revenueEst * CTR1,
-         transEst1 = transactionsEst * CTR1,
-         clickEst1 = clicks * CTR1,
-         sessionsEst1 = sessionEst * CTR1,
-         revenueEst1.lower = revenueEst * CTR1.lower,
-         revenueEst1.upper = revenueEst * CTR1.upper,
-         revenueEst1.change = revenueEst1 - revenueEst)
-
-estimates &lt;- predict_click %&gt;% 
-  select(landingPagePath, query, clicks, impressions, 
-         ctr, position, serp, revenueEst, revenueEst1, 
-         revenueEst1.change, revenueEst1.lower, revenueEst1.upper, 
-         accuracyEst) %&gt;%
-  arrange(desc(revenueEst1)) %&gt;% 
-  dplyr::filter(abs(accuracyEst) &lt; 10, 
-                revenueEst1.change &gt; 0, 
-                clicks &gt; 10)
-
-</code></pre>
-
-<p><code>estimates</code> now in this example holds 226 rows sorted in order or how much revenue they are to make if position #1 in Google. This is from an original keyword list of 21437, which is at least a way to narrow down to important keywords.</p>
-
-<h2 id="plotting-the-data">Plotting the data</h2>
-
-<p>All that remains to to present the data: limiting the keywords to the top 30 lets you present like below.</p>
-
-<p>The bars show the range of the estimate, as you can see its quite wide but lets you be more realistic in your expectations.</p>
-
-<p>The number in the middle of the bar is the current position, with the revenue at the x axis and keyword on the y.</p>
-
-<p><img src="/images/see-potential.png" alt="seo-forecast-estimate" /></p>
-
-<h3 id="ggplot2-code">ggplot2 code</h3>
-
-<p>To create the plots in this post, please see the ggplot2 code below.  Feel free to modify for your own needs:</p>
-
-<pre><code class="language-r">library(ggplot2)
-
-## CTR per position
-ctr_plot &lt;- ggplot(tidy_data, aes(x = position, 
-                                  y = ctr
-                                  ))
-ctr_plot &lt;- ctr_plot + theme_minimal()
-ctr_plot &lt;- ctr_plot + coord_cartesian(xlim = c(1,30), 
-                                       ylim = c(0, 0.5))
-ctr_plot &lt;- ctr_plot + geom_point(aes(alpha = log(clicks),
-                                      color = serp, 
-                                      size = clicks))
-ctr_plot &lt;- ctr_plot + geom_smooth(aes(weight = clicks), 
-                                   size = 0.2)
-ctr_plot + scale_y_continuous(labels = scales::percent)
-ctr_plot
-
-hh &lt;- ggplot(click_curve, aes(positionRound, CTRmean)) 
-hh &lt;- hh + theme_minimal()
-hh &lt;- hh + geom_line(linetype = 2) + coord_cartesian(xlim = c(1, 30), 
-                                                     ylim = c(0,0.5))
-hh &lt;- hh + geom_ribbon(aes(positionRound, ymin = lower, ymax = upper), 
-                       alpha = 0.2, 
-                       fill = &quot;orange&quot;)
-hh &lt;- hh + scale_y_continuous(labels = scales::percent)
-hh &lt;- hh + geom_point() 
-hh &lt;- hh + geom_label(aes(label = scales::percent(CTRmean)))
-hh
-
-
-est_plot &lt;- ggplot(estimates[1:30,], 
-                   aes(reorder(query, revenueEst1), 
-                       revenueEst1, 
-                       ymax = revenueEst1.upper, 
-                       ymin =  revenueEst1.lower))
-est_plot &lt;- est_plot + theme_minimal() + coord_flip()
-
-est_plot &lt;- est_plot + geom_crossbar(aes(fill = cut(accuracyEst, 
-                                                    3, 
-                                                    labels = c(&quot;Good&quot;,
-                                                               &quot;Ok&quot;,
-                                                               &quot;Poor&quot;))
-                                                               ), 
-                                     alpha = 0.7, 
-                                     show.legend = FALSE)
-                                     
-est_plot &lt;- est_plot + scale_x_discrete(name = &quot;Query&quot;)
-est_plot &lt;- est_plot + scale_y_continuous(name = &quot;Estimated SEO Revenue Increase for Google #1&quot;, 
-                                          labels = scales::dollar_format(prefix = &quot;£&quot;))
-est_plot &lt;- est_plot + geom_label(aes(label = round(position)), 
-                                  hjust = &quot;center&quot;)
-est_plot &lt;- est_plot + ggtitle(&quot;SEO Potential Revenue (Current position)&quot;)
-est_plot
-
-</code></pre>
+<p>Its been a while since my last blog, although I had a good excuse as I’ve moved house into the Copenhagen suburbs, Brønshøj. But in the meantime, I have had the chance to find my new favourite tool for data engineering - Google Cloud Functions in Python.</p>
+<p>This post will look at how to use them to work with the GA360 BigQuery export tables.</p>
+<div id="google-cloud-functions" class="section level2">
+<h2>Google Cloud Functions</h2>
+<p><a href="https://cloud.google.com/functions/">Cloud Functions</a> are the highest level of abstraction on the serverless stack of the GCP, and offer you a way to just upload code, and then let Google take care of all the dev-ops underneath for serving the results of your function. They have preconfigured triggers, which you can use to run your code under certain circumstances, such as if a new object arrives in Google Cloud Storage; if you make a request to a HTTP endpoint; or if it recieves a message from Pub/Sub, Google’s message broker service.</p>
+<p>Up until recently they have only been available in Node.js, but the new <a href="https://cloud.google.com/functions/docs/concepts/python-runtime">Python 3 runtime is now in beta</a>. Since I have much more experience with the latter, I took that as an excuse to try it out, and found it solved a lot of little data engineering tasks.</p>
+<p>There are lots use cases for Cloud Functions, some of my favourites are to create <a href="https://cloud.google.com/functions/docs/tutorials/http">mini APIs</a>, <a href="https://cloud.google.com/community/tutorials/cloud-functions-avro-import-bq">load BigQuery with files hitting Cloud Storage</a>, or <a href="https://cloud.google.com/functions/docs/tutorials/slack">creating Slack commands</a></p>
+<div id="scheduler-vs-event-based-triggers" class="section level3">
+<h3>Scheduler vs Event based triggers</h3>
+<p>One major benefit is that it helps move you from a <em>schedule based</em> mindset (such as running scripts on a schedule/cron) to an <em>event based</em> one. For example, the GA360 exports to BigQuery usually happen before 0900 for my clients, but that is not guaranteed. If you have all your data processing set for a schedule of 0910 say, its going to break if those exports are late.</p>
+<p>An event based trigger just waits until it sees the data, then launches the code.</p>
+<p>Another advantage is that event based workflows are asynchronous in the respect they can trigger in parallel. Going back to the GA360 example, a scheduled script may loop through each BigQuery table whilst doing its export - however an event based trigger will launch all the copy jobs at once.</p>
+</div>
+</div>
+<div id="example-copy-ga360-exports-to-a-partitioned-table" class="section level2">
+<h2>Example: Copy GA360 exports to a partitioned table</h2>
+<p>As a demonstration, the script below shows how to create a cloud function that will copy a BigQuery GA360 data export to another table. You may want to do this to aggregate your datasets. However the use case here is to create a parititoned table version of the GA360 exports, to make them easier to work with.</p>
+<div id="why-partitioned-tables" class="section level3">
+<h3>Why partitioned tables?</h3>
+<p>Partitioned tables are a more modern take on organising date based BigQuery tables than the older sharded format. I’m pretty sure if the BigQuery exports were redone today they would be in partitioned tables, but the GA360 exports predate them.</p>
+</div>
+<div id="limitations" class="section level3">
+<h3>Limitations</h3>
+<p>You can’t copy tables outside the region they are in (EU or US for example), for that check out the Cloudy McCloudface master Graham Polley with his <a href="https://medium.com/weareservian/how-to-transfer-bigquery-tables-between-locations-with-cloud-dataflow-9582acc6ae1d">article going through Cloud Dataflow</a>.</p>
+<p>Also cloud functions only work on the same project they are deployed to, so you will need to put it in the same GCP project as the BigQuery exports.</p>
+<p>Don’t make large heavy calculations in your cloud function. They should be light-weight “glue” that trigger larger operations, not calculating big transformations themselves.</p>
+</div>
+<div id="setup-destination-dataset-and-table" class="section level3">
+<h3>1. Setup destination dataset and table</h3>
+<p>First create the dataset where you want the data to be copied to (such as <code>ga360</code>) in the same region of your existing BigQuery exports. By default this is US, but you may have set it up to be EU.</p>
+<p>Create a partitioned table within the dataset called <code>ga_sessions</code>. You don’t have to specify a schema as that will be created when the first data hits it. You could choose to require a partition filter if you have a lot of data, to make sure people don’t query a lot of data by mistake.</p>
+</div>
+<div id="setup-the-logging-export-and-pubsub-trigger" class="section level3">
+<h3>2. Setup the logging export and pub/sub trigger</h3>
+<p>First I was dissappointed that there wasn’t a “BigQuery table ready” event for Cloud Functions…</p>
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr"><a href="https://twitter.com/felipehoffa?ref_src=twsrc%5Etfw">@felipehoffa</a> a trigger every time BigQuery datasets get a new table would be cool, to feed into cloud functions/pubsub etc</p>&mdash; Mark Edmondson (@HoloMarkeD) <a href="https://twitter.com/HoloMarkeD/status/1044854587440734208?ref_src=twsrc%5Etfw">September 26, 2018</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<p>…but then I realised that you can create almost any trigger you want using the <a href="https://console.cloud.google.com/logs/viewer">cloud log viewer</a> within the GCP console.</p>
+<p>With its use of advanced filters, any event thats happening in your GCP can be narrowed down, and then by using its “Create Export” button you can turn that filter into a Pub/Sub trigger, which Cloud Functions can use.</p>
+<p>Here is the filter I use. It uses the <code>analytics-processing-dev@system.gserviceaccount.com</code> email you give to enable GA360 BigQuery exports to narrow down, and then prevents the <code>ga_sessions_intraday</code> tables from appearing, as they are not final data.</p>
+<p>Put this in your logging filter:</p>
+<pre class="js"><code>resource.type=&quot;bigquery_resource&quot;
+protoPayload.methodName=&quot;jobservice.jobcompleted&quot;
+protoPayload.serviceData.jobCompletedEvent.eventName=&quot;load_job_completed&quot;
+protoPayload.authenticationInfo.principalEmail=&quot;analytics-processing-dev@system.gserviceaccount.com&quot;
+NOT protoPayload.serviceData.jobCompletedEvent.job.jobConfiguration.load.destinationTable.tableId:&quot;ga_sessions_intraday&quot;</code></pre>
+<p>Now use “Create Export” and select the “Cloud Pub/Sub” Sink Service. This is the Pub/sub topic that the cloud function will subscribe too, and will update every new logging entry.</p>
+<p>It should look like this:</p>
+<div class="figure">
+<img src="../images/ga360_logging_filter.png" />
+
+</div>
+</div>
+<div id="write-the-code" class="section level3">
+<h3>3. Write the code</h3>
+<p>The code is adapted from the <a href="https://cloud.google.com/functions/docs/tutorials/pubsub">Cloud Pub/Sub tutorial</a> for Cloud Functions.</p>
+<p>You will need to specify the <code>pip</code> requirements for your code in a <code>requirements.txt</code> file, but you don’t have to actually upload the libraries as you do for say App Engine. Cloud Functions will download them for you when you deploy.</p>
+<p>This <code>requirements.txt</code> file only imports the BigQuery Python client:</p>
+<pre><code>google-cloud-bigquery==1.5.1</code></pre>
+<p>The full Python code is below, with some walkthrough afterwards:</p>
+<pre class="python"><code>import logging
+import base64
+import json
+from google.cloud import bigquery
+import re
+
+# replace with your dataset
+DEST_DATASET = &#39;REPLACE_DATASET&#39;
+
+def make_partition_tbl_name(table_id):
+    t_split = table_id.split(&#39;_20&#39;)
+
+    name = t_split[0]
+
+    suffix =  &#39;&#39;.join(re.findall(&quot;\d\d&quot;, table_id)[0:4])
+    name = name + &#39;$&#39; + suffix
+
+    logging.info(&#39;partition table name: {}&#39;.format(name))
+
+    return name
+
+
+def copy_bq(dataset_id, table_id):
+    client = bigquery.Client()
+    dest_dataset = DEST_DATASET
+    dest_table = make_partition_tbl_name(table_id)
+
+    source_table_ref = client.dataset(dataset_id).table(table_id)
+    dest_table_ref = client.dataset(dest_dataset).table(dest_table)
+
+    job = client.copy_table(
+        source_table_ref,
+        dest_table_ref,
+        location = &#39;EU&#39;) # API request
+
+    logging.info(&#39;Copy job: dataset {}: tableId {} -&gt; dataset {}: tableId {} - &#39;
+                 &#39;check BigQuery logs of job_id: {} for status&#39;.format(
+        dataset_id, table_id, dest_dataset, dest_table,
+        job.job_id))
+
+def extract_data(data):
+    &quot;&quot;&quot;Gets the tableId, datasetId from pub/sub data&quot;&quot;&quot;
+    data = json.loads(data)
+    table_info = data[&#39;protoPayload&#39;][&#39;serviceData&#39;][&#39;jobCompletedEvent&#39;][&#39;job&#39;][&#39;jobConfiguration&#39;][&#39;load&#39;][&#39;destinationTable&#39;]
+    logging.info(&#39;Found data: {}&#39;.format(json.dumps(table_info)))
+    return table_info
+
+def bq_to_bq(data, context):
+    if &#39;data&#39; in data:
+        table_info = extract_data(base64.b64decode(data[&#39;data&#39;]).decode(&#39;utf-8&#39;))
+        copy_bq(dataset_id=table_info[&#39;datasetId&#39;], table_id=table_info[&#39;tableId&#39;])
+    else:
+        raise ValueError(&#39;No data found in pub-sub&#39;)</code></pre>
+</div>
+<div id="handling-pubsub-functions" class="section level3">
+<h3>Handling pub/sub functions</h3>
+<p>The functions below take care of processing the pub/sub data. All data arrives as a base64 encoded string, which is extracted. This extraction is in the same format as the logs - the <code>extract_data()</code> function parses out what is needed for the BigQuery copy job, namely the <code>table_id</code>. You can adapt this as needed if you need other information for your code.</p>
+<p>As detailed in the <a href="https://cloud.google.com/functions/docs/tutorials/pubsub">tutorial</a>, the Pub/sub trigger needs to be processed by a function expecting the <code>data</code> and <code>context</code> arguments. That is the <code>bq_to_bq(data, content)</code> function below.</p>
+<pre class="python"><code>def extract_data(data):
+    &quot;&quot;&quot;Gets the tableId, datasetId from pub/sub data&quot;&quot;&quot;
+    data = json.loads(data)
+    table_info = data[&#39;protoPayload&#39;][&#39;serviceData&#39;][&#39;jobCompletedEvent&#39;][&#39;job&#39;][&#39;jobConfiguration&#39;][&#39;load&#39;][&#39;destinationTable&#39;]
+    logging.info(&#39;Found data: {}&#39;.format(json.dumps(table_info)))
+    return table_info
+
+def bq_to_bq(data, context):
+    if &#39;data&#39; in data:
+        table_info = extract_data(base64.b64decode(data[&#39;data&#39;]).decode(&#39;utf-8&#39;))
+        copy_bq(dataset_id=table_info[&#39;datasetId&#39;], table_id=table_info[&#39;tableId&#39;])
+    else:
+        raise ValueError(&#39;No data found in pub-sub&#39;)</code></pre>
+</div>
+<div id="copy-the-bigquery-table-functions" class="section level3">
+<h3>Copy the BigQuery table functions</h3>
+<p>The functions below then create the <code>table_id</code> you want to write to. This basically means taking the table name <code>ga_sessions_20171011</code> and turning it into <code>ga_sessions$20171011</code>, so that the partitioned table is written to the same date partition as the export.</p>
+<p>In the example below, adapated from <a href="https://googlecloudplatform.github.io/google-cloud-python/latest/bigquery/index.html">here</a>, it then creates the BigQuery job to copy.</p>
+<p>Note here we do not wait for the job to finish - we are in an event style mindset, so just want to trigger and finish. Instead just return the jobId, that you can examine in the BigQuery logs if you need to.</p>
+<pre class="python"><code>def make_partition_tbl_name(table_id):
+    t_split = table_id.split(&#39;_20&#39;)
+
+    name = t_split[0]
+
+    suffix =  &#39;&#39;.join(re.findall(&quot;\d\d&quot;, table_id)[0:4])
+    name = name + &#39;$&#39; + suffix
+
+    logging.info(&#39;partition table name: {}&#39;.format(name))
+
+    return name
+
+
+def copy_bq(dataset_id, table_id):
+    client = bigquery.Client()
+    dest_dataset = DEST_DATASET
+    dest_table = make_partition_tbl_name(table_id)
+
+    source_table_ref = client.dataset(dataset_id).table(table_id)
+    dest_table_ref = client.dataset(dest_dataset).table(dest_table)
+
+    job = client.copy_table(
+        source_table_ref,
+        dest_table_ref,
+        location = &#39;EU&#39;) # API request
+
+    logging.info(&#39;Copy job: dataset {}: tableId {} -&gt; dataset {}: tableId {} - &#39;
+                 &#39;check BigQuery logs of job_id: {} for status&#39;.format(
+        dataset_id, table_id, dest_dataset, dest_table,
+        job.job_id))</code></pre>
+</div>
+<div id="deploy" class="section level3">
+<h3>4. Deploy</h3>
+<p>Now all that remains is to deploy the function. The code above needs to be saved to a file called <code>main.py</code> and then put into the same folder as <code>requirements.txt</code>:</p>
+<pre><code>-|
+ |- main.py
+ |- requirements.txt</code></pre>
+<p>You may need to then install the <code>gcloud beta</code> componenets to deploy the python. See the <a href="https://cloud.google.com/functions/docs/quickstart">guide</a> here.</p>
+<p>After you have it installed, browse to the folder holding your code in your console, and then issue the <code>gcloud</code> commands to deploy the files. It takes around 2 mins.</p>
+<p>You need to specify the function that will trigger. In our case this is the function that recieves the data, <code>def bq_to_bq(data, context)</code>. We also need to specify its a Python file, and what the trigger will be:</p>
+<pre><code>gcloud functions deploy bq_to_bq \
+                 --runtime python37 \ 
+                 --trigger-resource ga360_export \ 
+                 --trigger-event google.pubsub.topic.publish</code></pre>
+<p>The <code>--trigger-resource</code> should be the name of the logging export you did in step 2.</p>
+<p>Once deployed you should start seeing your GA360 tables being copied over to your new partitioned table dataset from the next day’s exports. In your Cloud Function logs you should be able to see the copy jobs as they occur with the BigQuery jobIDs, and in your BigQuery logs for that jobId the status of the task. You could even set up error alerting by creating log-based metrics and exporting it to Stackdriver, to send an email or Slack message if things go awry.</p>
+</div>
+</div>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<p>Hopefully this helps you integrate Cloud Functions into your own workflows. You can see that the code is minimal and for the right type of job give minimal upkeep without too much development work. Whilst not suited to every task, they have quickly become a great tool in my toolbox for moving data around.</p>
+</div>
 
         </div>
         <footer class="article-footer">
-    <a data-url="https://code.markedmondson.me/search-console-google-analytics-r-keyword-research/" data-id="93f9d7348db275c87b006e1e24780658" class="article-share-link">
+    <a data-url="https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/" data-id="4eafa654217481dabe178dcef11c9255" class="article-share-link">
         <i class="fa fa-share"></i>
         Share
     </a>
     
-    <a href="https://code.markedmondson.me/search-console-google-analytics-r-keyword-research/#disqus_thread" class="article-comment-link">
+    <a href="https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/#disqus_thread" class="article-comment-link">
         Comments
     </a>
     
@@ -697,21 +583,14 @@ est_plot
     
 <nav id="article-nav">
     
-    <a href="https://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="https://code.markedmondson.me/talking-google-analytics-dashboards/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">
           Older
       </strong>
-      <div class="article-nav-title">Scheduling R scripts for a team using RStudio Server, Docker, Github and Google Compute Engine</div>
+      <div class="article-nav-title">Talking Google Analytics dashboards via R, Shiny and Text-to-Speech APIs</div>
     </a>
     
 
-    
-    <a href="https://code.markedmondson.me/anti-sampling-google-analytics-api/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">
-          Newer
-      </strong>
-      <div class="article-nav-title">Efficient anti-sampling with the Google Analytics Reporting API</div>
-    </a>
     
 </nav>
 
@@ -761,7 +640,7 @@ est_plot
                 <div class="item-thumbnail">
                     <a href="https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/cloud-functions.png)" alt="SEO keyword research using searchConsoleR and googleAnalyticsR" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/cloud-functions.png)" alt="Turning GA360 BigQuery exports into partitioned tables using Cloud Functions" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -778,7 +657,7 @@ est_plot
                 <div class="item-thumbnail">
                     <a href="https://code.markedmondson.me/talking-google-analytics-dashboards/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/talking-gas.png)" alt="SEO keyword research using searchConsoleR and googleAnalyticsR" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/talking-gas.png)" alt="Turning GA360 BigQuery exports into partitioned tables using Cloud Functions" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -797,7 +676,7 @@ est_plot
                 <div class="item-thumbnail">
                     <a href="https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/r-kubernetes.png)" alt="SEO keyword research using searchConsoleR and googleAnalyticsR" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/r-kubernetes.png)" alt="Turning GA360 BigQuery exports into partitioned tables using Cloud Functions" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -816,7 +695,7 @@ est_plot
                 <div class="item-thumbnail">
                     <a href="https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/datastudio.png)" alt="SEO keyword research using searchConsoleR and googleAnalyticsR" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/datastudio.png)" alt="Turning GA360 BigQuery exports into partitioned tables using Cloud Functions" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -835,7 +714,7 @@ est_plot
                 <div class="item-thumbnail">
                     <a href="https://code.markedmondson.me/searchconsoler-vs-googlelanguager/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/nlp_sc.png)" alt="SEO keyword research using searchConsoleR and googleAnalyticsR" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/nlp_sc.png)" alt="Turning GA360 BigQuery exports into partitioned tables using Cloud Functions" class="thumbnail-image"></span>
                     
                     </a>
                 </div>

@@ -2,7 +2,7 @@
 <html lang="en-GB">
 <head>
     <title>Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API &middot; Mark Edmondson</title>
-    <meta name="generator" content="Hugo 0.18.1" />
+    <meta name="generator" content="Hugo 0.51" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
@@ -10,7 +10,7 @@
       <meta name="description" content="The code bit of the blog">
     
     
-    <link rel="canonical" href="https://code.markedmondson.me/searchconsoler-vs-googlelanguager"/>
+    <link rel="canonical" href="https://code.markedmondson.me/searchconsoler-vs-googlelanguager/"/>
     <link rel="icon" href="https://code.markedmondson.me/favicon.ico">
     <link rel="apple-touch-icon" href="https://code.markedmondson.me/apple-touch-icon.png"/>
     <link rel="stylesheet" href="https://code.markedmondson.me/css/style.css">
@@ -24,19 +24,8 @@
 <meta property="og:description" content="With the launch of the Google Natural Language API (NLP API), and the emphasis of machine learning that is said to account for up to 30% of the SEO algorithmn for Google search, a natural question is whether you can use Google’s own macine learning APIs to help optimise your website for search.
 Whilst I don’t believe they will offer exactly the same results, I can see useful applications that include:" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://code.markedmondson.me/searchconsoler-vs-googlelanguager" />
-
-
-<meta property="og:updated_time" content="2018-01-11T00:00:00&#43;00:00"/>
-
-
-
-
-
-
-
-
-
+<meta property="og:url" content="https://code.markedmondson.me/searchconsoler-vs-googlelanguager/" /><meta property="article:published_time" content="2018-01-11T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-01-11T00:00:00&#43;00:00"/>
 
     
     
@@ -45,24 +34,19 @@ Whilst I don’t believe they will offer exactly the same results, I can see use
 Whilst I don’t believe they will offer exactly the same results, I can see useful applications that include:">
 
 
+<meta itemprop="datePublished" content="2018-01-11T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2018-01-11T00:00:00&#43;00:00" />
 <meta itemprop="wordCount" content="1699">
 
 
 
-<meta itemprop="keywords" content="big-query,blogging,docker,google-analytics,google-app-engine,google-auth,google-cloud-storage,google-compute-engine,google-language,google-tag-manager,python,r,rstudio-server,search-console," />
+<meta itemprop="keywords" content="r,search-console,google-language," />
 
-    
-
-  <meta name="twitter:card" content="summary"/>
-
-
-
+    <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API"/>
 <meta name="twitter:description" content="With the launch of the Google Natural Language API (NLP API), and the emphasis of machine learning that is said to account for up to 30% of the SEO algorithmn for Google search, a natural question is whether you can use Google’s own macine learning APIs to help optimise your website for search.
 Whilst I don’t believe they will offer exactly the same results, I can see useful applications that include:"/>
 <meta name="twitter:site" content="@HoloMarkeD"/>
-<meta name="twitter:domain" content="markedmondson.me"/>
 
     
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -76,7 +60,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <meta name="google-site-verification" content="e8JvngILwz-scbcavSJIg_gDaKMqH3AGWUBlLgLtNk4" />
 </head>
 <body>
 <div class="container">
@@ -165,11 +148,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
    	
    	<div class="outer">
-   		
-	    <aside id="profile">
+   	
+    	<aside id="profile">
   <div class="inner profile-inner">
     <div class="base-info profile-block">
+      
       <img id="avatar" src="https://code.markedmondson.me/images/gde_avatar.jpg">
+      
       <h2 id="name">Mark Edmondson</h2>
       <h3 id="title">Coding in digital analytics</h3>
       <span id="location"><i class="fa fa-map-marker"></i>Copenhagen, Denmark</span>
@@ -181,12 +166,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        18
+        19
         <span>Posts</span>
       </div>
       <div class="article-info-block">
         
-          14
+          15
         
         <span>
             Tags
@@ -263,24 +248,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </div>
 </aside>
 
-	    
+    
 
-	    
-<section id="main">
-
+    <section id="main">
+    
     <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
-        <div class="article-inner">
-            
-                <img src="https://code.markedmondson.me/banners/nlp_sc.png" class="article-banner">
-            
+    <div class="article-inner">
+        
+            <img src="https://code.markedmondson.me/banners/nlp_sc.png" class="article-banner">
+        
 
-            <header class="article-header">
-    <a href="https://code.markedmondson.me/searchconsoler-vs-googlelanguager">
+        <header class="article-header">
+    <a href="https://code.markedmondson.me/searchconsoler-vs-googlelanguager/">
     <h1 class="article-title" itemprop="name">
         Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API
     </h1>
     </a>
     <div class="article-meta">
+
+        
         <div class="article-date">
             <i class="fa fa-calendar"></i>
             <time datetime="2018-01-11 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-01-11</time>
@@ -291,8 +277,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             8
             minute read
         </div>
-
-
+        
         
 
         
@@ -319,8 +304,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
 </header>
 
-            <div class="article-entry" itemprop="articleBody">
-                <p>With the launch of the Google Natural Language API (NLP API), and the emphasis of machine learning that is said to account for up to 30% of the SEO algorithmn for Google search, a natural question is whether you can use Google’s own macine learning APIs to help optimise your website for search.</p>
+        <div class="article-entry" itemprop="articleBody">
+            
+
+
+<p>With the launch of the Google Natural Language API (NLP API), and the emphasis of machine learning that is said to account for up to 30% of the SEO algorithmn for Google search, a natural question is whether you can use Google’s own macine learning APIs to help optimise your website for search.</p>
 <p>Whilst I don’t believe they will offer exactly the same results, I can see useful applications that include:</p>
 <ul>
 <li>Identifying what entities are on your website, to see what topics Google Knowledge Graph may categorise your website as</li>
@@ -606,9 +594,9 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)</code><
 <p>Its early days but I am starting to run through new client websites to see what comes up (by writing more custom code to parse out the content) to pass on to the SEO specialists, at the very least its another perspective to inform topic and keyword choices. If anyone takes this approach and finds it useful, do please comment as I’ll be interested if this helps. It would also be good to compare this with other non-Google NLP APIs such as on Azure and AWS to see if the Google one is especially useful for Google SEO.</p>
 </div>
 
-            </div>
-            <footer class="article-footer">
-    <a data-url="https://code.markedmondson.me/searchconsoler-vs-googlelanguager" data-id="2cb57c96f3fcc7ca9f7ce1253b1d11ff" class="article-share-link">
+        </div>
+        <footer class="article-footer">
+    <a data-url="https://code.markedmondson.me/searchconsoler-vs-googlelanguager/" data-id="a11056a2f18022d344c40f23c35d2953" class="article-share-link">
         <i class="fa fa-share"></i>
         Share
     </a>
@@ -684,9 +672,9 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)</code><
     </script>
 </footer>
 
-        </div>
+    </div>
 
-        
+    
 <nav id="article-nav">
     
     <a href="https://code.markedmondson.me/rstudio-server-chromebook/" id="article-nav-older" class="article-nav-link-wrap">
@@ -698,7 +686,7 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)</code><
     
 
     
-    <a href="https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">
           Newer
       </strong>
@@ -708,34 +696,39 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)</code><
 </nav>
 
 
-    </article>
+</article>
 
+
+<section id="comments">
+    <div id="disqus_thread">
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
     
-    <section id="comments">
-        <div id="disqus_thread">
-            <div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_shortname = 'markedmondson';
-    var disqus_identifier = 'https:\/\/code.markedmondson.me\/searchconsoler-vs-googlelanguager';
-    var disqus_title = 'Comparing Google Search Console queries with Google\x27s Cloud Natural Language API';
-    var disqus_url = 'https:\/\/code.markedmondson.me\/searchconsoler-vs-googlelanguager';
-
+    
+    
+    };
     (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "markedmondson" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
     })();
 </script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-        </div>
-    </section>
-    
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
 </section>
 
 
-	    
-	    <aside id="sidebar">
+    </section>
+
+   	
+    	<aside id="sidebar">
     
 <div class="widget-wrap">
     <h3 class="widget-title">
@@ -746,7 +739,24 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)</code><
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/talking-google-analytics-dashboards" class="thumbnail">
+                    <a href="https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/cloud-functions.png)" alt="Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/" class="title">Turning GA360 BigQuery exports into partitioned tables using Cloud Functions</a></p>
+                    <p class="item-date">
+                        <time datetime="2018-10-09 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-10-09</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/talking-google-analytics-dashboards/" class="thumbnail">
                     
                         <span style="background-image:url(https://code.markedmondson.me/banners/talking-gas.png)" alt="Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API" class="thumbnail-image"></span>
                     
@@ -756,7 +766,7 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)</code><
                     
                     
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/talking-google-analytics-dashboards" class="title">Talking Google Analytics dashboards via R, Shiny and Text-to-Speech APIs</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/talking-google-analytics-dashboards/" class="title">Talking Google Analytics dashboards via R, Shiny and Text-to-Speech APIs</a></p>
                     <p class="item-date">
                         <time datetime="2018-08-15 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-08-15</time>
                     </p>
@@ -765,7 +775,7 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)</code><
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts" class="thumbnail">
+                    <a href="https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts/" class="thumbnail">
                     
                         <span style="background-image:url(https://code.markedmondson.me/banners/r-kubernetes.png)" alt="Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API" class="thumbnail-image"></span>
                     
@@ -775,7 +785,7 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)</code><
                     
                     
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts" class="title">R on Kubernetes - serverless Shiny, R APIs and scheduled scripts</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts/" class="title">R on Kubernetes - serverless Shiny, R APIs and scheduled scripts</a></p>
                     <p class="item-date">
                         <time datetime="2018-05-02 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-05-02</time>
                     </p>
@@ -784,7 +794,7 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)</code><
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown" class="thumbnail">
+                    <a href="https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown/" class="thumbnail">
                     
                         <span style="background-image:url(https://code.markedmondson.me/banners/datastudio.png)" alt="Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API" class="thumbnail-image"></span>
                     
@@ -794,7 +804,7 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)</code><
                     
                     
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown" class="title">Embedding Google Data Studio into RMarkdown</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown/" class="title">Embedding Google Data Studio into RMarkdown</a></p>
                     <p class="item-date">
                         <time datetime="2018-03-15 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-03-15</time>
                     </p>
@@ -803,7 +813,7 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)</code><
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/searchconsoler-vs-googlelanguager" class="thumbnail">
+                    <a href="https://code.markedmondson.me/searchconsoler-vs-googlelanguager/" class="thumbnail">
                     
                         <span style="background-image:url(https://code.markedmondson.me/banners/nlp_sc.png)" alt="Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API" class="thumbnail-image"></span>
                     
@@ -811,26 +821,9 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)</code><
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/searchconsoler-vs-googlelanguager" class="title">Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/searchconsoler-vs-googlelanguager/" class="title">Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API</a></p>
                     <p class="item-date">
                         <time datetime="2018-01-11 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-01-11</time>
-                    </p>
-                </div>
-            </li>
-            
-            <li>
-                <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/rstudio-server-chromebook/" class="thumbnail">
-                    
-                        <span style="background-image:url(https://code.markedmondson.me/banners/chromebook.png)" alt="Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API" class="thumbnail-image"></span>
-                    
-                    </a>
-                </div>
-                <div class="item-inner">
-                    
-                    <p class="item-title"><a href="https://code.markedmondson.me/rstudio-server-chromebook/" class="title">Run RStudio Server on a Chromebook as a Cloud Native</a></p>
-                    <p class="item-date">
-                        <time datetime="2017-09-05 13:55:57 &#43;0100 &#43;0100" itemprop="datePublished">2017-09-05</time>
                     </p>
                 </div>
             </li>
@@ -861,7 +854,7 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)</code><
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/big-query">
                     big-query
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">5</span>
             </li>
             
             <li class="category-list-item">
@@ -870,6 +863,14 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)</code><
                     blogging
                 </a>
                 <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-functions">
+                    cloud-functions
+                </a>
+                <span class="category-list-count">1</span>
             </li>
             
             <li class="category-list-item">
@@ -885,7 +886,7 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)</code><
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-analytics">
                     google-analytics
                 </a>
-                <span class="category-list-count">6</span>
+                <span class="category-list-count">7</span>
             </li>
             
             <li class="category-list-item">
@@ -941,7 +942,7 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)</code><
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/python">
                     python
                 </a>
-                <span class="category-list-count">2</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -981,7 +982,7 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)</code><
     <div id="toTop" class="fa fa-angle-up"></div>
 </aside>
 
-	    
+    
 	</div>
 </div>
 
@@ -998,17 +999,19 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)</code><
 <script src="https://code.markedmondson.me/fancybox/jquery.fancybox.pack.js"></script>
 <script src="https://code.markedmondson.me/js/script.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+
+
 <script>hljs.initHighlightingOnLoad();</script>
 
 
-<!-- MathJax -->
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
   tex2jax: {
     inlineMath: [['$','$'], ['\\(','\\)']]}
   });
 </script>
-<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
 
 
 

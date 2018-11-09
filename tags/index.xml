@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Mark Edmondson</title>
+    <link>https://code.markedmondson.me/tags/</link>
+    <description>Recent content in Tags on Mark Edmondson</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-GB</language>
+    <lastBuildDate>Tue, 09 Oct 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://code.markedmondson.me/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Big Query</title>
+      <link>https://code.markedmondson.me/tags/big-query/</link>
+      <pubDate>Tue, 09 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://code.markedmondson.me/tags/big-query/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Blogging</title>
+      <link>https://code.markedmondson.me/tags/blogging/</link>
+      <pubDate>Mon, 23 Jan 2017 22:45:03 +0100</pubDate>
+      
+      <guid>https://code.markedmondson.me/tags/blogging/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Cloud Functions</title>
+      <link>https://code.markedmondson.me/tags/cloud-functions/</link>
+      <pubDate>Tue, 09 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://code.markedmondson.me/tags/cloud-functions/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Docker</title>
+      <link>https://code.markedmondson.me/tags/docker/</link>
+      <pubDate>Wed, 02 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://code.markedmondson.me/tags/docker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Google Analytics</title>
+      <link>https://code.markedmondson.me/tags/google-analytics/</link>
+      <pubDate>Tue, 09 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://code.markedmondson.me/tags/google-analytics/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Google App Engine</title>
+      <link>https://code.markedmondson.me/tags/google-app-engine/</link>
+      <pubDate>Tue, 05 Sep 2017 13:55:57 +0100</pubDate>
+      
+      <guid>https://code.markedmondson.me/tags/google-app-engine/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Google Auth</title>
+      <link>https://code.markedmondson.me/tags/google-auth/</link>
+      <pubDate>Thu, 15 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://code.markedmondson.me/tags/google-auth/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Google Cloud Storage</title>
+      <link>https://code.markedmondson.me/tags/google-cloud-storage/</link>
+      <pubDate>Tue, 05 Sep 2017 13:55:57 +0100</pubDate>
+      
+      <guid>https://code.markedmondson.me/tags/google-cloud-storage/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Google Compute Engine</title>
+      <link>https://code.markedmondson.me/tags/google-compute-engine/</link>
+      <pubDate>Tue, 05 Sep 2017 13:55:57 +0100</pubDate>
+      
+      <guid>https://code.markedmondson.me/tags/google-compute-engine/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Google Language</title>
+      <link>https://code.markedmondson.me/tags/google-language/</link>
+      <pubDate>Wed, 15 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://code.markedmondson.me/tags/google-language/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Google Tag Manager</title>
+      <link>https://code.markedmondson.me/tags/google-tag-manager/</link>
+      <pubDate>Tue, 24 Jan 2017 21:20:50 +0100</pubDate>
+      
+      <guid>https://code.markedmondson.me/tags/google-tag-manager/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Python</title>
+      <link>https://code.markedmondson.me/tags/python/</link>
+      <pubDate>Tue, 09 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://code.markedmondson.me/tags/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>R</title>
+      <link>https://code.markedmondson.me/tags/r/</link>
+      <pubDate>Wed, 15 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://code.markedmondson.me/tags/r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Rstudio Server</title>
+      <link>https://code.markedmondson.me/tags/rstudio-server/</link>
+      <pubDate>Tue, 05 Sep 2017 13:55:57 +0100</pubDate>
+      
+      <guid>https://code.markedmondson.me/tags/rstudio-server/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Search Console</title>
+      <link>https://code.markedmondson.me/tags/search-console/</link>
+      <pubDate>Thu, 11 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://code.markedmondson.me/tags/search-console/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
