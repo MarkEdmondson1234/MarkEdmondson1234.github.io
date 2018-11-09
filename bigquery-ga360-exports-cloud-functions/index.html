@@ -34,7 +34,7 @@
 
 <meta itemprop="datePublished" content="2018-10-09T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2018-10-09T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="1679">
+<meta itemprop="wordCount" content="1681">
 
 
 
@@ -268,7 +268,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2018-10-09 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-10-09</time>
             &middot;
-            1679
+            1681
             words
             &middot;
             8
@@ -445,8 +445,8 @@ def bq_to_bq(data, context):
 <div id="copy-the-bigquery-table-functions" class="section level3">
 <h3>Copy the BigQuery table functions</h3>
 <p>The functions below then create the <code>table_id</code> you want to write to. This basically means taking the table name <code>ga_sessions_20171011</code> and turning it into <code>ga_sessions$20171011</code>, so that the partitioned table is written to the same date partition as the export.</p>
-<p>In the example below, adapated from <a href="https://googlecloudplatform.github.io/google-cloud-python/latest/bigquery/index.html">here</a>, it then creates the BigQuery job to copy.</p>
-<p>Note here we do not wait for the job to finish - we are in an event style mindset, so just want to trigger and finish. Instead just return the jobId, that you can examine in the BigQuery logs if you need to.</p>
+<p>In the example below, adapted from <a href="https://googlecloudplatform.github.io/google-cloud-python/latest/bigquery/index.html">here</a>, it then creates the BigQuery job to copy.</p>
+<p>Note here we do not wait for the job to finish - we are in an event style mindset, so just want to trigger and finish. Instead we just return the <code>jobId</code>, so that you can examine it the BigQuery logs if you need to.</p>
 <pre class="python"><code>def make_partition_tbl_name(table_id):
     t_split = table_id.split(&#39;_20&#39;)
 
@@ -486,18 +486,18 @@ def copy_bq(dataset_id, table_id):
  |- requirements.txt</code></pre>
 <p>You may need to then install the <code>gcloud beta</code> componenets to deploy the python. See the <a href="https://cloud.google.com/functions/docs/quickstart">guide</a> here.</p>
 <p>After you have it installed, browse to the folder holding your code in your console, and then issue the <code>gcloud</code> commands to deploy the files. It takes around 2 mins.</p>
-<p>You need to specify the function that will trigger. In our case this is the function that recieves the data, <code>def bq_to_bq(data, context)</code>. We also need to specify its a Python file, and what the trigger will be:</p>
+<p>You need to specify the function that will trigger. In our case this is the function that receives the data, <code>def bq_to_bq(data, context)</code>. We also need to specify its a Python file, and what the trigger will be:</p>
 <pre><code>gcloud functions deploy bq_to_bq \
                  --runtime python37 \ 
                  --trigger-resource ga360_export \ 
                  --trigger-event google.pubsub.topic.publish</code></pre>
 <p>The <code>--trigger-resource</code> should be the name of the logging export you did in step 2.</p>
-<p>Once deployed you should start seeing your GA360 tables being copied over to your new partitioned table dataset from the next day’s exports. In your Cloud Function logs you should be able to see the copy jobs as they occur with the BigQuery jobIDs, and in your BigQuery logs for that jobId the status of the task. You could even set up error alerting by creating log-based metrics and exporting it to Stackdriver, to send an email or Slack message if things go awry.</p>
+<p>Once deployed you should start seeing your GA360 tables being copied over to your new partitioned table dataset from the next day’s exports. In your Cloud Function logs you should be able to see the copy jobs as they occur with the BigQuery <code>jobId</code>s, and in your BigQuery logs for that <code>jobId</code> the status of the task. You could even set up error alerting by creating log-based metrics and exporting it to Stackdriver, to send an email or Slack message if things go awry.</p>
 </div>
 </div>
 <div id="summary" class="section level2">
 <h2>Summary</h2>
-<p>Hopefully this helps you integrate Cloud Functions into your own workflows. You can see that the code is minimal and for the right type of job give minimal upkeep without too much development work. Whilst not suited to every task, they have quickly become a great tool in my toolbox for moving data around.</p>
+<p>Hopefully this helps you integrate Cloud Functions into your own workflows. You can see that the code is minimal and for the right type of job has low upkeep without too much development work. Whilst not suited to every task, they have quickly become a useful tool in my toolbox for moving data around.</p>
 </div>
 
         </div>
