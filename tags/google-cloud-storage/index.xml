@@ -6,10 +6,21 @@
     <description>Recent content in Google Cloud Storage on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
-    <lastBuildDate>Tue, 05 Sep 2017 13:55:57 +0100</lastBuildDate>
+    <lastBuildDate>Thu, 29 Nov 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://code.markedmondson.me/tags/google-cloud-storage/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Auto Google Analytics Data Imports from Cloud Storage</title>
+      <link>https://code.markedmondson.me/automatic-google-analytics-data-imports-cloud-storage/</link>
+      <pubDate>Thu, 29 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://code.markedmondson.me/automatic-google-analytics-data-imports-cloud-storage/</guid>
+      <description>Continuing my infatuation with cloud functions (see last post on using cloud functions to manipulate BigQuery exports) this is a post showing how to bring together various code examples out there so that you can easily upload custom data imports from a Google cloud storage bucket.
+The code is available in this GitHub repo for useful cloud functions with Google Analytics
+Extended data imports Google Analytics offers various versions of uploads.</description>
+    </item>
     
     <item>
       <title>Run RStudio Server on a Chromebook as a Cloud Native</title>

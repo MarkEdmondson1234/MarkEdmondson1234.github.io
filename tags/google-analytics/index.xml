@@ -6,10 +6,21 @@
     <description>Recent content in Google Analytics on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
-    <lastBuildDate>Tue, 09 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 29 Nov 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://code.markedmondson.me/tags/google-analytics/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Auto Google Analytics Data Imports from Cloud Storage</title>
+      <link>https://code.markedmondson.me/automatic-google-analytics-data-imports-cloud-storage/</link>
+      <pubDate>Thu, 29 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://code.markedmondson.me/automatic-google-analytics-data-imports-cloud-storage/</guid>
+      <description>Continuing my infatuation with cloud functions (see last post on using cloud functions to manipulate BigQuery exports) this is a post showing how to bring together various code examples out there so that you can easily upload custom data imports from a Google cloud storage bucket.
+The code is available in this GitHub repo for useful cloud functions with Google Analytics
+Extended data imports Google Analytics offers various versions of uploads.</description>
+    </item>
     
     <item>
       <title>Turning GA360 BigQuery exports into partitioned tables using Cloud Functions</title>
@@ -19,7 +30,7 @@
       <guid>https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/</guid>
       <description>Its been a while since my last blog, although I had a good excuse as I’ve moved house into the Copenhagen suburbs, Brønshøj. But in the meantime, I have had the chance to find my new favourite tool for data engineering - Google Cloud Functions in Python.
 This post will look at how to use them to work with the GA360 BigQuery export tables.
-Google Cloud Functions Cloud Functions are the highest level of abstraction on the serverless stack of the GCP, and offer you a way to just upload code, and then let Google take care of all the dev-ops underneath for serving the results of your function.</description>
+The code is available in this GitHub repo for useful cloud functions with Google Analytics</description>
     </item>
     
     <item>

@@ -19,7 +19,7 @@
       <guid>https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/</guid>
       <description>Its been a while since my last blog, although I had a good excuse as I’ve moved house into the Copenhagen suburbs, Brønshøj. But in the meantime, I have had the chance to find my new favourite tool for data engineering - Google Cloud Functions in Python.
 This post will look at how to use them to work with the GA360 BigQuery export tables.
-Google Cloud Functions Cloud Functions are the highest level of abstraction on the serverless stack of the GCP, and offer you a way to just upload code, and then let Google take care of all the dev-ops underneath for serving the results of your function.</description>
+The code is available in this GitHub repo for useful cloud functions with Google Analytics</description>
     </item>
     
     <item>

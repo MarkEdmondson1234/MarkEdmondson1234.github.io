@@ -34,7 +34,7 @@
 
 <meta itemprop="datePublished" content="2018-10-09T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2018-10-09T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="1682">
+<meta itemprop="wordCount" content="1712">
 
 
 
@@ -163,7 +163,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        19
+        20
         <span>Posts</span>
       </div>
       <div class="article-info-block">
@@ -268,10 +268,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2018-10-09 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-10-09</time>
             &middot;
-            1682
+            1712
             words
             &middot;
-            8
+            9
             minute read
         </div>
         
@@ -311,6 +311,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <p>Its been a while since my last blog, although I had a good excuse as I’ve moved house into the Copenhagen suburbs, Brønshøj. But in the meantime, I have had the chance to find my new favourite tool for data engineering - Google Cloud Functions in Python.</p>
 <p>This post will look at how to use them to work with the GA360 BigQuery export tables.</p>
+<p>The code is available in this <a href="https://github.com/MarkEdmondson1234/google-analytics-cloud-functions">GitHub repo for useful cloud functions with Google Analytics</a></p>
 <div id="google-cloud-functions" class="section level2">
 <h2>Google Cloud Functions</h2>
 <p><a href="https://cloud.google.com/functions/">Cloud Functions</a> are the highest level of abstraction on the serverless stack of the GCP, and offer you a way to just upload code, and then let Google take care of all the dev-ops underneath for serving the results of your function. They have preconfigured triggers, which you can use to run your code under certain circumstances, such as if a new object arrives in Google Cloud Storage; if you make a request to a HTTP endpoint; or if it receives a message from Pub/Sub, Google’s message broker service.</p>
@@ -366,6 +367,7 @@ NOT protoPayload.serviceData.jobCompletedEvent.job.jobConfiguration.load.destina
 </div>
 <div id="write-the-code" class="section level3">
 <h3>3. Write the code</h3>
+<p>The code is available in this <a href="https://github.com/MarkEdmondson1234/google-analytics-cloud-functions">GitHub repo for useful cloud functions with Google Analytics</a></p>
 <p>The code is adapted from the <a href="https://cloud.google.com/functions/docs/tutorials/pubsub">Cloud Pub/Sub tutorial</a> for Cloud Functions.</p>
 <p>You will need to specify the <code>pip</code> requirements for your code in a <code>requirements.txt</code> file, but you don’t have to actually upload the libraries as you do for say App Engine. Cloud Functions will download them for you when you deploy.</p>
 <p>This <code>requirements.txt</code> file only imports the BigQuery Python client:</p>
@@ -593,6 +595,13 @@ def copy_bq(dataset_id, table_id):
     
 
     
+    <a href="https://code.markedmondson.me/automatic-google-analytics-data-imports-cloud-storage/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">
+          Newer
+      </strong>
+      <div class="article-nav-title">Auto Google Analytics Data Imports from Cloud Storage</div>
+    </a>
+    
 </nav>
 
 
@@ -636,6 +645,23 @@ def copy_bq(dataset_id, table_id):
     </h3>
     <div class="widget">
         <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/automatic-google-analytics-data-imports-cloud-storage/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/data-imports.jpg)" alt="Turning GA360 BigQuery exports into partitioned tables using Cloud Functions" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/automatic-google-analytics-data-imports-cloud-storage/" class="title">Auto Google Analytics Data Imports from Cloud Storage</a></p>
+                    <p class="item-date">
+                        <time datetime="2018-11-29 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-11-29</time>
+                    </p>
+                </div>
+            </li>
             
             <li>
                 <div class="item-thumbnail">
@@ -711,23 +737,6 @@ def copy_bq(dataset_id, table_id):
                 </div>
             </li>
             
-            <li>
-                <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/searchconsoler-vs-googlelanguager/" class="thumbnail">
-                    
-                        <span style="background-image:url(https://code.markedmondson.me/banners/nlp_sc.png)" alt="Turning GA360 BigQuery exports into partitioned tables using Cloud Functions" class="thumbnail-image"></span>
-                    
-                    </a>
-                </div>
-                <div class="item-inner">
-                    
-                    <p class="item-title"><a href="https://code.markedmondson.me/searchconsoler-vs-googlelanguager/" class="title">Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API</a></p>
-                    <p class="item-date">
-                        <time datetime="2018-01-11 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-01-11</time>
-                    </p>
-                </div>
-            </li>
-            
         </ul>
     </div>
 </div>
@@ -770,7 +779,7 @@ def copy_bq(dataset_id, table_id):
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-functions">
                     cloud-functions
                 </a>
-                <span class="category-list-count">1</span>
+                <span class="category-list-count">2</span>
             </li>
             
             <li class="category-list-item">
@@ -786,7 +795,7 @@ def copy_bq(dataset_id, table_id):
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-analytics">
                     google-analytics
                 </a>
-                <span class="category-list-count">7</span>
+                <span class="category-list-count">8</span>
             </li>
             
             <li class="category-list-item">
@@ -810,7 +819,7 @@ def copy_bq(dataset_id, table_id):
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-cloud-storage">
                     google-cloud-storage
                 </a>
-                <span class="category-list-count">3</span>
+                <span class="category-list-count">4</span>
             </li>
             
             <li class="category-list-item">
@@ -842,7 +851,7 @@ def copy_bq(dataset_id, table_id):
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/python">
                     python
                 </a>
-                <span class="category-list-count">3</span>
+                <span class="category-list-count">4</span>
             </li>
             
             <li class="category-list-item">
