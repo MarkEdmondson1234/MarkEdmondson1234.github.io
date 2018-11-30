@@ -34,7 +34,7 @@
 
 <meta itemprop="datePublished" content="2018-11-29T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2018-11-29T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="1837">
+<meta itemprop="wordCount" content="1833">
 
 
 
@@ -268,7 +268,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2018-11-29 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-11-29</time>
             &middot;
-            1837
+            1833
             words
             &middot;
             9
@@ -422,7 +422,7 @@ def get_ga_service():
     # Build the service object.
     return build('analytics', 'v3', credentials=credentials, cache_discovery=False)
 
-def upload_ga(obj_name, ga_config):
+def upload_ga(obj_name):
 
     filename = '/tmp/{}'.format(os.path.basename(obj_name))
 
@@ -470,7 +470,7 @@ def gcs_to_ga(data, context):
     if object_name.startswith(folder):
       logging.info('File matches folder {}'.format(folder))
 
-      upload_ga(object_name, ga_config)
+      upload_ga(object_name)
       
     return
 </code></pre>
@@ -500,7 +500,7 @@ def gcs_to_ga(data, context):
     if object_name.startswith(folder):
       logging.info('File matches folder {}'.format(folder))
 
-      upload_ga(object_name, ga_config)
+      upload_ga(object_name)
       
     return
 </code></pre>
@@ -541,7 +541,7 @@ def get_ga_service():
 
 <p>Code is adapted from <a href="https://developers.google.com/analytics/devguides/config/mgmt/v3/mgmtReference/management/uploads/uploadData">here</a></p>
 
-<pre><code class="language-python">def upload_ga(obj_name, ga_config):
+<pre><code class="language-python">def upload_ga(obj_name):
 
     filename = '/tmp/{}'.format(os.path.basename(obj_name))
 
