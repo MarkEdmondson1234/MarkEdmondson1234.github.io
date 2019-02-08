@@ -36,7 +36,7 @@ Avoiding the daily walk The most common approach to mitigate sampling is to brea
 
 <meta itemprop="datePublished" content="2016-08-05T23:03:57&#43;01:00" />
 <meta itemprop="dateModified" content="2016-08-05T23:03:57&#43;01:00" />
-<meta itemprop="wordCount" content="1006">
+<meta itemprop="wordCount" content="932">
 
 
 
@@ -271,7 +271,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2016-08-05 23:03:57 &#43;0100 &#43;0100" itemprop="datePublished">2016-08-05</time>
             &middot;
-            1006
+            932
             words
             &middot;
             5
@@ -429,13 +429,6 @@ total = empty_matrix
 
 for i in new_date_ranges:
 
-  if(new_date_ranges[i].start == new_date_ranges[i].end):
-    // only one day so split calls into hourly
-    // see below for do_hourly() explanation
-    batch_call = do_hourly(new_date_range.start, 
-                           metrics = your_metrics, 
-                           dimensions = your_dimensions)
-  else:
     // multi-day batching
     batch_call = get_ga_api(new_date_ranges[i], 
                             metrics = your_metrics, 
@@ -444,11 +437,7 @@ for i in new_date_ranges:
   total = total + batch_call
 </code></pre>
 
-<h3 id="per-hour-fetching-do-hourly">Per hour fetching do_hourly()</h3>
-
-<p>The <code>do_hourly()</code> function is very similar to the above code for daily, but with a fetch to examine the session distribution per hour.  I only call it when necessary since it is a lot more API calls and its an edge case.</p>
-
-<p>If you need anti-sampling for sub-hourly, then you should really be looking at using the <a href="http://code.markedmondson.me/googleAnalyticsR/big-query.html">BigQuery Google Analytics 360 exports</a>. :)</p>
+<p>If you need anti-sampling for sub-daily, then you should really be looking at using the <a href="http://code.markedmondson.me/googleAnalyticsR/big-query.html">BigQuery Google Analytics 360 exports</a>. :)</p>
 
         </div>
         <footer class="article-footer">
