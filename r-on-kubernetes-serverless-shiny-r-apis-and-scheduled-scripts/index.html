@@ -34,7 +34,7 @@
 
 <meta itemprop="datePublished" content="2018-05-02T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2018-05-02T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="2923">
+<meta itemprop="wordCount" content="3291">
 
 
 
@@ -268,10 +268,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2018-05-02 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-05-02</time>
             &middot;
-            2923
+            3291
             words
             &middot;
-            14
+            16
             minute read
         </div>
         
@@ -610,9 +610,99 @@ spec:
 <li><code>/</code> holds the Wordcloud Shiny app.</li>
 </ul>
 
-<h3 id="b-r-apis-opencpu">B: R APIs - OpenCPU</h3>
+<h3 id="b1-r-apis-opencpu">B1: R APIs - OpenCPU</h3>
+
+<p><em>edit 8th Feb, 2019</em> - seems most people are using <a href="https://www.rplumber.io/">plumber</a> these days for R APIs, so I&rsquo;ve updated to include an example of that as well as OpenCPU*</p>
 
 <p>Kubernetes is well suited to serving R APIs as they can auto-scale to demand, covering peaks and troughs in demand.</p>
+
+<p>Plumber has its own Docker container at <code>tresletech/plumber</code> so you can use that as a basis for your own deployments.</p>
+
+<p>An example below deploys the demo from plumber&rsquo;s website.</p>
+
+<p>Say you have an R script that uses plumber such as below:</p>
+
+<pre><code class="language-r">#* Echo back the input
+#* @param msg The message to echo
+#* @get /api/echo
+function(msg=&quot;&quot;){
+  list(msg = paste0(&quot;The message is: '&quot;, msg, &quot;'&quot;))
+}
+
+#* Plot a histogram
+#* @png
+#* @get /api/plot
+function(){
+  rand &lt;- rnorm(100)
+  hist(rand)
+}
+
+#* Return the sum of two numbers
+#* @param a The first number to add
+#* @param b The second number to add
+#* @post /api/sum
+function(a, b){
+  as.numeric(a) + as.numeric(b)
+}
+</code></pre>
+
+<p>You could include your own libraries etc as well, but in that case make sure to install them in the Dockerfile as well so they are available in its environment.</p>
+
+<p>A Dockerfile can be very simple - it only uses the premade plumber Docker image then copies in your script (and perhaps installs any dependencies you want).  The <code>CMD</code> line specifies which R script to use in plumber.</p>
+
+<pre><code>FROM trestletech/plumber
+WORKDIR /payload/
+COPY [&quot;.&quot;,&quot;./&quot;]
+
+CMD [&quot;api.R&quot;]
+</code></pre>
+
+<p>The folder structure is arranged so the Dockerfile will pick up and copy in your plumber script when building:</p>
+
+<pre><code>|
+|- Dockerfile
+|- api.R
+</code></pre>
+
+<p>Deploy and build your Dockerfile so its available for Kubernetes.  I use GitHub and <a href="https://cloud.google.com/cloud-build/">Google Cloud Build</a> to have it in a private repo, so thats its available at <code>gcr.io/your-project/my-plumber</code></p>
+
+<p>Now we want to deploy the image to Kubernetes:</p>
+
+<pre><code class="language-sh">kubectl run my-plumber --image gcr.io/your-project/my-plumber --port 8000
+</code></pre>
+
+<p>Expose the port as before:</p>
+
+<pre><code class="language-sh">kubectl expose deployment my-plumber --target-port=8000  --type=NodePort
+</code></pre>
+
+<p>And create the ingress so it can speak with the outside world:</p>
+
+<pre><code class="language-yaml">apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: r-ingress-nginx
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    #nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: &quot;false&quot;
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /api/
+        backend:
+          serviceName: my-plumber
+          servicePort: 8000
+</code></pre>
+
+<blockquote>
+<p>This assumes you have configured the ingress controller above</p>
+</blockquote>
+
+<h3 id="b2-r-apis-opencpu">B2: R APIs - OpenCPU</h3>
+
+<p>An alternative to plumber is using <a href="https://www.opencpu.org/">OpenCPU</a>, which uses a package structure to construct R APIs.</p>
 
 <p>A demo API is shown below, using <a href="http://code.markedmondson.me/predictClickOpenCPU/"><code>openCPU</code> for predicting website clicks</a>, but the same principle applies if using <code>plumber</code> or another framework by swapping out the Dockerfile to serve the API on a port.</p>
 
@@ -1225,7 +1315,7 @@ spec:
 <footer id="footer">
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2018
+      &copy; 2019
       Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
     </div>
   </div>
