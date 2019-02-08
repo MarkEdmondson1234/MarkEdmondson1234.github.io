@@ -34,7 +34,7 @@
 
 <meta itemprop="datePublished" content="2018-05-02T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2018-05-02T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="3291">
+<meta itemprop="wordCount" content="3345">
 
 
 
@@ -268,7 +268,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2018-05-02 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-05-02</time>
             &middot;
-            3291
+            3345
             words
             &middot;
             16
@@ -622,7 +622,7 @@ spec:
 
 <p>Say you have an R script that uses plumber such as below:</p>
 
-<pre><code class="language-r">#* Echo back the input
+<pre><code>#* Echo back the input
 #* @param msg The message to echo
 #* @get /api/echo
 function(msg=&quot;&quot;){
@@ -678,7 +678,7 @@ CMD [&quot;api.R&quot;]
 
 <p>And create the ingress so it can speak with the outside world:</p>
 
-<pre><code class="language-yaml">apiVersion: extensions/v1beta1
+<pre><code>apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: r-ingress-nginx
@@ -699,6 +699,12 @@ spec:
 <blockquote>
 <p>This assumes you have configured the ingress controller above</p>
 </blockquote>
+
+<p>You can then call your plumber API.  In the ingress above its configured to be within the ´/api/` folder, so all the plumber functions are relative to that.  Assuming your public ip address is 1.2.3.4, this means you can use curl to test your API:</p>
+
+<pre><code>curl http://1.2.3.4/api/echo?msg=&quot;its alive!&quot;
+#&gt; &quot;The message is: its alive!&quot;
+</code></pre>
 
 <h3 id="b2-r-apis-opencpu">B2: R APIs - OpenCPU</h3>
 
@@ -722,7 +728,7 @@ spec:
 
 <p>Save the below as <code>r-ingress-opencpu.yaml</code></p>
 
-<pre><code class="language-yaml">apiVersion: extensions/v1beta1
+<pre><code>apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: r-ingress-nginx-ocpu
