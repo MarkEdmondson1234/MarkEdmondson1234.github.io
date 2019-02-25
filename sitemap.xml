@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://code.markedmondson.me/r-at-scale-on-google-cloud-platform/</loc>
+    <lastmod>2019-02-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://code.markedmondson.me/automatic-google-analytics-data-imports-cloud-storage/</loc>
     <lastmod>2018-11-29T00:00:00+00:00</lastmod>
   </url>
@@ -132,7 +137,7 @@
   
   <url>
     <loc>https://code.markedmondson.me/tags/docker/</loc>
-    <lastmod>2018-05-02T00:00:00+00:00</lastmod>
+    <lastmod>2019-02-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -162,7 +167,7 @@
   
   <url>
     <loc>https://code.markedmondson.me/tags/google-compute-engine/</loc>
-    <lastmod>2017-09-05T13:55:57+01:00</lastmod>
+    <lastmod>2019-02-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -180,13 +185,13 @@
   
   <url>
     <loc>https://code.markedmondson.me/</loc>
-    <lastmod>2018-11-29T00:00:00+00:00</lastmod>
+    <lastmod>2019-02-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://code.markedmondson.me/post/</loc>
-    <lastmod>2018-11-29T00:00:00+00:00</lastmod>
+    <lastmod>2019-02-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -198,7 +203,7 @@
   
   <url>
     <loc>https://code.markedmondson.me/tags/r/</loc>
-    <lastmod>2018-08-15T00:00:00+00:00</lastmod>
+    <lastmod>2019-02-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

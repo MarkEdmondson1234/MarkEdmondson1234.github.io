@@ -6,10 +6,20 @@
     <description>Recent content in Docker on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
-    <lastBuildDate>Wed, 02 May 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 23 Feb 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://code.markedmondson.me/tags/docker/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>R at scale on the Google Cloud Platform</title>
+      <link>https://code.markedmondson.me/r-at-scale-on-google-cloud-platform/</link>
+      <pubDate>Sat, 23 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://code.markedmondson.me/r-at-scale-on-google-cloud-platform/</guid>
+      <description>This post covers my current thinking on what I consider the optimal way to work with R on the Google Cloud Platform (GCP). It seems this has developed into my niche, and I get questions about it so would like to be able to point to a URL.
+Both R and the GCP rapidly evolve, so this will have to be updated I guess at some point in the future, but even as things stand now you can do some wonderful things with R, and can multiply those out to potentially billions of users with GCP.</description>
+    </item>
     
     <item>
       <title>R on Kubernetes - serverless Shiny, R APIs and scheduled scripts</title>
