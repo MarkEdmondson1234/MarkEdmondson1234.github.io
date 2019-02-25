@@ -34,7 +34,7 @@
 
 <meta itemprop="datePublished" content="2019-02-23T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2019-02-23T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="2372">
+<meta itemprop="wordCount" content="2367">
 
 
 
@@ -268,7 +268,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2019-02-23 00:00:00 &#43;0000 UTC" itemprop="datePublished">2019-02-23</time>
             &middot;
-            2372
+            2367
             words
             &middot;
             12
@@ -502,7 +502,7 @@ result
 
 <h2 id="2-scaling-r-applications">2. Scaling R applications</h2>
 
-<p>Now I turn to cloud applications of R - you have written your code and now want to activate that analysis by providing its results, either in a Shiny interactive visualisation or via an API others can call to get the results or R analysis.</p>
+<p>Now I turn to cloud applications of R - you have written your code and want to activate that analysis by providing its results, either in a Shiny interactive visualisation or via an API others can call to get the results.</p>
 
 <h3 id="first-dockerise-your-app">First - Dockerise your app</h3>
 
@@ -562,7 +562,7 @@ CMD [&quot;api.R&quot;]
 
 <h3 id="2a-low-traffic-r-apps">2A - Low traffic R apps</h3>
 
-<p>This is for the situation where you want to make sure your Shiny app scales beyond say a VM you&rsquo;ve set up for low traffic.  In that situation you can just use the <a href="https://cloudyr.github.io/googleComputeEngineR/articles/shiny-app.html"><code>googleComputeEngineR</code> template for Shiny</a>:</p>
+<p>If you only have a few users and no existing resources, you could set up a VM that will handle the requests.  In that situation you can just use the <a href="https://cloudyr.github.io/googleComputeEngineR/articles/shiny-app.html"><code>googleComputeEngineR</code> template for Shiny</a>:</p>
 
 <pre><code>library(googleComputeEngineR)
 ## make new Shiny template VM for your self-contained Shiny app
@@ -572,9 +572,9 @@ vm &lt;- gce_vm(&quot;myapp&quot;,
              dynamic_image = gce_tag_container(&quot;custom-shiny-app&quot;, &quot;your-project&quot;))
 </code></pre>
 
-<p>And if you do that, you still have a Docker image which can then easily be moved to other platforms when you are ready.</p>
+<p>And if you do that, you still have a Docker image which can then easily be moved to other platforms when you are ready to scale.</p>
 
-<p>I always want an API to scale so would suggest it is always deployed to a scalable solution - autoscaling is the killer feature so you aren&rsquo;t losing requests in high peaks or keeping around spare capacity when you are at traffic lows.</p>
+<p>I always want an API to scale so would suggest it is always deployed to a more flexible solution - autoscaling is the killer feature so you aren&rsquo;t losing requests in high peaks or keeping around spare capacity when you are at traffic lows.</p>
 
 <h3 id="2b-r-apps-on-kubernetes">2B - R apps on Kubernetes</h3>
 
@@ -660,7 +660,9 @@ spec:
 
 <h2 id="summary">Summary</h2>
 
-<p>The basic summary at the moment then is &ldquo;Use Docker!&rdquo; then &ldquo;Use Kubernetes!&rdquo; but I suspect the Kubernetes part will be modified in the future to using more managed services as they evolve, largely to match other cloud paltforms where you can already do so.  In all cases though, having that Docker container gives you the flexibility to swap once the new services comes along.  Cloud Functions and App Engine in particular are the next step in managed services, and perhaps in the future you won&rsquo;t even need to create the Docker image - just upload your code, it builds the Dockerfile for you then deploys.</p>
+<p>The basic summary at the moment then is &ldquo;Use Docker!&rdquo; then &ldquo;Use Kubernetes!&rdquo; but I suspect the Kubernetes part will be modified in the future to using more managed services as they evolve, largely to match other cloud paltforms where you can already do so.</p>
+
+<p>In all cases, having that Docker container gives you the flexibility to swap once the new services comes along.  Cloud Functions and App Engine in particular are the next step in managed services, and perhaps in the future you won&rsquo;t even need to create the Docker image - just upload your code, it builds the Dockerfile for you then deploys.</p>
 
         </div>
         <footer class="article-footer">
