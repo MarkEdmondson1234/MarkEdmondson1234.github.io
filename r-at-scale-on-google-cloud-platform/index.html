@@ -34,7 +34,7 @@
 
 <meta itemprop="datePublished" content="2019-02-23T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2019-02-23T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="2367">
+<meta itemprop="wordCount" content="2368">
 
 
 
@@ -268,7 +268,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2019-02-23 00:00:00 &#43;0000 UTC" itemprop="datePublished">2019-02-23</time>
             &middot;
-            2367
+            2368
             words
             &middot;
             12
@@ -340,7 +340,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <p>The above are used within <a href="https://cloudyr.github.io/googleComputeEngineR/reference/gce_vm_template.html">googleComputeEngineR&rsquo;s templates</a>, so as RStudio, Shiny and R APIs can be launched quickly.</p>
 
-<p>The above basically constitute a continuous development basis, so to deploy new code I need but push to GitHub and my script, Shiny app, R API or model are updated automatically.</p>
+<p>The above basically constitute a continuous delivery (CD) basis, so to deploy new code I need but push to GitHub and my script, Shiny app, R API or model are updated automatically.</p>
 
 <h3 id="1-scaling-an-r-script">1. Scaling an R script</h3>
 
@@ -396,7 +396,7 @@ bigmem &lt;- gce_vm(&quot;big-mem&quot;, template = &quot;rstudio&quot;, predefi
 
 <ul>
 <li>Docker image created that is available for other workflows</li>
-<li>future interface lets same code work with different scaling strategies like multisession, multicore or multi-instance.</li>
+<li>library(future) interface lets same code work with different scaling strategies like multisession, multicore or multi-instance.</li>
 </ul>
 
 <p><em>Cons</em></p>
