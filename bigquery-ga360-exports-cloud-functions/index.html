@@ -14,8 +14,8 @@
     <link rel="icon" href="https://code.markedmondson.me/favicon.ico">
     <link rel="apple-touch-icon" href="https://code.markedmondson.me/apple-touch-icon.png"/>
     <link rel="stylesheet" href="https://code.markedmondson.me/css/style.css">
+    <link rel="stylesheet" href="https://code.markedmondson.me/css/github.css" rel="stylesheet" id="theme-stylesheet">
     <link rel="stylesheet" href="https://code.markedmondson.me/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://code.markedmondson.me/css/monokai.css">
     <link rel="stylesheet" href="https://code.markedmondson.me/fancybox/jquery.fancybox.css">
     
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
@@ -52,9 +52,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-WFFMBH');</script>
 
-<link rel="stylesheet" href="https://code.markedmondson.me/css/github.css" rel="stylesheet" id="theme-stylesheet">
-<script src="https://code.markedmondson.me/js/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
+
+    <script src="https://code.markedmondson.me/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
     
 
     
@@ -492,7 +492,7 @@ def copy_bq(dataset_id, table_id):
 <p>You may need to then install the <code>gcloud beta</code> components to deploy the python. See the <a href="https://cloud.google.com/functions/docs/quickstart">guide</a> here.</p>
 <p>After you have it installed, browse to the folder holding your code in your console, and then issue the <code>gcloud</code> commands to deploy the files. It takes around 2 mins.</p>
 <p>You need to specify the function that will trigger. In our case this is the function that receives the data, <code>def bq_to_bq(data, context)</code>. We also need to specify its a Python file, and what the trigger will be:</p>
-<pre><code>gcloud functions deploy bq_to_bq \
+<pre class="shell"><code>gcloud functions deploy bq_to_bq \
                  --runtime python37 \ 
                  --trigger-resource ga360_export \ 
                  --trigger-event google.pubsub.topic.publish</code></pre>
