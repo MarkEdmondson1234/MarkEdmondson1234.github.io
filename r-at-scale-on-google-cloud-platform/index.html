@@ -34,7 +34,7 @@
 
 <meta itemprop="datePublished" content="2019-02-23T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2019-02-23T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="2368">
+<meta itemprop="wordCount" content="2367">
 
 
 
@@ -52,7 +52,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-WFFMBH');</script>
 
-
+<link rel="stylesheet" href="https://code.markedmondson.me/css/github.css" rel="stylesheet" id="theme-stylesheet">
+<script src="https://code.markedmondson.me/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
     
 
     
@@ -268,7 +270,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2019-02-23 00:00:00 &#43;0000 UTC" itemprop="datePublished">2019-02-23</time>
             &middot;
-            2368
+            2367
             words
             &middot;
             12
@@ -340,7 +342,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <p>The above are used within <a href="https://cloudyr.github.io/googleComputeEngineR/reference/gce_vm_template.html">googleComputeEngineR&rsquo;s templates</a>, so as RStudio, Shiny and R APIs can be launched quickly.</p>
 
-<p>The above basically constitute a continuous delivery (CD) basis, so to deploy new code I need but push to GitHub and my script, Shiny app, R API or model are updated automatically.</p>
+<p>This basically constitutes a continuous delivery (CD) basis, so to deploy new code I need but push to GitHub and my script, Shiny app, R API or model are updated automatically.</p>
 
 <h3 id="1-scaling-an-r-script">1. Scaling an R script</h3>
 
@@ -370,7 +372,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <p>Launching this with googleComputeEngineR:</p>
 
-<pre><code>library(googleComputeEngineR)
+<pre><code class="language-r">library(googleComputeEngineR)
 
 # this will cost a lot
 bigmem &lt;- gce_vm(&quot;big-mem&quot;, template = &quot;rstudio&quot;, predefined_type = &quot;n1-ultramem-160&quot;)
@@ -415,7 +417,7 @@ bigmem &lt;- gce_vm(&quot;big-mem&quot;, template = &quot;rstudio&quot;, predefi
 
 <p>I have a few examples on the <a href="https://cloudyr.github.io/googleComputeEngineR/articles/massive-parallel.html">googleComputeEngineR website</a> as its a popular application.  A full example from there is shown below:</p>
 
-<pre><code>library(future)
+<pre><code class="language-r">library(future)
 library(googleComputeEngineR)
 
 ## names for your cluster - just three for this example
@@ -429,8 +431,8 @@ jobs &lt;- lapply(vm_names, function(x) {
     gce_vm_template(template = &quot;r-base&quot;,
                     predefined_type = &quot;n1-highmem-2&quot;,
                     name = x,
-                    dynamic_image = my_docker),
-                    wait = FALSE
+                    dynamic_image = my_docker,
+                    wait = FALSE)
                     })
                      
 ## wait for all the jobs to complete and VMs are ready
@@ -510,7 +512,7 @@ result
 
 <p>The Dockerfiles are relatively simple, thanks to <code>rocker/shiny</code>:</p>
 
-<pre><code>FROM rocker/shiny
+<pre><code class="language-docker">FROM rocker/shiny
 MAINTAINER Mark Edmondson (r@sunholo.com)
 
 # install R package dependencies
@@ -551,7 +553,7 @@ function(msg=&quot;&quot;){
 
 <p>Then the Dockerfile could look like:</p>
 
-<pre><code>FROM trestletech/plumber
+<pre><code class="language-docker">FROM trestletech/plumber
 
 # copy your plumbed R script     
 COPY api.R /api.R
@@ -564,7 +566,7 @@ CMD [&quot;api.R&quot;]
 
 <p>If you only have a few users and no existing resources, you could set up a VM that will handle the requests.  In that situation you can just use the <a href="https://cloudyr.github.io/googleComputeEngineR/articles/shiny-app.html"><code>googleComputeEngineR</code> template for Shiny</a>:</p>
 
-<pre><code>library(googleComputeEngineR)
+<pre><code class="language-r">library(googleComputeEngineR)
 ## make new Shiny template VM for your self-contained Shiny app
 vm &lt;- gce_vm(&quot;myapp&quot;, 
              template = &quot;shiny&quot;,
@@ -599,13 +601,13 @@ vm &lt;- gce_vm(&quot;myapp&quot;,
 
 <p>Once setup, deployment is quick via the CLI:</p>
 
-<pre><code>kubectl run shiny1 --image gcr.io/gcer-public/shiny-googleauthrdemo:latest --port 3838
+<pre><code class="language-bash">kubectl run shiny1 --image gcr.io/gcer-public/shiny-googleauthrdemo:latest --port 3838
 kubectl expose deployment shiny1 --target-port=3838  --type=NodePort
 </code></pre>
 
 <p>The trickest thing is the ingress, but once grokked works by uploading some boilerplate yaml:</p>
 
-<pre><code>apiVersion: extensions/v1beta1
+<pre><code class="language-yaml">apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: r-ingress-nginx
@@ -626,13 +628,13 @@ spec:
 
 <p>Deploying the R API once in a Docker container is very similar.</p>
 
-<pre><code>kubectl run my-plumber --image gcr.io/your-project/my-plumber --port 8000
+<pre><code class="language-bash">kubectl run my-plumber --image gcr.io/your-project/my-plumber --port 8000
 kubectl expose deployment my-plumber --target-port=8000  --type=NodePort
 </code></pre>
 
 <p>&hellip;with a ingress setup similar to:</p>
 
-<pre><code>apiVersion: extensions/v1beta1
+<pre><code class="language-yaml">apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: r-ingress-nginx
@@ -652,7 +654,7 @@ spec:
 
 <p>You should then be able to call your R API via any HTTP request:</p>
 
-<pre><code>curl http://1.2.3.4/api/echo?msg=&quot;its alive!&quot;
+<pre><code class="language-bash">curl 'http://1.2.3.4/api/echo?msg=&quot;its alive!&quot;'
 #&gt; &quot;The message is: its alive!&quot;
 </code></pre>
 
@@ -660,7 +662,7 @@ spec:
 
 <h2 id="summary">Summary</h2>
 
-<p>The basic summary at the moment then is &ldquo;Use Docker!&rdquo; then &ldquo;Use Kubernetes!&rdquo; but I suspect the Kubernetes part will be modified in the future to using more managed services as they evolve, largely to match other cloud paltforms where you can already do so.</p>
+<p>The basic summary at the moment then is &ldquo;Use Docker!&rdquo; then &ldquo;Use Kubernetes!&rdquo; but I suspect the Kubernetes part will be modified in the future to using more managed services as they evolve, largely to match other cloud platforms where you can already do so.</p>
 
 <p>In all cases, having that Docker container gives you the flexibility to swap once the new services comes along.  Cloud Functions and App Engine in particular are the next step in managed services, and perhaps in the future you won&rsquo;t even need to create the Docker image - just upload your code, it builds the Dockerfile for you then deploys.</p>
 
@@ -1059,7 +1061,7 @@ spec:
 
 <script src="https://code.markedmondson.me/fancybox/jquery.fancybox.pack.js"></script>
 <script src="https://code.markedmondson.me/js/script.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+<script src="https://code.markedmondson.me/js/highlight.pack.js"></script>
 
 
 <script>hljs.initHighlightingOnLoad();</script>

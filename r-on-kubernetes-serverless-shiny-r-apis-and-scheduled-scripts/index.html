@@ -52,7 +52,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-WFFMBH');</script>
 
-
+<link rel="stylesheet" href="https://code.markedmondson.me/css/github.css" rel="stylesheet" id="theme-stylesheet">
+<script src="https://code.markedmondson.me/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
     
 
     
@@ -678,7 +680,7 @@ CMD [&quot;api.R&quot;]
 
 <p>And create the ingress so it can speak with the outside world:</p>
 
-<pre><code>apiVersion: extensions/v1beta1
+<pre><code class="language-yaml">apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: r-ingress-nginx
@@ -702,7 +704,7 @@ spec:
 
 <p>You can then call your plumber API.  In the ingress above its configured to be within the ´/api/` folder, so all the plumber functions are relative to that.  Assuming your public ip address is 1.2.3.4, this means you can use curl to test your API:</p>
 
-<pre><code>curl http://1.2.3.4/api/echo?msg=&quot;its alive!&quot;
+<pre><code class="language-bash">curl http://1.2.3.4/api/echo?msg=&quot;its alive!&quot;
 #&gt; &quot;The message is: its alive!&quot;
 </code></pre>
 
@@ -728,7 +730,7 @@ spec:
 
 <p>Save the below as <code>r-ingress-opencpu.yaml</code></p>
 
-<pre><code>apiVersion: extensions/v1beta1
+<pre><code class="language-yaml">apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: r-ingress-nginx-ocpu
@@ -798,7 +800,7 @@ spec:
 
 <p>This is an example Dockerfile that installs dependencies and R packages, loads a local configuration file then runs a custom function when it is called upon by the cronJob:</p>
 
-<pre><code>FROM rocker/verse
+<pre><code class="language-docker">FROM rocker/verse
 MAINTAINER Mark Edmondson (r@sunholo.com)
 
 # install R package dependencies
@@ -1328,7 +1330,7 @@ spec:
 
 <script src="https://code.markedmondson.me/fancybox/jquery.fancybox.pack.js"></script>
 <script src="https://code.markedmondson.me/js/script.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+<script src="https://code.markedmondson.me/js/highlight.pack.js"></script>
 
 
 <script>hljs.initHighlightingOnLoad();</script>
