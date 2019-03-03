@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Google Cloud Storage on Mark Edmondson</title>
-    <link>https://code.markedmondson.me/tags/google-cloud-storage/</link>
+    <link>/tags/google-cloud-storage/</link>
     <description>Recent content in Google Cloud Storage on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
     <lastBuildDate>Thu, 29 Nov 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://code.markedmondson.me/tags/google-cloud-storage/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/google-cloud-storage/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Auto Google Analytics Data Imports from Cloud Storage</title>
-      <link>https://code.markedmondson.me/automatic-google-analytics-data-imports-cloud-storage/</link>
+      <link>/automatic-google-analytics-data-imports-cloud-storage/</link>
       <pubDate>Thu, 29 Nov 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://code.markedmondson.me/automatic-google-analytics-data-imports-cloud-storage/</guid>
+      <guid>/automatic-google-analytics-data-imports-cloud-storage/</guid>
       <description>Continuing my infatuation with cloud functions (see last post on using cloud functions to manipulate BigQuery exports) this is a post showing how to bring together various code examples out there so that you can easily upload custom data imports from a Google cloud storage bucket.
 The code is available in this GitHub repo for useful cloud functions with Google Analytics
 Extended data imports Google Analytics offers various versions of uploads.</description>
@@ -24,20 +24,20 @@ Extended data imports Google Analytics offers various versions of uploads.</desc
     
     <item>
       <title>Run RStudio Server on a Chromebook as a Cloud Native</title>
-      <link>https://code.markedmondson.me/rstudio-server-chromebook/</link>
+      <link>/rstudio-server-chromebook/</link>
       <pubDate>Tue, 05 Sep 2017 13:55:57 +0100</pubDate>
       
-      <guid>https://code.markedmondson.me/rstudio-server-chromebook/</guid>
+      <guid>/rstudio-server-chromebook/</guid>
       <description>I recently got an Asus Chromebook Flip with which I&amp;rsquo;m very happy, but it did make me realise that if a Chromebook was to replace my normal desktop as my primary workstation, my RStudio Server setup would need to be more cloud native than was available up until now.
 TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically backs up data and configuration settings to Google Cloud Storage is on the googleComputeEngineR website here.</description>
     </item>
     
     <item>
       <title>My R Packages</title>
-      <link>https://code.markedmondson.me/r-packages/</link>
+      <link>/r-packages/</link>
       <pubDate>Tue, 24 Jan 2017 21:20:50 +0100</pubDate>
       
-      <guid>https://code.markedmondson.me/r-packages/</guid>
+      <guid>/r-packages/</guid>
       <description>A full list of R packages I have published are on my Github, but some notable ones are below.
 Some are part of the cloudyR project, which has many packages useful for using R in the cloud. I concentrate on the Google cloud below, but be sure to check out the other packages if you’re looking to work with AWS or other cloud based services.
 CRAN     Status URL Description     googleAuthR The central workhorse for authentication on Google APIs   googleAnalyticsR Works with Google Analytics Reporting V3/V4 and Management APIs   googleComputeEngineR Launch Virtual Machines within the Google Cloud, via templates or your own Docker containers.</description>
@@ -45,10 +45,10 @@ CRAN     Status URL Description     googleAuthR The central workhorse for authen
     
     <item>
       <title>A digital analytics workflow through the Google Cloud using R</title>
-      <link>https://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/</link>
+      <link>/digital-analytics-workflow-through-google-cloud/</link>
       <pubDate>Mon, 10 Oct 2016 23:03:57 +0100</pubDate>
       
-      <guid>https://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/</guid>
+      <guid>/digital-analytics-workflow-through-google-cloud/</guid>
       <description>There are now several packages built upon the googleAuthR framework which are helpful to a digital analyst who uses R, so this post looks to demonstrate how they all work together. If you&amp;rsquo;re new to R, and would like to know how it helps with your digital analytics, Tim Wilson and I ran a workshop last month aimed at getting a digital analyst up and running. The course material is online at www.</description>
     </item>
     

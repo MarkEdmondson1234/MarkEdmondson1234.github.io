@@ -3,224 +3,224 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://code.markedmondson.me/r-at-scale-on-google-cloud-platform/</loc>
+    <loc>/r-at-scale-on-google-cloud-platform/</loc>
     <lastmod>2019-02-23T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/automatic-google-analytics-data-imports-cloud-storage/</loc>
+    <loc>/automatic-google-analytics-data-imports-cloud-storage/</loc>
     <lastmod>2018-11-29T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/</loc>
+    <loc>/bigquery-ga360-exports-cloud-functions/</loc>
     <lastmod>2018-10-09T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/talking-google-analytics-dashboards/</loc>
+    <loc>/talking-google-analytics-dashboards/</loc>
     <lastmod>2018-08-15T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts/</loc>
+    <loc>/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts/</loc>
     <lastmod>2018-05-02T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown/</loc>
+    <loc>/embedding-google-data-studio-into-rmarkdown/</loc>
     <lastmod>2018-03-15T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/searchconsoler-vs-googlelanguager/</loc>
+    <loc>/searchconsoler-vs-googlelanguager/</loc>
     <lastmod>2018-01-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/rstudio-server-chromebook/</loc>
+    <loc>/rstudio-server-chromebook/</loc>
     <lastmod>2017-09-05T13:55:57+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/</loc>
+    <loc>/4-ways-schedule-r-scripts-on-google-cloud-platform/</loc>
     <lastmod>2017-07-09T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/r-packages/</loc>
+    <loc>/r-packages/</loc>
     <lastmod>2017-01-24T21:20:50+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/new-blog-down/</loc>
+    <loc>/new-blog-down/</loc>
     <lastmod>2017-01-23T22:45:03+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/about/</loc>
+    <loc>/about/</loc>
     <lastmod>2017-01-22T22:15:51-07:00</lastmod>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/</loc>
+    <loc>/real-time-GTM-google-cloud-r-shiny-2/</loc>
     <lastmod>2017-01-22T14:20:57+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/</loc>
+    <loc>/real-time-GTM-google-cloud-r-shiny-1/</loc>
     <lastmod>2017-01-12T23:03:57+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/quicker-insight-sort-metric-delta/</loc>
+    <loc>/quicker-insight-sort-metric-delta/</loc>
     <lastmod>2016-12-01T23:03:57+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/</loc>
+    <loc>/launch-rstudio-server-google-cloud-in-two-lines-r/</loc>
     <lastmod>2016-10-20T23:03:57+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/</loc>
+    <loc>/digital-analytics-workflow-through-google-cloud/</loc>
     <lastmod>2016-10-10T23:03:57+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/anti-sampling-google-analytics-api/</loc>
+    <loc>/anti-sampling-google-analytics-api/</loc>
     <lastmod>2016-08-05T23:03:57+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/search-console-google-analytics-r-keyword-research/</loc>
+    <loc>/search-console-google-analytics-r-keyword-research/</loc>
     <lastmod>2016-06-21T23:03:57+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/</loc>
+    <loc>/setting-up-scheduled-R-scripts-for-an-analytics-team/</loc>
     <lastmod>2016-04-21T23:03:57+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/googleAuthR-0.2.0/</loc>
+    <loc>/googleAuthR-0.2.0/</loc>
     <lastmod>2016-02-05T23:03:57+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/hello-world/</loc>
+    <loc>/hello-world/</loc>
     <lastmod>2016-01-14T23:03:57+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/tags/big-query/</loc>
+    <loc>/tags/big-query/</loc>
     <lastmod>2018-10-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/tags/blogging/</loc>
+    <loc>/tags/blogging/</loc>
     <lastmod>2017-01-23T22:45:03+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/categories/</loc>
+    <loc>/categories/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/tags/cloud-functions/</loc>
+    <loc>/tags/cloud-functions/</loc>
     <lastmod>2018-11-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/tags/docker/</loc>
+    <loc>/tags/docker/</loc>
     <lastmod>2019-02-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/tags/google-analytics/</loc>
+    <loc>/tags/google-analytics/</loc>
     <lastmod>2018-11-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/tags/google-app-engine/</loc>
+    <loc>/tags/google-app-engine/</loc>
     <lastmod>2017-09-05T13:55:57+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/tags/google-auth/</loc>
+    <loc>/tags/google-auth/</loc>
     <lastmod>2018-03-15T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/tags/google-cloud-storage/</loc>
+    <loc>/tags/google-cloud-storage/</loc>
     <lastmod>2018-11-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/tags/google-compute-engine/</loc>
+    <loc>/tags/google-compute-engine/</loc>
     <lastmod>2019-02-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/tags/google-language/</loc>
+    <loc>/tags/google-language/</loc>
     <lastmod>2018-08-15T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/tags/google-tag-manager/</loc>
+    <loc>/tags/google-tag-manager/</loc>
     <lastmod>2017-01-24T21:20:50+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/</loc>
+    <loc>/</loc>
     <lastmod>2019-02-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/post/</loc>
+    <loc>/post/</loc>
     <lastmod>2019-02-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/tags/python/</loc>
+    <loc>/tags/python/</loc>
     <lastmod>2018-11-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/tags/r/</loc>
+    <loc>/tags/r/</loc>
     <lastmod>2019-02-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/tags/rstudio-server/</loc>
+    <loc>/tags/rstudio-server/</loc>
     <lastmod>2017-09-05T13:55:57+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/tags/search-console/</loc>
+    <loc>/tags/search-console/</loc>
     <lastmod>2018-01-11T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/tags/</loc>
+    <loc>/tags/</loc>
     <lastmod>2018-10-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
