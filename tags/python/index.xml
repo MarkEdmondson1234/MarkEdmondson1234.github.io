@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Python on Mark Edmondson</title>
-    <link>/tags/python/</link>
+    <link>https://code.markedmondson.me/tags/python/</link>
     <description>Recent content in Python on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
     <lastBuildDate>Thu, 29 Nov 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/python/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://code.markedmondson.me/tags/python/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Auto Google Analytics Data Imports from Cloud Storage</title>
-      <link>/automatic-google-analytics-data-imports-cloud-storage/</link>
+      <link>https://code.markedmondson.me/automatic-google-analytics-data-imports-cloud-storage/</link>
       <pubDate>Thu, 29 Nov 2018 00:00:00 +0000</pubDate>
       
-      <guid>/automatic-google-analytics-data-imports-cloud-storage/</guid>
+      <guid>https://code.markedmondson.me/automatic-google-analytics-data-imports-cloud-storage/</guid>
       <description>Continuing my infatuation with cloud functions (see last post on using cloud functions to manipulate BigQuery exports) this is a post showing how to bring together various code examples out there so that you can easily upload custom data imports from a Google cloud storage bucket.
 The code is available in this GitHub repo for useful cloud functions with Google Analytics
 Extended data imports Google Analytics offers various versions of uploads.</description>
@@ -24,10 +24,10 @@ Extended data imports Google Analytics offers various versions of uploads.</desc
     
     <item>
       <title>Turning GA360 BigQuery exports into partitioned tables using Cloud Functions</title>
-      <link>/bigquery-ga360-exports-cloud-functions/</link>
+      <link>https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/</link>
       <pubDate>Tue, 09 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>/bigquery-ga360-exports-cloud-functions/</guid>
+      <guid>https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/</guid>
       <description>Its been a while since my last blog, although I had a good excuse as I’ve moved house into the Copenhagen suburbs, Brønshøj. But in the meantime, I have had the chance to find my new favourite tool for data engineering - Google Cloud Functions in Python.
 This post will look at how to use them to work with the GA360 BigQuery export tables.
 The code is available in this GitHub repo for useful cloud functions with Google Analytics</description>
@@ -35,19 +35,19 @@ The code is available in this GitHub repo for useful cloud functions with Google
     
     <item>
       <title>Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two</title>
-      <link>/real-time-GTM-google-cloud-r-shiny-2/</link>
+      <link>https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/</link>
       <pubDate>Sun, 22 Jan 2017 14:20:57 +0100</pubDate>
       
-      <guid>/real-time-GTM-google-cloud-r-shiny-2/</guid>
+      <guid>https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/</guid>
       <description>In part two of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&amp;rsquo;s data streaming capability. In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in Shiny and the JavaScript visualisation library Highcharts.</description>
     </item>
     
     <item>
       <title>Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one</title>
-      <link>/real-time-GTM-google-cloud-r-shiny-1/</link>
+      <link>https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/</link>
       <pubDate>Thu, 12 Jan 2017 23:03:57 +0100</pubDate>
       
-      <guid>/real-time-GTM-google-cloud-r-shiny-1/</guid>
+      <guid>https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/</guid>
       <description>In part one of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&amp;rsquo;s data streaming capability. In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in Shiny and the JavaScript visualisation library Highcharts.</description>
     </item>
     

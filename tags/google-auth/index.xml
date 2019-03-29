@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Google Auth on Mark Edmondson</title>
-    <link>/tags/google-auth/</link>
+    <link>https://code.markedmondson.me/tags/google-auth/</link>
     <description>Recent content in Google Auth on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
     <lastBuildDate>Thu, 15 Mar 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/google-auth/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://code.markedmondson.me/tags/google-auth/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Embedding Google Data Studio into RMarkdown</title>
-      <link>/embedding-google-data-studio-into-rmarkdown/</link>
+      <link>https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown/</link>
       <pubDate>Thu, 15 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/embedding-google-data-studio-into-rmarkdown/</guid>
+      <guid>https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown/</guid>
       <description>Adding Google Data Studio Dashboards to RMarkdown This week I learnt you can take Google Data Studio reports and, via their embed feature, paste them straight into an RMarkdown HTML document.
 This is cool as you can then combine the strengths of both for client reports or similar.
 Data Studio is a free online solution, that I have found to be very quick to get something decent looking. It also has excellent connectors to data sources that can be difficult to get access to otherwise, such as DoubleClick.</description>
@@ -24,10 +24,10 @@ Data Studio is a free online solution, that I have found to be very quick to get
     
     <item>
       <title>My R Packages</title>
-      <link>/r-packages/</link>
+      <link>https://code.markedmondson.me/r-packages/</link>
       <pubDate>Tue, 24 Jan 2017 21:20:50 +0100</pubDate>
       
-      <guid>/r-packages/</guid>
+      <guid>https://code.markedmondson.me/r-packages/</guid>
       <description>A full list of R packages I have published are on my Github, but some notable ones are below.
 Some are part of the cloudyR project, which has many packages useful for using R in the cloud. I concentrate on the Google cloud below, but be sure to check out the other packages if you’re looking to work with AWS or other cloud based services.
 CRAN     Status URL Description     googleAuthR The central workhorse for authentication on Google APIs   googleAnalyticsR Works with Google Analytics Reporting V3/V4 and Management APIs   googleComputeEngineR Launch Virtual Machines within the Google Cloud, via templates or your own Docker containers.</description>
@@ -35,10 +35,10 @@ CRAN     Status URL Description     googleAuthR The central workhorse for authen
     
     <item>
       <title>googleAuthR 0.2.0</title>
-      <link>/googleAuthR-0.2.0/</link>
+      <link>https://code.markedmondson.me/googleAuthR-0.2.0/</link>
       <pubDate>Fri, 05 Feb 2016 23:03:57 +0100</pubDate>
       
-      <guid>/googleAuthR-0.2.0/</guid>
+      <guid>https://code.markedmondson.me/googleAuthR-0.2.0/</guid>
       <description>googleAuthR is now on CRAN version 0.2.0.
 This release is the result of using the library myself to create three working Google API libraries, and tweaking the googleAuthR code to better support the process. As a result all of these libraries are now able to be authorised with one Google OAuth2 login flow:
  googleAnalyticsR searchConsoleR bigQueryR  Batching This means the libraries above and any other created with googleAuthR can take advatage of batching: this uses a Google API feature that means you can send multiple API calls at once.</description>
