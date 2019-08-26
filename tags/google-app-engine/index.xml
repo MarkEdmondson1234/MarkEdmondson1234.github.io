@@ -1,51 +1,54 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Google App Engine on Mark Edmondson</title>
-    <link>https://code.markedmondson.me/tags/google-app-engine/</link>
-    <description>Recent content in Google App Engine on Mark Edmondson</description>
+    <title>google-app-engine on Mark Edmondson</title>
+    <link>/tags/google-app-engine/</link>
+    <description>Recent content in google-app-engine on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
     <lastBuildDate>Tue, 05 Sep 2017 13:55:57 +0100</lastBuildDate>
     
-	<atom:link href="https://code.markedmondson.me/tags/google-app-engine/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/google-app-engine/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Run RStudio Server on a Chromebook as a Cloud Native</title>
-      <link>https://code.markedmondson.me/rstudio-server-chromebook/</link>
+      <link>/rstudio-server-chromebook/</link>
       <pubDate>Tue, 05 Sep 2017 13:55:57 +0100</pubDate>
       
-      <guid>https://code.markedmondson.me/rstudio-server-chromebook/</guid>
+      <guid>/rstudio-server-chromebook/</guid>
       <description>I recently got an Asus Chromebook Flip with which I&amp;rsquo;m very happy, but it did make me realise that if a Chromebook was to replace my normal desktop as my primary workstation, my RStudio Server setup would need to be more cloud native than was available up until now.
 TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically backs up data and configuration settings to Google Cloud Storage is on the googleComputeEngineR website here.</description>
     </item>
     
     <item>
       <title>Five Ways to Schedule R scripts on Google Cloud Platform</title>
-      <link>https://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/</link>
+      <link>/4-ways-schedule-r-scripts-on-google-cloud-platform/</link>
       <pubDate>Sun, 09 Jul 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/</guid>
-      <description>A common question I come across is how to automate scheduling of R scripts downloading data. This post goes through some options that I have played around with, which I’ve mostly used for downloading API data such as Google Analytics using the Google Cloud platform, but the same principles could apply for AWS or Azure.
-HUGOMORE42 Scheduling scripts advice But first, some notes on the scripts you are scheduling, that I’ve picked up.</description>
+      <guid>/4-ways-schedule-r-scripts-on-google-cloud-platform/</guid>
+      <description>
+
+
+&lt;p&gt;A common question I come across is how to automate scheduling of R scripts downloading data. This post goes through some options that I have played around with, which I’ve mostly used for downloading API data such as Google Analytics using the Google Cloud platform, but the same principles could apply for AWS or Azure.&lt;/p&gt;
+</description>
     </item>
     
     <item>
       <title>Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two</title>
-      <link>https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/</link>
+      <link>/real-time-GTM-google-cloud-r-shiny-2/</link>
       <pubDate>Sun, 22 Jan 2017 14:20:57 +0100</pubDate>
       
-      <guid>https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/</guid>
+      <guid>/real-time-GTM-google-cloud-r-shiny-2/</guid>
       <description>In part two of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&amp;rsquo;s data streaming capability. In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in Shiny and the JavaScript visualisation library Highcharts.</description>
     </item>
     
     <item>
       <title>Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one</title>
-      <link>https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/</link>
+      <link>/real-time-GTM-google-cloud-r-shiny-1/</link>
       <pubDate>Thu, 12 Jan 2017 23:03:57 +0100</pubDate>
       
-      <guid>https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/</guid>
+      <guid>/real-time-GTM-google-cloud-r-shiny-1/</guid>
       <description>In part one of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&amp;rsquo;s data streaming capability. In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in Shiny and the JavaScript visualisation library Highcharts.</description>
     </item>
     
