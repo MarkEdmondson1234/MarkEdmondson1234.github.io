@@ -2,41 +2,41 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>r on Mark Edmondson</title>
-    <link>/tags/r/</link>
+    <link>https://code.markedmondson.me/tags/r/</link>
     <description>Recent content in r on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
     <lastBuildDate>Thu, 11 Jan 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/r/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://code.markedmondson.me/tags/r/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API</title>
-      <link>/searchconsoler-vs-googlelanguager/</link>
+      <link>https://code.markedmondson.me/searchconsoler-vs-googlelanguager/</link>
       <pubDate>Thu, 11 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>/searchconsoler-vs-googlelanguager/</guid>
+      <guid>https://code.markedmondson.me/searchconsoler-vs-googlelanguager/</guid>
       <description>With the launch of the Google Natural Language API (NLP API), and the emphasis of machine learning that is said to account for up to 30% of the SEO algorithmn for Google search, a natural question is whether you can use Google’s own macine learning APIs to help optimise your website for search.
 Whilst I don’t believe they will offer exactly the same results, I can see useful applications that include:</description>
     </item>
     
     <item>
       <title>Run RStudio Server on a Chromebook as a Cloud Native</title>
-      <link>/rstudio-server-chromebook/</link>
+      <link>https://code.markedmondson.me/rstudio-server-chromebook/</link>
       <pubDate>Tue, 05 Sep 2017 13:55:57 +0100</pubDate>
       
-      <guid>/rstudio-server-chromebook/</guid>
+      <guid>https://code.markedmondson.me/rstudio-server-chromebook/</guid>
       <description>I recently got an Asus Chromebook Flip with which I&amp;rsquo;m very happy, but it did make me realise that if a Chromebook was to replace my normal desktop as my primary workstation, my RStudio Server setup would need to be more cloud native than was available up until now.
 TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically backs up data and configuration settings to Google Cloud Storage is on the googleComputeEngineR website here.</description>
     </item>
     
     <item>
       <title>Five Ways to Schedule R scripts on Google Cloud Platform</title>
-      <link>/4-ways-schedule-r-scripts-on-google-cloud-platform/</link>
+      <link>https://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/</link>
       <pubDate>Sun, 09 Jul 2017 00:00:00 +0000</pubDate>
       
-      <guid>/4-ways-schedule-r-scripts-on-google-cloud-platform/</guid>
+      <guid>https://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/</guid>
       <description>
 
 
@@ -46,10 +46,10 @@ TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically
     
     <item>
       <title>My R Packages</title>
-      <link>/r-packages/</link>
+      <link>https://code.markedmondson.me/r-packages/</link>
       <pubDate>Tue, 24 Jan 2017 21:20:50 +0100</pubDate>
       
-      <guid>/r-packages/</guid>
+      <guid>https://code.markedmondson.me/r-packages/</guid>
       <description>A full list of R packages I have published are on my Github, but some notable ones are below.
 Some are part of the cloudyR project, which has many packages useful for using R in the cloud. I concentrate on the Google cloud below, but be sure to check out the other packages if you’re looking to work with AWS or other cloud based services.
 CRAN     Status URL Description     googleAuthR The central workhorse for authentication on Google APIs   googleAnalyticsR Works with Google Analytics Reporting V3/V4 and Management APIs   googleComputeEngineR Launch Virtual Machines within the Google Cloud, via templates or your own Docker containers.</description>
@@ -57,10 +57,10 @@ CRAN     Status URL Description     googleAuthR The central workhorse for authen
     
     <item>
       <title>New Blog Down</title>
-      <link>/new-blog-down/</link>
+      <link>https://code.markedmondson.me/new-blog-down/</link>
       <pubDate>Mon, 23 Jan 2017 22:45:03 +0100</pubDate>
       
-      <guid>/new-blog-down/</guid>
+      <guid>https://code.markedmondson.me/new-blog-down/</guid>
       <description>A new year, a new blogging platform!
 This time I’m moving from Jekyll to RStudio’s new blogdown format.
 This keeps the advantages of Jekyll (a static, high performance website; markdown for editing; free hosting on Github) but with the extra bonus of being able to render in RMarkdown plus adding some nice looking capabilities from the Hugo project.</description>
@@ -68,10 +68,10 @@ This keeps the advantages of Jekyll (a static, high performance website; markdow
     
     <item>
       <title>Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two</title>
-      <link>/real-time-GTM-google-cloud-r-shiny-2/</link>
+      <link>https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/</link>
       <pubDate>Sun, 22 Jan 2017 14:20:57 +0100</pubDate>
       
-      <guid>/real-time-GTM-google-cloud-r-shiny-2/</guid>
+      <guid>https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/</guid>
       <description>In part two of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&amp;rsquo;s data streaming capability. In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in Shiny and the JavaScript visualisation library Highcharts.</description>
     </item>
     
