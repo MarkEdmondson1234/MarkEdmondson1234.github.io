@@ -10,20 +10,20 @@
       <meta name="description" content="The code bit of the blog">
     
     
-    <link rel="canonical" href="https://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/"/>
-    <link rel="icon" href="https://code.markedmondson.me/favicon.ico">
-    <link rel="apple-touch-icon" href="https://code.markedmondson.me/apple-touch-icon.png"/>
-    <link rel="stylesheet" href="https://code.markedmondson.me/css/style.css">
-    <link rel="stylesheet" href="https://code.markedmondson.me/css/github.css" rel="stylesheet" id="theme-stylesheet">
-    <link rel="stylesheet" href="https://code.markedmondson.me/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://code.markedmondson.me/fancybox/jquery.fancybox.css">
+    <link rel="canonical" href="/digital-analytics-workflow-through-google-cloud/"/>
+    <link rel="icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/github.css" rel="stylesheet" id="theme-stylesheet">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
     
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
     <meta property="og:title" content="A digital analytics workflow through the Google Cloud using R" />
 <meta property="og:description" content="There are now several packages built upon the googleAuthR framework which are helpful to a digital analyst who uses R, so this post looks to demonstrate how they all work together. If you&rsquo;re new to R, and would like to know how it helps with your digital analytics, Tim Wilson and I ran a workshop last month aimed at getting a digital analyst up and running. The course material is online at www." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/" />
+<meta property="og:url" content="/digital-analytics-workflow-through-google-cloud/" />
 <meta property="article:published_time" content="2016-10-10T23:03:57&#43;01:00"/>
 <meta property="article:modified_time" content="2016-10-10T23:03:57&#43;01:00"/>
 
@@ -54,7 +54,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-WFFMBH');</script>
 
 
-    <script src="https://code.markedmondson.me/js/highlight.pack.js"></script>
+    <script src="/js/highlight.pack.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
     
 
@@ -69,16 +69,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 	<header id="header">
   <div id="header-main" class="header-inner">
     <div class="outer">
-      <a href="https://code.markedmondson.me/" id="logo">
+      <a href="/" id="logo">
           
-          <i class="logo" style="background-image: url('https://code.markedmondson.me/images/greenhand.png')"></i>
+          <i class="logo" style="background-image: url('/images/greenhand.png')"></i>
           
           <span class="site-title">Mark Edmondson</span>
       </a>
       <nav id="main-nav">
           
           
-          <a class="main-nav-link" href="https://code.markedmondson.me/">Home</a>
+          <a class="main-nav-link" href="/">Home</a>
           
           
           
@@ -98,7 +98,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       </nav>
         <nav id="sub-nav">
           <div class="profile" id="profile-nav">
-            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="https://code.markedmondson.me/images/gde_avatar.jpg"><i class="fa fa-caret-down"></i></a>
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="/images/gde_avatar.jpg"><i class="fa fa-caret-down"></i></a>
           </div>
         </nav>
         <div id="search-form-wrap">
@@ -106,7 +106,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               <input type="search" name="q" class="search-form-input" placeholder="Search">
               <button type="submit" class="search-form-submit">
               </button>
-              <input type="hidden" name="sitesearch" value="https://code.markedmondson.me/" />
+              <input type="hidden" name="sitesearch" value="/" />
          </form>
         </div>
     </div>
@@ -117,7 +117,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <tr>
           
           
-          <td><a class="main-nav-link" href="https://code.markedmondson.me/">Home</a></td>
+          <td><a class="main-nav-link" href="/">Home</a></td>
           
           
           
@@ -137,7 +137,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <td>
           <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
           <input type="search" name="q" class="search-form-input" placeholder="Search">
-          <input type="hidden" name="sitesearch" value="https://code.markedmondson.me/" />
+          <input type="hidden" name="sitesearch" value="/" />
           </form>
         </td>
       </tr>
@@ -153,7 +153,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <div class="inner profile-inner">
     <div class="base-info profile-block">
       
-      <img id="avatar" src="https://code.markedmondson.me/images/gde_avatar.jpg">
+      <img id="avatar" src="/images/gde_avatar.jpg">
       
       <h2 id="name">Mark Edmondson</h2>
       <h3 id="title">Coding in digital analytics</h3>
@@ -166,7 +166,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        21
+        22
         <span>Posts</span>
       </div>
       <div class="article-info-block">
@@ -241,7 +241,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <td><a href="//twitter.com/HoloMarkeD" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
 
 
-          <td><a href="https://code.markedmondson.me/index.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+          <td><a href="/index.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
         </tr>
       </table>
     </div>
@@ -255,11 +255,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
     <div class="article-inner">
         
-            <img src="https://code.markedmondson.me/images/r-infrastructure.png" class="article-banner">
+            <img src="/images/r-infrastructure.png" class="article-banner">
         
 
         <header class="article-header">
-    <a href="https://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/">
+    <a href="/digital-analytics-workflow-through-google-cloud/">
     <h1 class="article-title" itemprop="name">
         A digital analytics workflow through the Google Cloud using R
     </h1>
@@ -287,27 +287,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <i class="fa fa-tags"></i>
                 
                 
-                <a class="article-category-link" href="https://code.markedmondson.me/tags/r">R</a>
+                <a class="article-category-link" href="/tags/r">R</a>
                 &middot;
                 
                 
-                <a class="article-category-link" href="https://code.markedmondson.me/tags/google-compute-engine">google-compute-engine</a>
+                <a class="article-category-link" href="/tags/google-compute-engine">google-compute-engine</a>
                 &middot;
                 
                 
-                <a class="article-category-link" href="https://code.markedmondson.me/tags/docker">docker</a>
+                <a class="article-category-link" href="/tags/docker">docker</a>
                 &middot;
                 
                 
-                <a class="article-category-link" href="https://code.markedmondson.me/tags/big-query">big-query</a>
+                <a class="article-category-link" href="/tags/big-query">big-query</a>
                 &middot;
                 
                 
-                <a class="article-category-link" href="https://code.markedmondson.me/tags/google-cloud-storage">google-cloud-storage</a>
+                <a class="article-category-link" href="/tags/google-cloud-storage">google-cloud-storage</a>
                 &middot;
                 
                 
-                <a class="article-category-link" href="https://code.markedmondson.me/tags/rstudio-server">rstudio-server</a>
+                <a class="article-category-link" href="/tags/rstudio-server">rstudio-server</a>
                 
                 
             </div>
@@ -503,12 +503,12 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
 
         </div>
         <footer class="article-footer">
-    <a data-url="https://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/" data-id="e02b32d6b8f66b0e3cf93cb53038b4c5" class="article-share-link">
+    <a data-url="/digital-analytics-workflow-through-google-cloud/" data-id="e02b32d6b8f66b0e3cf93cb53038b4c5" class="article-share-link">
         <i class="fa fa-share"></i>
         Share
     </a>
     
-    <a href="https://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/#disqus_thread" class="article-comment-link">
+    <a href="/digital-analytics-workflow-through-google-cloud/#disqus_thread" class="article-comment-link">
         Comments
     </a>
     
@@ -584,7 +584,7 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
     
 <nav id="article-nav">
     
-    <a href="https://code.markedmondson.me/anti-sampling-google-analytics-api/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/anti-sampling-google-analytics-api/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">
           Older
       </strong>
@@ -593,7 +593,7 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
     
 
     
-    <a href="https://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/launch-rstudio-server-google-cloud-in-two-lines-r/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">
           Newer
       </strong>
@@ -646,15 +646,15 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/r-at-scale-on-google-cloud-platform/" class="thumbnail">
+                    <a href="/r-at-scale-on-google-cloud-platform/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/r-at-scale.png)" alt="A digital analytics workflow through the Google Cloud using R" class="thumbnail-image"></span>
+                        <span style="background-image:url(/banners/r-at-scale.png)" alt="A digital analytics workflow through the Google Cloud using R" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/r-at-scale-on-google-cloud-platform/" class="title">R at scale on the Google Cloud Platform</a></p>
+                    <p class="item-title"><a href="/r-at-scale-on-google-cloud-platform/" class="title">R at scale on the Google Cloud Platform</a></p>
                     <p class="item-date">
                         <time datetime="2019-02-23 00:00:00 &#43;0000 UTC" itemprop="datePublished">2019-02-23</time>
                     </p>
@@ -663,15 +663,32 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/automatic-google-analytics-data-imports-cloud-storage/" class="thumbnail">
+                    <a href="/gago/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/data-imports.jpg)" alt="A digital analytics workflow through the Google Cloud using R" class="thumbnail-image"></span>
+                        <span style="background-image:url(/banners/r-at-scale.png)" alt="A digital analytics workflow through the Google Cloud using R" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/automatic-google-analytics-data-imports-cloud-storage/" class="title">Auto Google Analytics Data Imports from Cloud Storage</a></p>
+                    <p class="item-title"><a href="/gago/" class="title">R at scale on the Google Cloud Platform</a></p>
+                    <p class="item-date">
+                        <time datetime="2019-02-23 00:00:00 &#43;0000 UTC" itemprop="datePublished">2019-02-23</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="/automatic-google-analytics-data-imports-cloud-storage/" class="thumbnail">
+                    
+                        <span style="background-image:url(/banners/data-imports.jpg)" alt="A digital analytics workflow through the Google Cloud using R" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="/automatic-google-analytics-data-imports-cloud-storage/" class="title">Auto Google Analytics Data Imports from Cloud Storage</a></p>
                     <p class="item-date">
                         <time datetime="2018-11-29 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-11-29</time>
                     </p>
@@ -680,15 +697,15 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/" class="thumbnail">
+                    <a href="/bigquery-ga360-exports-cloud-functions/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/cloud-functions.png)" alt="A digital analytics workflow through the Google Cloud using R" class="thumbnail-image"></span>
+                        <span style="background-image:url(/banners/cloud-functions.png)" alt="A digital analytics workflow through the Google Cloud using R" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/" class="title">Turning GA360 BigQuery exports into partitioned tables using Cloud Functions</a></p>
+                    <p class="item-title"><a href="/bigquery-ga360-exports-cloud-functions/" class="title">Turning GA360 BigQuery exports into partitioned tables using Cloud Functions</a></p>
                     <p class="item-date">
                         <time datetime="2018-10-09 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-10-09</time>
                     </p>
@@ -697,9 +714,9 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/talking-google-analytics-dashboards/" class="thumbnail">
+                    <a href="/talking-google-analytics-dashboards/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/talking-gas.png)" alt="A digital analytics workflow through the Google Cloud using R" class="thumbnail-image"></span>
+                        <span style="background-image:url(/banners/talking-gas.png)" alt="A digital analytics workflow through the Google Cloud using R" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -707,28 +724,9 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
                     
                     
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/talking-google-analytics-dashboards/" class="title">Talking Google Analytics dashboards via R, Shiny and Text-to-Speech APIs</a></p>
+                    <p class="item-title"><a href="/talking-google-analytics-dashboards/" class="title">Talking Google Analytics dashboards via R, Shiny and Text-to-Speech APIs</a></p>
                     <p class="item-date">
                         <time datetime="2018-08-15 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-08-15</time>
-                    </p>
-                </div>
-            </li>
-            
-            <li>
-                <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts/" class="thumbnail">
-                    
-                        <span style="background-image:url(https://code.markedmondson.me/banners/r-kubernetes.png)" alt="A digital analytics workflow through the Google Cloud using R" class="thumbnail-image"></span>
-                    
-                    </a>
-                </div>
-                <div class="item-inner">
-                    
-                    
-                    
-                    <p class="item-title"><a href="https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts/" class="title">R on Kubernetes - serverless Shiny, R APIs and scheduled scripts</a></p>
-                    <p class="item-date">
-                        <time datetime="2018-05-02 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-05-02</time>
                     </p>
                 </div>
             </li>
@@ -756,15 +754,15 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/r">
+                <a class="category-list-link" href="/tags/r">
                     R
                 </a>
-                <span class="category-list-count">11</span>
+                <span class="category-list-count">12</span>
             </li>
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/big-query">
+                <a class="category-list-link" href="/tags/big-query">
                     big-query
                 </a>
                 <span class="category-list-count">5</span>
@@ -772,7 +770,7 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/blogging">
+                <a class="category-list-link" href="/tags/blogging">
                     blogging
                 </a>
                 <span class="category-list-count">2</span>
@@ -780,7 +778,7 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-functions">
+                <a class="category-list-link" href="/tags/cloud-functions">
                     cloud-functions
                 </a>
                 <span class="category-list-count">2</span>
@@ -788,15 +786,15 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/docker">
+                <a class="category-list-link" href="/tags/docker">
                     docker
                 </a>
-                <span class="category-list-count">6</span>
+                <span class="category-list-count">7</span>
             </li>
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-analytics">
+                <a class="category-list-link" href="/tags/google-analytics">
                     google-analytics
                 </a>
                 <span class="category-list-count">8</span>
@@ -804,7 +802,7 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-app-engine">
+                <a class="category-list-link" href="/tags/google-app-engine">
                     google-app-engine
                 </a>
                 <span class="category-list-count">4</span>
@@ -812,7 +810,7 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-auth">
+                <a class="category-list-link" href="/tags/google-auth">
                     google-auth
                 </a>
                 <span class="category-list-count">3</span>
@@ -820,7 +818,7 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-cloud-storage">
+                <a class="category-list-link" href="/tags/google-cloud-storage">
                     google-cloud-storage
                 </a>
                 <span class="category-list-count">4</span>
@@ -828,15 +826,15 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-compute-engine">
+                <a class="category-list-link" href="/tags/google-compute-engine">
                     google-compute-engine
                 </a>
-                <span class="category-list-count">7</span>
+                <span class="category-list-count">8</span>
             </li>
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-language">
+                <a class="category-list-link" href="/tags/google-language">
                     google-language
                 </a>
                 <span class="category-list-count">2</span>
@@ -844,7 +842,7 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-tag-manager">
+                <a class="category-list-link" href="/tags/google-tag-manager">
                     google-tag-manager
                 </a>
                 <span class="category-list-count">3</span>
@@ -852,7 +850,7 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/python">
+                <a class="category-list-link" href="/tags/python">
                     python
                 </a>
                 <span class="category-list-count">4</span>
@@ -860,7 +858,7 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/r">
+                <a class="category-list-link" href="/tags/r">
                     r
                 </a>
                 <span class="category-list-count">6</span>
@@ -868,7 +866,7 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/rstudio-server">
+                <a class="category-list-link" href="/tags/rstudio-server">
                     rstudio-server
                 </a>
                 <span class="category-list-count">4</span>
@@ -876,7 +874,7 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/search-console">
+                <a class="category-list-link" href="/tags/search-console">
                     search-console
                 </a>
                 <span class="category-list-count">3</span>
@@ -909,9 +907,9 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
 </footer>
 
 
-<script src="https://code.markedmondson.me/fancybox/jquery.fancybox.pack.js"></script>
-<script src="https://code.markedmondson.me/js/script.js"></script>
-<script src="https://code.markedmondson.me/js/highlight.pack.js"></script>
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script src="/js/script.js"></script>
+<script src="/js/highlight.pack.js"></script>
 
 
 <script>hljs.initHighlightingOnLoad();</script>
