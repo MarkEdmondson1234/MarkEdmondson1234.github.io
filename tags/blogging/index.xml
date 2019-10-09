@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>blogging on Mark Edmondson</title>
-    <link>/tags/blogging/</link>
+    <link>https://code.markedmondson.me/tags/blogging/</link>
     <description>Recent content in blogging on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
     <lastBuildDate>Mon, 23 Jan 2017 22:45:03 +0100</lastBuildDate>
     
-	<atom:link href="/tags/blogging/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://code.markedmondson.me/tags/blogging/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>New Blog Down</title>
-      <link>/new-blog-down/</link>
+      <link>https://code.markedmondson.me/new-blog-down/</link>
       <pubDate>Mon, 23 Jan 2017 22:45:03 +0100</pubDate>
       
-      <guid>/new-blog-down/</guid>
+      <guid>https://code.markedmondson.me/new-blog-down/</guid>
       <description>A new year, a new blogging platform!
 This time I’m moving from Jekyll to RStudio’s new blogdown format.
 This keeps the advantages of Jekyll (a static, high performance website; markdown for editing; free hosting on Github) but with the extra bonus of being able to render in RMarkdown plus adding some nice looking capabilities from the Hugo project.</description>
@@ -24,10 +24,10 @@ This keeps the advantages of Jekyll (a static, high performance website; markdow
     
     <item>
       <title>Jekyll &#43; Github &#43; Markdown = Blog</title>
-      <link>/hello-world/</link>
+      <link>https://code.markedmondson.me/hello-world/</link>
       <pubDate>Thu, 14 Jan 2016 23:03:57 +0100</pubDate>
       
-      <guid>/hello-world/</guid>
+      <guid>https://code.markedmondson.me/hello-world/</guid>
       <description>Hello World! Welcome to my new home for code blogging. I&amp;rsquo;ll keep the regular blog for all the other stuff, running on Posthaven.
 Why? Its educational, and free, and writing code posts using Posthaven&amp;rsquo;s rich text editor was sometimes painful.
 Using this setup means its all written in Markdown so I get control over everything just the way I want it, and since it combines Github and Markdown, two things I know well already, Jekyll seemed worth knowing.</description>

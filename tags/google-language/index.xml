@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>google-language on Mark Edmondson</title>
-    <link>/tags/google-language/</link>
+    <link>https://code.markedmondson.me/tags/google-language/</link>
     <description>Recent content in google-language on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
     <lastBuildDate>Wed, 15 Aug 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/google-language/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://code.markedmondson.me/tags/google-language/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Talking Google Analytics dashboards via R, Shiny and Text-to-Speech APIs</title>
-      <link>/talking-google-analytics-dashboards/</link>
+      <link>https://code.markedmondson.me/talking-google-analytics-dashboards/</link>
       <pubDate>Wed, 15 Aug 2018 00:00:00 +0000</pubDate>
       
-      <guid>/talking-google-analytics-dashboards/</guid>
+      <guid>https://code.markedmondson.me/talking-google-analytics-dashboards/</guid>
       <description>
 
 
@@ -26,10 +26,10 @@
     
     <item>
       <title>Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API</title>
-      <link>/searchconsoler-vs-googlelanguager/</link>
+      <link>https://code.markedmondson.me/searchconsoler-vs-googlelanguager/</link>
       <pubDate>Thu, 11 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>/searchconsoler-vs-googlelanguager/</guid>
+      <guid>https://code.markedmondson.me/searchconsoler-vs-googlelanguager/</guid>
       <description>With the launch of the Google Natural Language API (NLP API), and the emphasis of machine learning that is said to account for up to 30% of the SEO algorithmn for Google search, a natural question is whether you can use Google’s own macine learning APIs to help optimise your website for search.
 Whilst I don’t believe they will offer exactly the same results, I can see useful applications that include:</description>
     </item>
