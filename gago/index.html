@@ -342,10 +342,10 @@ import (
 
 // get auth file and authenticate
 authFile := os.Getenv(&quot;GAGO_AUTH&quot;)
-analyticsreportingService, _ := Authenticate(authFile)
+analyticsreportingService, _ := gago.Authenticate(authFile)
 
 // make report request struct
-var req = GoogleAnalyticsRequest{
+var req = gago.GoogleAnalyticsRequest{
 		Service:    analyticsreportingService,
 		ViewID:     &quot;106249469&quot;,
 		Start:      &quot;2016-07-01&quot;,
@@ -356,10 +356,10 @@ var req = GoogleAnalyticsRequest{
 		AntiSample: true}
 
 // API calls
-report := GoogleAnalytics(req)
+report := gago.GoogleAnalytics(req)
 
 // write data out as a CSV to console
-WriteCSV(report, os.Stdout)
+gago.WriteCSV(report, os.Stdout)
 </code></pre>
 
 <p><code>gago</code> is then intended for use by Go developers looking to integrate Google Analytics data into their own applications, whilst <code>gagocli</code> is a command line interface for all users to work with <code>gago</code> and the Google Analytics API.</p>
