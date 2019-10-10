@@ -35,7 +35,7 @@
 
 <meta itemprop="datePublished" content="2019-10-09T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2019-10-09T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="1271">
+<meta itemprop="wordCount" content="1273">
 
 
 
@@ -271,7 +271,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2019-10-09 00:00:00 &#43;0000 UTC" itemprop="datePublished">2019-10-09</time>
             &middot;
-            1271
+            1273
             words
             &middot;
             6
@@ -301,7 +301,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <p><a href="https://github.com/MarkEdmondson1234/gago">gago</a> is a new <a href="https://golang.org/">Go</a> library for working with the Google Analytics Reporting API v4.</p>
 
-<p>I used it as a way to learn Go, transferring across some of the lessons I learned from working the Google Analytics API with <a href="https://code.markedmondson.me/googleAnalyticsR/">googleAnalyticsR</a>.  In particular how to get fast downloads when using the anti-sample option, taking advantage of Go&rsquo;s natural multi-threaded nature.</p>
+<p>I used it as a way to learn Go, transferring across some of the lessons I learned from working with the Google Analytics API in <a href="https://code.markedmondson.me/googleAnalyticsR/">googleAnalyticsR</a>.  In particular how to get fast downloads and adding an anti-sample option, whilst taking advantage of Go&rsquo;s natural multi-threaded nature.</p>
 
 <p>The imagined use case is for when you need to download Google Analytics data but you don&rsquo;t want to install an interpreted language such as Python or R to do so.  Since Go compiles to binary files it should work on any system.</p>
 
@@ -309,7 +309,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <p>The first question I get from people is why bother learning Go in the first place?</p>
 
-<p>The primary reason was just try something new, but as I worked with it I did find some advantages over my normal daily R, Python and SQL in my current position as a Data Engineer.  These were:</p>
+<p>The primary reason was just to try something new, but as I worked with it I did find some advantages over my usual R, Python and SQL in my current position as a Data Engineer.  These were:</p>
 
 <ul>
 <li>Strongly typed language making code a lot more robust by default</li>
@@ -321,15 +321,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li>Favoured functional programming styles over OO-orientated (e.g. R like, but with Python clean syntax)</li>
 </ul>
 
-<p>All that said I wouldn&rsquo;t use it as a replacement for R for data science workloads, but perhaps some of the systems programming that I currently use Python for such as Cloud Functions it may work for, especially if response and speed is required.  Perhaps also if there are bottlenecks in Python/R code then making a more efficient loop in Go that is called from R may be an option, although the best way to do that at the moment is to use C++ and the Rcpp library.</p>
+<p>All that said I wouldn&rsquo;t use it as a replacement for R for data science workloads, but perhaps some of the systems programming that I currently use Python for such as Cloud Functions it may work for, especially if response and speed is required.  Perhaps also if there are bottlenecks in Python/R code then making a more efficient loop in Go may be an option, although the best way to do that in R at the moment is to use C++ and the Rcpp library.</p>
 
-<p>The first applications I&rsquo;m using it for is to create a command line tool that can work on a server to download data that can then be passed to another language for analysis, and to distribute to other users who need a quick way to download data but who don&rsquo;t have R/Python environment.</p>
+<p>The first application is creating a command line tool that can work on a server to download data, which can then be passed to another language for analysis or distributed to other users who need a quick way to download data but who don&rsquo;t have an R/Python environment.</p>
 
 <h2 id="gago-and-gagocli">gago and gagocli</h2>
 
 <p>The first step was to import the official <a href="https://godoc.org/google.golang.org/api/analyticsreporting/v4">Google Analytics v4 library for Go</a>, which is created using the discovery API.</p>
 
-<p>As anyone who has worked with the v4 API can tell you, it is not trivial to turn the base functions into a working download of your data.  It requires some knowledge about what Google Analytics data model is, and then you also have to negotiate a complicated nested JSON structure and paging.  <code>gago</code> is intended to take out some of that workload for Go developers, requiring you only need to supply a <a href="https://gobyexample.com/structs">Go struct</a> with the data you wish to get.</p>
+<p>As anyone who has worked with the v4 API can tell you, it is not trivial to turn the base functions into a working download of your data.  It requires some knowledge about what Google Analytics data model is, and then you have to negotiate a complicated nested JSON structure and paging.  <code>gago</code> is intended to take out some of that workload for Go developers, requiring you only need to supply a <a href="https://gobyexample.com/structs">Go struct</a> with the data you wish to get.</p>
 
 <p>Here is an example on how to fetch all rows of data with the unsampled flag set that breaks up your API calls into batches under the sampling limits:</p>
 
@@ -357,6 +357,9 @@ var req = GoogleAnalyticsRequest{
 
 // API calls
 report := GoogleAnalytics(req)
+
+// write data out as a CSV to console
+WriteCSV(report, os.Stdout)
 </code></pre>
 
 <p><code>gago</code> is then intended for use by Go developers looking to integrate Google Analytics data into their own applications, whilst <code>gagocli</code> is a command line interface for all users to work with <code>gago</code> and the Google Analytics API.</p>
@@ -388,13 +391,13 @@ gagocli reports -c config.yml -view 1234 -max 10
 
 <p>The API fetches for big reports using <code>gago</code> will I think be the fastest way available to download Google Analytics data at the moment.</p>
 
-<p>This is due to <code>gago</code> using optimisations that take advantage of some of the Google Analytics Reporitng API v4 as well as Go&rsquo;s multi-threading.</p>
+<p>This is due to <code>gago</code> using optimisations that take advantage of some of the Google Analytics Reporting API v4 as well as Go&rsquo;s multi-threading.</p>
 
-<p>To start with, the v4 API feature of batching is used, meaning 5 API requests can be made at once. On top of this, you can fetch multiple API requests at once, with a limit of 10 per web property - Go make it easy to set off 10 requests at once and monitor and patch them together again.  This means 10 API requests * 5 API batch = 50 API pages can be made at once.</p>
+<p>To start with, the v4 feature of batching is used, meaning five API requests can be made at once. On top of this, you can fetch multiple batched requests at once, with a limit of ten per web property - Go make it easy to set off ten requests at once and monitor and patch them together again.  This means 10 API requests * 5 batched = 50 API pages can be requested at once.</p>
 
 <p>This is a bit hacky since its not using the intended paging functionality of the API, which traditionally lets you request one page at a time, the response of which includes a link/paging number to where the next API call should start from.</p>
 
-<p>However, it seems to work.  The requests are instead made ahead of time, and all sent at once using Go&rsquo;s nice interface for asynchronous parallel fetches, the <a href="https://gobyexample.com/goroutines">goroutine</a>.</p>
+<p>However, it seems to work.  The requests are instead constructed ahead of time, and all sent at once using Go&rsquo;s nice interface for asynchronous parallel fetches, the <a href="https://gobyexample.com/goroutines">goroutine</a>.</p>
 
 <h3 id="benchmarks">Benchmarks</h3>
 

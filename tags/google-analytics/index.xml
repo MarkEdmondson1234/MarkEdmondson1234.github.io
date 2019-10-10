@@ -18,7 +18,7 @@
       
       <guid>https://code.markedmondson.me/gago/</guid>
       <description>gago is a new Go library for working with the Google Analytics Reporting API v4.
-I used it as a way to learn Go, transferring across some of the lessons I learned from working the Google Analytics API with googleAnalyticsR. In particular how to get fast downloads when using the anti-sample option, taking advantage of Go&amp;rsquo;s natural multi-threaded nature.
+I used it as a way to learn Go, transferring across some of the lessons I learned from working with the Google Analytics API in googleAnalyticsR. In particular how to get fast downloads and adding an anti-sample option, whilst taking advantage of Go&amp;rsquo;s natural multi-threaded nature.
 The imagined use case is for when you need to download Google Analytics data but you don&amp;rsquo;t want to install an interpreted language such as Python or R to do so.</description>
     </item>
     
