@@ -6,24 +6,15 @@
     <description>Recent content in Tags on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
-    <lastBuildDate>Wed, 09 Oct 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 18 Jan 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://code.markedmondson.me/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>google-analytics</title>
-      <link>https://code.markedmondson.me/tags/google-analytics/</link>
-      <pubDate>Wed, 09 Oct 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://code.markedmondson.me/tags/google-analytics/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>R</title>
       <link>https://code.markedmondson.me/tags/R/</link>
-      <pubDate>Sat, 23 Feb 2019 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 18 Jan 2020 00:00:00 +0000</pubDate>
       
       <guid>https://code.markedmondson.me/tags/R/</guid>
       <description></description>
@@ -32,9 +23,18 @@
     <item>
       <title>docker</title>
       <link>https://code.markedmondson.me/tags/docker/</link>
-      <pubDate>Sat, 23 Feb 2019 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 18 Jan 2020 00:00:00 +0000</pubDate>
       
       <guid>https://code.markedmondson.me/tags/docker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>google-analytics</title>
+      <link>https://code.markedmondson.me/tags/google-analytics/</link>
+      <pubDate>Wed, 09 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://code.markedmondson.me/tags/google-analytics/</guid>
       <description></description>
     </item>
     

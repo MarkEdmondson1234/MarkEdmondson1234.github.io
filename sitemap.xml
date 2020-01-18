@@ -3,20 +3,37 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://code.markedmondson.me/googleCloudRunner/</loc>
+    <lastmod>2020-01-18T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://code.markedmondson.me/</loc>
-    <lastmod>2019-10-09T00:00:00+00:00</lastmod>
+    <lastmod>2020-01-18T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://code.markedmondson.me/post/</loc>
-    <lastmod>2019-10-09T00:00:00+00:00</lastmod>
+    <lastmod>2020-01-18T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://code.markedmondson.me/tags/R/</loc>
+    <lastmod>2020-01-18T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://code.markedmondson.me/tags/</loc>
-    <lastmod>2019-10-09T00:00:00+00:00</lastmod>
+    <lastmod>2020-01-18T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://code.markedmondson.me/tags/docker/</loc>
+    <lastmod>2020-01-18T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -32,20 +49,8 @@
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/tags/R/</loc>
-    <lastmod>2019-02-23T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>https://code.markedmondson.me/r-at-scale-on-google-cloud-platform/</loc>
     <lastmod>2019-02-23T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://code.markedmondson.me/tags/docker/</loc>
-    <lastmod>2019-02-23T00:00:00+00:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>

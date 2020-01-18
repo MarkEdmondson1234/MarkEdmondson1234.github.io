@@ -6,10 +6,20 @@
     <description>Recent content in R on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
-    <lastBuildDate>Sat, 23 Feb 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 18 Jan 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://code.markedmondson.me/tags/R/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Introducing googleCloudRunner - serverless R on Google Cloud Platform</title>
+      <link>https://code.markedmondson.me/googleCloudRunner/</link>
+      <pubDate>Sat, 18 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://code.markedmondson.me/googleCloudRunner/</guid>
+      <description>I&amp;rsquo;ve been working on googleCloudRunner over the last couple months which is soon available on CRAN - https://code.markedmondson.me/googleCloudRunner/
+googleCloudRunner feels like the culmination of my last couple of years interest in this R/Google Cloud Platform niche I find myself in. The package seems to fulfill every use case I have wanted for working with R in the cloud, available now in a simple UI syntax that hopefully any R user can pick up quickly.</description>
+    </item>
     
     <item>
       <title>R at scale on the Google Cloud Platform</title>

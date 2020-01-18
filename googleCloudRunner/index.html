@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <title>Introducing googleCloudRunner - serverless R on Google Cloud Platform &middot; Mark Edmondson</title>
+    <meta name="generator" content="Hugo 0.55.5" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Mark Edmondson">
+    
+      <meta name="description" content="googleCloudRunner includes tools for R users to create APIs, cloud builds or scheduled scripts in the Google Cloud Platform">
+    
+    
+    <link rel="canonical" href="https://code.markedmondson.me/googleCloudRunner/"/>
+    <link rel="icon" href="https://code.markedmondson.me/favicon.ico">
+    <link rel="apple-touch-icon" href="https://code.markedmondson.me/apple-touch-icon.png"/>
+    <link rel="stylesheet" href="https://code.markedmondson.me/css/style.css">
+    <link rel="stylesheet" href="https://code.markedmondson.me/css/github.css" rel="stylesheet" id="theme-stylesheet">
+    <link rel="stylesheet" href="https://code.markedmondson.me/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://code.markedmondson.me/fancybox/jquery.fancybox.css">
+    
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+    <meta property="og:title" content="Introducing googleCloudRunner - serverless R on Google Cloud Platform" />
+<meta property="og:description" content="googleCloudRunner includes tools for R users to create APIs, cloud builds or scheduled scripts in the Google Cloud Platform" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://code.markedmondson.me/googleCloudRunner/" />
+<meta property="article:published_time" content="2020-01-18T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-01-18T00:00:00&#43;00:00"/>
+
+    
+    
+<meta itemprop="name" content="Introducing googleCloudRunner - serverless R on Google Cloud Platform">
+<meta itemprop="description" content="googleCloudRunner includes tools for R users to create APIs, cloud builds or scheduled scripts in the Google Cloud Platform">
+
+
+<meta itemprop="datePublished" content="2020-01-18T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2020-01-18T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="2399">
+
+
+
+<meta itemprop="keywords" content="R,docker," />
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Introducing googleCloudRunner - serverless R on Google Cloud Platform"/>
+<meta name="twitter:description" content="googleCloudRunner includes tools for R users to create APIs, cloud builds or scheduled scripts in the Google Cloud Platform"/>
+<meta name="twitter:site" content="@HoloMarkeD"/>
+
+    
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WFFMBH');</script>
+
+
+    <script src="https://code.markedmondson.me/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+
+
+<div id="container">
+	<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="https://code.markedmondson.me/" id="logo">
+          
+          <i class="logo" style="background-image: url('https://code.markedmondson.me/images/greenhand.png')"></i>
+          
+          <span class="site-title">Mark Edmondson</span>
+      </a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="https://code.markedmondson.me/">Home</a>
+          
+          
+          
+          
+
+          
+          <a class="main-nav-link" href="/r-packages/">My R Packages</a>
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.markedmondson.me/posts/">Non-code blog</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="https://code.markedmondson.me/images/gde_avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+              <input type="hidden" name="sitesearch" value="https://code.markedmondson.me/" />
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="https://code.markedmondson.me/">Home</a></td>
+          
+          
+          
+          
+
+          
+          <td><a class="main-nav-link" href="/r-packages/">My R Packages</a></td>
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.markedmondson.me/posts/">Non-code blog</a></td>
+          
+          
+          <td>
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" class="search-form-input" placeholder="Search">
+          <input type="hidden" name="sitesearch" value="https://code.markedmondson.me/" />
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+   	
+   	<div class="outer">
+   	
+    	<aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      
+      <img id="avatar" src="https://code.markedmondson.me/images/gde_avatar.jpg">
+      
+      <h2 id="name">Mark Edmondson</h2>
+      <h3 id="title">Coding in digital analytics</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Copenhagen, Denmark</span>
+      
+          <a id="follow" href="https://github.com/MarkEdmondson1234">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+      <div class="article-info-block">
+        23
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          15
+        
+        <span>
+            Tags
+        </span>
+      </div>
+    </div>
+    <div class="profile-block social-links">
+      <table>
+        <tr>
+          
+<td><a href="//github.com/MarkEdmondson1234" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/MarkEdmondsonAtHome" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//linkedin.com/in/markpeteredmondson" target="_blank" title="LinkedIn"><i class="fa fa-linkedin"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/HoloMarkeD" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="https://code.markedmondson.me/index.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</aside>
+
+    
+
+    <section id="main">
+    
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+            <img src="https://code.markedmondson.me/banners/gcp-pyramid.png" class="article-banner">
+        
+
+        <header class="article-header">
+    <a href="https://code.markedmondson.me/googleCloudRunner/">
+    <h1 class="article-title" itemprop="name">
+        Introducing googleCloudRunner - serverless R on Google Cloud Platform
+    </h1>
+    </a>
+    <div class="article-meta">
+
+        
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2020-01-18 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-01-18</time>
+            &middot;
+            2399
+            words
+            &middot;
+            12
+            minute read
+        </div>
+        
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/r">R</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/docker">docker</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+        <div class="article-entry" itemprop="articleBody">
+            
+
+<p>I&rsquo;ve been working on <strong>googleCloudRunner</strong> over the last couple months which is soon available on CRAN - <a href="https://code.markedmondson.me/googleCloudRunner/">https://code.markedmondson.me/googleCloudRunner/</a></p>
+
+<p><strong>googleCloudRunner</strong> feels like the culmination of my last couple of years interest in this R/Google Cloud Platform niche I find myself in.  The package seems to fulfill every use case I have wanted for working with R in the cloud, available now in a simple UI syntax that hopefully any R user can pick up quickly.  Those use cases include:</p>
+
+<ul>
+<li>scheduling an R script</li>
+<li>creating an R API for R-as-a-Service</li>
+<li>data pipelines where R input/output can be integrated with non-R applications</li>
+<li>&lsquo;event driven&rsquo; R workloads, where R can be triggered e.g. pub/sub events, GitHub commits</li>
+</ul>
+
+<p>These use cases and other practicalities are outlined on the <a href="https://code.markedmondson.me/googleCloudRunner/articles/usecases.html">googleCloudRunner website and use-case section</a>, but for this blog post I&rsquo;d like to talk about how the package evolved alongside my increased understanding of how the cloud differs from local development.  This post will mirror a talk I will give at R v1.0.0&rsquo;s 20th birthday party in Copenhagen this year on Feb 28th.</p>
+
+<h2 id="my-journey-up-the-pyramid">My journey up the Pyramid</h2>
+
+<p>My journey has been one of learning increasing levels of abstraction.  Abstraction has been a motivation for me all the back to the start of my career in digital marketing in 2006, and has been key to my enjoying my work - how does what I&rsquo;m doing now fit into a wider picture?  The next step has not always been obvious, but when I look back I&rsquo;ve always been drawn in that direction.</p>
+
+<p>For example, my work roles have evolved over time from:</p>
+
+<ul>
+<li>Finding links for SEO purposes (start using Python)</li>
+<li>Applying SEO to websites</li>
+<li>Measuring SEO&rsquo;s impact via Google Analytics</li>
+<li>Tracking all website visits via Google Analytics (start using JavaScript)</li>
+<li>Analysis of data extracted from Google Analytics (start using R)</li>
+<li>Automating data analysis via servers in the cloud (start using Docker)</li>
+<li>Scaling data pipelines within the cloud (start using SQL)</li>
+<li>Creating use cases for data pipelines</li>
+</ul>
+
+<p>Digital marketing/cloud is a nice verticial to work in for this since there are lots of new things to try each month.  As a market it evolves rapidly.</p>
+
+<p>This abstraction has also happened with my understanding of R programming:</p>
+
+<ul>
+<li>R code - struggling through the R learning curve</li>
+<li>R functions - moving towards more reproducability and modularity</li>
+<li>R packages - bundling up useful functions into versioned packages</li>
+<li>Docker environments of R packages - fixing package versions and dependencies</li>
+<li>Running R environments on servers - scaling lots of R environments for parallel/reliability</li>
+<li>Running R environments on serverless services - abstracting dev-ops to cloud platforms</li>
+</ul>
+
+<p>Google itself talks about abstraction of its infrastructure from the point of view of how much controlled vs managed solutions you want, and I have moved up that infrastucture as time has gone on, from its base with virtual machines to the peak submitting R functions for GCP to deal with.</p>
+
+<p><img src="/images/gcp-pyramid-r.png" alt="" /></p>
+
+<p><strong>googleComputeEngineR</strong> published in 2017 created VMs (virtual machines) much like your own machine sitting at home.  As I got used to configuring compute via code more advanced uses were found via utilising Docker containers to replicate R environments, such as massive parallel processing and firing up customised RStudio or Shiny servers.</p>
+
+<blockquote>
+<p>Docker really is the key to how you move up the pyramid - it enables almost everything beyond base infrastructure and is my highest recommendation for learning if you are interested in following a similar track</p>
+</blockquote>
+
+<p>The more meta-code I wrote to manage these services, the more standard they get and I realised that platforms offered a more robust way on top of those same VMs I was coordinating.  The market leader for the management of Docker containers on multiple machines is Kubernetes, which <a href="https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts/">this post talks about and tracks my journey deploying R through it</a> in 2018.</p>
+
+<p>But Kubernetes I have concluded is only really needed if you are building a platform.  It lets you do hard things easily (auto-scaling multiple containers) but some easy things are more difficult (assigning a https outside ip address and authenticating it), so a more managed service on top of it is preferable if available for your needs.</p>
+
+<p>Many platforms build on top of Kubernetes, including <a href="https://cloud.google.com/knative/">Knative</a>.  Knative takes care of details such as scale-to-zero, authentication etc. so you only need to worry about deploying containers with your code and everything else is taken care of.  Google Cloud Platform&rsquo;s managed Knative service is <a href="https://cloud.run">Cloud Run</a>, which reached general availability recently and is now, via <strong>googleCloudRunner</strong>, my preferred service for R APIs.</p>
+
+<p>You can read more about this via this presentation on <a href="http://code.markedmondson.me/r-at-scale-gcp.html">R at scale on Google Cloud Platform</a> I  made in New York in September 2019</p>
+
+<p>Along the way, a few key highlights of the lessons for moving into the cloud have been:</p>
+
+<ul>
+<li>separation of code, data and configuration</li>
+<li>events not schedules</li>
+<li>technical debt of code vs no-code</li>
+</ul>
+
+<p>I would like to talk about how <strong>googleCloudRunner</strong> manifests these learnings in its approach.</p>
+
+<h2 id="separation-of-code-data-and-configuration">Separation of Code, Data and Configuration</h2>
+
+<p><img src="/images/blocks.png" alt="" /></p>
+
+<p>Being able to decouple code and data is taught a lot in Google Cloud Platform material, and the benefits are clear once done.  In practice this means that the right tool for the right job when placing data somewhere, freeing up the code you write to run in more customised environments.</p>
+
+<p><strong>googleCloudRunner</strong> enables this workflow via the <a href="https://cloud.google.com/cloud-build/">Cloud Build</a> service.  Cloud Build has been mentioned several times in tutorials of mine over the years, and has evolved from a handy online Docker builder service to a powerful continuous integration service, being able to sequence Dockerfiles on a shared workspace.</p>
+
+<p>By separating out config and code I mean writing code that can quickly be applied to another project or client by replacing a config file, that points to the data locations and any other specific configurations for that project.</p>
+
+<ul>
+<li><em>Data</em> - build steps via <code>gcloud</code> or similar can import data from the appropriate GCP data service, such as DataStore or BigQuery</li>
+<li><em>Code</em> - Docker containers for each step means code is independent of the data you are working with</li>
+<li><em>Config</em> - Cloud Build substitution macros configuration can be changed for new projects quickly.</li>
+</ul>
+
+<p>All this encourages workflows that can be interchanged easily.  For instance, to download Google Analytics data and upload to BigQuery could take this code/config for one client:</p>
+
+<pre><code class="language-r">ga_to_bq &lt;- cr_build_yaml(
+  steps = c(
+    cr_buildstep_decrypt(
+      id = &quot;decrypt file&quot;,
+      cipher = &quot;/workspace/auth.json.enc&quot;,
+      plain = &quot;/workspace/auth.json&quot;,
+      keyring = &quot;my-keyring&quot;,
+      key = &quot;ga_auth&quot;
+    ),
+    cr_buildstep(
+      id = &quot;download google analytics&quot;,
+      name = &quot;gcr.io/gcer-public/gago:master&quot;,
+      env = c(&quot;GAGO_AUTH=/workspace/auth.json&quot;),
+      args = c(&quot;reports&quot;,
+               &quot;--view=$_VIEWID&quot;,
+               &quot;--dims=ga:date,ga:medium&quot;,
+               &quot;--mets=ga:sessions&quot;,
+               &quot;--start=2014-01-01&quot;,
+               &quot;--end=2019-11-30&quot;,
+               &quot;--antisample&quot;,
+               &quot;--max=-1&quot;,
+               &quot;-o=google_analytics.csv&quot;),
+      dir = &quot;build&quot;
+    ),
+    cr_buildstep(
+      id = &quot;load BigQuery&quot;,
+      name = &quot;gcr.io/cloud-builders/gcloud&quot;,
+      entrypoint = &quot;bq&quot;,
+      args = c(&quot;--location=EU&quot;,
+               &quot;load&quot;,
+               &quot;--autodetect&quot;,
+               &quot;--source_format=CSV&quot;,
+               &quot;$_BQTABLE&quot;,
+               &quot;google_analytics.csv&quot;
+               ),
+      dir = &quot;build&quot;
+    )
+  ),
+  substitutions = c(`_VIEWID` = 12345678, `_BQTABLE` = &quot;test_EU.polygot&quot;)
+)
+
+# build the cloud build steps
+build &lt;- cr_build(ga_to_bq)
+
+# schedule the build
+cr_schedule(&quot;15 5 * * *&quot;, name=&quot;ga-to-bq-clienta&quot;,
+            httpTarget = cr_build_schedule_http(build))
+</code></pre>
+
+<p>The flexibility of the above when these elements are separated means:</p>
+
+<ul>
+<li><em>Data</em> - the data is uploaded to BigQuery ready for use in other applications,</li>
+<li><em>Code</em> - the code is separated within Docker containers so could be replaced (for instance swapping <code>gago</code> for a <code>googleAnalyticsR</code> container)</li>
+<li><em>Config</em> - for new clients swapping out the <code>$_VIEWID</code> and <code>$_BQTABLE</code> substitutions enables a quick turn-around.</li>
+</ul>
+
+<h2 id="events-not-schedules">Events not Schedules</h2>
+
+<p>Scheduling is a common use case for data pipelines, but it is not the ideal.  Nothing is 100% reliable, so if a certain step fails then downstream schedules can all fail, which can involve some convoluted contingency code to deal with it. An example of this are the GA360 BigQuery exports, which although usually arrive before 0900 each day, but can sometimes be delayed by several hours.  If they are, reports downstream can break.</p>
+
+<p>Another example are database exports to Cloud Storage.  CRM systems can delay, so a scheduled import from Cloud Storage may miss data.</p>
+
+<p>Both the above scenarios can be solved if data flows are instead triggered via events rather than trusting a schedule.  In GCP that means <a href="https://cloud.google.com/pubsub/">Cloud Pub/Sub</a>, a message queue system that can be triggered from various events like BigQuery tables, GCP logs and Cloud Storage file updates.</p>
+
+<p>Cloud Functions are a favourite of mine precisely because they can trigger off pub/sub messages, but up until recently this could only be utilised with Python, not R. (See this <a href="https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/">example for triggering transformations of GA360 BigQuery tables</a>).</p>
+
+<p>With Cloud Run, any code can run off HTTP events.  <strong>googleCloudRunner</strong> includes helper functions that will use the <a href="https://www.rplumber.io/"><code>plumber</code> package</a> to create an R API that can trigger off HTTP pub/sub events.  From there, any R code can be triggered.</p>
+
+<p>Creating the plumber API that supports pub/sub is carried out like below:</p>
+
+<pre><code class="language-r"># example function echos back pubsub message
+# change to do something more interesting with event data
+pub &lt;- function(x){
+  paste(&quot;Echo:&quot;, x)
+}
+
+#' Recieve pub/sub message
+#' @post /pubsub
+#' @param message a pub/sub message
+function(message=NULL){
+  googleCloudRunner::cr_plumber_pubsub(message, pub)
+}
+</code></pre>
+
+<p>A Dockerfile to run the plumber API like below:</p>
+
+<pre><code>FROM gcr.io/gcer-public/googlecloudrunner:master
+
+COPY [&quot;.&quot;, &quot;./&quot;]
+
+ENTRYPOINT [&quot;R&quot;, &quot;-e&quot;, &quot;pr &lt;- plumber::plumb(commandArgs()[4]); pr$run(host='0.0.0.0', port=as.numeric(Sys.getenv('PORT')))&quot;]
+CMD [&quot;api.R&quot;]
+</code></pre>
+
+<p>After which only one more function is needed to create an R API on Cloud Run:</p>
+
+<pre><code class="language-r">cr_deploy_plumber(&quot;api_folder&quot;)
+</code></pre>
+
+<p>Any R code can now trigger when a Cloud Storage file is available or BigQuery table is filled, or any other Pub/Sub event.  Reporting, anomaly detection, alerts, data updates are all good use cases.</p>
+
+<h2 id="technical-debt-of-code-vs-no-code">Technical Debt of Code vs No-Code</h2>
+
+<p>One reason its been a while since my last R package is that any code created introduces a technical debt for its maintainers.  Keeping up to date with dependency updates and bugs can suck up any time for new development.  <strong>googleCloudRunner</strong> I believe will help move some of the use cases away from my other packages such as <code>googleComputeEngineR</code>.</p>
+
+<p><img src="https://imgs.xkcd.com/comics/automation.png" alt="" />
+<em><a href="https://xkcd.com/1319/">https://xkcd.com/1319/</a></em></p>
+
+<p>Its obviously a lot easier to re-use someone&rsquo;s code than create your own, and since <strong>googleCloudRunner</strong>&rsquo;s integration with Cloud Build is Docker based, this means that the scope of which code to use within R is much increased.  Any language&rsquo;s application be be integrated with R via <strong>googleCloudRunner</strong>, so long as its in a Docker container.</p>
+
+<p>A good example of this came up in the development of <strong>googleCloudRunner</strong> itself.  I wanted to integrate with Cloud Run for the previous use case, but whilst using <code>googleAuthR</code>&rsquo;s discovery API to generate code for simple functions like listing Cloud Run applications was fine, to deploy a Cloud Run service itself is non-trivial as it has lots of nested functionality involved such as integration with Anthos.</p>
+
+<p>However, since I was already using Cloud Build to make the Docker container for eventual deployment to Cloud Run, why create a native R API wrapper when <code>gcloud</code> was available?  And since Cloud Builds are running in the cloud, there is no issue with worrying about installing system depencies such as would be the case if calling python or gcloud natively on the R user&rsquo;s system via <code>system()</code> commands.</p>
+
+<p>And so it is that to deploy Cloud Run commands, the R function <a href="https://code.markedmondson.me/googleCloudRunner/reference/cr_run.html"><code>cr_run()</code></a> triggers a Cloud Build calling <code>gcloud run</code> without you needing <code>gcloud</code> installed.</p>
+
+<p>The docker based runsteps means you can use any pre-made Docker containers in other languages.  For instance, the Slack buildstep below uses node.js. All this means that you can get up and running quickly with new functionality. A <a href="https://code.markedmondson.me/googleCloudRunner/articles/usecases.html#polygot-cloud-builds---integrating-r-code-with-other-languages">polygot example is included in the website documentation</a> to highlight this flexibility. To round out this section, here is an example calling R to render an Rmd, Cloud Run to host it and Slack message when its done:</p>
+
+<pre><code class="language-r">r &lt;- &quot;rmarkdown::render('scheduled_rmarkdown.Rmd', output_file = 'scheduled_rmarkdown.html')&quot;
+
+build_rmd &lt;- cr_build_yaml(
+      steps = c(
+        cr_buildstep(
+          id = &quot;download Rmd template&quot;,
+          name = &quot;gsutil&quot;,
+          args = c(&quot;cp&quot;,
+                   &quot;gs://mark-edmondson-public-read/scheduled_rmarkdown.Rmd&quot;,
+                   &quot;scheduled_rmarkdown.Rmd&quot;),
+        ),
+        cr_buildstep_r(
+          id=&quot;render rmd&quot;,
+          r = r,
+          name = &quot;gcr.io/gcer-public/render_rmd:master&quot;
+        ),
+        cr_buildstep_nginx_setup(&quot;/workspace/&quot;),
+        cr_buildstep_docker(&quot;html-on-cloudrun&quot;, tag = &quot;$BUILD_ID&quot;),
+        cr_buildstep_run(name = &quot;my-html-on-cloudrun&quot;,
+                         image = &quot;gcr.io/mark-edmondson-gde/html-on-cloudrun:$BUILD_ID&quot;,
+                         concurrency = 80),
+        cr_buildstep_slack(&quot;deployed to Cloud Run&quot;)
+        ), 
+    images = &quot;gcr.io/mark-edmondson-gde/html-on-cloudrun:$BUILD_ID&quot;,
+    )
+</code></pre>
+
+<h2 id="an-r-philosophy-is-a-cloud-philosophy">An R philosophy is a Cloud philosophy?</h2>
+
+<p>I hope the above helps shows the ideas behind <strong>googleCloudRunner</strong> and how it can best help your own workflows.  I finish now with an idea that perhaps its natural that R and the Cloud have been as focus of mine, since perhaps their philosophies overlap?</p>
+
+<p>This obviously is not clear by the amount of R support in the cloud - first class support is usually reserved for more general purpose languages such as Python or Java. But as I was writing this I did notice some parallels:</p>
+
+<ul>
+<li>R favours a functional, interpreted language, rather than OO approach.  This means no side effects such as f(x) -&gt; x each time the function is invoked, whilst OO favour mutation of objects.  Cloud micro-services are much easier when working in a stateless manner.</li>
+<li>Separation of code and data.  As mentioned previously, cloud services encourage separation of code and data, and for reproducability R users have also been encouraged to do so.</li>
+<li>Vetting of R packages.  R is one of the few languages where library dependencies are checked manually before being accepted into the central repository, CRAN.  This helps keep a standard for security and patches.</li>
+<li>Side effect free functional functions can be asynchronously fired and suit patchy http connections.</li>
+</ul>
+
+<h2 id="summary">Summary</h2>
+
+<p>I hope others will see the benefits I already am seeing from having this in my data engineering armoury.  There has already been good feedback from early users.</p>
+
+<p><blockquote class="twitter-tweet"><p lang="en" dir="ltr">Popping up from my new Cloud Build jobs to say Google Cloud Platform is staggeringly good. If you&#39;re into <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> it&#39;s well worth your time, starting with <a href="https://twitter.com/HoloMarkeD?ref_src=twsrc%5Etfw">@HoloMarkeD</a>&#39;s packages. The free tier is enough for all sorts of side-project fun.</p>&mdash; Neil Charles (@neilcharles_uk) <a href="https://twitter.com/neilcharles_uk/status/1218113727532355584?ref_src=twsrc%5Etfw">January 17, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+
+<p>I&rsquo;m also pleased that it has potenital applications outside of R, since to my knowledge there are not yet other easy ways to generate cloudbuild.yml programatically, which is the backbone of the package.  Looping creation of hundreds of Cloud Builds for distribution to other non-R using data workers, for instance, means one-off jobs and scripts can be safely banked for when needed or modified.  It also makes it a lot easier to integrate R scripts into what non-R users are doing - killer features like the stat libraries, ggplot2, tidyverse, RMarkdown reports etc.</p>
+
+<p>I wonder what the next meta-jump is from here and would be interested if you have some ideas.  Multi-cloud? Multi-builds?  I guess I&rsquo;ll just have to wait to find out :)</p>
+
+        </div>
+        <footer class="article-footer">
+    <a data-url="https://code.markedmondson.me/googleCloudRunner/" data-id="1d88e8225fca6e3161b192f6b43dc38f" class="article-share-link">
+        <i class="fa fa-share"></i>
+        Share
+    </a>
+    
+    <a href="https://code.markedmondson.me/googleCloudRunner/#disqus_thread" class="article-comment-link">
+        Comments
+    </a>
+    
+
+    <script>
+    (function ($) {
+        
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+    </script>
+</footer>
+
+    </div>
+
+    
+<nav id="article-nav">
+    
+    <a href="https://code.markedmondson.me/gago/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">
+          Older
+      </strong>
+      <div class="article-nav-title">gago: Blazingly fast Google Analytics API downloads with Go</div>
+    </a>
+    
+
+    
+</nav>
+
+
+</article>
+
+
+<section id="comments">
+    <div id="disqus_thread">
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "markedmondson" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+</section>
+
+
+    </section>
+
+   	
+    	<aside id="sidebar">
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/googleCloudRunner/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/gcp-pyramid.png)" alt="Introducing googleCloudRunner - serverless R on Google Cloud Platform" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/googleCloudRunner/" class="title">Introducing googleCloudRunner - serverless R on Google Cloud Platform</a></p>
+                    <p class="item-date">
+                        <time datetime="2020-01-18 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-01-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/gago/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/gago.png)" alt="Introducing googleCloudRunner - serverless R on Google Cloud Platform" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/gago/" class="title">gago: Blazingly fast Google Analytics API downloads with Go</a></p>
+                    <p class="item-date">
+                        <time datetime="2019-10-09 00:00:00 &#43;0000 UTC" itemprop="datePublished">2019-10-09</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/r-at-scale-on-google-cloud-platform/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/r-at-scale.png)" alt="Introducing googleCloudRunner - serverless R on Google Cloud Platform" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/r-at-scale-on-google-cloud-platform/" class="title">R at scale on the Google Cloud Platform</a></p>
+                    <p class="item-date">
+                        <time datetime="2019-02-23 00:00:00 &#43;0000 UTC" itemprop="datePublished">2019-02-23</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/automatic-google-analytics-data-imports-cloud-storage/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/data-imports.jpg)" alt="Introducing googleCloudRunner - serverless R on Google Cloud Platform" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/automatic-google-analytics-data-imports-cloud-storage/" class="title">Auto Google Analytics Data Imports from Cloud Storage</a></p>
+                    <p class="item-date">
+                        <time datetime="2018-11-29 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-11-29</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/cloud-functions.png)" alt="Introducing googleCloudRunner - serverless R on Google Cloud Platform" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/" class="title">Turning GA360 BigQuery exports into partitioned tables using Cloud Functions</a></p>
+                    <p class="item-date">
+                        <time datetime="2018-10-09 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-10-09</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/r">
+                    R
+                </a>
+                <span class="category-list-count">18</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/big-query">
+                    big-query
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/blogging">
+                    blogging
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-functions">
+                    cloud-functions
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/docker">
+                    docker
+                </a>
+                <span class="category-list-count">7</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-analytics">
+                    google-analytics
+                </a>
+                <span class="category-list-count">9</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-app-engine">
+                    google-app-engine
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-auth">
+                    google-auth
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-cloud-storage">
+                    google-cloud-storage
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-compute-engine">
+                    google-compute-engine
+                </a>
+                <span class="category-list-count">7</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-language">
+                    google-language
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-tag-manager">
+                    google-tag-manager
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/python">
+                    python
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/rstudio-server">
+                    rstudio-server
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/search-console">
+                    search-console
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+
+    
+
+
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+    
+	</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script src="https://code.markedmondson.me/fancybox/jquery.fancybox.pack.js"></script>
+<script src="https://code.markedmondson.me/js/script.js"></script>
+<script src="https://code.markedmondson.me/js/highlight.pack.js"></script>
+
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+</body>
+</html>
