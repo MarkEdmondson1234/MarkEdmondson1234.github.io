@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>cloud-functions on Mark Edmondson</title>
-    <link>https://code.markedmondson.me/tags/cloud-functions/</link>
+    <link>/tags/cloud-functions/</link>
     <description>Recent content in cloud-functions on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
     <lastBuildDate>Thu, 29 Nov 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://code.markedmondson.me/tags/cloud-functions/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/cloud-functions/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Auto Google Analytics Data Imports from Cloud Storage</title>
-      <link>https://code.markedmondson.me/automatic-google-analytics-data-imports-cloud-storage/</link>
+      <link>/automatic-google-analytics-data-imports-cloud-storage/</link>
       <pubDate>Thu, 29 Nov 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://code.markedmondson.me/automatic-google-analytics-data-imports-cloud-storage/</guid>
+      <guid>/automatic-google-analytics-data-imports-cloud-storage/</guid>
       <description>Continuing my infatuation with cloud functions (see last post on using cloud functions to manipulate BigQuery exports) this is a post showing how to bring together various code examples out there so that you can easily upload custom data imports from a Google cloud storage bucket.
 The code is available in this GitHub repo for useful cloud functions with Google Analytics
 Extended data imports Google Analytics offers various versions of uploads.</description>
@@ -24,10 +24,10 @@ Extended data imports Google Analytics offers various versions of uploads.</desc
     
     <item>
       <title>Turning GA360 BigQuery exports into partitioned tables using Cloud Functions</title>
-      <link>https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/</link>
+      <link>/bigquery-ga360-exports-cloud-functions/</link>
       <pubDate>Tue, 09 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/</guid>
+      <guid>/bigquery-ga360-exports-cloud-functions/</guid>
       <description>Its been a while since my last blog, although I had a good excuse as I’ve moved house into the Copenhagen suburbs, Brønshøj. But in the meantime, I have had the chance to find my new favourite tool for data engineering - Google Cloud Functions in Python.
 This post will look at how to use them to work with the GA360 BigQuery export tables.
 The code is available in this GitHub repo for useful cloud functions with Google Analytics</description>
