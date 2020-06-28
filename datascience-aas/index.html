@@ -35,7 +35,7 @@
 
 <meta itemprop="datePublished" content="2020-06-28T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2020-06-28T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="2213">
+<meta itemprop="wordCount" content="2242">
 
 
 
@@ -283,7 +283,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2020-06-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-06-28</time>
             &middot;
-            2213
+            2242
             words
             &middot;
             11
@@ -489,7 +489,7 @@ fb_document_get &lt;- function(document_path,
 
 <h3 id="google-cloud-functions">Google Cloud Functions</h3>
 
-<p>For simple &ldquo;glue&rdquo; data flows my go-to is Google Cloud Functions, as you only need write the code and deploy without needing to worry about servers or scale.  Firebase has its own Cloud Function UI as well but that only supports node.js, so I opted to use the GCP console Cloud Fucntions in Python3.7. (Its the same service and infrastructure as Firebase.)</p>
+<p>For simple &ldquo;glue&rdquo; data flows my go-to is Google Cloud Functions, as you only need write the code and deploy without needing to worry about servers or scale.  Firebase has its own Cloud Function UI as well but that only supports node.js, so I opted to use the GCP console Cloud Functions in Python3.7 (Its the same service and infrastructure as Firebase.)</p>
 
 <p>Paddle had lots of Python examples already on the website on how to verify and deal with the data in their webhook payload so a lot of it was just copy-paste from there into the Cloud Function UI.  There is some more setup info in the <a href="https://github.com/MarkEdmondson1234/Shiny-R-SaaS/tree/master/payment_app">Cloud Function readme</a> - the only extra bit I needed to add was how to take the webhook payload and write it to Firestore - this was all handled by this snippet of code:</p>
 
@@ -508,7 +508,9 @@ def update_firebase(data, collection, doc_id):
     event_ref.set(data)   
 </code></pre>
 
-<p>Before writing to Firebase though Paddle gives you code to verify that the data is from a trusted source which it achieves via public/private keys which is important for payment applications - you can see the <a href="https://github.com/MarkEdmondson1234/Shiny-R-SaaS/blob/master/payment_app/fb_functions/main.py">full function here</a>.</p>
+<p>The <code>event</code> collection is per userId, and gives the complete history of their transactions.</p>
+
+<p>If implementing your own, make sure to use the verification code that checks the webhook is from a trusted source. Paddle supplies public/private keys and <a href="https://developer.paddle.com/webhook-reference/verifying-webhooks">code to check them</a>, which is important for payment applications - you can see the <a href="https://github.com/MarkEdmondson1234/Shiny-R-SaaS/blob/master/payment_app/fb_functions/main.py">full function here</a>.</p>
 
 <p>As it works off webhooks this means that even when a user is not on the app important updates will still be enacted (such as monthly credit card payments or declines) and it moves a lot of work off your app for verifying/authorizing users.</p>
 
@@ -613,6 +615,8 @@ shinyApp(ui, server)
 <p><img src="/images/non-subscriber-content.png" alt="" /></p>
 
 <p><img src="/images/subscriber-content.png" alt="" /></p>
+
+<p>Its not pretty yet but thats for you to do :)</p>
 
 <h2 id="summary">Summary</h2>
 
