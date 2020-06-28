@@ -6,10 +6,20 @@
     <description>Recent content on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
-    <lastBuildDate>Sat, 18 Jan 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 28 Jun 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions</title>
+      <link>/datascience-aas/</link>
+      <pubDate>Sun, 28 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/datascience-aas/</guid>
+      <description>This post has been delayed due to the events of 2020 including a global pandemic and social justice demonstrations, if you are touched by those I wish you all the best. For my family and I we have been very lucky and spent most of the last months tending our garden in the Copenhagen suburbs, but others have been a lot more directly affected.
+One consequence of the pandemic may be that from now on more interaction will be online, which presents both opportunities and challenges.</description>
+    </item>
     
     <item>
       <title>Introducing googleCloudRunner - serverless R on Google Cloud Platform</title>

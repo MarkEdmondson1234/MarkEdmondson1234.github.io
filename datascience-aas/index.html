@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <title>Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions &middot; Mark Edmondson</title>
+    <meta name="generator" content="Hugo 0.55.5" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Mark Edmondson">
+    
+      <meta name="description" content="A bootstrap example on how to create a paid data science app (DSaaS)">
+    
+    
+    <link rel="canonical" href="/datascience-aas/"/>
+    <link rel="icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/github.css" rel="stylesheet" id="theme-stylesheet">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+    
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+    <meta property="og:title" content="Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions" />
+<meta property="og:description" content="A bootstrap example on how to create a paid data science app (DSaaS)" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/datascience-aas/" />
+<meta property="article:published_time" content="2020-06-28T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-06-28T00:00:00&#43;00:00"/>
+
+    
+    
+<meta itemprop="name" content="Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions">
+<meta itemprop="description" content="A bootstrap example on how to create a paid data science app (DSaaS)">
+
+
+<meta itemprop="datePublished" content="2020-06-28T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2020-06-28T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="2213">
+
+
+
+<meta itemprop="keywords" content="R,firebase,google-auth,cloud-functions,python," />
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions"/>
+<meta name="twitter:description" content="A bootstrap example on how to create a paid data science app (DSaaS)"/>
+<meta name="twitter:site" content="@HoloMarkeD"/>
+
+    
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WFFMBH');</script>
+
+
+    <script src="/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+
+
+<div id="container">
+	<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="/" id="logo">
+          
+          <i class="logo" style="background-image: url('/images/greenhand.png')"></i>
+          
+          <span class="site-title">Mark Edmondson</span>
+      </a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="/">Home</a>
+          
+          
+          
+          
+          
+          
+
+          
+          <a class="main-nav-link" href="/r-packages/">My R Packages</a>
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.markedmondson.me/posts/">Non-code blog</a>
+          
+          
+          
+          <a class="main-nav-link" href="https://www.markedmondson.me/static/presentations/">Past Presentations</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="/images/gde_avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+              <input type="hidden" name="sitesearch" value="/" />
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="/">Home</a></td>
+          
+          
+          
+          
+          
+          
+
+          
+          <td><a class="main-nav-link" href="/r-packages/">My R Packages</a></td>
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.markedmondson.me/posts/">Non-code blog</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="https://www.markedmondson.me/static/presentations/">Past Presentations</a></td>
+          
+          
+          <td>
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" class="search-form-input" placeholder="Search">
+          <input type="hidden" name="sitesearch" value="/" />
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+   	
+   	<div class="outer">
+   	
+    	<aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      
+      <img id="avatar" src="/images/gde_avatar.jpg">
+      
+      <h2 id="name">Mark Edmondson</h2>
+      <h3 id="title">Coding in digital analytics</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Copenhagen, Denmark</span>
+      
+          <a id="follow" href="https://github.com/MarkEdmondson1234">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+      <div class="article-info-block">
+        24
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          16
+        
+        <span>
+            Tags
+        </span>
+      </div>
+    </div>
+    <div class="profile-block social-links">
+      <table>
+        <tr>
+          
+<td><a href="//github.com/MarkEdmondson1234" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/MarkEdmondsonAtHome" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//linkedin.com/in/markpeteredmondson" target="_blank" title="LinkedIn"><i class="fa fa-linkedin"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/HoloMarkeD" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="/index.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</aside>
+
+    
+
+    <section id="main">
+    
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+            <img src="/banners/piketty-capital.png" class="article-banner">
+        
+
+        <header class="article-header">
+    <a href="/datascience-aas/">
+    <h1 class="article-title" itemprop="name">
+        Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions
+    </h1>
+    </a>
+    <div class="article-meta">
+
+        
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2020-06-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-06-28</time>
+            &middot;
+            2213
+            words
+            &middot;
+            11
+            minute read
+        </div>
+        
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                
+                <a class="article-category-link" href="/tags/r">R</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="/tags/firebase">firebase</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="/tags/google-auth">google-auth</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="/tags/cloud-functions">cloud-functions</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="/tags/python">python</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+        <div class="article-entry" itemprop="articleBody">
+            
+
+<p>This post has been delayed due to the events of 2020 including a global pandemic and social justice demonstrations, if you are touched by those I wish you all the best.  For my family and I we have been very lucky and spent most of the last months tending our garden in the Copenhagen suburbs, but others have been a lot more directly affected.</p>
+
+<p>One consequence of the pandemic may be that from now on more interaction will be online, which presents both opportunities and challenges.  I think it&rsquo;s important that any opportunities are democratised as much as possible, so I hope this post will help those with data science skills have an easier route to generate an income from those skills if they choose to.</p>
+
+<p>The demo tech stack chosen is one to keep online payments as simple yet as secure as possible, with low running costs taken care of via serverless infrastructure.</p>
+
+<p>The <a href="https://github.com/MarkEdmondson1234/Shiny-R-SaaS">demo app code is on GitHub available here</a> and a working demo with that code is running on <a href="https://mark.shinyapps.io/r-saas/">shinyapps.io here.</a></p>
+
+<h2 id="money-and-open-source-software">Money and open source software</h2>
+
+<p>The interaction between open-source and how it&rsquo;s paid for is interesting economics.  There are several open-source projects that are highly valuable and essential for modern living, yet created by people in their free time with no expectation of payment.  Indeed, from my own experience, the motivations to create these open source projects are more about craftsmanship, education and pride than any promise of monetary reward.</p>
+
+<p>Yet if those projects are to go beyond hobby projects, at some point the open source contributor needs to be paid, and this seems to happen in a few ways:</p>
+
+<ol>
+<li>The employer of the contributor pays enough that they can work in their free time
+
+<ul>
+<li>This risks burnout of the contributor</li>
+</ul></li>
+<li>The employer agrees to subsidise the open source project directly
+
+<ul>
+<li>The employer may then want rights over the open source project, potentially compromising it</li>
+</ul></li>
+<li>The open source project serves as a CV for demonstrating the contributors skill
+
+<ul>
+<li>The project may then be abandoned once the contributer is busy with paid projects</li>
+</ul></li>
+<li>The open source project generates income from direct sponsorship of its users
+
+<ul>
+<li>With <a href="https://github.com/sponsors">GitHub Sponsors</a> this is now easier than ever, and may be the future of open source, although favours public facing projects over critical infrastructure</li>
+</ul></li>
+<li>The open source project offers paid options on top of the free to use version, which supports the open-source work
+
+<ul>
+<li>This is the RStudio (PBC) model, with paid enterprise options supporting huge open source efforts</li>
+</ul></li>
+</ol>
+
+<p>If we&rsquo;re lucky the contributor finds how to make one of the above work.  For example Hadley Wickham and Wes McKinney were employed by firms who wanted to support the open source work they were doing directly.  But what about those projects that rely on free time or user contributions?  Unfortunately, the most likely possibility is that they have to stop supporting the project - we can at best hope the person got a good job via the CV recognition route.</p>
+
+<p>My ambition is that the demo payment template described in this post will help people into easier direct sponsorship or dedicated apps before they are abandoned.</p>
+
+<h2 id="github-sponsors">GitHub Sponsors</h2>
+
+<p>GitHub Sponsors has also been a huge step in this area and there was <a href="https://calebporzio.com/i-just-hit-dollar-100000yr-on-github-sponsors-heres-how-i-did-it">a recent report of a contributor with a $100k salary</a> which is fantastic.</p>
+
+<p>I am humbled by the people who have also <a href="https://github.com/sponsors/MarkEdmondson1234">sponsored my efforts</a>.</p>
+
+<p><img src="/images/github-sponsors.png" alt="" /></p>
+
+<p>Thank you!</p>
+
+<p>Any feedback is always a great motivation for me to carry on with my work (I used to fret I got no-one creating GitHub issues) and it never is taken for granted.  To have some who will actually take the time to send some money with that feedback is amazing and was another motivation to give back with this project.  It greatly reduces burnout to know that the work has some value to others.</p>
+
+<h2 id="r-as-a-production-language">R as a production language</h2>
+
+<p>Another motivation for this template is to help sustain R programmers in particular.  Although the demo payment flow will work with any service (the Paddle javascript embeds in any HTML) I focused on making a front end for R using Shiny as there is a thirving ecosystem of <a href="https://shiny.rstudio.com/gallery/">fantastic Shiny apps</a> that are currently offered for free, and I think it&rsquo;ll be cool if there are more that also generate income for their creators.</p>
+
+<p><img src="/images/shiny-showcase.png" alt="" /></p>
+
+<p>A myth that R can&rsquo;t be used in production is possibly perpetrated as it has arisen via academia and so commercial applications haven&rsquo;t been a priority.  Nothing cements R as a production language more than if people are making a living from it. I certainly do in my day-to-day work at <a href="https://iihnordic.com/">IIH Nordic</a>, but anything to help others have the same is probably worth while.</p>
+
+<h2 id="the-demo-dsaas-data-science-as-a-service">The demo DSaaS (Data Science as a Service)</h2>
+
+<p>The <a href="https://github.com/MarkEdmondson1234/Shiny-R-SaaS">demo app code is on GitHub available here</a> and a working demo with that code is running on <a href="https://mark.shinyapps.io/r-saas/">shinyapps.io here.</a></p>
+
+<p><img src="/images/subscriber-content.png" alt="" /></p>
+
+<p>It features:</p>
+
+<ul>
+<li>Firebase to handle authentication and store subscription user data</li>
+<li>Paddle to handle payments, taxes and fulfillment</li>
+<li>Cloud Functions to sync changes between Paddle and Firebase</li>
+<li>Shiny frontend with demo content for &lsquo;free&rsquo;, &lsquo;logged in but not subscribed&rsquo; and &lsquo;subscriber&rsquo; content</li>
+</ul>
+
+<p>The detailed setup steps needed are in the <a href="https://github.com/MarkEdmondson1234/Shiny-R-SaaS">GitHub readme</a>, for this blogpost I&rsquo;ll take about what choices were made and why.</p>
+
+<h2 id="overall-flow">Overall flow</h2>
+
+<p>I used <a href="https://rich-iannone.github.io/DiagrammeR/"><code>library(DiagrammeR)</code></a> to plan out what flows were needed (click image to make bigger):</p>
+
+<p><img src="/images/paddle_flow.png" alt="" /></p>
+
+<p>It does take some planning!</p>
+
+<p>The key areas are how a user logs on and the app knows they are a paid subscriber, and what happens offline if say the credit card is declined - the app needs to know this state has been updated the next time a user logs on.</p>
+
+<h3 id="firebase">Firebase</h3>
+
+<p>Firebase is a development platform for building mobile and web apps that is a layer on top of the Google Cloud Platform.</p>
+
+<p>Firebase has many tools to help make application development easier, but only two were needed for this project: Firebase AuthUI and Firestore, a noSQL database.</p>
+
+<p><img src="/images/firebase-login.png" alt="" /></p>
+
+<p>Firebase AuthUI has been implemented for Shiny apps via JohnCoene&rsquo;s <a href="https://github.com/JohnCoene/firebase">firebase package</a>.</p>
+
+<blockquote>
+<p>This has a nice open source story of taking inspiration from each other, first started by <a href="https://github.com/shinyonfire/sof-auth-example">Andy Merlino showing a POC of Firebase</a> on Shiny, myself putting in the Firebase Auth UI module which helped simplify the code and finished and polished by John to make a simple and powerful Shiny package to implement Firebase authentication.</p>
+</blockquote>
+
+<p>Its easy and secure to setup, and since the authentication uses a centralised database running on Firebase it works across apps/website so a user who logs in with Shiny can also be recognised elsewhere, which you can use to make a suite of services, support or apps.</p>
+
+<p>In a similar manner, Firestore is a noSQL database that is used to carry the subscription data, linked to the Firebase userId.</p>
+
+<p><img src="/images/firebase-database.png" alt="" /></p>
+
+<p>Being noSQL it is quick for reads and also lets you keep historic events such as when a user subscribed, cancelled or updated. Since its on the Google Cloud Platform I could use <a href="https://code.markedmondson.me/googleAuthR/"><code>googleAuthR</code></a> to authenticate and generated the R function to read it:</p>
+
+<pre><code class="language-r">library(googleAuthR)
+
+gar_auth_service(&quot;firebase-reader-auth-key.json&quot;,
+                 scope = &quot;https://www.googleapis.com/auth/datastore&quot;)
+
+#' Gets a Firebase data entry.  Will return NULL if it can not
+fb_document_get &lt;- function(document_path,
+                            database_id = &quot;(default)&quot;,
+                            project_id = Sys.getenv(&quot;FIREBASE_PROJECT&quot;)){
+
+  the_url &lt;- sprintf(&quot;https://firestore.googleapis.com/v1/projects/%s/databases/%s/documents/%s&quot;,
+                     project_id, database_id, document_path)
+
+  f &lt;- gar_api_generator(the_url,
+                         &quot;GET&quot;,
+                         data_parse_function = function(x) x)
+
+  f()
+}
+</code></pre>
+
+<h3 id="paddle">Paddle</h3>
+
+<p>For a long time I was thinking of using Stripe for this template, but whilst Stripe has a great API and I&rsquo;d <a href="https://github.com/MarkEdmondson1234/stripeR">worked with it before</a>, there was still some work to do to make reliable payment apps such as handling when a user&rsquo;s card gets declined (how would your app know to deny paid content?) and international taxes etc.</p>
+
+<p>The pitch of <a href="https://paddle.com/">paddle.com</a> was that it took care of all that for you, so you are closer to a working app.  They do charge more per transaction than Stripe, so if you are looking for the cheapest then you may want to stick with Stripe and implement the &ldquo;Stripe stack&rdquo;, but I figured it was worth it for keeping the implementation simple.</p>
+
+<p>Paddle has a simple JavaScript button to implement the payment popups -</p>
+
+<pre><code class="language-js">&lt;script src=&quot;https://cdn.paddle.com/paddle/paddle.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+	Paddle.Setup({ vendor: 1234567 });
+&lt;/script&gt;
+
+...
+// a buy button
+&lt;a href=&quot;#!&quot; class=&quot;paddle_button&quot; data-product=&quot;12345&quot;&gt;Buy Now!&lt;/a&gt;
+</code></pre>
+
+<p><img src="/images/paddle-paymentstep-2.png" alt="" /></p>
+
+<p>Paddle then uses webhooks to communicate with your server (in this case, Firestore) - so the next ingredient was how to create a webhook for communication between Paddle and Firestore.  You can then test this from the Paddle UI:</p>
+
+<p><img src="/images/paddle-webhook-test.png" alt="" /></p>
+
+<h3 id="google-cloud-functions">Google Cloud Functions</h3>
+
+<p>For simple &ldquo;glue&rdquo; data flows my go-to is Google Cloud Functions, as you only need write the code and deploy without needing to worry about servers or scale.  Firebase has its own Cloud Function UI as well but that only supports node.js, so I opted to use the GCP console Cloud Fucntions in Python3.7. (Its the same service and infrastructure as Firebase.)</p>
+
+<p>Paddle had lots of Python examples already on the website on how to verify and deal with the data in their webhook payload so a lot of it was just copy-paste from there into the Cloud Function UI.  There is some more setup info in the <a href="https://github.com/MarkEdmondson1234/Shiny-R-SaaS/tree/master/payment_app">Cloud Function readme</a> - the only extra bit I needed to add was how to take the webhook payload and write it to Firestore - this was all handled by this snippet of code:</p>
+
+<pre><code class="language-python">import logging
+from google.cloud import firestore
+
+def update_firebase(data, collection, doc_id):
+    logging.info('fb update - collection {} doc_id {}'.format(collection, doc_id))
+
+    db = firestore.Client()
+    doc_ref = db.collection(collection).document(doc_id)
+    doc_ref.set(data)
+
+    # add the event
+    event_ref = db.collection(collection).document(doc_id).collection('event').document(data['alert_id'])
+    event_ref.set(data)   
+</code></pre>
+
+<p>Before writing to Firebase though Paddle gives you code to verify that the data is from a trusted source which it achieves via public/private keys which is important for payment applications - you can see the <a href="https://github.com/MarkEdmondson1234/Shiny-R-SaaS/blob/master/payment_app/fb_functions/main.py">full function here</a>.</p>
+
+<p>As it works off webhooks this means that even when a user is not on the app important updates will still be enacted (such as monthly credit card payments or declines) and it moves a lot of work off your app for verifying/authorizing users.</p>
+
+<p>Once the cloud function is deployed then your app needs to only query if a subscription exists for the FirebaseId a user has just logged in with, and check that that subscription is still live.</p>
+
+<h3 id="shiny-app">Shiny app</h3>
+
+<p>Finally the actual demo app is via Shiny, which is much like any other Shiny app but with three additions:</p>
+
+<ul>
+<li>A login screen presenting Firebase Auth</li>
+<li>A check that a user is logged in before showing free content</li>
+<li>A check that a user is a subscriber before showing paid content</li>
+</ul>
+
+<p>The first two are provided by John&rsquo;s firebase library - see <a href="https://firebase.john-coene.com/articles/ui.html">the website on setting it up</a> :</p>
+
+<pre><code class="language-r">library(shiny)
+library(firebase)
+
+ui &lt;- fluidPage(
+  useFirebase(), # import dependencies
+  useFirebaseUI(),
+  reqSignin(h4(&quot;VIP plot below&quot;)), # hide from UI
+  plotOutput(&quot;plot&quot;)
+)
+
+server &lt;- function(input, output){
+  f &lt;- FirebaseUI$
+    new()$ # instantiate
+    set_providers( # define providers
+      email = TRUE, 
+      google = TRUE
+    )$
+    launch() # launch
+
+  output$plot &lt;- renderPlot({
+    f$req_sign_in() # require sign in
+    plot(cars)
+  })
+}
+
+shinyApp(ui, server)
+</code></pre>
+
+<p>The check that a user is a subscriber involves taking the FirebaseId and seeing if it has a live entry in the subscriptions Firestore.</p>
+
+<p>Another useful feature of Paddle is in its response it gives you cancel and update links unique to that user, so you can use those entries to create a UI for a subscriber that permits them to control their subscription:</p>
+
+<pre><code class="language-r">  # NULL if no subscription
+  subscriber &lt;- reactive({
+    req(firebase_user())
+
+    # fb_document_get() is defined in global.R 
+    o &lt;- fb_document_get(paste0(&quot;subscriptions/&quot;, firebase_user()$uid))
+
+    if(!is.null(o) &amp;&amp; o$fields$status$stringValue == &quot;deleted&quot;){
+      # has subscription entry but it is cancelled
+      return(NULL)
+    }
+
+    o
+
+  })
+
+  subscriber_details &lt;- reactive({
+    req(subscriber())
+    ss &lt;- subscriber()
+
+    tagList(
+      div(class=&quot;card&quot;,
+        h3(&quot;Subscription details&quot;),
+        p(&quot;Status:&quot;, ss$fields$status$stringValue),
+        p(class=&quot;email&quot;, ss$fields$email$stringValue),
+        p(&quot;Last update: &quot;, ss$fields$event_time$stringValue),
+        p(&quot;Next bill date:&quot;, ss$fields$next_bill_date$stringValue),
+        p(a(href=ss$fields$update_url$stringValue,
+          &quot;Update your subscription&quot;,
+                             icon = icon(&quot;credit-card&quot;),
+                             class = &quot;btn-info&quot;)),
+        &quot; &quot;,
+        p(a(href=ss$fields$cancel_url$stringValue,
+          &quot;Cancel your subscription&quot;,
+                      icon = icon(&quot;window-close&quot;),
+                      class = &quot;btn-danger&quot;))
+        )
+      )
+
+  })
+  
+  # only displays for subscribers
+  output$paid_content &lt;- renderPlot({
+    req(subscriber())
+
+    plot(iris)
+
+  })
+</code></pre>
+
+<p>Put together this is a view for a non-subscriber vs a subscriber:</p>
+
+<p><img src="/images/non-subscriber-content.png" alt="" /></p>
+
+<p><img src="/images/subscriber-content.png" alt="" /></p>
+
+<h2 id="summary">Summary</h2>
+
+<p>I hope the above enables wonderful in-depth DSaaS that sustain both the contributors and the data science ecosystem in general.  Getting past all the boilerplate has certainly stopped me from creating apps in the past (I have a few failed projects in the closet), so I hope now this template exists it will be easier to launch.</p>
+
+<p>All we need are some good ideas on what people would be happy to pay for, and that is a whole other blog post I guess of which I have not yet much experience.</p>
+
+<p>You can substitute Shiny for a Python Flask app, HTML page or even an Excel sheet you send people.  Its really just a matter of what you think would be suitable.  There is also the matter of marketing, adding value with your app, customer service etc. that are all still to be tackled, but at least you can start moving down that track rather than the boring finacial bits ;)</p>
+
+<p>If you do make anything derived from it, please do let me know as I&rsquo;d love to hear what you are doing, and if you can see ways to improve the template feel free to raise an issue on the <a href="https://github.com/MarkEdmondson1234/Shiny-R-SaaS/issues">project&rsquo;s GitHub issues</a>.</p>
+
+        </div>
+        <footer class="article-footer">
+    <a data-url="/datascience-aas/" data-id="890680f11932cab34db4956a2a2d88ab" class="article-share-link">
+        <i class="fa fa-share"></i>
+        Share
+    </a>
+    
+    <a href="/datascience-aas/#disqus_thread" class="article-comment-link">
+        Comments
+    </a>
+    
+
+    <script>
+    (function ($) {
+        
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+    </script>
+</footer>
+
+    </div>
+
+    
+<nav id="article-nav">
+    
+    <a href="/googleCloudRunner-intro/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">
+          Older
+      </strong>
+      <div class="article-nav-title">Introducing googleCloudRunner - serverless R on Google Cloud Platform</div>
+    </a>
+    
+
+    
+</nav>
+
+
+</article>
+
+
+<section id="comments">
+    <div id="disqus_thread">
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "markedmondson" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+</section>
+
+
+    </section>
+
+   	
+    	<aside id="sidebar">
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="/datascience-aas/" class="thumbnail">
+                    
+                        <span style="background-image:url(/banners/piketty-capital.png)" alt="Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="/datascience-aas/" class="title">Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions</a></p>
+                    <p class="item-date">
+                        <time datetime="2020-06-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-06-28</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="/googleCloudRunner-intro/" class="thumbnail">
+                    
+                        <span style="background-image:url(/banners/gcp-pyramid.png)" alt="Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="/googleCloudRunner-intro/" class="title">Introducing googleCloudRunner - serverless R on Google Cloud Platform</a></p>
+                    <p class="item-date">
+                        <time datetime="2020-01-18 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-01-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="/gago/" class="thumbnail">
+                    
+                        <span style="background-image:url(/banners/gago.png)" alt="Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="/gago/" class="title">gago: Blazingly fast Google Analytics API downloads with Go</a></p>
+                    <p class="item-date">
+                        <time datetime="2019-10-09 00:00:00 &#43;0000 UTC" itemprop="datePublished">2019-10-09</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="/r-at-scale-on-google-cloud-platform/" class="thumbnail">
+                    
+                        <span style="background-image:url(/banners/r-at-scale.png)" alt="Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="/r-at-scale-on-google-cloud-platform/" class="title">R at scale on the Google Cloud Platform</a></p>
+                    <p class="item-date">
+                        <time datetime="2019-02-23 00:00:00 &#43;0000 UTC" itemprop="datePublished">2019-02-23</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="/automatic-google-analytics-data-imports-cloud-storage/" class="thumbnail">
+                    
+                        <span style="background-image:url(/banners/data-imports.jpg)" alt="Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="/automatic-google-analytics-data-imports-cloud-storage/" class="title">Auto Google Analytics Data Imports from Cloud Storage</a></p>
+                    <p class="item-date">
+                        <time datetime="2018-11-29 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-11-29</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="/tags/r">
+                    R
+                </a>
+                <span class="category-list-count">19</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="/tags/big-query">
+                    big-query
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="/tags/blogging">
+                    blogging
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="/tags/cloud-functions">
+                    cloud-functions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="/tags/docker">
+                    docker
+                </a>
+                <span class="category-list-count">7</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="/tags/firebase">
+                    firebase
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="/tags/google-analytics">
+                    google-analytics
+                </a>
+                <span class="category-list-count">9</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="/tags/google-app-engine">
+                    google-app-engine
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="/tags/google-auth">
+                    google-auth
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="/tags/google-cloud-storage">
+                    google-cloud-storage
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="/tags/google-compute-engine">
+                    google-compute-engine
+                </a>
+                <span class="category-list-count">7</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="/tags/google-language">
+                    google-language
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="/tags/google-tag-manager">
+                    google-tag-manager
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="/tags/python">
+                    python
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="/tags/rstudio-server">
+                    rstudio-server
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="/tags/search-console">
+                    search-console
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+
+    
+
+
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+    
+	</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script src="/js/script.js"></script>
+<script src="/js/highlight.pack.js"></script>
+
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+</body>
+</html>

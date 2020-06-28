@@ -28,7 +28,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="/" />
 
-<meta property="og:updated_time" content="2020-01-18T00:00:00&#43;00:00"/>
+<meta property="og:updated_time" content="2020-06-28T00:00:00&#43;00:00"/>
 
     
     
@@ -173,12 +173,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        23
+        24
         <span>Posts</span>
       </div>
       <div class="article-info-block">
         
-          15
+          16
         
         <span>
             Tags
@@ -260,6 +260,153 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <section id="main">
     
     
+
+<article class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        <a href="/search-console-google-analytics-r-keyword-research/" itemprop="url">
+            <img src="/banners/searchConsole.png" class="article-banner">
+        
+        </a>
+
+        <header class="article-header">
+    <a href="/search-console-google-analytics-r-keyword-research/">
+    <h1 class="article-title" itemprop="name">
+        SEO keyword research using searchConsoleR and googleAnalyticsR
+    </h1>
+    </a>
+    <div class="article-meta">
+
+        
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2016-06-21 23:03:57 &#43;0100 &#43;0100" itemprop="datePublished">2016-06-21</time>
+            &middot;
+            1657
+            words
+            &middot;
+            8
+            minute read
+        </div>
+        
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                
+                <a class="article-category-link" href="/tags/r">R</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="/tags/google-analytics">google-analytics</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="/tags/search-console">search-console</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+        <div class="article-entry" itemprop="articleBody">
+            <p>
+                In this blog we look at a method to estimate where to prioritise your SEO resources, estimating which keywords will give the greatest increase in revenue if you could improve their Google rank.
+Overview Thanks to Vincent at data-seo.com who proof read and corrected some errors in the first draft
+Data comes from Google Search Console and Google Analytics.
+Search Console is used to provide the keywords in these days post (not provided).
+            </p>
+            <p class="article-more-link">
+                <a href="/search-console-google-analytics-r-keyword-research/">
+                    Read more
+                </a>
+            </p>
+        </div>
+        <footer class="article-footer">
+    <a data-url="/search-console-google-analytics-r-keyword-research/" data-id="93f9d7348db275c87b006e1e24780658" class="article-share-link">
+        <i class="fa fa-share"></i>
+        Share
+    </a>
+    
+    <a href="/search-console-google-analytics-r-keyword-research/#disqus_thread" class="article-comment-link">
+        Comments
+    </a>
+    
+
+    <script>
+    (function ($) {
+        
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+    </script>
+</footer>
+
+    </div>
+</article>
 
 <article class="article article-type-post" itemscope="" itemprop="blogPost">
     <div class="article-inner">
@@ -712,6 +859,23 @@ Using this setup means its all written in Markdown so I get control over everyth
             
             <li>
                 <div class="item-thumbnail">
+                    <a href="/datascience-aas/" class="thumbnail">
+                    
+                        <span style="background-image:url(/banners/piketty-capital.png)" alt="Mark Edmondson" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="/datascience-aas/" class="title">Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions</a></p>
+                    <p class="item-date">
+                        <time datetime="2020-06-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-06-28</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
                     <a href="/googleCloudRunner-intro/" class="thumbnail">
                     
                         <span style="background-image:url(/banners/gcp-pyramid.png)" alt="Mark Edmondson" class="thumbnail-image"></span>
@@ -778,23 +942,6 @@ Using this setup means its all written in Markdown so I get control over everyth
                 </div>
             </li>
             
-            <li>
-                <div class="item-thumbnail">
-                    <a href="/bigquery-ga360-exports-cloud-functions/" class="thumbnail">
-                    
-                        <span style="background-image:url(/banners/cloud-functions.png)" alt="Mark Edmondson" class="thumbnail-image"></span>
-                    
-                    </a>
-                </div>
-                <div class="item-inner">
-                    
-                    <p class="item-title"><a href="/bigquery-ga360-exports-cloud-functions/" class="title">Turning GA360 BigQuery exports into partitioned tables using Cloud Functions</a></p>
-                    <p class="item-date">
-                        <time datetime="2018-10-09 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-10-09</time>
-                    </p>
-                </div>
-            </li>
-            
         </ul>
     </div>
 </div>
@@ -821,7 +968,7 @@ Using this setup means its all written in Markdown so I get control over everyth
                 <a class="category-list-link" href="/tags/r">
                     R
                 </a>
-                <span class="category-list-count">18</span>
+                <span class="category-list-count">19</span>
             </li>
             
             <li class="category-list-item">
@@ -845,7 +992,7 @@ Using this setup means its all written in Markdown so I get control over everyth
                 <a class="category-list-link" href="/tags/cloud-functions">
                     cloud-functions
                 </a>
-                <span class="category-list-count">2</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -854,6 +1001,14 @@ Using this setup means its all written in Markdown so I get control over everyth
                     docker
                 </a>
                 <span class="category-list-count">7</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="/tags/firebase">
+                    firebase
+                </a>
+                <span class="category-list-count">1</span>
             </li>
             
             <li class="category-list-item">
@@ -877,7 +1032,7 @@ Using this setup means its all written in Markdown so I get control over everyth
                 <a class="category-list-link" href="/tags/google-auth">
                     google-auth
                 </a>
-                <span class="category-list-count">3</span>
+                <span class="category-list-count">4</span>
             </li>
             
             <li class="category-list-item">
@@ -917,7 +1072,7 @@ Using this setup means its all written in Markdown so I get control over everyth
                 <a class="category-list-link" href="/tags/python">
                     python
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">5</span>
             </li>
             
             <li class="category-list-item">
