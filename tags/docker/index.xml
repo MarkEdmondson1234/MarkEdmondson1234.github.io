@@ -6,10 +6,20 @@
     <description>Recent content in docker on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
-    <lastBuildDate>Sat, 18 Jan 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 01 Aug 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/docker/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Shiny on Google Cloud Run - Scale-to-Zero R Web Apps</title>
+      <link>/shiny-cloudrun/</link>
+      <pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/shiny-cloudrun/</guid>
+      <description>There are some references on how to deploy Shiny apps to Cloud Run around the web and in various bits of my package documentation, but its a cool service so I thought it worth pulling out and having a blog post to refer to.
+Why Shiny on Cloud Run? As mentioned in my R at scale on Google Cloud Platform post, Cloud Run is a container-as-a-service which lets you deploy Docker containers to the web without needing to worry about the infrastructure.</description>
+    </item>
     
     <item>
       <title>Introducing googleCloudRunner - serverless R on Google Cloud Platform</title>

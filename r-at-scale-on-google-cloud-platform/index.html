@@ -35,11 +35,11 @@
 
 <meta itemprop="datePublished" content="2019-02-23T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2019-02-23T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="2603">
+<meta itemprop="wordCount" content="2607">
 
 
 
-<meta itemprop="keywords" content="docker,R,google-compute-engine," />
+<meta itemprop="keywords" content="docker,R,google-compute-engine,cloud-run," />
 
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="R at scale on the Google Cloud Platform"/>
@@ -178,12 +178,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        24
+        25
         <span>Posts</span>
       </div>
       <div class="article-info-block">
         
-          16
+          17
         
         <span>
             Tags
@@ -283,7 +283,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2019-02-23 00:00:00 &#43;0000 UTC" itemprop="datePublished">2019-02-23</time>
             &middot;
-            2603
+            2607
             words
             &middot;
             13
@@ -308,6 +308,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 
                 
                 <a class="article-category-link" href="/tags/google-compute-engine">google-compute-engine</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="/tags/cloud-run">cloud-run</a>
                 
                 
             </div>
@@ -608,7 +612,7 @@ vm &lt;- gce_vm(&quot;myapp&quot;,
 <p><em>Cons</em></p>
 
 <ul>
-<li>Only works with R APIs, not Shiny</li>
+<li>Works with stateless apps only, so R APIs, and limited Shiny - see <a href="https://code.markedmondson.me/shiny-cloudrun">https://code.markedmondson.me/shiny-cloudrun</a></li>
 </ul>
 
 <p>Now Google has released <a href="https://cloud.run">Cloud Run!</a>  And with that release, I modify my original recommendation for R APIs to be deployed on Kubernetes, to instead use Cloud Run.</p>
@@ -651,7 +655,7 @@ CMD [&quot;api.R&quot;]
 </ul>
 
 <blockquote>
-<p>But what about Shiny apps?  Well those need web sockets, and they are (AFAIK at time of writing) not supported by Cloud Run.  So the original suggestion on using Kubernetes still stands for Shiny apps, below.</p>
+<p>But what about Shiny apps?  Well this is a work in progress and some limited Shiny apps do also work on Cloud Run.  See the <a href="https://code.markedmondson.me/shiny-cloudrun">blog post about running Shiny on Cloud Run</a></p>
 </blockquote>
 
 <h3 id="2b-r-apps-on-kubernetes">2B - R apps on Kubernetes</h3>
@@ -855,6 +859,23 @@ spec:
             
             <li>
                 <div class="item-thumbnail">
+                    <a href="/shiny-cloudrun/" class="thumbnail">
+                    
+                        <span style="background-image:url(/banners/shiny-clouds.jpg)" alt="R at scale on the Google Cloud Platform" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="/shiny-cloudrun/" class="title">Shiny on Google Cloud Run - Scale-to-Zero R Web Apps</a></p>
+                    <p class="item-date">
+                        <time datetime="2020-08-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-01</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
                     <a href="/datascience-aas/" class="thumbnail">
                     
                         <span style="background-image:url(/banners/piketty-capital.png)" alt="R at scale on the Google Cloud Platform" class="thumbnail-image"></span>
@@ -921,23 +942,6 @@ spec:
                 </div>
             </li>
             
-            <li>
-                <div class="item-thumbnail">
-                    <a href="/automatic-google-analytics-data-imports-cloud-storage/" class="thumbnail">
-                    
-                        <span style="background-image:url(/banners/data-imports.jpg)" alt="R at scale on the Google Cloud Platform" class="thumbnail-image"></span>
-                    
-                    </a>
-                </div>
-                <div class="item-inner">
-                    
-                    <p class="item-title"><a href="/automatic-google-analytics-data-imports-cloud-storage/" class="title">Auto Google Analytics Data Imports from Cloud Storage</a></p>
-                    <p class="item-date">
-                        <time datetime="2018-11-29 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-11-29</time>
-                    </p>
-                </div>
-            </li>
-            
         </ul>
     </div>
 </div>
@@ -964,7 +968,7 @@ spec:
                 <a class="category-list-link" href="/tags/r">
                     R
                 </a>
-                <span class="category-list-count">19</span>
+                <span class="category-list-count">20</span>
             </li>
             
             <li class="category-list-item">
@@ -993,10 +997,18 @@ spec:
             
             <li class="category-list-item">
                 
+                <a class="category-list-link" href="/tags/cloud-run">
+                    cloud-run
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
                 <a class="category-list-link" href="/tags/docker">
                     docker
                 </a>
-                <span class="category-list-count">7</span>
+                <span class="category-list-count">8</span>
             </li>
             
             <li class="category-list-item">

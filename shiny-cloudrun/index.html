@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
-    <title>New Blog Down &middot; Mark Edmondson</title>
+    <title>Shiny on Google Cloud Run - Scale-to-Zero R Web Apps &middot; Mark Edmondson</title>
     <meta name="generator" content="Hugo 0.55.5" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
     
-      <meta name="description" content="The code bit of the blog">
+      <meta name="description" content="How to create scale-to-zero Shiny apps on Google Cloud Run: pitfalls, how and why">
     
     
-    <link rel="canonical" href="/new-blog-down/"/>
+    <link rel="canonical" href="/shiny-cloudrun/"/>
     <link rel="icon" href="/favicon.ico">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
     <link rel="stylesheet" href="/css/style.css">
@@ -20,36 +20,30 @@
     
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
-    <meta property="og:title" content="New Blog Down" />
-<meta property="og:description" content="A new year, a new blogging platform!
-This time I’m moving from Jekyll to RStudio’s new blogdown format.
-This keeps the advantages of Jekyll (a static, high performance website; markdown for editing; free hosting on Github) but with the extra bonus of being able to render in RMarkdown plus adding some nice looking capabilities from the Hugo project." />
+    <meta property="og:title" content="Shiny on Google Cloud Run - Scale-to-Zero R Web Apps" />
+<meta property="og:description" content="How to create scale-to-zero Shiny apps on Google Cloud Run: pitfalls, how and why" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/new-blog-down/" />
-<meta property="article:published_time" content="2017-01-23T22:45:03&#43;01:00"/>
-<meta property="article:modified_time" content="2017-01-23T22:45:03&#43;01:00"/>
+<meta property="og:url" content="/shiny-cloudrun/" />
+<meta property="article:published_time" content="2020-08-01T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-08-01T00:00:00&#43;00:00"/>
 
     
     
-<meta itemprop="name" content="New Blog Down">
-<meta itemprop="description" content="A new year, a new blogging platform!
-This time I’m moving from Jekyll to RStudio’s new blogdown format.
-This keeps the advantages of Jekyll (a static, high performance website; markdown for editing; free hosting on Github) but with the extra bonus of being able to render in RMarkdown plus adding some nice looking capabilities from the Hugo project.">
+<meta itemprop="name" content="Shiny on Google Cloud Run - Scale-to-Zero R Web Apps">
+<meta itemprop="description" content="How to create scale-to-zero Shiny apps on Google Cloud Run: pitfalls, how and why">
 
 
-<meta itemprop="datePublished" content="2017-01-23T22:45:03&#43;01:00" />
-<meta itemprop="dateModified" content="2017-01-23T22:45:03&#43;01:00" />
-<meta itemprop="wordCount" content="467">
+<meta itemprop="datePublished" content="2020-08-01T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2020-08-01T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1639">
 
 
 
-<meta itemprop="keywords" content="blogging,R," />
+<meta itemprop="keywords" content="R,docker,cloud-run," />
 
     <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="New Blog Down"/>
-<meta name="twitter:description" content="A new year, a new blogging platform!
-This time I’m moving from Jekyll to RStudio’s new blogdown format.
-This keeps the advantages of Jekyll (a static, high performance website; markdown for editing; free hosting on Github) but with the extra bonus of being able to render in RMarkdown plus adding some nice looking capabilities from the Hugo project."/>
+<meta name="twitter:title" content="Shiny on Google Cloud Run - Scale-to-Zero R Web Apps"/>
+<meta name="twitter:description" content="How to create scale-to-zero Shiny apps on Google Cloud Run: pitfalls, how and why"/>
 <meta name="twitter:site" content="@HoloMarkeD"/>
 
     
@@ -273,13 +267,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
     <div class="article-inner">
         
-            <img src="/banners/hugo.png" class="article-banner">
+            <img src="/banners/shiny-clouds.jpg" class="article-banner">
         
 
         <header class="article-header">
-    <a href="/new-blog-down/">
+    <a href="/shiny-cloudrun/">
     <h1 class="article-title" itemprop="name">
-        New Blog Down
+        Shiny on Google Cloud Run - Scale-to-Zero R Web Apps
     </h1>
     </a>
     <div class="article-meta">
@@ -287,12 +281,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         
         <div class="article-date">
             <i class="fa fa-calendar"></i>
-            <time datetime="2017-01-23 22:45:03 &#43;0100 CET" itemprop="datePublished">2017-01-23</time>
+            <time datetime="2020-08-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-01</time>
             &middot;
-            467
+            1639
             words
             &middot;
-            3
+            8
             minute read
         </div>
         
@@ -305,11 +299,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <i class="fa fa-tags"></i>
                 
                 
-                <a class="article-category-link" href="/tags/blogging">blogging</a>
+                <a class="article-category-link" href="/tags/r">R</a>
                 &middot;
                 
                 
-                <a class="article-category-link" href="/tags/r">R</a>
+                <a class="article-category-link" href="/tags/docker">docker</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="/tags/cloud-run">cloud-run</a>
                 
                 
             </div>
@@ -320,97 +318,232 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <div class="article-entry" itemprop="articleBody">
             
-<script src="/rmarkdown-libs/htmlwidgets/htmlwidgets.js"></script>
-<script src="/rmarkdown-libs/jquery/jquery.min.js"></script>
-<script src="/rmarkdown-libs/proj4js/proj4.js"></script>
-<link href="/rmarkdown-libs/highcharts/css/motion.css" rel="stylesheet" />
-<script src="/rmarkdown-libs/highcharts/highstock.js"></script>
-<script src="/rmarkdown-libs/highcharts/highcharts-3d.js"></script>
-<script src="/rmarkdown-libs/highcharts/highcharts-more.js"></script>
-<script src="/rmarkdown-libs/highcharts/modules/annotations.js"></script>
-<script src="/rmarkdown-libs/highcharts/modules/broken-axis.js"></script>
-<script src="/rmarkdown-libs/highcharts/modules/data.js"></script>
-<script src="/rmarkdown-libs/highcharts/modules/drilldown.js"></script>
-<script src="/rmarkdown-libs/highcharts/modules/exporting.js"></script>
-<script src="/rmarkdown-libs/highcharts/modules/funnel.js"></script>
-<script src="/rmarkdown-libs/highcharts/modules/heatmap.js"></script>
-<script src="/rmarkdown-libs/highcharts/modules/map.js"></script>
-<script src="/rmarkdown-libs/highcharts/modules/no-data-to-display.js"></script>
-<script src="/rmarkdown-libs/highcharts/modules/offline-exporting.js"></script>
-<script src="/rmarkdown-libs/highcharts/modules/solid-gauge.js"></script>
-<script src="/rmarkdown-libs/highcharts/modules/treemap.js"></script>
-<script src="/rmarkdown-libs/highcharts/plugins/annotations.js"></script>
-<script src="/rmarkdown-libs/highcharts/plugins/draggable-legend.js"></script>
-<script src="/rmarkdown-libs/highcharts/plugins/draggable-points.js"></script>
-<script src="/rmarkdown-libs/highcharts/plugins/export-csv.js"></script>
-<script src="/rmarkdown-libs/highcharts/plugins/grouped-categories.js"></script>
-<script src="/rmarkdown-libs/highcharts/plugins/motion.js"></script>
-<script src="/rmarkdown-libs/highcharts/plugins/pattern-fill-v2.js"></script>
-<script src="/rmarkdown-libs/highcharts/plugins/tooltip-delay.js"></script>
-<script src="/rmarkdown-libs/highcharts/custom/reset.js"></script>
-<script src="/rmarkdown-libs/highcharts/custom/symbols-extra.js"></script>
-<script src="/rmarkdown-libs/highcharts/custom/text-symbols.js"></script>
-<link href="/rmarkdown-libs/fontawesome/font-awesome.min.css" rel="stylesheet" />
-<link href="/rmarkdown-libs/htmlwdgtgrid/htmlwdgtgrid.css" rel="stylesheet" />
-<script src="/rmarkdown-libs/highchart-binding/highchart.js"></script>
+
+<p>There are some references on how to deploy Shiny apps to Cloud Run around the web and in various bits of my package documentation, but its a cool service so I thought it worth pulling out and having a blog post to refer to.</p>
+
+<h2 id="why-shiny-on-cloud-run">Why Shiny on Cloud Run?</h2>
+
+<p>As mentioned in my <a href="https://code.markedmondson.me/r-at-scale-on-google-cloud-platform/">R at scale on Google Cloud Platform post</a>, Cloud Run is a container-as-a-service which lets you deploy Docker containers to the web without needing to worry about the infrastructure.  One of the most attractive features is the scaling, as you can pay zero when your app has no visits, but as demand increases it can flexibly serve up your app to billions of users.</p>
+
+<p>Its like Google Cloud Functions or AWS Lambda functions, but works with any language since its using a Docker container that can carry any language that support HTTP, whereas Cloud Functions only works with the supported languages.</p>
+
+<p>Its favoured for me over <a href="https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts/">Kubernetes clusters</a>, since its a lot more simple to deploy and maintain apps, and you don&rsquo;t need to pay at least $100 a month to pay for a Kubernetes cluster.</p>
+
+<p>For <a href="https://www.rplumber.io/">R APIs such as plumber</a>, Cloud Run is my recommended solution, since it can scale so well and the cost is good.  However, for Shiny I&rsquo;ve to date still used Kubernetes as Cloud Run had some limitations which in my quick experiments meant Shiny did not function.  This blog post is about how and why to work around those limitations.</p>
+
+<h2 id="why-not-shiny-on-cloud-run">Why Not Shiny on Cloud Run</h2>
+
+<p>The limitations that affect Shiny are the <a href="https://rstudio.github.io/websocket/articles/overview.html">websockets</a> and the fact that Shiny is a stateful service, whereas Cloud Run is meant for stateless services.</p>
+
+<p>What this means is that for Cloud Run each HTTP request should not depend on previous HTTP requests which is the case for say an API, but Shiny is inherently a session where users past actions affect the current Shiny state - if a subsequent request then hits a different app than the one the user is in then we have problems.</p>
+
+<p>As <a href="https://github.com/rstudio/shiny/issues/2455#issuecomment-497883381">RStudio&rsquo;s <code>jcheng5</code> put it</a>:</p>
+
+<blockquote>
+<p>Wait, is GCR akin to Amazon&rsquo;s Lambda? If so, I imagine this won&rsquo;t be a good fit for Shiny, no matter what software you put in the middle. These services are designed for stateless HTTP servers, and Shiny is inherently stateful. I bet you&rsquo;d end up with errors under load as requests that can only be served out of container A (where its session lives in memory) end up being routed to container B instead.</p>
+</blockquote>
+
+<p>As a new service, for a long while Cloud Run did not support websockets, which is a requirement for Shiny.  That support is now enabled in some limited fashion, and so with a little configuration you can have a Shiny app running.</p>
+
+<p>Thanks to <code>randy3k</code> the limitations above where navigated in the following ways:</p>
+
+<ul>
+<li>Limit the number of instances to 1 - this means there is only one instance to route requests too</li>
+<li>Disable some websocket protocols to only leave those that work with Cloud Run - namely <code>disable_protocols websocket xdr-streaming xhr-streaming iframe-eventsource iframe-htmlfile xdr-polling iframe-xhr-polling;</code></li>
+</ul>
+
+<p><a href="https://github.com/randy3k/shiny-cloudrun-demo">See <code>randy3k</code>&rsquo;s GitHub repo with a sample app solving the issues here</a>.</p>
+
+<p>The above means that your Shiny app is limited to the number of concurrent requests you configure to your one container, which at present is #80 connections.  This means you lose the scale to billion feature as on concurrent request #81 no container will be available to serve it, and it won&rsquo;t autoscale as the normal Cloud Run would (which defaults to 1000 containers e.g. 80,000 concurrent requests).</p>
+
+<p>It also means that you need to worry about the footprint of your Shiny app.  Whereas if it autoscaled the CPU/RAM load if it got too high would trigger another container, for one contianer running how many requests you can support up to 80 depends on how much CPU/RAM your Shiny app uses, much like a traditional Shiny server running on say <code>googleComputeEngineR</code>.</p>
+
+<p>However, the above still leaves some use cases where Shiny is useful:</p>
+
+<ul>
+<li>If your traffic is below 80 concurrent users (e.g. 80 people browsing at the same time)</li>
+<li>And your app load on CPU/RAM is small enough to support your expected amount of concurrent users.</li>
+</ul>
+
+<p>For APIs the above limits would be a problem as they can be queried thousands of times an hour, but since Shiny is usually a dashboard option for a select group of users, I think that leaves a lot of room for Shiny on Cloud Run being viable, and you also get the killer feature of scaling to 0 in the downtime between user sessions, which gives it the advantage over other solutions such as running your own Shiny server.</p>
+
+<p>Another big plus for me is that as its running on Google infrastructure, this means OAuth2 workflows are automatically on the accepted list of domains - this means setup for OAuth2 buttons using say <a href="https://code.markedmondson.me/googleAuthR/reference/googleAuth_js.html"><code>googleAuthR::googleAuth_js</code></a> is simple and doesn&rsquo;t involve validating a domain.</p>
+
+<p>If your Shiny app expects big peaks of traffic however, or is a big heavy app in terms of resources, then you are probably best looking at other options.  For me, this is keeping the existing <a href="https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts/">Shiny deployments running on Google Kubernetes Engine</a>.</p>
+
+<h2 id="how-to-deploy-shiny-on-cloud-run">How to deploy Shiny on Cloud Run</h2>
+
+<p>Cloud Run is such a useful service it is included in my newest package, <code>googleCloudRunner</code> as a <a href="https://code.markedmondson.me/googleCloudRunner/reference/cr_buildstep_run.html">build template</a> and <a href="https://code.markedmondson.me/googleCloudRunner/reference/cr_deploy_run.html">deployment option</a>.  To accomodate the limitations above, the latest version includes parameters to enable Shiny on Cloud Run in CI/CD workflows e.g. if you supply your app and Dockerfile, it will build the Cloud Run container with your Shiny app embedded and deploy it for you.  You can set this up so it will trigger on each commit to git (say GitHub) so you can quickly make code changes and see it deployed on a URL.</p>
+
+<h3 id="hello-world">Hello World</h3>
+
+<p>The first example uses <a href="https://github.com/randy3k/shiny-cloudrun-demo"><code>randy3k</code>&rsquo;s example</a>.  You will need to clone the repo so that you have a local version of the Dockerfile and <code>app.R</code> containing the Shiny app.</p>
+
+<p>Once you have the repo in say folder <code>shiny-app/</code> then you can build its Dockerfile and then deploy the app with one function:</p>
+
+<pre><code class="language-r"># set up via googleCloudRunner::cr_setup() first if you haven't done so
+library(googleCloudRunner)
+
+# deploy the app version from this folder
+cr_deploy_run(&quot;shiny-app/&quot;,
+              remote = &quot;shiny-cloudrun&quot;,
+              max_instances = 1, # required for shiny
+              concurrency = 80)
+</code></pre>
+
+<h3 id="authenticated-shiny-app">Authenticated Shiny App</h3>
+
+<p>This is the example deployed to <code>https://shiny-cloudrun-sc-ewjogewawq-ew.a.run.app/</code></p>
+
+<p>This demonstrates deploying an app with a Google login, in this case for Search Console.</p>
+
+<p>The difference here is to also add a <code>client.json</code> file to help with the authentication app, and setting up the Cloud Run domain as a verified OAuth2 source.  This is the example in the <a href="https://code.markedmondson.me/googleCloudRunner/articles/cloudrun.html#shiny-app-on-cloud-run-with-googleauthr-authentication-1">googleCloudRunner Cloud Run documentation</a></p>
+
+<p>Folder:</p>
+
+<pre><code>|
+|- app.R
+|- Dockerfile
+|- client.json
+|- shiny-customized.config
+</code></pre>
+
+<h4 id="app-r">app.R</h4>
+
+<pre><code class="language-r">library(shiny)
+library(searchConsoleR)
+library(googleAuthR)
+
+gar_set_client(web_json = &quot;client.json&quot;,
+               scopes = &quot;https://www.googleapis.com/auth/webmasters&quot;)
+
+ui &lt;- fluidPage(
+  googleAuth_jsUI('auth', login_text = 'Login to Google'),
+  tableOutput(&quot;sc_accounts&quot;)
+)
+
+server &lt;- function(input, output, session) {
+  auth &lt;- callModule(googleAuth_js, &quot;auth&quot;)
+
+  sc_accounts &lt;- reactive({
+    req(auth())
+
+    with_shiny(
+      list_websites,
+      shiny_access_token = auth()
+    )
+
+  })
+
+  output$sc_accounts &lt;- renderTable({
+    sc_accounts()
+  })
 
 
-<p>A new year, a new blogging platform!</p>
-<p>This time I’m moving from <a href="/hello-world">Jekyll</a> to RStudio’s new <a href="https://github.com/rstudio/blogdown">blogdown</a> format.</p>
-<p>This keeps the advantages of Jekyll (a static, high performance website; markdown for editing; free hosting on Github) but with the extra bonus of being able to render in RMarkdown plus adding some nice looking capabilities from the <a href="https://gohugo.io/">Hugo</a> project.</p>
-<p>As I blog a lot about R it makes sense to have a platform that is more R-aware, as well as it letting me do things like this:</p>
-<pre class="r"><code>library(googleAnalyticsR)
-library(highcharter)
-library(forecast)
+}
 
-gadata &lt;- google_analytics(81416156, 
-                           date_range = c(&quot;2013-08-01&quot;, &quot;2017-07-31&quot;),
-                           dimensions = c(&quot;yearMonth&quot;),
-                           metrics = &quot;sessions&quot;)
+shinyApp(ui = ui, server = server)
+</code></pre>
 
-ga_ts &lt;- ts(gadata$sessions, start = c(2013,08), end = c(2017,07), frequency = 12)
+<h4 id="dockerfile">Dockerfile</h4>
 
-forecast1 &lt;- HoltWinters(ga_ts)
+<pre><code>FROM rocker/shiny
 
-## forecast for next 12 months of the blog sessions
-hchart(forecast(forecast1, h = 12))</code></pre>
-<div id="htmlwidget-1" style="width:100%;height:500px;" class="highchart html-widget"></div>
-<script type="application/json" data-for="htmlwidget-1">{"x":{"hc_opts":{"title":{"text":null},"yAxis":{"title":{"text":null}},"credits":{"enabled":false},"exporting":{"enabled":false},"plotOptions":{"series":{"turboThreshold":0},"treemap":{"layoutAlgorithm":"squarified"},"bubble":{"minSize":5,"maxSize":25}},"annotationsOptions":{"enabledButtons":false},"tooltip":{"delayForDisplay":10},"xAxis":{"type":"datetime"},"series":[{"data":[[1375315200000,0],[1377993600000,0],[1380585600000,0],[1383264000000,0],[1385856000000,0],[1388534400000,317],[1391212800000,197],[1393632000000,279],[1396310400000,59],[1398902400000,162],[1401580800000,107],[1404172800000,140],[1406851200000,229],[1409529600000,283],[1412121600000,347],[1414800000000,693],[1417392000000,621],[1420070400000,569],[1422748800000,1397],[1425168000000,1309],[1427846400000,1196],[1430438400000,1015],[1433116800000,1260],[1435708800000,2887],[1438387200000,2105],[1441065600000,2607],[1443657600000,3165],[1446336000000,1994],[1448928000000,2228],[1451606400000,2061],[1454284800000,2146],[1456790400000,2406],[1459468800000,2698],[1462060800000,3103],[1464739200000,2909],[1467331200000,3410],[1470009600000,3125],[1472688000000,3221],[1475280000000,3917],[1477958400000,3838],[1480550400000,8267],[1483228800000,13818],[1485907200000,6872],[1488326400000,7392],[1491004800000,6566],[1493596800000,6562],[1496275200000,5840],[1498867200000,5989]],"name":"Series","zIndex":3},{"data":[[1501545600000,5799.88296109746],[1504224000000,5953.82702697917],[1506816000000,6286.04960256189],[1509494400000,5919.18174699678],[1512086400000,7512.16192182951],[1514764800000,8349.27443790722],[1517443200000,4701.14915567939],[1519862400000,6100.01802849025],[1522540800000,6101.59851593583],[1525132800000,6404.34402681755],[1527811200000,6192.00418324618],[1530403200000,6785.03321678322]],"name":"HoltWinters","zIndex":2,"id":"rqtrdvuehs"},{"data":[[1501545600000,8009.15429421046,3590.61162798446],[1504224000000,8605.30544712378,3302.34860683456],[1506816000000,9315.86738613737,3256.23181898641],[1509494400000,9285.0774362373,2553.28605775626],[1512086400000,11183.4984332413,3840.82541041768],[1514764800000,12302.5224403987,4396.02643541569],[1517443200000,8917.50157908768,484.796732271103],[1519862400000,10563.9944786475,1636.04157833298],[1522540800000,10800.1667804965,1403.0302513752],[1525132800000,11326.3356690203,1482.35238461478],[1527811200000,11327.7085862557,1056.29978023663],[1530403200000,12125.9055897453,1444.16084382116]],"name":"HoltWinters level 80","type":"arearange","fillOpacity":0.1,"zIndex":1,"lineWidth":0,"linkedTo":"rqtrdvuehs"},{"data":[[1501545600000,9178.67189272986,2421.09402946506],[1504224000000,10008.9133371896,1898.74071676878],[1506816000000,10919.756037155,1652.34316796876],[1509494400000,11066.874983848,771.488510145552],[1512086400000,13126.9865851167,1897.33725854234],[1514764800000,14395.2455210494,2303.30335476499],[1517443200000,11149.5037269577,-1747.20541559893],[1519862400000,12927.0808680766,-727.044811096055],[1522540800000,13287.438574996,-1084.24154312437],[1525132800000,13931.8806552989,-1123.19260166379],[1527811200000,14046.3862742742,-1662.37790778189],[1530403200000,14953.1926404598,-1383.12620689336]],"name":"HoltWinters level 95","type":"arearange","fillOpacity":0.1,"zIndex":1,"lineWidth":0,"linkedTo":"rqtrdvuehs"}]},"theme":{"chart":{"backgroundColor":"transparent"}},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","drillUpText":"Back to {series.name}","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"thousandsSep":" ","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
-<p>As I type R code blocks, the code output gets rendered right into the blog.</p>
-<p>This is the example from the <a href="http://www.dartistics.com">Dartistics.com</a> homepage, and adding interactive HTML widgets to my posts is going to be lovely, with no other hassle other than writing the code.</p>
-<div id="setup-blogdown" class="section level2">
-<h2>Setup blogdown</h2>
-<p>Now, blogdown is in beta so the documentation is a bit sparse at the moment, and I had some teething troubles migrating across from my old blog, but hopefully I have that all sorted now (although I never want to hear about Git submodules again).</p>
-<p>I mostly followed the guide on <a href="https://gohugo.io/tutorials/github-pages-blog/">Hugo about hosting on Github pages</a> and then added the deploy script it recommends to RStudio’s custom project settings, meaning I can now publish with a click of a button:</p>
-<p><img src="/images/hugo-deploy-rstudio.png" /></p>
-<p>My work flow now is:</p>
-<ol style="list-style-type: decimal">
-<li>Click the “Add Post” RStudio addin</li>
-<li>Write my markdown or RMarkdown post</li>
-<li>Preview the website using the “Live Preview Site” RStudio addin</li>
-<li>Copy the public folder over to my website hosting GitHub via a “Build All” button triggering this script:</li>
-</ol>
-<pre><code># Build the project.
-RScript -e &#39;blogdown::build_site()&#39;
+# install R package dependencies
+RUN apt-get update &amp;&amp; apt-get install -y \
+    libcurl4-openssl-dev libssl-dev \
+    ## clean up
+    &amp;&amp; apt-get clean \
+    &amp;&amp; rm -rf /var/lib/apt/lists/ \
+    &amp;&amp; rm -rf /tmp/downloaded_packages/ /tmp/*.rds
 
-# Copy all over to other GitHub repo that holds public files
-cp -a ~/Documents/markedmondson.me-hugo/public/. ~/Documents/MarkEdmondson1234.github.io/</code></pre>
-<ol start="5" style="list-style-type: decimal">
-<li>Push the new changes to the website hosting GitHub</li>
-</ol>
-<p>For migration I had to go through and add the <code>url</code> field to the posts with my old URLs to preserve old links to the blog, and also turn off forced lower case via the <code>disablePathToLower = true</code> option in the <code>config.toml</code> file.</p>
-<p>I maintain two Github repos - one with the <a href="https://github.com/MarkEdmondson1234/MarkEdmondson1234.github.io">actual site content</a> and the other holding the <a href="https://github.com/MarkEdmondson1234/markedmondson.me-hugo">Hugo configuration</a>, if you’re interested in my setup.</p>
-<p>I had/have a lot of hassles with git submodules, so much so I now just copy over the files in the Hugo repo’s public folder manually to the GitHub repo that hosts the HTML.</p>
-</div>
+## Install packages from CRAN
+RUN install2.r --error \
+    -r 'http://cran.rstudio.com' \
+    googleAuthR searchConsoleR
+
+COPY shiny-customized.config /etc/shiny-server/shiny-server.conf
+COPY client.json /srv/shiny-server/client.json
+COPY app.R /srv/shiny-server/app.R
+
+EXPOSE 8080
+
+USER shiny
+
+# avoid s6 initialization
+# see https://github.com/rocker-org/shiny/issues/79
+CMD [&quot;/usr/bin/shiny-server&quot;]
+</code></pre>
+
+<h4 id="client-id-and-gcp-setup">client.id and GCP setup</h4>
+
+<p>The client.json was a web client json from my project:</p>
+
+<pre><code class="language-json">{&quot;web&quot;:{&quot;client_id&quot;:&quot;10XXX&quot;,&quot;project_id&quot;:&quot;XXXX&quot;,&quot;auth_uri&quot;:&quot;https://accounts.google.com/o/oauth2/auth&quot;,&quot;token_uri&quot;:&quot;https://accounts.google.com/o/oauth2/token&quot;,&quot;auth_provider_x509_cert_url&quot;:&quot;https://www.googleapis.com/oauth2/v1/certs&quot;,&quot;client_secret&quot;:&quot;XXXXX&quot;,&quot;redirect_uris&quot;:[&quot;http://localhost&quot;],&quot;javascript_origins&quot;:[&quot;https://www.example.com&quot;,&quot;http://localhost:1221&quot;]}}
+</code></pre>
+
+<p>You need to add the domain of where the Cloud Run is running in the JavaScript origins within the GCP console, that you get after deploying the app. (GCP console &gt; APIs &amp; Services &gt; Crdentials &gt; Click on the Web Client ID you are using &gt; Add URL to Authorised JavaScript origins).</p>
+
+<p><img src="/images/javascript-origins.png" alt="" /></p>
+
+<p>In the example case this is <code>https://shiny-cloudrun-sc-ewjogewawq-ew.a.run.app/</code></p>
+
+<blockquote>
+<p>It did take a while for this to propagate, so if your login doesn&rsquo;t work after this step try again in a few hours</p>
+</blockquote>
+
+<h4 id="shiny-customized-config">shiny-customized.config</h4>
+
+<p>This is the configuration file for Shiny that will overwrite the default one - its main purpose is turning off the websocket functionality that is not supported on Cloud Run</p>
+
+<pre><code>disable_protocols websocket xdr-streaming xhr-streaming iframe-eventsource iframe-htmlfile xdr-polling iframe-xhr-polling;
+
+run_as shiny;
+
+server {
+  listen 8080;
+
+  location / {
+    site_dir /srv/shiny-server;
+
+    log_dir /var/log/shiny-server;
+
+    directory_index off;
+  }
+}
+</code></pre>
+
+<h4 id="deploying">Deploying</h4>
+
+<p>You can then deploy similar to the example above, which will build the Dockerfile and then deploy it to Cloud Run.</p>
+
+<pre><code class="language-r"># deploy the app version from this folder
+cr_deploy_run(&quot;shiny_cloudrun/app/&quot;,
+              remote = &quot;shiny-cloudrun-sc&quot;,
+              max_instances = 1, # required for shiny
+              concurrency = 80)
+</code></pre>
+
+<h2 id="summary">Summary</h2>
+
+<p>Deploying Shiny to Cloud Run opens up a lot more experimentation with Shiny apps for me since they can be deployed for zero cost, and also gets around the authentication OAuth2 issues I was having on <code>shinyapps.io</code> since the authorization rules tightened.</p>
+
+<p>If a Shiny app gets too popular for Cloud Run, then it may need migrating to another service but thats a nice problem to have and since its in a Docker container already thats a smooth switch (and there is another <a href="https://code.markedmondson.me/googleCloudRunner/articles/usecases.html#deploy-a-shiny-app-to-google-kubernetes-engine-1">googleCloudRunner example for deploying Shiny to Kuberentes</a>)</p>
+
+<p>Coupled with the workflow to <a href="https://code.markedmondson.me/datascience-aas/">make paid Shiny apps</a> it paves the path to narrow focus but useful paid data science apps.</p>
+
+<p>Many thanks to all the members of the R community who helped solve this problem - <code>rankdy3k</code> as mentioned above but also <code>maxheld83</code>, <code>jchen5</code> and <code>jdwrink</code> who first raised the <a href="https://github.com/rstudio/shiny/issues/2455">issue on the shiny GitHub</a>.</p>
+
+<p>When researching this post I also found this <a href="https://medium.com/engineered-publicis-sapient/google-cloud-run-best-bet-to-host-shiny-application-3aa1e18770a9">guide on how to publish Shiny on Google Cloud Run by Vabhav Ararwal</a> that uses the Web UI a bit more.</p>
 
         </div>
         <footer class="article-footer">
-    <a data-url="/new-blog-down/" data-id="565a687394fc951f8fde8dba12fa8952" class="article-share-link">
+    <a data-url="/shiny-cloudrun/" data-id="487f6c86234d6d90b48b9cace989e42e" class="article-share-link">
         <i class="fa fa-share"></i>
         Share
     </a>
     
-    <a href="/new-blog-down/#disqus_thread" class="article-comment-link">
+    <a href="/shiny-cloudrun/#disqus_thread" class="article-comment-link">
         Comments
     </a>
     
@@ -486,21 +619,14 @@ cp -a ~/Documents/markedmondson.me-hugo/public/. ~/Documents/MarkEdmondson1234.g
     
 <nav id="article-nav">
     
-    <a href="/real-time-GTM-google-cloud-r-shiny-2/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/datascience-aas/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">
           Older
       </strong>
-      <div class="article-nav-title">Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two</div>
+      <div class="article-nav-title">Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions</div>
     </a>
     
 
-    
-    <a href="/r-packages/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">
-          Newer
-      </strong>
-      <div class="article-nav-title">My R Packages</div>
-    </a>
     
 </nav>
 
@@ -550,7 +676,7 @@ cp -a ~/Documents/markedmondson.me-hugo/public/. ~/Documents/MarkEdmondson1234.g
                 <div class="item-thumbnail">
                     <a href="/shiny-cloudrun/" class="thumbnail">
                     
-                        <span style="background-image:url(/banners/shiny-clouds.jpg)" alt="New Blog Down" class="thumbnail-image"></span>
+                        <span style="background-image:url(/banners/shiny-clouds.jpg)" alt="Shiny on Google Cloud Run - Scale-to-Zero R Web Apps" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -567,7 +693,7 @@ cp -a ~/Documents/markedmondson.me-hugo/public/. ~/Documents/MarkEdmondson1234.g
                 <div class="item-thumbnail">
                     <a href="/datascience-aas/" class="thumbnail">
                     
-                        <span style="background-image:url(/banners/piketty-capital.png)" alt="New Blog Down" class="thumbnail-image"></span>
+                        <span style="background-image:url(/banners/piketty-capital.png)" alt="Shiny on Google Cloud Run - Scale-to-Zero R Web Apps" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -584,7 +710,7 @@ cp -a ~/Documents/markedmondson.me-hugo/public/. ~/Documents/MarkEdmondson1234.g
                 <div class="item-thumbnail">
                     <a href="/googleCloudRunner-intro/" class="thumbnail">
                     
-                        <span style="background-image:url(/banners/gcp-pyramid.png)" alt="New Blog Down" class="thumbnail-image"></span>
+                        <span style="background-image:url(/banners/gcp-pyramid.png)" alt="Shiny on Google Cloud Run - Scale-to-Zero R Web Apps" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -601,7 +727,7 @@ cp -a ~/Documents/markedmondson.me-hugo/public/. ~/Documents/MarkEdmondson1234.g
                 <div class="item-thumbnail">
                     <a href="/gago/" class="thumbnail">
                     
-                        <span style="background-image:url(/banners/gago.png)" alt="New Blog Down" class="thumbnail-image"></span>
+                        <span style="background-image:url(/banners/gago.png)" alt="Shiny on Google Cloud Run - Scale-to-Zero R Web Apps" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -618,7 +744,7 @@ cp -a ~/Documents/markedmondson.me-hugo/public/. ~/Documents/MarkEdmondson1234.g
                 <div class="item-thumbnail">
                     <a href="/r-at-scale-on-google-cloud-platform/" class="thumbnail">
                     
-                        <span style="background-image:url(/banners/r-at-scale.png)" alt="New Blog Down" class="thumbnail-image"></span>
+                        <span style="background-image:url(/banners/r-at-scale.png)" alt="Shiny on Google Cloud Run - Scale-to-Zero R Web Apps" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
