@@ -35,7 +35,7 @@
 
 <meta itemprop="datePublished" content="2020-08-01T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2020-08-01T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="1674">
+<meta itemprop="wordCount" content="1716">
 
 
 
@@ -283,10 +283,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2020-08-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-01</time>
             &middot;
-            1674
+            1716
             words
             &middot;
-            8
+            9
             minute read
         </div>
         
@@ -356,7 +356,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <p>The above means that your Shiny app is limited though: the number of concurrent requests you can have to one container in Cloud Run is 80 connections.  This means you lose the &ldquo;scale-to-a-billion&rdquo;&rdquo; feature as on concurrent request 81 no container will be available to serve it, and it also means the app won&rsquo;t autoscale as the normal Cloud Run would.  For normal applications, Cloud Run allows 1000 containers with up to 80 requests each e.g. 80,000 concurrent requests.</p>
 
-<p>Having only one container also means that you need to worry about the footprint of your Shiny app.  Whereas if it autoscaled high CPU/RAM load would trigger another container, for one container CLoud Run has a limit of 80 but the real limit will be how much traffic your Shiny app can handle, which depends on how much CPU/RAM your Shiny app uses.  This is much like a traditional Shiny server running on say <a href="https://cloudyr.github.io/googleComputeEngineR/"><code>googleComputeEngineR</code></a>.</p>
+<p>Having only one container also means that you need to worry about the footprint of your Shiny app.  Whereas if it autoscaled high CPU/RAM load would trigger another container, for one container Cloud Run has a limit of 80 but the real limit will be how much traffic your Shiny app can handle, which depends on how much CPU/RAM your Shiny app uses.  This is much like a traditional Shiny server running on say <a href="https://cloudyr.github.io/googleComputeEngineR/"><code>googleComputeEngineR</code></a>.</p>
 
 <p>However, the above still leaves some use cases where Shiny is useful:</p>
 
@@ -535,6 +535,8 @@ cr_deploy_run(&quot;shiny_cloudrun/app/&quot;,
 <p>Many thanks to all the members of the R community who helped solve this problem - <code>rankdy3k</code> as mentioned above but also <code>maxheld83</code>, <code>jchen5</code> and <code>jdwrink</code> who first raised the <a href="https://github.com/rstudio/shiny/issues/2455">issue on the shiny GitHub</a>.</p>
 
 <p>When researching this post I also found this <a href="https://medium.com/engineered-publicis-sapient/google-cloud-run-best-bet-to-host-shiny-application-3aa1e18770a9">guide on how to publish Shiny on Google Cloud Run by Vabhav Ararwal</a> that uses the Web UI a bit more.</p>
+
+<p>After first publishing Augusto also pointed me to his blog post about how to <a href="https://www.hasselpunk.com/blog/2020-06-13serverlessshinyengooglecloud/">deploy Shiny to Cloud Run for Anthos</a>[Spanish], that can run on top of your Kubernetes cluster.  This looks like a nicer more consistent way to deploy on Kubernetes.</p>
 
         </div>
         <footer class="article-footer">
