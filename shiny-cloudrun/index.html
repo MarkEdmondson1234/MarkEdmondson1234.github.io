@@ -35,7 +35,7 @@
 
 <meta itemprop="datePublished" content="2020-08-01T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2020-08-01T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="1716">
+<meta itemprop="wordCount" content="1753">
 
 
 
@@ -283,7 +283,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2020-08-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-01</time>
             &middot;
-            1716
+            1753
             words
             &middot;
             9
@@ -354,11 +354,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <p><a href="https://github.com/randy3k/shiny-cloudrun-demo">See <code>randy3k</code>&rsquo;s GitHub repo with a sample app solving the issues here</a>.</p>
 
-<p>The above means that your Shiny app is limited though: the number of concurrent requests you can have to one container in Cloud Run is 80 connections.  This means you lose the &ldquo;scale-to-a-billion&rdquo;&rdquo; feature as on concurrent request 81 no container will be available to serve it, and it also means the app won&rsquo;t autoscale as the normal Cloud Run would.  For normal applications, Cloud Run allows 1000 containers with up to 80 requests each e.g. 80,000 concurrent requests.</p>
+<p>The above means that your Shiny app is limited: the number of concurrent requests you can have to one container in Cloud Run is 80 connections.  This means you lose the &ldquo;scale-to-a-billion&rdquo; feature, as on concurrent request 81 no container will be available to serve it.  It also means the app won&rsquo;t autoscale as the normal Cloud Run setups would - for normal applications, Cloud Run allows 1000 containers with up to 80 requests each e.g. 80,000 concurrent requests.</p>
 
-<p>Having only one container also means that you need to worry about the footprint of your Shiny app.  Whereas if it autoscaled high CPU/RAM load would trigger another container, for one container Cloud Run has a limit of 80 but the real limit will be how much traffic your Shiny app can handle, which depends on how much CPU/RAM your Shiny app uses.  This is much like a traditional Shiny server running on say <a href="https://cloudyr.github.io/googleComputeEngineR/"><code>googleComputeEngineR</code></a>.</p>
+<p>Having only one container means that you need to worry about the footprint of your Shiny app.  Whereas if autoscaling was available, high CPU/RAM load would trigger another container, as we will have only one container the max limit may be 80 but the real limit will be how much traffic your Shiny app can handle, which depends on how much CPU/RAM your Shiny app uses.  Also remember as R is single-threaded, all users will be waiting to use a single R process - see this <a href="https://appsilon.com/alternatives-to-scaling-shiny/">nice article by Appsilon for an overview on scaling shiny</a>.  This then is much like a traditional Shiny server running on say <a href="https://cloudyr.github.io/googleComputeEngineR/"><code>googleComputeEngineR</code></a>.</p>
 
-<p>However, the above still leaves some use cases where Shiny is useful:</p>
+<p>However, the above still leaves some use cases where Shiny on Cloud Run is useful:</p>
 
 <ul>
 <li>If your peak traffic is below 80 concurrent users e.g. 80 people browsing at the same time</li>
@@ -367,7 +367,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <p>For APIs the above limitations would be a problem as they can be queried thousands of times an hour, but since Shiny is usually a dashboard option for a select group of users, I think this leaves a lot of room for Shiny on Cloud Run being viable, plus you also get the killer feature of scaling to 0 in the downtime between user sessions, which gives it the advantage over other solutions such as running your own Shiny server.</p>
 
-<p>Another big plus for me is that as its running on Google infrastructure, this means OAuth2 workflows are automatically on the accepted list of domains - this means setup for OAuth2 buttons using say <a href="https://code.markedmondson.me/googleAuthR/reference/googleAuth_js.html"><code>googleAuthR::googleAuth_js</code></a> is simpler and doesn&rsquo;t involve validating a domain.</p>
+<p>Another big plus for me is that as its running on Google infrastructure, this means OAuth2 workflows are automatically on the accepted list of domains leading to setup for OAuth2 buttons using say <a href="https://code.markedmondson.me/googleAuthR/reference/googleAuth_js.html"><code>googleAuthR::googleAuth_js</code></a> as simpler and not needing to validate a domain.</p>
 
 <p>If your Shiny app expects big peaks of traffic however, or is a big heavy app in terms of resources, then you are probably best looking at other options.  For me, this is keeping the existing <a href="https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts/">Shiny deployments running on Google Kubernetes Engine</a>.</p>
 
