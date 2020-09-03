@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
-    <title>A digital analytics workflow through the Google Cloud using R &middot; Mark Edmondson</title>
+    <title>Google Tag Manager Server Side on Cloud Run - Pros and Cons &middot; Mark Edmondson</title>
     <meta name="generator" content="Hugo 0.55.5" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
     
-      <meta name="description" content="The code bit of the blog">
+      <meta name="description" content="Is Cloud Run viable for running Google Tag Manager server-side?">
     
     
-    <link rel="canonical" href="/digital-analytics-workflow-through-google-cloud/"/>
+    <link rel="canonical" href="/gtm-serverside-cloudrun/"/>
     <link rel="icon" href="/favicon.ico">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
     <link rel="stylesheet" href="/css/style.css">
@@ -20,30 +20,30 @@
     
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
-    <meta property="og:title" content="A digital analytics workflow through the Google Cloud using R" />
-<meta property="og:description" content="There are now several packages built upon the googleAuthR framework which are helpful to a digital analyst who uses R, so this post looks to demonstrate how they all work together. If you&rsquo;re new to R, and would like to know how it helps with your digital analytics, Tim Wilson and I ran a workshop last month aimed at getting a digital analyst up and running. The course material is online at www." />
+    <meta property="og:title" content="Google Tag Manager Server Side on Cloud Run - Pros and Cons" />
+<meta property="og:description" content="Is Cloud Run viable for running Google Tag Manager server-side?" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/digital-analytics-workflow-through-google-cloud/" />
-<meta property="article:published_time" content="2016-10-10T23:03:57&#43;01:00"/>
-<meta property="article:modified_time" content="2016-10-10T23:03:57&#43;01:00"/>
+<meta property="og:url" content="/gtm-serverside-cloudrun/" />
+<meta property="article:published_time" content="2020-08-21T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-08-21T00:00:00&#43;00:00"/>
 
     
     
-<meta itemprop="name" content="A digital analytics workflow through the Google Cloud using R">
-<meta itemprop="description" content="There are now several packages built upon the googleAuthR framework which are helpful to a digital analyst who uses R, so this post looks to demonstrate how they all work together. If you&rsquo;re new to R, and would like to know how it helps with your digital analytics, Tim Wilson and I ran a workshop last month aimed at getting a digital analyst up and running. The course material is online at www.">
+<meta itemprop="name" content="Google Tag Manager Server Side on Cloud Run - Pros and Cons">
+<meta itemprop="description" content="Is Cloud Run viable for running Google Tag Manager server-side?">
 
 
-<meta itemprop="datePublished" content="2016-10-10T23:03:57&#43;01:00" />
-<meta itemprop="dateModified" content="2016-10-10T23:03:57&#43;01:00" />
-<meta itemprop="wordCount" content="1325">
+<meta itemprop="datePublished" content="2020-08-21T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2020-08-21T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1313">
 
 
 
-<meta itemprop="keywords" content="R,google-compute-engine,docker,big-query,google-cloud-storage,rstudio-server," />
+<meta itemprop="keywords" content="google-tag-manager,docker,cloud-run," />
 
     <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="A digital analytics workflow through the Google Cloud using R"/>
-<meta name="twitter:description" content="There are now several packages built upon the googleAuthR framework which are helpful to a digital analyst who uses R, so this post looks to demonstrate how they all work together. If you&rsquo;re new to R, and would like to know how it helps with your digital analytics, Tim Wilson and I ran a workshop last month aimed at getting a digital analyst up and running. The course material is online at www."/>
+<meta name="twitter:title" content="Google Tag Manager Server Side on Cloud Run - Pros and Cons"/>
+<meta name="twitter:description" content="Is Cloud Run viable for running Google Tag Manager server-side?"/>
 <meta name="twitter:site" content="@HoloMarkeD"/>
 
     
@@ -267,13 +267,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
     <div class="article-inner">
         
-            <img src="/images/r-infrastructure.png" class="article-banner">
+            <img src="/banners/princess-gtm.png" class="article-banner">
         
 
         <header class="article-header">
-    <a href="/digital-analytics-workflow-through-google-cloud/">
+    <a href="/gtm-serverside-cloudrun/">
     <h1 class="article-title" itemprop="name">
-        A digital analytics workflow through the Google Cloud using R
+        Google Tag Manager Server Side on Cloud Run - Pros and Cons
     </h1>
     </a>
     <div class="article-meta">
@@ -281,9 +281,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         
         <div class="article-date">
             <i class="fa fa-calendar"></i>
-            <time datetime="2016-10-10 23:03:57 &#43;0100 &#43;0100" itemprop="datePublished">2016-10-10</time>
+            <time datetime="2020-08-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-21</time>
             &middot;
-            1325
+            1313
             words
             &middot;
             7
@@ -299,11 +299,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <i class="fa fa-tags"></i>
                 
                 
-                <a class="article-category-link" href="/tags/r">R</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="/tags/google-compute-engine">google-compute-engine</a>
+                <a class="article-category-link" href="/tags/google-tag-manager">google-tag-manager</a>
                 &middot;
                 
                 
@@ -311,15 +307,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 &middot;
                 
                 
-                <a class="article-category-link" href="/tags/big-query">big-query</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="/tags/google-cloud-storage">google-cloud-storage</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="/tags/rstudio-server">rstudio-server</a>
+                <a class="article-category-link" href="/tags/cloud-run">cloud-run</a>
                 
                 
             </div>
@@ -331,196 +319,116 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="article-entry" itemprop="articleBody">
             
 
-<p>There are now several packages built upon the <code>googleAuthR</code> framework which are helpful to a digital analyst who uses R, so this post looks to demonstrate how they all work together.  If you&rsquo;re new to R, and would like to know how it helps with your digital analytics, <a href="http://analyticsdemystified.com/blog/tim-wilson/">Tim Wilson</a> and I ran a workshop last month aimed at getting a digital analyst up and running.  The course material is online at <a href="http://www.dartistics.com/">www.dartistics.com</a>.</p>
+<p>One of the most exciting developments in 2020 for me is the launch of <a href="https://developers.google.com/tag-manager/serverside">Google Tag Manager Server Side</a>, which lies at the intersection of cloud and digital analytics that I&rsquo;ve gravitated towards in recent years.</p>
 
-<h2 id="diagram">Diagram</h2>
+<p>There are many good resources out there on GTM Serverside, <a href="https://www.simoahava.com/analytics/server-side-tagging-google-tag-manager/">Simo in particular has got me up to speed with his excellent range of posts</a>.  This post will assume you&rsquo;ve read those, and be more about the viability of deploying GTM server side within Cloud Run.</p>
 
-<p>A top level overview is shown below:</p>
+<p>Many thanks to Adam Halbardier @ Google in the GTM serverside google group who helped guide me through the below.</p>
 
-<p><img src="../images/r-infrastructure.png" alt="R-infrastructure-digital-analytics" /></p>
+<h2 id="why-gtm-serverside-on-cloud-run">Why GTM Serverside on Cloud Run?</h2>
 
-<p>The diagram shows <a href="http://code.markedmondson.me/googleAuthR/"><code>googleAuthR</code></a> packages, other packages, servers and APIs all of which interact to turn data into actionable analytics.</p>
+<p>The current supported production deployment for GTM server side is to App Engine Flexible, which supports Docker containers.</p>
 
-<p>The most recent addition is <a href="https://cloudyr.github.io/googleComputeEngineR/"><code>googleComputeEngineR</code></a> which has helped make great savings in the time it takes to set up servers.  I have in the past blogged about <a href="http://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/">setting up R servers in the Google Cloud</a>, but it was still more dev-ops than I really wanted to be doing.  Now, I can do setups similar to those I have written about in a couple of lines of R.</p>
+<p>I have gone through my own journey up the Cloud stack with R deployments and briefly considered App Engine Flexible as an option for R APIs, but it got superseded when Cloud Run appeared.  The private beta of GTM server side used Kubernetes, which demonstrated that the platform running the container is flexible, so it encouraged trying other Docker based deployments on GCP.  This flexibility is also good to make it deployable to other clouds if you need to.</p>
 
-<h2 id="data-workflow">Data workflow</h2>
-
-<p>A suggested workflow for working with data is:</p>
-
-<ol>
-<li><em>Infrastructure</em> - Creating a computer to run your analysis.  This can be either your own laptop, or a server in the cloud.</li>
-<li><em>Collection</em> - Downloading your raw data from one or multiple sources, such as APIs or your CRM database.</li>
-<li><em>Transformation</em> - Turning your raw data into useful information via ETL, modelling or statistics.</li>
-<li><em>Storage</em> - Storing the information you have created so that it can be automatically updated and used.</li>
-<li><em>Output</em> - Displaying or using the information into an end user application.</li>
-</ol>
-
-<p>The components of the diagram can be combined into the workflow above.  You can swap out various bits for your own needs, but its possible to use R for all of these steps.</p>
-
-<p>You could do all of this with an Excel workbook on your laptop.  However, as data analysis becomes more complicated, it makes sense to start breaking out the components into more specialised tools, since Excel will start to strain when you increase the data volume or want reproducibility.</p>
-
-<h3 id="infrastructure">Infrastructure</h3>
-
-<p><a href="https://cloudyr.github.io/googleComputeEngineR/"><code>googleComputeEngineR</code></a> uses the Google Clouds&rsquo; virtual machine instances to create servers, with specific support for R.</p>
-
-<p>It uses <a href="https://www.docker.com/">Docker containers</a> to make launching the servers and applications you need quick and simple, without you needing to know too much dev-ops to get started.</p>
-
-<p>Due to Docker, the applications created can be more easily transferred into other IT environments, such as within internal client intranets or AWS.</p>
-
-<p>To help with a digital analytics workflow, <code>googleComputeEngineR</code> includes templates for the below:</p>
+<p>Cloud Run deployments are not initially supported by the GTM beta so should not be considered in production, but I hope that it will be in the future.  The main advantages for me are:</p>
 
 <ul>
-<li><strong>RStudio Server</strong> - an R IDE you can work with from your browser. The server edition means you can access it from anywhere, and can always ensure the correct packages are installed.</li>
-<li><strong>Shiny</strong> - A server to run your Shiny apps that display your data in dashboards or applications end users can work with.</li>
-<li><strong>OpenCPU</strong> - A server that turns your R code into a JSON API.  Used for turning R output into a format web development teams can use straight within a website.</li>
+<li>Scale-to-zero - App Engine Flexible does not scale to zero, so you have a minimum charge of at least 1 VM per month and as its recommended to use 3 VMs this is $120 per month.  App Engine Standard does scale-to-zero, but is recommended by Google only for debug and testing purposes.</li>
+<li>Cost - this will alter given the number of hits per month, but initial thoughts are that if you are under 1Million hits per month then Cloud Run should be cheaper compared to $120 a month for App Engine Flexible.</li>
+<li>Performance - I&rsquo;m only running this on my blog at the moment so it may differ for lots of traffic and heavy tag use, but running similar GTM containers on App Engine and Cloud Run look to be at least comparable and in my tests Cloud Run is 50% quicker in responses - below <code>gtm2.markedmmondson.me</code> requests are to Cloud Run (91ms), <code>gtm.markedmondson.me</code> are to App Engine Standard (250ms)</li>
 </ul>
 
-<p>For instance, launching an RStudio server is as simple as:</p>
+<p><img src="/images/gtm-requests.png" alt="" /></p>
 
-<pre><code class="language-r">library(googleComputeEngineR)
-vm &lt;- gce_vm_template(&quot;rstudio&quot;, 
-                      name = &quot;rstudio-server&quot;, 
-                      predefined_type = &quot;f1-micro&quot;, 
-                      username = &quot;mark&quot;, 
-                      password = &quot;mark1234&quot;)
+<p>This needs to be taken with a pinch of salt until run on larger websites.  At the GCP end, for me the App Engine had latencies around 77.25 ms compared to 24ms for Cloud Run, with the rest of the time seen on the website waterfall charts taken up by networking speed I guess.</p>
 
+<ul>
+<li>Ease of deployment - App Engine flexible although supported by a Google shell script is more complicated if you want to customise it - read through what the <a href="https://googletagmanager.com/static/serverjs/setup.sh">shell script does</a> (right click and &ldquo;Save Link As&rdquo; to text for examination) as an example. In my experience if you don&rsquo;t need to work-around Cloud Run limitations then deploying and updating is simpler in Cloud Run.</li>
+</ul>
+
+<h2 id="why-not-gtm-serverside-on-cloud-run">Why not GTM Serverside on Cloud Run?</h2>
+
+<p>Currently its a bit awkward to have the debug container displayed in the GTM interface - this is because debug requests go to <code>/gtm/*</code> on a debug specified container, and Cloud Run does not support routing requests to folders.</p>
+
+<p>There are work-arounds, but that makes it deployment more convoluted, but hopefully GTM serverside container will be easier to support different platforms, to make it not only more compatible with Cloud Run but other cloud services such as AWS and Azure container services.</p>
+
+<p>The costs for high volume websites as well may be more for Cloud Run once the bill goes over $120.  The best I can figure out from my limited running so far it works out around 1USD for 10000 requests so it may only make sense for websites under 1million hits per month.  But this is work in progress, will update here once I know more.</p>
+
+<h2 id="how-to-deploy-gtm-serverside-to-cloud-run">How to deploy GTM Serverside to Cloud Run</h2>
+
+<p>When considering the Cloud Run configuration, you can refer to the deployment script given in the documentation for upgrading to a App Engine flexible service.  The most critical information you need is the docker image it deploys, which at time of writing is <code>gcr.io/cloud-tagging-10302018/gtm-cloud-image:master</code></p>
+
+<p>This continer runs the node.js as developed by the GTM team.  As Adam writes, you can examine the application in the Docker container like so to see how you can configure it:</p>
+
+<pre><code class="language-sh">$ docker pull gcr.io/cloud-tagging-10302018/gtm-cloud-image:stable
+$ docker images
+$ docker run &lt;image id&gt; /bin/bash -c &quot;node server_bin.js --help&quot;
+
+Usage: node server_bin.js [options]
+
+For options that can be set via either command-line flag or an environment variable, the command-line flag value takes precedence.
+
+Options:
+
+  --container_config: Base64-encoded container parameters in the URL query string format. This flag is required to be set. May also be set by CONTAINER_CONFIG environment variable. (default: undefined)
+
+  --[no]run_as_debug_server: Enable when the server should run as a debug server. See the documentation for additional details. May also be set by RUN_AS_DEBUG_SERVER environment variable. (default: false)
+
+  --container_refresh_seconds: Interval between container refreshes. May also be set by CONTAINER_REFRESH_SECONDS environment variable. (default: 60) (an integer)
+
+  --host: Host on which to bind. Set the value to empty string to listen on the unspecified IPv6 address (::) if available, or the unspecified IPv4 address (0.0.0.0) otherwise. May also be set by HOST environment variable. (default: &quot;&quot;)
+
+  --port: Port to listen on. May also be set by PORT environment variable. (default: 8080)(an integer)
+
+  --debug_message_expiration_seconds: Number of seconds after which an unread debug message is deleted. This flag is applicable only when running as the debug server. May also be set by DEBUG_MESSAGE_EXPIRATION_SECONDS environment variable. (default: 600) (an integer)
+
+  --policy_script_url: HTTPS URL from which to load the policy script. May also be set by POLICY_SCRIPT_URL environment variable. (default: undefined)
+
+  --policy_script_refresh_seconds: Interval between policy script refreshes. May also be set by POLICY_SCRIPT_REFRESH_SECONDS environment variable. (default: 60) (an integer)
 </code></pre>
 
-<p>The instance will launch within a few minutes and give you a URL you can then login with.</p>
+<p>For our initial purposes, the most pertinent is the <code>CONTAINER_CONFIG</code> env arg, which is how the Docker image knows which GTM serverside its working for.  Its also good to see that <code>PORT</code> is configurable as well, as that is a recommended setting for Cloud Run.</p>
 
-<h3 id="collection">Collection</h3>
+<h3 id="cloud-run-setup">Cloud Run setup</h3>
 
-<p>Once you are logged in to your RStudio Server, you can use all of R&rsquo;s power to download and work with your data.</p>
+<p>For initial deployment I tried to copy the resource requirements from the <a href="https://developers.google.com/tag-manager/serverside/script-user-guide">App Engine Flexible configuration that you can read about here</a>.  From the shell script there we have enough to configure Cloud Run:</p>
 
-<p>The <code>googleAuthR</code> packages can all be authenticated under the same OAuth2 token, to simplify access.</p>
+<ul>
+<li>Container image URL: <code>gcr.io/cloud-tagging-10302018/gtm-cloud-image:stable</code></li>
+<li>Container port: Leave as <code>8080</code></li>
+<li>Capacity: To match the App Engine flex configuration I set this to <code>512MiB</code></li>
+<li>CPU Allocated: Leave as <code>1</code></li>
+<li>Request timeout: Leave as <code>300</code></li>
+<li>Maximum requests per container: Set to max <code>80</code> which mirrors App Engine flexible 100 requests per VM.</li>
+<li>Variables (second tab):
 
-<p>Other packages useful to digital analytics include APIs such as <a href="https://github.com/randyzwitch/RSiteCatalyst"><code>RSiteCatalyst</code></a> and <code>twitteR</code>.  A full list of digital analytics R packages can be found in the <a href="https://cran.r-project.org/web/views/WebTechnologies.html">web technologies section of CRAN Task Views</a>.</p>
+<ul>
+<li><code>CONTAINER_CONFIG</code> = <code>{ContainerId given to you on GTM Serverside setup}</code>
+<br /></li>
+</ul></li>
+</ul>
 
-<p>Another option is the R package <a href="https://github.com/jennybc/googlesheets"><code>googlesheets</code></a> by Jenny Bryan, which could either be used as a data source or as a data storage for reports, to be processed onwards later.</p>
+<p>It should look a bit like below:</p>
 
-<p>The below example R script fetches data from Google Analytics, SEO data from Google Search Console and CRM data from BigQuery.</p>
+<p><img src="/images/cloudrun-gtm-setup.png" alt="" /></p>
 
-<pre><code class="language-r">library(googleAnalyticsR)
-library(searchConsoleR)
-library(bigQueryR)
-library(googleAuthR)
+<p>Once the Cloud Run is running with a green tick you should have a URL you could use, but for cookies its better for it to be running on a subdomain of your website domain.  This involves going to the <a href="https://console.cloud.google.com/run/domains">Domain Mappings in Cloud Run</a> and verifying your domain with Search Console then selecting the subdomain.  A https certificate will be created for you, and after you have changed your DNS settings via a CNAME record you can then use the new URL in your GTM serverside tags.</p>
 
-## authenticate with all services 
-gar_auth_service(&quot;auth.json&quot;)
-
-## get search console data
-seo_data &lt;- search_analytics(&quot;http://example.com&quot;, 
-                             &quot;2015-07-01&quot;, &quot;2015-07-31&quot;, 
-                              c(&quot;date&quot;, &quot;query&quot;, &quot;page&quot;))
-
-## get google analytics data
-ga_data &lt;- google_analytics_4(1235678,
-                              c(&quot;2015-07-01&quot;, &quot;2015-07-31&quot;),
-                              metrics = c(&quot;users&quot;),
-                              dimensions = c(&quot;date&quot;, &quot;userID&quot; , &quot;landingPagePath&quot;, &quot;campaign&quot;))
-
-## get CRM data from BigQuery
-crm_data &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
-                      &quot;SELECT userID, lifetimeValue FROM [my_dataset]&quot;)
-                              
-</code></pre>
-
-<h3 id="transformation">Transformation</h3>
-
-<p>This ground is well covered by existing R packages.  My suggestion here is to embrace the <a href="https://cran.r-project.org/web/packages/tidyverse/index.html"><code>tidyverse</code></a> and use that to create and generate your information.</p>
-
-<p>Applications include anomaly detection, measurement of causal effect, clustering and forecasting. Hadley Wickham&rsquo;s book <a href="http://r4ds.had.co.nz/index.html">&ldquo;R for Data Science&rdquo;</a> is a recent compendium of knowledge on this topic, which includes this suggested work flow:</p>
-
-<p><img src="../images/tidy-r.png" alt="tidyr" /></p>
-
-<h3 id="storage">Storage</h3>
-
-<p>Once you have your data in the format you want, you often need to keep it somewhere it is easily accessible for other systems.</p>
-
-<p><a href="https://cloud.google.com/storage/">Google Cloud Storage</a> is a cheap, reliable method of storing any type of data object so that its always available for further use, and is heavily used within Google Cloud applications as a central data store.  I use it for storing <code>RData</code> files or storing <code>csv</code> files with a public link that is emailed to users when available.  It is accessible in R via the <a href="http://code.markedmondson.me/googleCloudStorageR/"><code>googleCloudStorageR</code></a> package.</p>
-
-<p>For database style access, <a href="https://cloud.google.com/bigquery/">BigQuery</a> can be queried from many data services, including data visualisation platforms such as Google&rsquo;s Data Studio or Tableau.  BigQuery offers incredibly fast analytical queries for TBs of data, accessible via the <a href="http://code.markedmondson.me/bigQueryR/"><code>bigQueryR</code></a> package.</p>
-
-<p>An example of uploading data is below - again only one authentication is needed.</p>
-
-<pre><code class="language-r">library(googleCloudStorageR)
-library(bigQueryR)
-
-## authenticate with all services 
-gar_auth_service(&quot;auth.json&quot;)
-
-## upload to Big Query
-bqr_upload_data(&quot;projectID&quot;, &quot;datasetID&quot;, &quot;tableID&quot;,
-                my_data_for_sql_queries)
-
-## upload to Google Cloud Storage
-gcs_upload(&quot;my_rdata_file&quot;)
-
-
-</code></pre>
-
-<h3 id="output">Output</h3>
-
-<p>Finally, outputs include <a href="http://shiny.rstudio.com/">Shiny</a> apps, <a href="http://rmarkdown.rstudio.com/">RMarkdown</a>, a <a href="https://gist.github.com/MarkEdmondson1234/ddcac436cbdfd4557639522573bfc7b6">scheduled email</a> or an R API call using <a href="https://www.opencpu.org/">OpenCPU</a>.</p>
-
-<p>All <code>googleAuthR</code> functions are Shiny and RMarkdown compatible for user authentication - this means a user can login themselves and access their own data whilst using the logic of your app to gain insight, without you needing access to their data at all.  An example of an RMarkdown app taking advantage of this is the demo of the <a href="https://github.com/MarkEdmondson1234/gentelellaShiny">GentelellaShiny GA dashboard</a></p>
-
-<p><img src="../images/gentellaShinyGA.png" alt="gentella-shiny" /></p>
-
-<p>You can launch OpenCPU and Shiny servers just as easily as RStudio Server via <code>googleComputeEngineR</code>:</p>
-
-<pre><code class="language-r">library(googleComputeEngineR)
-
-## creates a Shiny server
-vm2 &lt;- gce_vm_template(&quot;shiny&quot;, 
-                      name = &quot;shiny-server&quot;, 
-                      predefined_type = &quot;f1-micro&quot;, 
-                      username = &quot;mark&quot;, 
-                      password = &quot;mark1234&quot;)
-
-## creates an OpenCPU server                      
-vm3 &lt;- gce_vm_template(&quot;opencpu&quot;, 
-                      name = &quot;opencpu-server&quot;, 
-                      predefined_type = &quot;f1-micro&quot;, 
-                      username = &quot;mark&quot;, 
-                      password = &quot;mark1234&quot;)
-
-</code></pre>
-
-<p>Shiny Apps or RMarkdown HTML files can then be uploaded for display to the end user.  If the server needs more power, simply save the container and relaunch with a bigger RAM or CPU.</p>
-
-<p>OpenCPU is the technology demonstrated in my recent EARL London talk on using R to <a href="http://code.markedmondson.me/predictClickOpenCPU/supercharge.html">forecast HTML prefetching and deploying through Google Tag Manager</a>.</p>
-
-<p>Your Shiny, RMarkdown or OpenCPU functions can download data via:</p>
-
-<pre><code class="language-r">library(googleCloudStorageR)
-library(bigQueryR)
-
-## authenticate with all services 
-gar_auth_service(&quot;auth.json&quot;)
-
-## download Google Cloud Storage
-my_data &lt;- gce_get_object(&quot;my_rdata_file&quot;)
-
-## query data from Big Query dependent on user input
-query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
-                   &quot;SELECT userID, lifetimeValue FROM [my_dataset]&quot;)
-</code></pre>
+<p><img src="/images/cloudrun-domain-mapping.png" alt="" /></p>
 
 <h2 id="summary">Summary</h2>
 
-<p>Hopefully this has shown where some efficiencies could be made in your own digital analysis. For me, the reduction of computer servers to atoms of work has expanded the horizons on what is possible: applications such as sending big calculations to the cloud if taking too long locally; being able to send clients entire clusters of computers with a data application ready and working; and having customised R environments for every occasion, such as R workshops.</p>
-
-<p>For the future, I hope to introduce Spark clusters via <a href="https://cloud.google.com/dataproc/">Google Dataproc</a>, giving the ability to use machine learning directly on a dataset without needing to download locally; scheduled scripts that launch servers as needed; and working with Google&rsquo;s newly launched <a href="https://cloud.google.com/ml/">machine learning APIs</a> that dovetail into the Google Cloud.</p>
+<p>If cheap enough I can see Cloud Run being the preferred method for small blogs like this one, and any website with less than $120 worth of App Engine traffic.  It may even be an option above that if the performance remains better.  At the very least it shows how with opening up GTM to Cloud environments how much customisation can be performed beyond just measurement so you have total control over your analytics setup.</p>
 
         </div>
         <footer class="article-footer">
-    <a data-url="/digital-analytics-workflow-through-google-cloud/" data-id="e02b32d6b8f66b0e3cf93cb53038b4c5" class="article-share-link">
+    <a data-url="/gtm-serverside-cloudrun/" data-id="f6d3ce7ade38a7e487b95936b1db3c1d" class="article-share-link">
         <i class="fa fa-share"></i>
         Share
     </a>
     
-    <a href="/digital-analytics-workflow-through-google-cloud/#disqus_thread" class="article-comment-link">
+    <a href="/gtm-serverside-cloudrun/#disqus_thread" class="article-comment-link">
         Comments
     </a>
     
@@ -596,21 +504,14 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
     
 <nav id="article-nav">
     
-    <a href="/anti-sampling-google-analytics-api/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/shiny-cloudrun/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">
           Older
       </strong>
-      <div class="article-nav-title">Efficient anti-sampling with the Google Analytics Reporting API</div>
+      <div class="article-nav-title">Shiny on Google Cloud Run - Scale-to-Zero R Web Apps</div>
     </a>
     
 
-    
-    <a href="/launch-rstudio-server-google-cloud-in-two-lines-r/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">
-          Newer
-      </strong>
-      <div class="article-nav-title">Launch RStudio Server in the Google Cloud with two lines of R</div>
-    </a>
     
 </nav>
 
@@ -660,7 +561,7 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
                 <div class="item-thumbnail">
                     <a href="/gtm-serverside-cloudrun/" class="thumbnail">
                     
-                        <span style="background-image:url(/banners/princess-gtm.png)" alt="A digital analytics workflow through the Google Cloud using R" class="thumbnail-image"></span>
+                        <span style="background-image:url(/banners/princess-gtm.png)" alt="Google Tag Manager Server Side on Cloud Run - Pros and Cons" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -677,7 +578,7 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
                 <div class="item-thumbnail">
                     <a href="/shiny-cloudrun/" class="thumbnail">
                     
-                        <span style="background-image:url(/banners/shiny-clouds.jpg)" alt="A digital analytics workflow through the Google Cloud using R" class="thumbnail-image"></span>
+                        <span style="background-image:url(/banners/shiny-clouds.jpg)" alt="Google Tag Manager Server Side on Cloud Run - Pros and Cons" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -694,7 +595,7 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
                 <div class="item-thumbnail">
                     <a href="/datascience-aas/" class="thumbnail">
                     
-                        <span style="background-image:url(/banners/piketty-capital.png)" alt="A digital analytics workflow through the Google Cloud using R" class="thumbnail-image"></span>
+                        <span style="background-image:url(/banners/piketty-capital.png)" alt="Google Tag Manager Server Side on Cloud Run - Pros and Cons" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -711,7 +612,7 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
                 <div class="item-thumbnail">
                     <a href="/googleCloudRunner-intro/" class="thumbnail">
                     
-                        <span style="background-image:url(/banners/gcp-pyramid.png)" alt="A digital analytics workflow through the Google Cloud using R" class="thumbnail-image"></span>
+                        <span style="background-image:url(/banners/gcp-pyramid.png)" alt="Google Tag Manager Server Side on Cloud Run - Pros and Cons" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -728,7 +629,7 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
                 <div class="item-thumbnail">
                     <a href="/gago/" class="thumbnail">
                     
-                        <span style="background-image:url(/banners/gago.png)" alt="A digital analytics workflow through the Google Cloud using R" class="thumbnail-image"></span>
+                        <span style="background-image:url(/banners/gago.png)" alt="Google Tag Manager Server Side on Cloud Run - Pros and Cons" class="thumbnail-image"></span>
                     
                     </a>
                 </div>

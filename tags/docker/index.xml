@@ -6,10 +6,20 @@
     <description>Recent content in docker on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
-    <lastBuildDate>Sat, 01 Aug 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 21 Aug 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/docker/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Google Tag Manager Server Side on Cloud Run - Pros and Cons</title>
+      <link>/gtm-serverside-cloudrun/</link>
+      <pubDate>Fri, 21 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/gtm-serverside-cloudrun/</guid>
+      <description>One of the most exciting developments in 2020 for me is the launch of Google Tag Manager Server Side, which lies at the intersection of cloud and digital analytics that I&amp;rsquo;ve gravitated towards in recent years.
+There are many good resources out there on GTM Serverside, Simo in particular has got me up to speed with his excellent range of posts. This post will assume you&amp;rsquo;ve read those, and be more about the viability of deploying GTM server side within Cloud Run.</description>
+    </item>
     
     <item>
       <title>Shiny on Google Cloud Run - Scale-to-Zero R Web Apps</title>
