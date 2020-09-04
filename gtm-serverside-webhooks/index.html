@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
-    <title>Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API &middot; Mark Edmondson</title>
+    <title>Using Google Tag Manager Server Side to Trigger Webhook Events &middot; Mark Edmondson</title>
     <meta name="generator" content="Hugo 0.55.5" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
     
-      <meta name="description" content="The code bit of the blog">
+      <meta name="description" content="How to configure Google Tag Manager Server Side so it can send webhooks to services upon certain events ">
     
     
-    <link rel="canonical" href="/searchconsoler-vs-googlelanguager/"/>
+    <link rel="canonical" href="/gtm-serverside-webhooks/"/>
     <link rel="icon" href="/favicon.ico">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
     <link rel="stylesheet" href="/css/style.css">
@@ -20,33 +20,30 @@
     
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
-    <meta property="og:title" content="Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API" />
-<meta property="og:description" content="With the launch of the Google Natural Language API (NLP API), and the emphasis of machine learning that is said to account for up to 30% of the SEO algorithmn for Google search, a natural question is whether you can use Google’s own macine learning APIs to help optimise your website for search.
-Whilst I don’t believe they will offer exactly the same results, I can see useful applications that include:" />
+    <meta property="og:title" content="Using Google Tag Manager Server Side to Trigger Webhook Events" />
+<meta property="og:description" content="How to configure Google Tag Manager Server Side so it can send webhooks to services upon certain events " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/searchconsoler-vs-googlelanguager/" />
-<meta property="article:published_time" content="2018-01-11T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2018-01-11T00:00:00&#43;00:00"/>
+<meta property="og:url" content="/gtm-serverside-webhooks/" />
+<meta property="article:published_time" content="2020-09-04T12:50:50&#43;01:00"/>
+<meta property="article:modified_time" content="2020-09-04T12:50:50&#43;01:00"/>
 
     
     
-<meta itemprop="name" content="Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API">
-<meta itemprop="description" content="With the launch of the Google Natural Language API (NLP API), and the emphasis of machine learning that is said to account for up to 30% of the SEO algorithmn for Google search, a natural question is whether you can use Google’s own macine learning APIs to help optimise your website for search.
-Whilst I don’t believe they will offer exactly the same results, I can see useful applications that include:">
+<meta itemprop="name" content="Using Google Tag Manager Server Side to Trigger Webhook Events">
+<meta itemprop="description" content="How to configure Google Tag Manager Server Side so it can send webhooks to services upon certain events ">
 
 
-<meta itemprop="datePublished" content="2018-01-11T00:00:00&#43;00:00" />
-<meta itemprop="dateModified" content="2018-01-11T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="1640">
+<meta itemprop="datePublished" content="2020-09-04T12:50:50&#43;01:00" />
+<meta itemprop="dateModified" content="2020-09-04T12:50:50&#43;01:00" />
+<meta itemprop="wordCount" content="1350">
 
 
 
-<meta itemprop="keywords" content="R,search-console,google-language," />
+<meta itemprop="keywords" content="google-tag-manager,cloud-functions," />
 
     <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API"/>
-<meta name="twitter:description" content="With the launch of the Google Natural Language API (NLP API), and the emphasis of machine learning that is said to account for up to 30% of the SEO algorithmn for Google search, a natural question is whether you can use Google’s own macine learning APIs to help optimise your website for search.
-Whilst I don’t believe they will offer exactly the same results, I can see useful applications that include:"/>
+<meta name="twitter:title" content="Using Google Tag Manager Server Side to Trigger Webhook Events"/>
+<meta name="twitter:description" content="How to configure Google Tag Manager Server Side so it can send webhooks to services upon certain events "/>
 <meta name="twitter:site" content="@HoloMarkeD"/>
 
     
@@ -270,13 +267,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
     <div class="article-inner">
         
-            <img src="/banners/nlp_sc.png" class="article-banner">
+            <img src="/banners/gtm-serverside-events.png" class="article-banner">
         
 
         <header class="article-header">
-    <a href="/searchconsoler-vs-googlelanguager/">
+    <a href="/gtm-serverside-webhooks/">
     <h1 class="article-title" itemprop="name">
-        Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API
+        Using Google Tag Manager Server Side to Trigger Webhook Events
     </h1>
     </a>
     <div class="article-meta">
@@ -284,12 +281,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         
         <div class="article-date">
             <i class="fa fa-calendar"></i>
-            <time datetime="2018-01-11 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-01-11</time>
+            <time datetime="2020-09-04 12:50:50 &#43;0100 &#43;0100" itemprop="datePublished">2020-09-04</time>
             &middot;
-            1640
+            1350
             words
             &middot;
-            8
+            7
             minute read
         </div>
         
@@ -302,15 +299,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <i class="fa fa-tags"></i>
                 
                 
-                <a class="article-category-link" href="/tags/r">R</a>
+                <a class="article-category-link" href="/tags/google-tag-manager">google-tag-manager</a>
                 &middot;
                 
                 
-                <a class="article-category-link" href="/tags/search-console">search-console</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="/tags/google-language">google-language</a>
+                <a class="article-category-link" href="/tags/cloud-functions">cloud-functions</a>
                 
                 
             </div>
@@ -323,238 +316,150 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             
 
 
-<p>With the launch of the Google Natural Language API (NLP API), and the emphasis of machine learning that is said to account for up to 30% of the SEO algorithmn for Google search, a natural question is whether you can use Google’s own macine learning APIs to help optimise your website for search.</p>
-<p>Whilst I don’t believe they will offer exactly the same results, I can see useful applications that include:</p>
-<ul>
-<li>Identifying what entities are on your website, to see what topics Google Knowledge Graph may categorise your website as</li>
-<li>Running your development website through the API to see if the topics are what you expect your SEO to cover</li>
-<li>Identify content that has very similar topics, that may be competing with one another in search</li>
-<li>Auto-optimisation of content by altering content to desired query targets</li>
-<li>Competitor analysis of SEO website performance</li>
-</ul>
-<p>Both these data sources are available through R via <code>searchConsoleR</code> and <code>googleLanguageR</code>, so below is a workflow on using them together to help answer questions like above.</p>
-<div id="overview" class="section level2">
-<h2>Overview</h2>
-<p>For this proof of concept we will use search console API and the NLP API to generate keywords for the same URLs, then compare the results.</p>
-<p>The general outline is:</p>
-<ol style="list-style-type: decimal">
-<li>Get Search Console data for a website</li>
-<li>For each SEO landing page, generate a corpus of NLP results</li>
-<li>Look for evidence that there is a relationship to a high agreement between NLP and SEO rankings</li>
-<li>Identify optimisation opportunities with suggested topics.</li>
-</ol>
+<p>When GTM Server Side was announced the use cases for it were not so compelling for me at first.</p>
+<p>Sure, extra security and potential speed ups were nice to have, but it wasn’t really necessary for a lot of websites, given the cost. However, now we have had a chance to play with it and can see its integration with the rest of the Google Cloud Platform, new use cases are coming up which are very compelling, especially if the <a href="https://code.markedmondson.me/gtm-serverside-cloudrun/">GTM Server Side costs can be driven down via Cloud Run deployments - see last post</a>.</p>
+<p>One of those use cases is triggering event flows from GTM Server Side. This has always been possible via your server, but the ease of setting it up as detailed below opens up a host of opportunities, much like when GTM itself first came out and democratised publishing of tags.</p>
+<p>The idea behind using GTM Server Side events is that because its running in your own server, you have access to a lot more configuration including the server logs. Via these, you can surface your dataLayer or other tracking events within <a href="https://cloud.google.com/logging/docs">Cloud Logging</a> - and from there this allows you to use the Cloud Logging features to set up <a href="https://cloud.google.com/logging/docs/routing/overview">Pub/Sub triggers</a>.</p>
+<p>This is a technique I picked up from <a href="http://127.0.0.1:4321/bigquery-ga360-exports-cloud-functions/">BigQuery logging of GA360 exports - being able to use event logging to process the often late exports rather than using a schedule</a>.</p>
+<p>Those Pub/Sub triggers can be used to trigger anything you like - in my example they set off a Cloud Function to send a message to Slack. An example video is shown below of it in action on this blog:</p>
+
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe src="//www.youtube.com/embed/YJYFmxsd38M" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
 </div>
-<div id="setup" class="section level2">
-<h2>Setup</h2>
-<p>As we’re authenticating with two <code>googleAuthR</code> libraries, we set the scopes and authenticate directly with <code>googleAuthR::gar_auth()</code> rather than authenticate seperatly. The NLP API requires you to set up your own Google Cloud project, so that projects client ID, secret etc are used to generate one authentication token that covers both. See the <a href="http://code.markedmondson.me/googleAuthR/articles/google-authentication-types.html#multiple-authentication-tokens">googleAuthR website</a> for details.</p>
-<p>The libraries used are also below:</p>
-<pre class="r"><code>library(googleAuthR)     # Authentication
-library(googleLanguageR) # Google NLP API
-library(searchConsoleR)  # Webmasters API
-library(tidyverse)       # Data processing
-library(rvest)           # URL scraping
-library(cld2)            # Offline language detection
 
-# set google project to your own
-# assumes you have downloaded your own client ID JSON and set in environment argument GAR_CLIENT_JSON
-gar_set_client(scopes = c(&quot;https://www.googleapis.com/auth/webmasters&quot;,
-                          &quot;https://www.googleapis.com/auth/cloud-platform&quot;))
+<p>The above is done via GTM Server Side, Cloud Logging to a Pub/Sub topic, which triggers a Cloud Function that calls a Slack webhook.</p>
+<div id="how-to-do-it" class="section level2">
+<h2>How to do it</h2>
+<p>I’ll walk through how this proof of concept was set-up, so you can hopefully see how accessible it is. Naturally this is just a POC, your own applications can build on the idea.</p>
+<div id="gtm-server-side-setup" class="section level3">
+<h3>GTM Server Side Setup</h3>
+<p>Within your GTM Server Side Client configuration, you can use the <a href="https://developers.google.com/tag-manager/serverside/api#logtoconsole">logToConsole</a> API which will then send it to the Cloud Logging output.</p>
+<p>This ‘Hello World’ example will log the ip address of the requester:</p>
+<pre class="node"><code>const logToConsole = require(&#39;logToConsole&#39;);
+const getRemoteAddress = require(&#39;getRemoteAddress&#39;);
 
-# creates an auth token for reuse called &quot;scgl.oauth&quot; that works with search console and Language API
-gar_auth(&quot;scgl.oauth&quot;)</code></pre>
-</div>
-<div id="gather-search-console-data" class="section level2">
-<h2>Gather Search Console data</h2>
-<p>For this we need the keywords and each SEO landing page that appeared in the Google results, so the dimensions <code>query</code> and <code>page</code> are required:</p>
-<pre class="r"><code>library(searchConsoleR)
+logToConsole(&#39;triggerIp:&#39;, getRemoteAddress());</code></pre>
+<p>In real-life you will probably want to react to more interesting events, such as those in the Google Analytics requests:</p>
+<pre class="node"><code>const logToConsole = require(&#39;logToConsole&#39;);
+const getRemoteAddress = require(&#39;getRemoteAddress&#39;);
+const isRequestMpv1 = require(&#39;isRequestMpv1&#39;);
+const claimRequest = require(&#39;claimRequest&#39;);
+const extractEventsFromMpv1 = require(&#39;extractEventsFromMpv1&#39;);
 
-test_website &lt;- &quot;https://www.example.co.uk&quot;
-sc &lt;- search_analytics(test_website, dimensions = c(&quot;query&quot;,&quot;page&quot;))</code></pre>
-<p>The NLP API supports <a href="https://cloud.google.com/natural-language/docs/languages">these 10 languages</a>, so the queries’ language also need to be on that list.</p>
-<p>For this example, we only use English keywords so we can limit to just those by detecting the query keywords.</p>
-<p>I suggest using the <a href="https://CRAN.R-project.org/package=cld2"><code>cld2</code> library</a>. I use this offline library for language detection as its free and fine for quick processing, whilst if more heavy duty detection and translation needed, then I would use <code>gl_translate()</code> from <code>googleLanguageR</code> although that has a cost.</p>
-<pre class="r"><code>library(cld2)
-
-sc$language &lt;- detect_language(sc$query)</code></pre>
-<p>Keeping the languages that are <code>en</code> or <code>NA</code> (we couldn’t tell)</p>
-<pre class="r"><code>sc_eng &lt;- sc %&gt;% filter(is.na(language) | language == &quot;en&quot;)</code></pre>
-<p>Now we have a clean dataset to send to the NLP API.</p>
-</div>
-<div id="gather-nlp-data" class="section level2">
-<h2>Gather NLP data</h2>
-<p>To avoid running NLP on lots of unnecessary HTML boiler plate, we need to consider what data we want to send in.</p>
-<p>For example, as we’re interested in SEO, the relevant data will include the title tags and the body content. Limiting the data sent to those will mean we have cleaner data out.</p>
-<p>There are two approaches to this:</p>
-<ul>
-<li>Examine the HTML or the website to only extract the useful bits using <code>rvest</code>’s CSS selectors (needs bespoke programming for each website)</li>
-<li>Take the text only cache from Google as the text source instead (cleaner data, but you’ll be blocked by Google if you scrape to many URLs)</li>
-</ul>
-<p>For this example, we take the latter method, but if you are running this beyond proof of concept scale I would advise the first.</p>
-<p>To take the “Text Only” cached version of a page, we use the URL that is supplied by Google Search’s cache:</p>
-<p>e.g.</p>
-<p>If your URL is - <code>http://example.com/your-website</code></p>
-<p>…then the text only webcache will be:
-<code>http://webcache.googleusercontent.com/search?q=cache:example.com/your-website&amp;num=1&amp;strip=1&amp;vwsrc=0#/</code></p>
-<p>An example function that does the above is shown below:</p>
-<pre class="r"><code>library(rvest)
-library(tidyverse)
-
-## create a function for scraping this website
-scrape &lt;- function(the_url){
-  message(&quot;Scraping &quot;, the_url)
+// Check if request is Measurement Protocol
+if (isRequestMpv1()) {
+  // Claim the request
+  claimRequest();
+  const events = extractEventsFromMpv1();
+  events.forEach((event, i) =&gt; {
   
-  read &lt;- read_html(the_url)
-  
-  Sys.sleep(5)   # be nice to website
-  
-  read %&gt;%
-    html_text() %&gt;% 
-    trimws()
-}
-
-scrape_googlecache &lt;- function(the_url){
-  
-  wc &lt;- gsub(&quot;https?://&quot;,&quot;&quot;, the_url)
-  cache_me &lt;- sprintf(
-    &quot;http://webcache.googleusercontent.com/search?q=cache:%s&amp;num=1&amp;strip=1&amp;vwsrc=0#/&quot;,
-    wc
-  )
-  
-  scraped &lt;- scrape(cache_me)
-  
-  # remove whitespace and double whitespace
-  out &lt;- gsub(&quot;(\r|\n|\t)&quot;,&quot; &quot;, scraped)
-  out &lt;- gsub(&quot;\\s\\s+&quot;,&quot; &quot;, out)
-  
-  # remove first 1000 characters of boilerplate
-  out &lt;- substr(out, 1000, nchar(out))
-
-  data.frame(cached = out, url = the_url, stringsAsFactors = FALSE)
-
+    // if event is a page_view
+    if(event.event_name === &quot;page_view&quot;){
+      // log some interesting stuff for the trigger
+      logToConsole(&#39;triggerIp:&#39;, getRemoteAddress(), 
+                   &#39; page:&#39;, event.page_location,
+                  &#39; referrer:&#39;, event.page_referrrer);
+    
+    }
+    
+  });
+  returnResponse();
 }</code></pre>
-<p>Here is a demo of how it works on one URL:</p>
-<pre class="r"><code>the_url &lt;- &quot;https://code.markedmondson.me&quot;
-
-html_url &lt;- scrape_googlecache(the_url)
-
-substr(html_url$cached, 1000, 2000)</code></pre>
-<p>You can now apply this function to all the unique URLs in your search console URLs using a purrr loop, but hit it too fast and you’ll be blocked.</p>
-<pre class="r"><code>library(tidyverse)
-
-all_urls_scrape &lt;- sc_eng %&gt;% 
-  distinct(page) %&gt;% 
-  select(page) %&gt;% 
-  map_df(scrape_googlecache)
-  </code></pre>
-<div id="do-the-nlp-api" class="section level3">
-<h3>Do the NLP API</h3>
-<p>Now we can get results from Google NLP - test this out first with a couple of URLs as it costs money for each API call.</p>
-<pre class="r"><code>library(tidyverse)
-library(googleLanguageR)
-
-nlp_results &lt;- all_urls_scrape %&gt;% 
-  select(cached) %&gt;% 
-  map(gl_nlp) # this line makes the API calls</code></pre>
-<p>The NLP API returns lots of data, for now we are interested in the entities section:</p>
-<pre class="r"><code>library(tidyverse)
-entities &lt;- map(nlp_results, &quot;entities&quot;)
-
-## only get the types that are not &quot;OTHER&quot;
-types &lt;- map(entities, function(x){
-  y &lt;- x[[1]]
-  y &lt;- y[y$type != &quot;OTHER&quot;,]
-  y &lt;- y[!is.na(y$type),]
-  y
-})
-</code></pre>
-<p>We now have a list of the NLP results for each URL, for all the URLs that were in the search console data.</p>
+<p>Here is an example of the events from the <code>extractEventsFromMpv1()</code> API:</p>
+<pre class="js"><code>[{&quot;x-ga-protocol_version&quot;:&quot;1&quot;,
+  &quot;x-ga-system_properties&quot;:{&quot;v&quot;:&quot;j85&quot;,&quot;u&quot;:&quot;SACAAEABAAAAAC~&quot;,&quot;gid&quot;:&quot;12345678.1599216410&quot;,&quot;r&quot;:&quot;1&quot;},
+  &quot;x-ga-page_id&quot;:1377079516,
+  &quot;x-ga-request_count&quot;:1,
+  &quot;page_location&quot;:&quot;https://code.markedmondson.me/r-at-scale-on-google-cloud-platform/&quot;,
+  &quot;page_referrer&quot;:&quot;https://www.google.com/&quot;,&quot;language&quot;:&quot;en-gb&quot;,&quot;page_encoding&quot;:&quot;UTF-8&quot;,
+  &quot;page_title&quot;:&quot;R at scale on the Google Cloud Platform · Mark Edmondson&quot;,
+  &quot;x-ga-mp1-sd&quot;:&quot;24-bit&quot;,
+  &quot;screen_resolution&quot;:&quot;1280x800&quot;,
+  &quot;x-ga-mp1-vp&quot;:&quot;1264x666&quot;,
+  &quot;x-ga-mp1-je&quot;:&quot;0&quot;,
+  &quot;x-ga-mp1-jid&quot;:&quot;920318383&quot;,
+  &quot;x-ga-mp1-gjid&quot;:&quot;277342247&quot;,
+  &quot;client_id&quot;:&quot;12345678.1599216410&quot;,
+  &quot;x-ga-measurement_id&quot;:&quot;UA-12345-2&quot;,
+  &quot;x-ga-gtm_version&quot;:&quot;2wg8q1XXXX&quot;,
+  &quot;x-ga-mp1-z&quot;:&quot;1831891234&quot;,
+  &quot;event_name&quot;:&quot;page_view&quot;}]</code></pre>
+<p>Make sure to turn on the necessary permissions for the GTM Client. For Cloud Logging, this should be on “Always Log” and not just “Debug”.</p>
+<p>Once you have published the Client associated with the Client Template, you should start to see the info in your <a href="https://console.cloud.google.com/logs/viewer">Cloud Logging</a> within the same project.</p>
 </div>
-<div id="nlp-features" class="section level3">
-<h3>NLP features</h3>
-<p>You can see the <a href="http://code.markedmondson.me/googleLanguageR/articles/nlp.html">googleLanguageR website</a> for more details on what is returned, as one example here is what recognised entities the API returned that have Wikipedia links:</p>
-<pre class="r"><code>library(tidyverse)
-
-## only get entries that have wikipedia links
-types[[1]] %&gt;% 
-  filter(!is.na(wikipedia_url)) %&gt;% 
-  distinct(name, wikipedia_url) %&gt;% 
-  head %&gt;% 
-  knitr::kable()
-  </code></pre>
+<div id="setup-cloud-logging" class="section level3">
+<h3>Setup Cloud Logging</h3>
+<p>Where these logs are depends on how you deployed your container - in my case this was within Cloud Run, but it is more likely to be in the App Engine logs if you’ve deployed in the usual manner.</p>
+<p>You should see them like below:</p>
+<p><img src="/images/gtm-cloud-logging.png" />
+Once populating, expand out one of them from the log and mouse over the relevant entry and select “Show matching entries”:</p>
+<p><img src="/images/gtm-show-matching.png" /></p>
+<p>This will populate an advanced filter at the top. This filter is where you define what log entries will trigger the Pub/Sub and subsequent actions via the “Create Sink” button at the top.</p>
+<p>For the example above the filter was:</p>
+<pre><code>resource.type=&quot;cloud_run_revision&quot;
+resource.labels.service_name=&quot;server-side&quot;
+textPayload=&quot;triggerIp: 12.34.56.78  page: https://code.markedmondson.me/gtm-serverside-cloudrun/  referrer: undefined&quot;</code></pre>
+<p>You may want to relax it a bit, for instance a regex filter that will trigger whatever the page or referrer is. For this you can use the <code>=~</code> operator and put in regex - the below will alter the trigger for only those entries that contain my ip address:</p>
+<pre><code>resource.type=&quot;cloud_run_revision&quot;
+resource.labels.service_name=&quot;server-side&quot;
+textPayload=~&quot;triggerIp: 12.34.56.78&quot;</code></pre>
+<p><em>Your resource.type and resource.labels.service_name will differ from mine depending on your deployment - if you have used “Show matching entries” button though it will be populated with the correct data</em></p>
+<p>Now “Create Sink” at the top and configure to a Pub/Sub topic. You can use an existing or create a new one in the wizard - this is the same as <a href="https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/">the BigQuery post details</a>:</p>
+<p><img src="/images/ga360_logging_filter.png" /></p>
+<p>Once your Pub/Sub topic is setup it will transmit for every new log entry. What processes the Pub/Sub topic is up to you, but for this demo I chose Cloud Functions which processes the data and sends it to my Slack channel.</p>
 </div>
-</div>
-<div id="comparison-between-search-console-and-nlp" class="section level2">
-<h2>Comparison between Search Console and NLP</h2>
-<p>We can now compare the URL entities in <code>types</code> and the Search Console data in <code>sc_eng</code></p>
-<p>For demo purposes, we only look at the home page for the example website, but you can repeat this by looping over the list of <code>types</code>.</p>
-<pre class="r"><code>homepage_types &lt;- types[[1]]
-homepage_search_console &lt;- sc_eng %&gt;% filter(page = &quot;https://www.example.co.uk/&quot;)</code></pre>
-<pre class="r"><code>page_types &lt;- readRDS(&quot;homepage_types.rds&quot;)
-page_search_console &lt;- readRDS(&quot;homepage_search_console.rds&quot;)</code></pre>
-<div id="data-processing" class="section level3">
-<h3>Data processing</h3>
-<p>We first get the NLP entity names and the search console queries into the same format, lowercase and deduplicated, and for the NLP results the <code>salience</code> score is how important it thinks that entity is to the page, so we’ll sort downwards from that:</p>
-<pre class="r"><code>library(tidyverse)
-page_types &lt;- page_types %&gt;% 
-  distinct(name, .keep_all = TRUE) %&gt;% 
-  mutate(name = tolower(name)) %&gt;% 
-  arrange(desc(salience))
-</code></pre>
-<p>Now the vector of entity names in <code>page_types$name</code> and the vector of search console queries in <code>sc_eng$query</code> are the two vectors of keywords we want to compare. Are they similar?</p>
-</div>
-<div id="similarity-of-keywords" class="section level3">
-<h3>Similarity of keywords</h3>
-<p>In my example case I have 10 distinct queries from search console, and 464 unique named entites extracted out of the HTML from the NLP API, sorted by salience.</p>
-<p>A simple way of matching strings in R is using its base function <code>agrep()</code> which is an implementation of Levenshtein distance AKA “fuzzy matching”. I’ll run all the queries and compare against the entities:</p>
-<pre class="r"><code>library(tidyverse)
-## named vector
-queries &lt;- page_search_console$query %&gt;% unique()
-queries &lt;- setNames(queries, queries) 
+<div id="setup-cloud-function" class="section level3">
+<h3>Setup Cloud Function</h3>
+<p>The Cloud Function I set-up within the Web UI.</p>
+<p>The trigger I set to the Pub/Sub topic just created.</p>
+<p>I’m using Slack as an example, but you would modify the below for your own application. <a href="https://api.slack.com/tutorials/slack-apps-hello-world">See the Slack tutorials on how to set up its webhooks</a> for your Slack channel. I chose it as its a super simple API for this kind of thing.</p>
+<p>I used Cloud Functions web editor to enter this Python code:</p>
+<pre class="py"><code>import requests
+import base64
+import logging
 
-fuzzy_ranks &lt;- queries %&gt;% 
-  map(~ agrep(., page_types$name, value = FALSE)) %&gt;% 
-  enframe(name = &quot;query&quot;, value = &quot;nlp_rank&quot;) %&gt;% 
-  mutate(nlp_hits = map_int(nlp_rank, length)) %&gt;% 
-  filter(nlp_hits &gt; 0)
+def website_alert(event, context):
 
-fuzzy_values &lt;- queries %&gt;% 
-  map(~ agrep(., page_types$name, value = TRUE)) %&gt;% 
-  enframe(name = &quot;query&quot;, value = &quot;nlp_value&quot;)
+    // replace with your Slack webhook
+    url = &quot;https://hooks.slack.com/services/CODEHERE/BLAHBLAH/ASECRETCODE&quot;
 
-fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)
-</code></pre>
-<p>Since its a one-to-many relationship (one query can match several entities on the page), a list-column created by <code>enframe()</code> keeps it all neat and tidy within the tidyverse style.</p>
-<ul>
-<li><code>nlp_rank</code> is a vector of rankings of the salience of the words</li>
-<li><code>nlp_hits</code> is a numeric of how many entities each query had</li>
-<li><code>nlp_value</code> is a vector of what entities are matched</li>
-</ul>
-<p>I’ve had to change a few values to protect client data, but here is an example of the output:</p>
-<p><img src="../images/searchconsole-googlelanguage-table.png" /></p>
+    pubsub_message = base64.b64decode(event[&#39;data&#39;]).decode(&#39;utf-8&#39;)
+
+    logging.info(pubsub_message)
+    
+    payload = &#39;{&quot;text&quot;:&quot;You just visited the website&quot;}&#39;
+
+    headers = {
+        &#39;Content-Type&#39;: &#39;application/json&#39;
+    }
+
+    response = requests.request(&quot;POST&quot;, url, headers=headers, data=payload)
+
+    print(response.text.encode(&#39;utf8&#39;))</code></pre>
+<p>Replace the Slack webhook for your own then publish the code and visit the website - you should get the Slack popup. Check the Cloud Function logs if its not working.</p>
 </div>
 </div>
-<div id="does-the-nlp-help-with-any-insight" class="section level2">
-<h2>Does the NLP help with any insight?</h2>
-<p>A few take aways from the above in the real case, which was an e-commerce page targeting customers in Europe was:</p>
-<ul>
-<li>The NLP ranked the salience of the top keyword referrer as 8 - meaning it had 7 more entities it thought the page was more relevant to the page. This may mean we should work more on stressing the subject we want to be recognised in Google for.</li>
-<li>One of these was “British” which didn’t appear on the page which only mentioned “UK”, so it looks like it adds synonyms as well into its analysis.</li>
-<li>The NLP ranked “customers” as rank 3, even though it was mentioned only two times on the page. It got that this was an ecommerce page. Likewise it identified “European Econmic area” as important, even though it was only mentioned once. Since this was a sales page aimed at EEC users, this looks fair.</li>
-</ul>
+<div id="improvements-and-where-to-go-from-here" class="section level2">
+<h2>Improvements and where to go from here</h2>
+<p>Its a nice demo but its not something you could use seriously every day yet. Obviously you will want to select the filters and application you want to send data to, and configure the events you are sending in.</p>
+<p>Other than that, you may wish to not use Cloud Logging and Pub/Sub but rather HTTP requests directly from the GTM Client - it has a <a href="https://developers.google.com/tag-manager/serverside/api#sendhttpget"><code>sendHttpGet()</code></a> and <a href="https://developers.google.com/tag-manager/serverside/api#sendhttprequest"><code>sendHttpRequest()</code></a> for this purpose. But I wonder if they will be as reliable as Pub/Sub, which guarantees at least once delivery.</p>
+<p>Another potential serious issue is that logging costs money, and in fact recently there are already <a href="https://developers.google.com/tag-manager/serverside/script-user-guide#disable_app_engine_request_logging_optional">updates to turn off some of the GTM logging</a> to reduce your cloud costs. This can still be done just selectively, so you can preserve your Cloud Logging for the above purposes if necessary.</p>
+<p>The whole idea can be traced back to <a href="https://twitter.com/silviueftimie">Silviu Eftimie</a> on the GTM Server Side forums, who was wondering if the new <a href="https://www.youtube.com/watch?reload=9&amp;v=Uz8G8fTwwXs">Google Cloud Workflows</a>, a service that allows real-time processing of data. This looks very exciting and opens the door to complete and complex data-flows reacting to the events sent.</p>
+<p><a href="https://firebase.google.com/products">Firebase has several APIs</a> that would really nicely fit in here too. Instead of Slack messages, a call to <a href="https://firebase.google.com/products/cloud-messaging">Firebase Cloud Messaging</a> for example would allow you to distribute alerts to mobile devices and/or web at scale, or tailored to individuals (a web developer for example if a server failure event is sent?) - other services include Remote Config (change app content?) and Predictions.</p>
 </div>
 <div id="summary" class="section level2">
 <h2>Summary</h2>
-<p>Its early days but I am starting to run through new client websites to see what comes up (by writing more custom code to parse out the content) to pass on to the SEO specialists, at the very least its another perspective to inform topic and keyword choices. If anyone takes this approach and finds it useful, do please comment as I’ll be interested if this helps. It would also be good to compare this with other non-Google NLP APIs such as on Azure and AWS to see if the Google one is especially useful for Google SEO.</p>
+<p>GTM Server Side has made me post <a href="https://code.markedmondson.me/gtm-serverside-cloudrun/">two blog posts</a> in a week, a new record. Its that game changing for new use cases which I hope to be working on in the next couple of years. It really shows how the Cloud can empower digital analytics, and how its firmly planted in its future, one which I am looking forward to seeing. If you have any other ideas on how this new paradigm will help generate more use cases, I’d be very interested in hearing what you are doing!</p>
 </div>
 
         </div>
         <footer class="article-footer">
-    <a data-url="/searchconsoler-vs-googlelanguager/" data-id="a11056a2f18022d344c40f23c35d2953" class="article-share-link">
+    <a data-url="/gtm-serverside-webhooks/" data-id="0a09a9f3291d0079d8d6443a8e2773d3" class="article-share-link">
         <i class="fa fa-share"></i>
         Share
     </a>
     
-    <a href="/searchconsoler-vs-googlelanguager/#disqus_thread" class="article-comment-link">
+    <a href="/gtm-serverside-webhooks/#disqus_thread" class="article-comment-link">
         Comments
     </a>
     
@@ -630,21 +535,14 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)
     
 <nav id="article-nav">
     
-    <a href="/rstudio-server-chromebook/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/gtm-serverside-cloudrun/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">
           Older
       </strong>
-      <div class="article-nav-title">Run RStudio Server on a Chromebook as a Cloud Native</div>
+      <div class="article-nav-title">Google Tag Manager Server Side on Cloud Run - Pros and Cons</div>
     </a>
     
 
-    
-    <a href="/embedding-google-data-studio-into-rmarkdown/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">
-          Newer
-      </strong>
-      <div class="article-nav-title">Embedding Google Data Studio into RMarkdown</div>
-    </a>
     
 </nav>
 
@@ -694,7 +592,7 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)
                 <div class="item-thumbnail">
                     <a href="/gtm-serverside-webhooks/" class="thumbnail">
                     
-                        <span style="background-image:url(/banners/gtm-serverside-events.png)" alt="Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API" class="thumbnail-image"></span>
+                        <span style="background-image:url(/banners/gtm-serverside-events.png)" alt="Using Google Tag Manager Server Side to Trigger Webhook Events" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -711,7 +609,7 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)
                 <div class="item-thumbnail">
                     <a href="/gtm-serverside-cloudrun/" class="thumbnail">
                     
-                        <span style="background-image:url(/banners/princess-gtm.png)" alt="Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API" class="thumbnail-image"></span>
+                        <span style="background-image:url(/banners/princess-gtm.png)" alt="Using Google Tag Manager Server Side to Trigger Webhook Events" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -728,7 +626,7 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)
                 <div class="item-thumbnail">
                     <a href="/shiny-cloudrun/" class="thumbnail">
                     
-                        <span style="background-image:url(/banners/shiny-clouds.jpg)" alt="Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API" class="thumbnail-image"></span>
+                        <span style="background-image:url(/banners/shiny-clouds.jpg)" alt="Using Google Tag Manager Server Side to Trigger Webhook Events" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -745,7 +643,7 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)
                 <div class="item-thumbnail">
                     <a href="/datascience-aas/" class="thumbnail">
                     
-                        <span style="background-image:url(/banners/piketty-capital.png)" alt="Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API" class="thumbnail-image"></span>
+                        <span style="background-image:url(/banners/piketty-capital.png)" alt="Using Google Tag Manager Server Side to Trigger Webhook Events" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
@@ -762,7 +660,7 @@ fuzzy &lt;- left_join(fuzzy_ranks, fuzzy_values, by = &quot;query&quot;)
                 <div class="item-thumbnail">
                     <a href="/googleCloudRunner-intro/" class="thumbnail">
                     
-                        <span style="background-image:url(/banners/gcp-pyramid.png)" alt="Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API" class="thumbnail-image"></span>
+                        <span style="background-image:url(/banners/gcp-pyramid.png)" alt="Using Google Tag Manager Server Side to Trigger Webhook Events" class="thumbnail-image"></span>
                     
                     </a>
                 </div>

@@ -28,7 +28,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="/" />
 
-<meta property="og:updated_time" content="2020-08-21T00:00:00&#43;00:00"/>
+<meta property="og:updated_time" content="2020-09-04T12:50:50&#43;01:00"/>
 
     
     
@@ -173,7 +173,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        26
+        27
         <span>Posts</span>
       </div>
       <div class="article-info-block">
@@ -260,6 +260,146 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <section id="main">
     
     
+
+<article class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        <a href="/gtm-serverside-webhooks/" itemprop="url">
+            <img src="/banners/gtm-serverside-events.png" class="article-banner">
+        
+        </a>
+
+        <header class="article-header">
+    <a href="/gtm-serverside-webhooks/">
+    <h1 class="article-title" itemprop="name">
+        Using Google Tag Manager Server Side to Trigger Webhook Events
+    </h1>
+    </a>
+    <div class="article-meta">
+
+        
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2020-09-04 12:50:50 &#43;0100 &#43;0100" itemprop="datePublished">2020-09-04</time>
+            &middot;
+            1350
+            words
+            &middot;
+            7
+            minute read
+        </div>
+        
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                
+                <a class="article-category-link" href="/tags/google-tag-manager">google-tag-manager</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="/tags/cloud-functions">cloud-functions</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+        <div class="article-entry" itemprop="articleBody">
+            <p>
+                How to configure Google Tag Manager Server Side so it can send webhooks to services upon certain events 
+            </p>
+            <p class="article-more-link">
+                <a href="/gtm-serverside-webhooks/">
+                    Read more
+                </a>
+            </p>
+        </div>
+        <footer class="article-footer">
+    <a data-url="/gtm-serverside-webhooks/" data-id="0a09a9f3291d0079d8d6443a8e2773d3" class="article-share-link">
+        <i class="fa fa-share"></i>
+        Share
+    </a>
+    
+    <a href="/gtm-serverside-webhooks/#disqus_thread" class="article-comment-link">
+        Comments
+    </a>
+    
+
+    <script>
+    (function ($) {
+        
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+    </script>
+</footer>
+
+    </div>
+</article>
 
 <article class="article article-type-post" itemscope="" itemprop="blogPost">
     <div class="article-inner">
@@ -3065,147 +3205,6 @@ For instance, if you are looking at landing page performance of SEO traffic you 
     </div>
 </article>
 
-<article class="article article-type-post" itemscope="" itemprop="blogPost">
-    <div class="article-inner">
-        
-        <a href="/launch-rstudio-server-google-cloud-in-two-lines-r/" itemprop="url">
-            <img src="/banners/rstudio-gce.png" class="article-banner">
-        
-        </a>
-
-        <header class="article-header">
-    <a href="/launch-rstudio-server-google-cloud-in-two-lines-r/">
-    <h1 class="article-title" itemprop="name">
-        Launch RStudio Server in the Google Cloud with two lines of R
-    </h1>
-    </a>
-    <div class="article-meta">
-
-        
-        <div class="article-date">
-            <i class="fa fa-calendar"></i>
-            <time datetime="2016-10-20 23:03:57 &#43;0100 &#43;0100" itemprop="datePublished">2016-10-20</time>
-            &middot;
-            525
-            words
-            &middot;
-            3
-            minute read
-        </div>
-        
-        
-
-        
-            
-            
-            <div class="article-category">
-                <i class="fa fa-tags"></i>
-                
-                
-                <a class="article-category-link" href="/tags/r">R</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="/tags/google-compute-engine">google-compute-engine</a>
-                
-                
-            </div>
-            
-        
-    </div>
-</header>
-
-        <div class="article-entry" itemprop="articleBody">
-            <p>
-                I&rsquo;ve written previously about how to get RStudio Server running on Google Compute Engine: the first in July 2014 gave you a snapshot to download then customise, the second in April 2016 launched via a Docker container.
-Things move on, and I now recommend using the process below that uses the RStudio template in the new on CRAN googleComputeEngineR package. Not only does it abstract away a lot of the dev-ops set up, but it also gives you more flexibility by taking advantage of Dockerfiles.
-            </p>
-            <p class="article-more-link">
-                <a href="/launch-rstudio-server-google-cloud-in-two-lines-r/">
-                    Read more
-                </a>
-            </p>
-        </div>
-        <footer class="article-footer">
-    <a data-url="/launch-rstudio-server-google-cloud-in-two-lines-r/" data-id="2e3f85e7dbea05d09b66ec9ffff37785" class="article-share-link">
-        <i class="fa fa-share"></i>
-        Share
-    </a>
-    
-    <a href="/launch-rstudio-server-google-cloud-in-two-lines-r/#disqus_thread" class="article-comment-link">
-        Comments
-    </a>
-    
-
-    <script>
-    (function ($) {
-        
-        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
-            __SHARE_BUTTON_BINDED__ = true;
-        } else {
-            return;
-        }
-        $('body').on('click', function() {
-            $('.article-share-box.on').removeClass('on');
-        }).on('click', '.article-share-link', function(e) {
-            e.stopPropagation();
-
-            var $this = $(this),
-                url = $this.attr('data-url'),
-                encodedUrl = encodeURIComponent(url),
-                id = 'article-share-box-' + $this.attr('data-id'),
-                offset = $this.offset(),
-                box;
-
-            if ($('#' + id).length) {
-                box = $('#' + id);
-
-                if (box.hasClass('on')){
-                    box.removeClass('on');
-                    return;
-                }
-            } else {
-                var html = [
-                    '<div id="' + id + '" class="article-share-box">',
-                        '<input class="article-share-input" value="' + url + '">',
-                        '<div class="article-share-links">',
-                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
-                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
-                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
-                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
-                        '</div>',
-                    '</div>'
-                ].join('');
-
-              box = $(html);
-
-              $('body').append(box);
-            }
-
-            $('.article-share-box.on').hide();
-
-            box.css({
-                top: offset.top + 25,
-                left: offset.left
-            }).addClass('on');
-
-        }).on('click', '.article-share-box', function (e) {
-            e.stopPropagation();
-        }).on('click', '.article-share-box-input', function () {
-            $(this).select();
-        }).on('click', '.article-share-box-link', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
-        });
-    })(jQuery);
-    </script>
-</footer>
-
-    </div>
-</article>
-
 
 <nav id="page-nav">
 
@@ -3230,6 +3229,23 @@ Things move on, and I now recommend using the process below that uses the RStudi
     </h3>
     <div class="widget">
         <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="/gtm-serverside-webhooks/" class="thumbnail">
+                    
+                        <span style="background-image:url(/banners/gtm-serverside-events.png)" alt="Mark Edmondson" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="/gtm-serverside-webhooks/" class="title">Using Google Tag Manager Server Side to Trigger Webhook Events</a></p>
+                    <p class="item-date">
+                        <time datetime="2020-09-04 12:50:50 &#43;0100 &#43;0100" itemprop="datePublished">2020-09-04</time>
+                    </p>
+                </div>
+            </li>
             
             <li>
                 <div class="item-thumbnail">
@@ -3299,23 +3315,6 @@ Things move on, and I now recommend using the process below that uses the RStudi
                 </div>
             </li>
             
-            <li>
-                <div class="item-thumbnail">
-                    <a href="/gago/" class="thumbnail">
-                    
-                        <span style="background-image:url(/banners/gago.png)" alt="Mark Edmondson" class="thumbnail-image"></span>
-                    
-                    </a>
-                </div>
-                <div class="item-inner">
-                    
-                    <p class="item-title"><a href="/gago/" class="title">gago: Blazingly fast Google Analytics API downloads with Go</a></p>
-                    <p class="item-date">
-                        <time datetime="2019-10-09 00:00:00 &#43;0000 UTC" itemprop="datePublished">2019-10-09</time>
-                    </p>
-                </div>
-            </li>
-            
         </ul>
     </div>
 </div>
@@ -3366,7 +3365,7 @@ Things move on, and I now recommend using the process below that uses the RStudi
                 <a class="category-list-link" href="/tags/cloud-functions">
                     cloud-functions
                 </a>
-                <span class="category-list-count">3</span>
+                <span class="category-list-count">4</span>
             </li>
             
             <li class="category-list-item">
@@ -3446,7 +3445,7 @@ Things move on, and I now recommend using the process below that uses the RStudi
                 <a class="category-list-link" href="/tags/google-tag-manager">
                     google-tag-manager
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">5</span>
             </li>
             
             <li class="category-list-item">

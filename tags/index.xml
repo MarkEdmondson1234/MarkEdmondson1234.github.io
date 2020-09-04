@@ -6,10 +6,28 @@
     <description>Recent content in Tags on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
-    <lastBuildDate>Fri, 21 Aug 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 04 Sep 2020 12:50:50 +0100</lastBuildDate>
     
 	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>cloud-functions</title>
+      <link>/tags/cloud-functions/</link>
+      <pubDate>Fri, 04 Sep 2020 12:50:50 +0100</pubDate>
+      
+      <guid>/tags/cloud-functions/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>google-tag-manager</title>
+      <link>/tags/google-tag-manager/</link>
+      <pubDate>Fri, 04 Sep 2020 12:50:50 +0100</pubDate>
+      
+      <guid>/tags/google-tag-manager/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>cloud-run</title>
@@ -30,29 +48,11 @@
     </item>
     
     <item>
-      <title>google-tag-manager</title>
-      <link>/tags/google-tag-manager/</link>
-      <pubDate>Fri, 21 Aug 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/google-tag-manager/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>R</title>
       <link>/tags/R/</link>
       <pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
       
       <guid>/tags/R/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>cloud-functions</title>
-      <link>/tags/cloud-functions/</link>
-      <pubDate>Sun, 28 Jun 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/cloud-functions/</guid>
       <description></description>
     </item>
     
