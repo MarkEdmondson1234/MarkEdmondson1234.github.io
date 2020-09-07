@@ -409,7 +409,7 @@ mock(&#39;isRequestMpv1&#39;, () =&gt; true);
 mock(&#39;extractEventsFromMpv1&#39;, () =&gt; mockData);
 // Call runCode to run the template&#39;s code.
 let result = runCode();
-assertThat(result).isEqualTo(true);</code></pre>
+assertThat(result).isTrue();</code></pre>
 <p><em>Thanks Simo with help for above</em></p>
 <p>You can also make a fancier client that takes fields so the user can decide what to log via the data.fields.</p>
 <p>Make sure to turn on the necessary permissions for the GTM Client. For Cloud Logging, this should be on “Always Log” and not just “Debug”.</p>
