@@ -35,7 +35,7 @@
 
 <meta itemprop="datePublished" content="2020-09-04T12:50:50&#43;01:00" />
 <meta itemprop="dateModified" content="2020-09-04T12:50:50&#43;01:00" />
-<meta itemprop="wordCount" content="1357">
+<meta itemprop="wordCount" content="1444">
 
 
 
@@ -283,7 +283,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2020-09-04 12:50:50 &#43;0100 &#43;0100" itemprop="datePublished">2020-09-04</time>
             &middot;
-            1357
+            1444
             words
             &middot;
             7
@@ -348,6 +348,7 @@ const extractEventsFromMpv1 = require(&#39;extractEventsFromMpv1&#39;);
 // Check if request is Measurement Protocol
 if (isRequestMpv1()) {
 
+  let test = false;
   const events = extractEventsFromMpv1();
   events.forEach((event, i) =&gt; {
   
@@ -357,11 +358,13 @@ if (isRequestMpv1()) {
       logToConsole(&#39;triggerIp:&#39;, getRemoteAddress(), 
                    &#39; page:&#39;, event.page_location,
                   &#39; referrer:&#39;, event.page_referrer);
-    
+      // for the tests
+      test = true;
     }
-    
   });
-
+  
+  return test;
+  
 }</code></pre>
 <p>Here is an example of the events from the <code>extractEventsFromMpv1()</code> API:</p>
 <pre class="js"><code>[{&quot;x-ga-protocol_version&quot;:&quot;1&quot;,
@@ -382,7 +385,33 @@ if (isRequestMpv1()) {
   &quot;x-ga-gtm_version&quot;:&quot;2wg8q1XXXX&quot;,
   &quot;x-ga-mp1-z&quot;:&quot;1831891234&quot;,
   &quot;event_name&quot;:&quot;page_view&quot;}]</code></pre>
-<p>You can make a fancier client that takes fields so the user can decide what to log.</p>
+<p>You can put this data as a mock for a Code test:</p>
+<pre class="js"><code>const mockData = [{&quot;x-ga-protocol_version&quot;:&quot;1&quot;,
+  &quot;x-ga-system_properties&quot;:{&quot;v&quot;:&quot;j85&quot;,&quot;u&quot;:&quot;SACAAEABAAAAAC~&quot;,&quot;gid&quot;:&quot;12345678.1599216410&quot;,&quot;r&quot;:&quot;1&quot;},
+  &quot;x-ga-page_id&quot;:1377079516,
+  &quot;x-ga-request_count&quot;:1,
+  &quot;page_location&quot;:&quot;https://code.markedmondson.me/r-at-scale-on-google-cloud-platform/&quot;,
+  &quot;page_referrer&quot;:&quot;https://www.google.com/&quot;,&quot;language&quot;:&quot;en-gb&quot;,&quot;page_encoding&quot;:&quot;UTF-8&quot;,
+  &quot;page_title&quot;:&quot;R at scale on the Google Cloud Platform · Mark Edmondson&quot;,
+  &quot;x-ga-mp1-sd&quot;:&quot;24-bit&quot;,
+  &quot;screen_resolution&quot;:&quot;1280x800&quot;,
+  &quot;x-ga-mp1-vp&quot;:&quot;1264x666&quot;,
+  &quot;x-ga-mp1-je&quot;:&quot;0&quot;,
+  &quot;x-ga-mp1-jid&quot;:&quot;920318383&quot;,
+  &quot;x-ga-mp1-gjid&quot;:&quot;277342247&quot;,
+  &quot;client_id&quot;:&quot;12345678.1599216410&quot;,
+  &quot;x-ga-measurement_id&quot;:&quot;UA-12345-2&quot;,
+  &quot;x-ga-gtm_version&quot;:&quot;2wg8q1XXXX&quot;,
+  &quot;x-ga-mp1-z&quot;:&quot;1831891234&quot;,
+  &quot;event_name&quot;:&quot;page_view&quot;}];
+
+mock(&#39;isRequestMpv1&#39;, () =&gt; true);
+mock(&#39;extractEventsFromMpv1&#39;, () =&gt; mockData);
+// Call runCode to run the template&#39;s code.
+let result = runCode();
+assertThat(result).isEqualTo(true);</code></pre>
+<p><em>Thanks Simo with help for above</em></p>
+<p>You can also make a fancier client that takes fields so the user can decide what to log via the data.fields.</p>
 <p>Make sure to turn on the necessary permissions for the GTM Client. For Cloud Logging, this should be on “Always Log” and not just “Debug”.</p>
 <p><img src="/images/gtm-client-logging.png" /></p>
 <p>Once you have published the Client associated with the Client Template, you should start to see the info in your <a href="https://console.cloud.google.com/logs/viewer">Cloud Logging</a> within the same project.</p>
