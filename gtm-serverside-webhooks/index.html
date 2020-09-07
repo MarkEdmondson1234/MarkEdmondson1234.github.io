@@ -35,7 +35,7 @@
 
 <meta itemprop="datePublished" content="2020-09-04T12:50:50&#43;01:00" />
 <meta itemprop="dateModified" content="2020-09-04T12:50:50&#43;01:00" />
-<meta itemprop="wordCount" content="1350">
+<meta itemprop="wordCount" content="1357">
 
 
 
@@ -283,7 +283,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2020-09-04 12:50:50 &#43;0100 &#43;0100" itemprop="datePublished">2020-09-04</time>
             &middot;
-            1350
+            1357
             words
             &middot;
             7
@@ -320,7 +320,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p>Sure, extra security and potential speed ups were nice to have, but it wasn’t really necessary for a lot of websites, given the cost. However, now we have had a chance to play with it and can see its integration with the rest of the Google Cloud Platform, new use cases are coming up which are very compelling, especially if the <a href="https://code.markedmondson.me/gtm-serverside-cloudrun/">GTM Server Side costs can be driven down via Cloud Run deployments - see last post</a>.</p>
 <p>One of those use cases is triggering event flows from GTM Server Side. This has always been possible via your server, but the ease of setting it up as detailed below opens up a host of opportunities, much like when GTM itself first came out and democratised publishing of tags.</p>
 <p>The idea behind using GTM Server Side events is that because its running in your own server, you have access to a lot more configuration including the server logs. Via these, you can surface your dataLayer or other tracking events within <a href="https://cloud.google.com/logging/docs">Cloud Logging</a> - and from there this allows you to use the Cloud Logging features to set up <a href="https://cloud.google.com/logging/docs/routing/overview">Pub/Sub triggers</a>.</p>
-<p>This is a technique I picked up from <a href="http://127.0.0.1:4321/bigquery-ga360-exports-cloud-functions/">BigQuery logging of GA360 exports - being able to use event logging to process the often late exports rather than using a schedule</a>.</p>
+<p>This is a technique I picked up from <a href="https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/">BigQuery logging of GA360 exports - being able to use event logging to process the often late exports rather than using a schedule</a>.</p>
 <p>Those Pub/Sub triggers can be used to trigger anything you like - in my example they set off a Cloud Function to send a message to Slack. An example video is shown below of it in action on this blog:</p>
 
 <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
@@ -343,13 +343,11 @@ logToConsole(&#39;triggerIp:&#39;, getRemoteAddress());</code></pre>
 <pre class="node"><code>const logToConsole = require(&#39;logToConsole&#39;);
 const getRemoteAddress = require(&#39;getRemoteAddress&#39;);
 const isRequestMpv1 = require(&#39;isRequestMpv1&#39;);
-const claimRequest = require(&#39;claimRequest&#39;);
 const extractEventsFromMpv1 = require(&#39;extractEventsFromMpv1&#39;);
 
 // Check if request is Measurement Protocol
 if (isRequestMpv1()) {
-  // Claim the request
-  claimRequest();
+
   const events = extractEventsFromMpv1();
   events.forEach((event, i) =&gt; {
   
@@ -363,7 +361,7 @@ if (isRequestMpv1()) {
     }
     
   });
-  returnResponse();
+
 }</code></pre>
 <p>Here is an example of the events from the <code>extractEventsFromMpv1()</code> API:</p>
 <pre class="js"><code>[{&quot;x-ga-protocol_version&quot;:&quot;1&quot;,
@@ -384,7 +382,9 @@ if (isRequestMpv1()) {
   &quot;x-ga-gtm_version&quot;:&quot;2wg8q1XXXX&quot;,
   &quot;x-ga-mp1-z&quot;:&quot;1831891234&quot;,
   &quot;event_name&quot;:&quot;page_view&quot;}]</code></pre>
+<p>You can make a fancier client that takes fields so the user can decide what to log.</p>
 <p>Make sure to turn on the necessary permissions for the GTM Client. For Cloud Logging, this should be on “Always Log” and not just “Debug”.</p>
+<p><img src="/images/gtm-client-logging.png" /></p>
 <p>Once you have published the Client associated with the Client Template, you should start to see the info in your <a href="https://console.cloud.google.com/logs/viewer">Cloud Logging</a> within the same project.</p>
 </div>
 <div id="setup-cloud-logging" class="section level3">
