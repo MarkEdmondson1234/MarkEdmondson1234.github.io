@@ -10,20 +10,20 @@
       <meta name="description" content="The code bit of the blog">
     
     
-    <link rel="canonical" href="/real-time-GTM-google-cloud-r-shiny-1/"/>
-    <link rel="icon" href="/favicon.ico">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/github.css" rel="stylesheet" id="theme-stylesheet">
-    <link rel="stylesheet" href="/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+    <link rel="canonical" href="https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/"/>
+    <link rel="icon" href="https://code.markedmondson.me/favicon.ico">
+    <link rel="apple-touch-icon" href="https://code.markedmondson.me/apple-touch-icon.png"/>
+    <link rel="stylesheet" href="https://code.markedmondson.me/css/style.css">
+    <link rel="stylesheet" href="https://code.markedmondson.me/css/github.css" rel="stylesheet" id="theme-stylesheet">
+    <link rel="stylesheet" href="https://code.markedmondson.me/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://code.markedmondson.me/fancybox/jquery.fancybox.css">
     
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
     <meta property="og:title" content="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" />
 <meta property="og:description" content="In part one of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&rsquo;s data streaming capability. In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in Shiny and the JavaScript visualisation library Highcharts." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/real-time-GTM-google-cloud-r-shiny-1/" />
+<meta property="og:url" content="https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/" />
 <meta property="article:published_time" content="2017-01-12T23:03:57&#43;01:00"/>
 <meta property="article:modified_time" content="2017-01-12T23:03:57&#43;01:00"/>
 
@@ -54,7 +54,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-WFFMBH');</script>
 
 
-    <script src="/js/highlight.pack.js"></script>
+    <script src="https://code.markedmondson.me/js/highlight.pack.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
     
 
@@ -69,16 +69,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 	<header id="header">
   <div id="header-main" class="header-inner">
     <div class="outer">
-      <a href="/" id="logo">
+      <a href="https://code.markedmondson.me/" id="logo">
           
-          <i class="logo" style="background-image: url('/images/greenhand.png')"></i>
+          <i class="logo" style="background-image: url('https://code.markedmondson.me/images/greenhand.png')"></i>
           
           <span class="site-title">Mark Edmondson</span>
       </a>
       <nav id="main-nav">
           
           
-          <a class="main-nav-link" href="/">Home</a>
+          <a class="main-nav-link" href="https://code.markedmondson.me/">Home</a>
           
           
           
@@ -104,7 +104,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       </nav>
         <nav id="sub-nav">
           <div class="profile" id="profile-nav">
-            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="/images/gde_avatar.jpg"><i class="fa fa-caret-down"></i></a>
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="https://code.markedmondson.me/images/gde_avatar.jpg"><i class="fa fa-caret-down"></i></a>
           </div>
         </nav>
         <div id="search-form-wrap">
@@ -112,7 +112,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               <input type="search" name="q" class="search-form-input" placeholder="Search">
               <button type="submit" class="search-form-submit">
               </button>
-              <input type="hidden" name="sitesearch" value="/" />
+              <input type="hidden" name="sitesearch" value="https://code.markedmondson.me/" />
          </form>
         </div>
     </div>
@@ -123,7 +123,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <tr>
           
           
-          <td><a class="main-nav-link" href="/">Home</a></td>
+          <td><a class="main-nav-link" href="https://code.markedmondson.me/">Home</a></td>
           
           
           
@@ -149,7 +149,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <td>
           <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
           <input type="search" name="q" class="search-form-input" placeholder="Search">
-          <input type="hidden" name="sitesearch" value="/" />
+          <input type="hidden" name="sitesearch" value="https://code.markedmondson.me/" />
           </form>
         </td>
       </tr>
@@ -165,7 +165,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <div class="inner profile-inner">
     <div class="base-info profile-block">
       
-      <img id="avatar" src="/images/gde_avatar.jpg">
+      <img id="avatar" src="https://code.markedmondson.me/images/gde_avatar.jpg">
       
       <h2 id="name">Mark Edmondson</h2>
       <h3 id="title">Coding in digital analytics</h3>
@@ -178,7 +178,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        27
+        28
         <span>Posts</span>
       </div>
       <div class="article-info-block">
@@ -253,7 +253,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <td><a href="//twitter.com/HoloMarkeD" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
 
 
-          <td><a href="/index.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+          <td><a href="https://code.markedmondson.me/index.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
         </tr>
       </table>
     </div>
@@ -267,11 +267,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
     <div class="article-inner">
         
-            <img src="/banners/itsalive.png" class="article-banner">
+            <img src="https://code.markedmondson.me/banners/itsalive.png" class="article-banner">
         
 
         <header class="article-header">
-    <a href="/real-time-GTM-google-cloud-r-shiny-1/">
+    <a href="https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/">
     <h1 class="article-title" itemprop="name">
         Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one
     </h1>
@@ -299,19 +299,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <i class="fa fa-tags"></i>
                 
                 
-                <a class="article-category-link" href="/tags/python">python</a>
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/python">python</a>
                 &middot;
                 
                 
-                <a class="article-category-link" href="/tags/google-app-engine">google-app-engine</a>
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/google-app-engine">google-app-engine</a>
                 &middot;
                 
                 
-                <a class="article-category-link" href="/tags/google-tag-manager">google-tag-manager</a>
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/google-tag-manager">google-tag-manager</a>
                 &middot;
                 
                 
-                <a class="article-category-link" href="/tags/big-query">big-query</a>
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/big-query">big-query</a>
                 
                 
             </div>
@@ -514,12 +514,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         </div>
         <footer class="article-footer">
-    <a data-url="/real-time-GTM-google-cloud-r-shiny-1/" data-id="b16f09ce10d075f772e1a8299cac80b3" class="article-share-link">
+    <a data-url="https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/" data-id="b16f09ce10d075f772e1a8299cac80b3" class="article-share-link">
         <i class="fa fa-share"></i>
         Share
     </a>
     
-    <a href="/real-time-GTM-google-cloud-r-shiny-1/#disqus_thread" class="article-comment-link">
+    <a href="https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/#disqus_thread" class="article-comment-link">
         Comments
     </a>
     
@@ -595,7 +595,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     
 <nav id="article-nav">
     
-    <a href="/quicker-insight-sort-metric-delta/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="https://code.markedmondson.me/quicker-insight-sort-metric-delta/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">
           Older
       </strong>
@@ -604,7 +604,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     
 
     
-    <a href="/real-time-GTM-google-cloud-r-shiny-2/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">
           Newer
       </strong>
@@ -657,15 +657,32 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="/gtm-serverside-webhooks/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/data-privacy-gtm/" class="thumbnail">
                     
-                        <span style="background-image:url(/banners/gtm-serverside-events.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/hawks-and-doves.jpg)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="/gtm-serverside-webhooks/" class="title">Using Google Tag Manager Server Side to Trigger Webhook Events</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/data-privacy-gtm/" class="title">Data Privacy Engineering with Google Tag Manager Server Side and Consent Mode</a></p>
+                    <p class="item-date">
+                        <time datetime="2020-11-27 09:29:50 &#43;0100 CET" itemprop="datePublished">2020-11-27</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/gtm-serverside-webhooks/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/gtm-serverside-events.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/gtm-serverside-webhooks/" class="title">Using Google Tag Manager Server Side to Trigger Webhook Events</a></p>
                     <p class="item-date">
                         <time datetime="2020-09-04 12:50:50 &#43;0100 &#43;0100" itemprop="datePublished">2020-09-04</time>
                     </p>
@@ -674,15 +691,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="/gtm-serverside-cloudrun/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/gtm-serverside-cloudrun/" class="thumbnail">
                     
-                        <span style="background-image:url(/banners/princess-gtm.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/princess-gtm.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="/gtm-serverside-cloudrun/" class="title">Google Tag Manager Server Side on Cloud Run - Pros and Cons</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/gtm-serverside-cloudrun/" class="title">Google Tag Manager Server Side on Cloud Run - Pros and Cons</a></p>
                     <p class="item-date">
                         <time datetime="2020-08-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-21</time>
                     </p>
@@ -691,15 +708,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="/shiny-cloudrun/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/shiny-cloudrun/" class="thumbnail">
                     
-                        <span style="background-image:url(/banners/shiny-clouds.jpg)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/shiny-clouds.jpg)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="/shiny-cloudrun/" class="title">Shiny on Google Cloud Run - Scale-to-Zero R Web Apps</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/shiny-cloudrun/" class="title">Shiny on Google Cloud Run - Scale-to-Zero R Web Apps</a></p>
                     <p class="item-date">
                         <time datetime="2020-08-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-01</time>
                     </p>
@@ -708,34 +725,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="/datascience-aas/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/datascience-aas/" class="thumbnail">
                     
-                        <span style="background-image:url(/banners/piketty-capital.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/piketty-capital.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="/datascience-aas/" class="title">Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/datascience-aas/" class="title">Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions</a></p>
                     <p class="item-date">
                         <time datetime="2020-06-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-06-28</time>
-                    </p>
-                </div>
-            </li>
-            
-            <li>
-                <div class="item-thumbnail">
-                    <a href="/googleCloudRunner-intro/" class="thumbnail">
-                    
-                        <span style="background-image:url(/banners/gcp-pyramid.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
-                    
-                    </a>
-                </div>
-                <div class="item-inner">
-                    
-                    <p class="item-title"><a href="/googleCloudRunner-intro/" class="title">Introducing googleCloudRunner - serverless R on Google Cloud Platform</a></p>
-                    <p class="item-date">
-                        <time datetime="2020-01-18 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-01-18</time>
                     </p>
                 </div>
             </li>
@@ -763,7 +763,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="/tags/r">
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/r">
                     R
                 </a>
                 <span class="category-list-count">20</span>
@@ -771,7 +771,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="/tags/big-query">
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/big-query">
                     big-query
                 </a>
                 <span class="category-list-count">5</span>
@@ -779,7 +779,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="/tags/blogging">
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/blogging">
                     blogging
                 </a>
                 <span class="category-list-count">2</span>
@@ -787,7 +787,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="/tags/cloud-functions">
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-functions">
                     cloud-functions
                 </a>
                 <span class="category-list-count">4</span>
@@ -795,7 +795,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="/tags/cloud-run">
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-run">
                     cloud-run
                 </a>
                 <span class="category-list-count">3</span>
@@ -803,7 +803,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="/tags/docker">
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/docker">
                     docker
                 </a>
                 <span class="category-list-count">9</span>
@@ -811,7 +811,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="/tags/firebase">
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/firebase">
                     firebase
                 </a>
                 <span class="category-list-count">1</span>
@@ -819,15 +819,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="/tags/google-analytics">
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-analytics">
                     google-analytics
                 </a>
-                <span class="category-list-count">9</span>
+                <span class="category-list-count">10</span>
             </li>
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="/tags/google-app-engine">
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-app-engine">
                     google-app-engine
                 </a>
                 <span class="category-list-count">4</span>
@@ -835,7 +835,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="/tags/google-auth">
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-auth">
                     google-auth
                 </a>
                 <span class="category-list-count">4</span>
@@ -843,7 +843,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="/tags/google-cloud-storage">
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-cloud-storage">
                     google-cloud-storage
                 </a>
                 <span class="category-list-count">4</span>
@@ -851,7 +851,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="/tags/google-compute-engine">
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-compute-engine">
                     google-compute-engine
                 </a>
                 <span class="category-list-count">7</span>
@@ -859,7 +859,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="/tags/google-language">
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-language">
                     google-language
                 </a>
                 <span class="category-list-count">2</span>
@@ -867,15 +867,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="/tags/google-tag-manager">
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-tag-manager">
                     google-tag-manager
                 </a>
-                <span class="category-list-count">5</span>
+                <span class="category-list-count">6</span>
             </li>
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="/tags/python">
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/python">
                     python
                 </a>
                 <span class="category-list-count">5</span>
@@ -883,7 +883,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="/tags/rstudio-server">
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/rstudio-server">
                     rstudio-server
                 </a>
                 <span class="category-list-count">4</span>
@@ -891,7 +891,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             
             <li class="category-list-item">
                 
-                <a class="category-list-link" href="/tags/search-console">
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/search-console">
                     search-console
                 </a>
                 <span class="category-list-count">3</span>
@@ -924,9 +924,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </footer>
 
 
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-<script src="/js/script.js"></script>
-<script src="/js/highlight.pack.js"></script>
+<script src="https://code.markedmondson.me/fancybox/jquery.fancybox.pack.js"></script>
+<script src="https://code.markedmondson.me/js/script.js"></script>
+<script src="https://code.markedmondson.me/js/highlight.pack.js"></script>
 
 
 <script>hljs.initHighlightingOnLoad();</script>

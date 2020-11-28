@@ -2,41 +2,41 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>cloud-functions on Mark Edmondson</title>
-    <link>/tags/cloud-functions/</link>
+    <link>https://code.markedmondson.me/tags/cloud-functions/</link>
     <description>Recent content in cloud-functions on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
     <lastBuildDate>Fri, 04 Sep 2020 12:50:50 +0100</lastBuildDate>
     
-	<atom:link href="/tags/cloud-functions/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://code.markedmondson.me/tags/cloud-functions/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Using Google Tag Manager Server Side to Trigger Webhook Events</title>
-      <link>/gtm-serverside-webhooks/</link>
+      <link>https://code.markedmondson.me/gtm-serverside-webhooks/</link>
       <pubDate>Fri, 04 Sep 2020 12:50:50 +0100</pubDate>
       
-      <guid>/gtm-serverside-webhooks/</guid>
+      <guid>https://code.markedmondson.me/gtm-serverside-webhooks/</guid>
       <description>When GTM Server Side was announced the use cases for it were not so compelling for me at first.
 Sure, extra security and potential speed ups were nice to have, but it wasn’t really necessary for a lot of websites, given the cost. However, now we have had a chance to play with it and can see its integration with the rest of the Google Cloud Platform, new use cases are coming up which are very compelling, especially if the GTM Server Side costs can be driven down via Cloud Run deployments - see last post.</description>
     </item>
     
     <item>
       <title>Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions</title>
-      <link>/datascience-aas/</link>
+      <link>https://code.markedmondson.me/datascience-aas/</link>
       <pubDate>Sun, 28 Jun 2020 00:00:00 +0000</pubDate>
       
-      <guid>/datascience-aas/</guid>
+      <guid>https://code.markedmondson.me/datascience-aas/</guid>
       <description>This post has been delayed due to the events of 2020 including a global pandemic and social justice demonstrations, if you are touched by those I wish you all the best. For my family and I we have been very lucky and spent most of the last months tending our garden in the Copenhagen suburbs, but others have been a lot more directly affected.
 One consequence of the pandemic may be that from now on more interaction will be online, which presents both opportunities and challenges.</description>
     </item>
     
     <item>
       <title>Auto Google Analytics Data Imports from Cloud Storage</title>
-      <link>/automatic-google-analytics-data-imports-cloud-storage/</link>
+      <link>https://code.markedmondson.me/automatic-google-analytics-data-imports-cloud-storage/</link>
       <pubDate>Thu, 29 Nov 2018 00:00:00 +0000</pubDate>
       
-      <guid>/automatic-google-analytics-data-imports-cloud-storage/</guid>
+      <guid>https://code.markedmondson.me/automatic-google-analytics-data-imports-cloud-storage/</guid>
       <description>Continuing my infatuation with cloud functions (see last post on using cloud functions to manipulate BigQuery exports) this is a post showing how to bring together various code examples out there so that you can easily upload custom data imports from a Google cloud storage bucket.
 The code is available in this GitHub repo for useful cloud functions with Google Analytics
 Extended data imports Google Analytics offers various versions of uploads.</description>
@@ -44,10 +44,10 @@ Extended data imports Google Analytics offers various versions of uploads.</desc
     
     <item>
       <title>Turning GA360 BigQuery exports into partitioned tables using Cloud Functions</title>
-      <link>/bigquery-ga360-exports-cloud-functions/</link>
+      <link>https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/</link>
       <pubDate>Tue, 09 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>/bigquery-ga360-exports-cloud-functions/</guid>
+      <guid>https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/</guid>
       <description>Its been a while since my last blog, although I had a good excuse as I’ve moved house into the Copenhagen suburbs, Brønshøj. But in the meantime, I have had the chance to find my new favourite tool for data engineering - Google Cloud Functions in Python.
 This post will look at how to use them to work with the GA360 BigQuery export tables.
 The code is available in this GitHub repo for useful cloud functions with Google Analytics</description>

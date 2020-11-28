@@ -2,61 +2,61 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>docker on Mark Edmondson</title>
-    <link>/tags/docker/</link>
+    <link>https://code.markedmondson.me/tags/docker/</link>
     <description>Recent content in docker on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
     <lastBuildDate>Fri, 21 Aug 2020 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/docker/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://code.markedmondson.me/tags/docker/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Google Tag Manager Server Side on Cloud Run - Pros and Cons</title>
-      <link>/gtm-serverside-cloudrun/</link>
+      <link>https://code.markedmondson.me/gtm-serverside-cloudrun/</link>
       <pubDate>Fri, 21 Aug 2020 00:00:00 +0000</pubDate>
       
-      <guid>/gtm-serverside-cloudrun/</guid>
+      <guid>https://code.markedmondson.me/gtm-serverside-cloudrun/</guid>
       <description>One of the most exciting developments in 2020 for me is the launch of Google Tag Manager Server Side, which lies at the intersection of cloud and digital analytics that I&amp;rsquo;ve gravitated towards in recent years.
 There are many good resources out there on GTM Serverside, Simo in particular has got me up to speed with his excellent range of posts. This post will assume you&amp;rsquo;ve read those, and be more about the viability of deploying GTM server side within Cloud Run.</description>
     </item>
     
     <item>
       <title>Shiny on Google Cloud Run - Scale-to-Zero R Web Apps</title>
-      <link>/shiny-cloudrun/</link>
+      <link>https://code.markedmondson.me/shiny-cloudrun/</link>
       <pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
       
-      <guid>/shiny-cloudrun/</guid>
+      <guid>https://code.markedmondson.me/shiny-cloudrun/</guid>
       <description>There are some references on how to deploy Shiny apps to Cloud Run around the web and in various bits of my package documentation, but its a cool service so I thought it worth pulling out and having a blog post to refer to.
 Why Shiny on Cloud Run? As mentioned in my R at scale on Google Cloud Platform post, Cloud Run is a container-as-a-service which lets you deploy Docker containers to the web without needing to worry about the infrastructure.</description>
     </item>
     
     <item>
       <title>Introducing googleCloudRunner - serverless R on Google Cloud Platform</title>
-      <link>/googleCloudRunner-intro/</link>
+      <link>https://code.markedmondson.me/googleCloudRunner-intro/</link>
       <pubDate>Sat, 18 Jan 2020 00:00:00 +0000</pubDate>
       
-      <guid>/googleCloudRunner-intro/</guid>
+      <guid>https://code.markedmondson.me/googleCloudRunner-intro/</guid>
       <description>I&amp;rsquo;ve been working on googleCloudRunner over the last couple months which is soon available on CRAN - https://code.markedmondson.me/googleCloudRunner/
 googleCloudRunner feels like the culmination of my last couple of years interest in this R/Google Cloud Platform niche I find myself in. The package seems to fulfill every use case I have wanted for working with R in the cloud, available now in a simple UI syntax that hopefully any R user can pick up quickly.</description>
     </item>
     
     <item>
       <title>R at scale on the Google Cloud Platform</title>
-      <link>/r-at-scale-on-google-cloud-platform/</link>
+      <link>https://code.markedmondson.me/r-at-scale-on-google-cloud-platform/</link>
       <pubDate>Sat, 23 Feb 2019 00:00:00 +0000</pubDate>
       
-      <guid>/r-at-scale-on-google-cloud-platform/</guid>
+      <guid>https://code.markedmondson.me/r-at-scale-on-google-cloud-platform/</guid>
       <description>This post covers my current thinking on what I consider the optimal way to work with R on the Google Cloud Platform (GCP). It seems this has developed into my niche, and I get questions about it so would like to be able to point to a URL.
 Both R and the GCP rapidly evolve, so this will have to be updated I guess at some point in the future, but even as things stand now you can do some wonderful things with R, and can multiply those out to potentially billions of users with GCP.</description>
     </item>
     
     <item>
       <title>R on Kubernetes - serverless Shiny, R APIs and scheduled scripts</title>
-      <link>/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts/</link>
+      <link>https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts/</link>
       <pubDate>Wed, 02 May 2018 00:00:00 +0000</pubDate>
       
-      <guid>/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts/</guid>
+      <guid>https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts/</guid>
       <description>&lt;h2 id=&#34;why-run-r-on-kubernetes&#34;&gt;Why run R on Kubernetes?&lt;/h2&gt;
 
 &lt;p&gt;&lt;a href=&#34;https://kubernetes.io/&#34;&gt;Kubernetes&lt;/a&gt; is a free and open-source utility to run jobs within a computer cluster.  It abstracts away the servers the jobs are running on so you need only worry about the code to run.  It has features such as &lt;a href=&#34;https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/&#34;&gt;scheduling&lt;/a&gt;, &lt;a href=&#34;https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler&#34;&gt;auto-scaling&lt;/a&gt;, and auto-healing to replace nodes if they breakdown.&lt;/p&gt;
@@ -68,20 +68,20 @@ Both R and the GCP rapidly evolve, so this will have to be updated I guess at so
     
     <item>
       <title>Run RStudio Server on a Chromebook as a Cloud Native</title>
-      <link>/rstudio-server-chromebook/</link>
+      <link>https://code.markedmondson.me/rstudio-server-chromebook/</link>
       <pubDate>Tue, 05 Sep 2017 13:55:57 +0100</pubDate>
       
-      <guid>/rstudio-server-chromebook/</guid>
+      <guid>https://code.markedmondson.me/rstudio-server-chromebook/</guid>
       <description>I recently got an Asus Chromebook Flip with which I&amp;rsquo;m very happy, but it did make me realise that if a Chromebook was to replace my normal desktop as my primary workstation, my RStudio Server setup would need to be more cloud native than was available up until now.
 TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically backs up data and configuration settings to Google Cloud Storage is on the googleComputeEngineR website here.</description>
     </item>
     
     <item>
       <title>Five Ways to Schedule R scripts on Google Cloud Platform</title>
-      <link>/4-ways-schedule-r-scripts-on-google-cloud-platform/</link>
+      <link>https://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/</link>
       <pubDate>Sun, 09 Jul 2017 00:00:00 +0000</pubDate>
       
-      <guid>/4-ways-schedule-r-scripts-on-google-cloud-platform/</guid>
+      <guid>https://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/</guid>
       <description>
 
 
@@ -91,19 +91,19 @@ TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically
     
     <item>
       <title>A digital analytics workflow through the Google Cloud using R</title>
-      <link>/digital-analytics-workflow-through-google-cloud/</link>
+      <link>https://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/</link>
       <pubDate>Mon, 10 Oct 2016 23:03:57 +0100</pubDate>
       
-      <guid>/digital-analytics-workflow-through-google-cloud/</guid>
+      <guid>https://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/</guid>
       <description>There are now several packages built upon the googleAuthR framework which are helpful to a digital analyst who uses R, so this post looks to demonstrate how they all work together. If you&amp;rsquo;re new to R, and would like to know how it helps with your digital analytics, Tim Wilson and I ran a workshop last month aimed at getting a digital analyst up and running. The course material is online at www.</description>
     </item>
     
     <item>
       <title>Scheduling R scripts for a team using RStudio Server, Docker, Github and Google Compute Engine</title>
-      <link>/setting-up-scheduled-R-scripts-for-an-analytics-team/</link>
+      <link>https://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/</link>
       <pubDate>Thu, 21 Apr 2016 23:03:57 +0100</pubDate>
       
-      <guid>/setting-up-scheduled-R-scripts-for-an-analytics-team/</guid>
+      <guid>https://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/</guid>
       <description>edit 20th November, 2016 - now everything in this post is abstracted away and available in the googleComputeEngineR package - I would say its a lot easier to use that. Here is a post on getting started with it. http://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/
 This blog will give you steps that allows you to run on Google Compute Engine a server that has these features:
  RStudio Server instance with multiple login. Apache to host a welcome webpage.</description>

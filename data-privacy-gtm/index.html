@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <title>Data Privacy Engineering with Google Tag Manager Server Side and Consent Mode &middot; Mark Edmondson</title>
+    <meta name="generator" content="Hugo 0.55.5" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Mark Edmondson">
+    
+      <meta name="description" content="The code bit of the blog">
+    
+    
+    <link rel="canonical" href="https://code.markedmondson.me/data-privacy-gtm/"/>
+    <link rel="icon" href="https://code.markedmondson.me/favicon.ico">
+    <link rel="apple-touch-icon" href="https://code.markedmondson.me/apple-touch-icon.png"/>
+    <link rel="stylesheet" href="https://code.markedmondson.me/css/style.css">
+    <link rel="stylesheet" href="https://code.markedmondson.me/css/github.css" rel="stylesheet" id="theme-stylesheet">
+    <link rel="stylesheet" href="https://code.markedmondson.me/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://code.markedmondson.me/fancybox/jquery.fancybox.css">
+    
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+    <meta property="og:title" content="Data Privacy Engineering with Google Tag Manager Server Side and Consent Mode" />
+<meta property="og:description" content="A new interest at the moment is engineering through various data privacy requirements with some of the new tools Google has available. With respect to my guiding principle of blogging about what I wish I could have read 6 months ago, I thought it worth writing about what is now possible. Data privacy engineering also requires clear thinking about the legal and technical details and so this will also help organise my communication around the subject." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://code.markedmondson.me/data-privacy-gtm/" />
+<meta property="article:published_time" content="2020-11-27T09:29:50&#43;01:00"/>
+<meta property="article:modified_time" content="2020-11-27T09:29:50&#43;01:00"/>
+
+    
+    
+<meta itemprop="name" content="Data Privacy Engineering with Google Tag Manager Server Side and Consent Mode">
+<meta itemprop="description" content="A new interest at the moment is engineering through various data privacy requirements with some of the new tools Google has available. With respect to my guiding principle of blogging about what I wish I could have read 6 months ago, I thought it worth writing about what is now possible. Data privacy engineering also requires clear thinking about the legal and technical details and so this will also help organise my communication around the subject.">
+
+
+<meta itemprop="datePublished" content="2020-11-27T09:29:50&#43;01:00" />
+<meta itemprop="dateModified" content="2020-11-27T09:29:50&#43;01:00" />
+<meta itemprop="wordCount" content="4011">
+
+
+
+<meta itemprop="keywords" content="google-tag-manager,google-analytics," />
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Data Privacy Engineering with Google Tag Manager Server Side and Consent Mode"/>
+<meta name="twitter:description" content="A new interest at the moment is engineering through various data privacy requirements with some of the new tools Google has available. With respect to my guiding principle of blogging about what I wish I could have read 6 months ago, I thought it worth writing about what is now possible. Data privacy engineering also requires clear thinking about the legal and technical details and so this will also help organise my communication around the subject."/>
+<meta name="twitter:site" content="@HoloMarkeD"/>
+
+    
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WFFMBH');</script>
+
+
+    <script src="https://code.markedmondson.me/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+
+
+<div id="container">
+	<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="https://code.markedmondson.me/" id="logo">
+          
+          <i class="logo" style="background-image: url('https://code.markedmondson.me/images/greenhand.png')"></i>
+          
+          <span class="site-title">Mark Edmondson</span>
+      </a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="https://code.markedmondson.me/">Home</a>
+          
+          
+          
+          
+          
+          
+
+          
+          <a class="main-nav-link" href="/r-packages/">My R Packages</a>
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.markedmondson.me/posts/">Non-code blog</a>
+          
+          
+          
+          <a class="main-nav-link" href="https://www.markedmondson.me/static/presentations/">Past Presentations</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="https://code.markedmondson.me/images/gde_avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+              <input type="hidden" name="sitesearch" value="https://code.markedmondson.me/" />
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="https://code.markedmondson.me/">Home</a></td>
+          
+          
+          
+          
+          
+          
+
+          
+          <td><a class="main-nav-link" href="/r-packages/">My R Packages</a></td>
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.markedmondson.me/posts/">Non-code blog</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="https://www.markedmondson.me/static/presentations/">Past Presentations</a></td>
+          
+          
+          <td>
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" class="search-form-input" placeholder="Search">
+          <input type="hidden" name="sitesearch" value="https://code.markedmondson.me/" />
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+   	
+   	<div class="outer">
+   	
+    	<aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      
+      <img id="avatar" src="https://code.markedmondson.me/images/gde_avatar.jpg">
+      
+      <h2 id="name">Mark Edmondson</h2>
+      <h3 id="title">Coding in digital analytics</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Copenhagen, Denmark</span>
+      
+          <a id="follow" href="https://github.com/MarkEdmondson1234">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+      <div class="article-info-block">
+        28
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          17
+        
+        <span>
+            Tags
+        </span>
+      </div>
+    </div>
+    <div class="profile-block social-links">
+      <table>
+        <tr>
+          
+<td><a href="//github.com/MarkEdmondson1234" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/MarkEdmondsonAtHome" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//linkedin.com/in/markpeteredmondson" target="_blank" title="LinkedIn"><i class="fa fa-linkedin"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/HoloMarkeD" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="https://code.markedmondson.me/index.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</aside>
+
+    
+
+    <section id="main">
+    
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+            <img src="https://code.markedmondson.me/banners/hawks-and-doves.jpg" class="article-banner">
+        
+
+        <header class="article-header">
+    <a href="https://code.markedmondson.me/data-privacy-gtm/">
+    <h1 class="article-title" itemprop="name">
+        Data Privacy Engineering with Google Tag Manager Server Side and Consent Mode
+    </h1>
+    </a>
+    <div class="article-meta">
+
+        
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2020-11-27 09:29:50 &#43;0100 CET" itemprop="datePublished">2020-11-27</time>
+            &middot;
+            4011
+            words
+            &middot;
+            19
+            minute read
+        </div>
+        
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/google-tag-manager">google-tag-manager</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/google-analytics">google-analytics</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+        <div class="article-entry" itemprop="articleBody">
+            
+
+
+<p>A new interest at the moment is engineering through various data privacy requirements with some of the new tools Google has available. With respect to my guiding principle of blogging about what I wish I could have read 6 months ago, I thought it worth writing about what is now possible. Data privacy engineering also requires clear thinking about the legal and technical details and so this will also help organise my communication around the subject.</p>
+<p>It comes with great thanks to the #measure community that has helped discuss these topics, in particular the #data-privacy channel in <a href="https://www.measure.chat/">Measure Slack</a> and a lot of the code snippets I’ve taken from <a href="https://www.simoahava.com">Simo Ahava’s examples</a>.</p>
+<blockquote>
+<p>The usual disclaimers about this subject apply, that this is just free rantings so I’m not liable for anything I say here and you should seek your own legal advice.</p>
+</blockquote>
+<div id="data-privacy-is-the-new-oil" class="section level2">
+<h2>Data Privacy is the new oil</h2>
+<p>Overall data privacy is becoming an increasingly hot topic, with it being talked about more and more within the general public. Whilst cookie banners have been around for at least 10 years, scandals like Cambridge Analytica have pushed data privacy to be an important issue with the public, as scary futures are imagined where AI control our sub-conscious thoughts via our online activity data (cue Terminator/Skynet reference).</p>
+<p>Whilst there are legitimate concerns, some of these reports are overblown and are just repeating hyperbole of ambitious companies. However, public trust and how their personal data is being handled is more and more a business advantage.</p>
+<p>There are also developing positions within the digital analytics community that I dub privacy hawks or doves.</p>
+<p><img src="/images/dove.png" />
+A <strong>privacy dove</strong> takes the position that all tracking is now forbidden if not explicitly agreed to and goes for a zero legal risk strategy, whilst a <strong>privacy hawk</strong> will allow tracking if its in the business interest, judging any legal risks to be less than the business gain.</p>
+<p><img src="/images/eagle.jpg" /></p>
+<p>It obviously must be considered if that person’s salary depends on them being a privacy hawk or a privacy dove when taking advice. Most people I speak to are between the two extreme positions, generally supportive of not tracking individuals but not wanting to destroy all of their data via consent boxes to do so.</p>
+<p>How much a company values data also factors. It follows that the more digitally mature a company is, the more valuable any lost data will be if they lose the ability to activate it, and the louder the privacy hawks arguments will be. As can be seen from some cookie consent implementations, privacy hawks value non-consented data enough to use dark patterns to try to collect more, such as pre-ticking boxes or using confusing UX to get users to opt-in.</p>
+<div class="figure">
+<img src="/images/pre-ticked-consent.png" alt="" />
+<p class="caption">Pre-ticked cookie consent</p>
+</div>
+<p>On the other hand, this also means that if a company has decided your data isn’t worth anything they may exclude you altogether - for example privacy doves judging that EU users on US websites are not worth any potential EU legal issues and so blocking all EU visitors.</p>
+</div>
+<div id="the-legalese" class="section level2">
+<h2>The Legalese</h2>
+<p>For my digital analytics work, privacy engineering boils down to supporting three areas:</p>
+<ul>
+<li>ePrivacy - aka “the cookie law” about consent for tracking information on your computer</li>
+<li>ITP - Apple’s efforts to be the privacy alternative browser, and general browser driven privacy initiatives</li>
+<li>GDPR - Data privacy protection for people within the EU</li>
+</ul>
+<p>The California Consumer Privacy Act (CCPA) is also relevant, but I will let Americans blog about that. There are also various other legislation around privacy being formulated around the world influenced by the above.</p>
+<div id="eprivacy" class="section level3">
+<h3>ePrivacy</h3>
+<p>The ePrivacy Directive is about accessing or recording data on your computer (or <code>"terminal equipment"</code>). It will eventually be replaced by the ePrivacy Regulation, the current draft of which allows exemptions for statistical uses, but it is not EU law yet. If it does get ratified then a lot of cookie consents may be unnecessary. Until then the text to rely on is <a href="https://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=CELEX:32002L0058:en:HTML">Article 5(3)</a>.</p>
+<p>From feedback I’ve got, ePrivacy compliance is the least clear as it changes from country to country and is currently under active review pending replacement, so interpretations of it are most varied. Cookie consent banners are now well established, but some privacy hawks consider work arounds like using localStorage instead of cookies valid, whilst privacy doves consider any information read or written in a persons browser is in need of a consent, including for example a browser’s user-agent.</p>
+</div>
+<div id="itp-browser-based-data-protections" class="section level3">
+<h3>ITP / Browser based data protections</h3>
+<p>ITP is the most rapidly changing in its reach and capabilities, but as its motivated by the richest company in the world’s market position (Apple) and not legislation, privacy hawks are more eager to circumnavigate around it, making it more like an arms race in measures and counter measures. ITP is a leader in the general trend of web browsers to respect privacy, with Firefox, Brave and even Chrome heading down the same path, and are arguably more powerful than governments in enforcing user privacy.</p>
+<p>Apples moral authority in privacy is not helped as they are currently targets for complaints to do with violating the ePrivacy above, <a href="https://noyb.eu/en/noyb-files-complaints-against-apples-tracking-code-idfa">creating an advertisment ID (IDFA) for every iPhone on the planet with user consent</a>.</p>
+<blockquote>
+<p>Each iPhone runs on Apple’s iOS operating system. By default, iOS automatically generates a unique “IDFA” (short for Identifier for Advertisers) for each iPhone. Just like a license plate this unique string of numbers and characters allows Apple and other third parties to identify users across applications and even connect online and mobile behaviour (“cross device tracking”). Apple’s operating system creates the IDFA without user’s knowledge or consent. After its creation, Apple and third parties (e.g. applications providers and advertisers) can access the IDFA to track users’ behaviour, elaborate consumption preferences and provide personalised advertising. Such tracking is strictly regulated by the EU “Cookie Law” (Article 5(3) of the e-Privacy Directive) and requires the users’ informed and unambiguous consent.</p>
+</blockquote>
+</div>
+<div id="gdpr" class="section level3">
+<h3>GDPR</h3>
+<p>Feedback to me is that GDPR is usually the easiest to handle internally even if far reaching, since its well defined and fairly static in what it expects - you have to be a willing bad actor or incapable due to IT problems to suffer from its consequences.</p>
+<p><img src="/images/GDPR.png" /></p>
+<p>As I understand it, GDPR’s main purpose is for legal checks with the big internet companies such as Google, Facebook and Apple to protect EU citizens. The EU has horrors such as the holocaust to remember why protecting personal identity is important, vowing never again that personal identity can be used to discriminate against people. Remembering this is a useful principle when dealing with user privacy: leaking personal data is considered personal harm, and that harm has potential legal and ethical repercussions. It also features into privacy hawks calculus, since what the data is used for is important context: if you are using data to market medicine at children you will carry a much harsher penalty for wrong doing than if you use data to optimise your sales funnel.</p>
+<div id="gdpr-and-third-parties-like-google-and-facebook" class="section level4">
+<h4>GDPR and third parties like Google and Facebook</h4>
+<p>Where GDPR is a bit more hazy is how to treat the big data companies you may be partnering with.</p>
+<p>The crux of the matter is usually whether these companies can be treated as Data Processors or Data Controllers. They will always argue the former, since that places the responsibility of personal data with you, the Data Controller. But if its ruled that these companies are using your data to identify individuals for their own purposes then they are Data Controllers, and need legal basis for that use.</p>
+<p>For example, Google has been scrutinised for DoubleClick, since this has historically been identifying users across all of Google properties to offer back services such as display remarketing and look-a-like audiences, collecting data from all websites that take part in their network. This has turned into actual fines, being fined 50 million EUR last year by the French data regulator CNIL for not giving clear enough user consent. As the <a href="https://www.bbc.com/news/technology-46944696">BBC reports</a>:</p>
+<blockquote>
+<p>CNIL said it had levied the record fine for “lack of transparency, inadequate information and lack of valid consent regarding ads personalisation”. The regulator said it judged that people were “not sufficiently informed” about how Google collected data to personalise advertising. “The information on processing operations for the ads personalisation is diluted in several documents and does not enable the user to be aware of their extent,” it said. It said the option to personalise ads was “pre-ticked” when creating an account, which did not respect the GDPR rules.</p>
+</blockquote>
+</div>
+<div id="privacy-shield" class="section level4">
+<h4>Privacy Shield</h4>
+<p><img src="/images/privacy_shield.png" /></p>
+<p>The latest chapter has been the loss of Privacy Shield in summer of 2020, which was a legal mechanism used to allow US companies to process EU data.</p>
+<p>A <a href="http://curia.europa.eu/juris/document/document.jsf?text=&amp;docid=228677&amp;pageIndex=0&amp;doclang=en&amp;mode=lst&amp;dir=&amp;occ=first&amp;part=1&amp;cid=16606736">key compliant from the records of the ruling</a> was about how Facebook would be compelled to give EU citizen data to United States authorities such as the NSA or FBI, so violating that EU citizens GDPR protected rights:</p>
+<blockquote>
+<p>In his reformulated complaint lodged on 1 December 2015, Mr Schrems claimed, inter alia, that United States law requires Facebook Inc. to make the personal data transferred to it available to certain United States authorities, such as the National Security Agency (NSA) and the Federal Bureau of Investigation (FBI). He submitted that, since that data was used in the context of various monitoring programmes in a manner incompatible with Articles 7, 8 and 47 of the Charter, the SCC Decision cannot justify the transfer of that data to the United States. In those circumstances, Mr Schrems asked the Commissioner to prohibit or suspend the transfer of his personal data to Facebook Inc.</p>
+</blockquote>
+<p>With the loss of Privacy Shield, almost everyone using these companies in the EU could be construed as illegal, since data is being sent to an untrusted country (the USA). This has prompted extreme reactions such as Facebook saying it will pull out from the EU. Pragmatically no-one is going to be prosecuted just yet, whilst the EU sort out with those companies what happens next.</p>
+</div>
+</div>
+</div>
+<div id="new-privacy-engineering-tech-from-google" class="section level2">
+<h2>New privacy engineering tech from Google</h2>
+<p>We now have two new products in beta from the Google Tag Manager team - <a href="https://support.google.com/analytics/answer/9976101?hl=en">Google Consent Mode</a> and <a href="https://developers.google.com/tag-manager/serverside">Google Tag Manager - Server Side</a>. Both allow a more nuanced approach to data collection for Google data products. With a combination of GTM-Server Side clients and Google Consent Mode, you can modify requests before the tags process it to help with your data privacy compliance: some proof of concepts are below.</p>
+<div class="figure">
+<img src="/images/server-side-tagging-outline.jpg" alt="" />
+<p class="caption">Image from Simo Ahava’s post - <a href="https://www.simoahava.com/analytics/server-side-tagging-google-tag-manager/" class="uri">https://www.simoahava.com/analytics/server-side-tagging-google-tag-manager/</a></p>
+</div>
+<p>Since these products work with data before its sent, you can modify data to more exacting specifications to respect your approach to data privacy. This gives some new interesting engineering solutions for problems that may not have had easy answers before.</p>
+<p>It also reverses a trend for Google Analytics in particular, which for years been working towards more integration with its services such as exporting segments for Google Ads or DoubleClick. Now the new privacy regulations have become business requirements, care needs to be done to reverse those integrations for opted-out users. Previously since Google Analytics data can be used for either statistics or marketing purposes, it meant an all-or-nothing approach to collecting data - opt-out: no data. With these new tools, more options are available.</p>
+<div id="gdpr-code-examples" class="section level3">
+<h3>GDPR Code examples</h3>
+<p>For GDPR, your main concern is to make sure that personal data is only collected with consent for it and its purpose, and that personal data is protected. There are different categories of data:</p>
+<ul>
+<li>personal information - also known as PII. Things that can be read to identify one person, such as emails, names, or addresses. It is best not to pass this unless absolutely necessary, as you will have to keep track of where it is stored so you can retrieve or delete it again later.</li>
+<li>pseudoanonymous - Use these instead if you can: its an ID that on its own gives no personal info, but once linked to other data can uniquely ID a user. <a href="https://gdpr-info.eu/recitals/no-30/">UserIds, CookieIDs, IP addresses</a> fall under here. <a href="https://gdpr-info.eu/recitals/no-28/">GDPR encourages use of pseudoanonyminity</a> as it means you can delete the personal data in one place, then destroy the psuedoanonymous keys to securely protect data, but you do need to protect that pseudoanonymous ID as you would personal data until that link is impossible.</li>
+<li>anonymous - Data that can not be used to identify (or re-identify) a user. This is useful as if you can make your data truly anonymous then <a href="https://gdpr-info.eu/recitals/no-26/">GDPR does not apply</a>.</li>
+</ul>
+<div id="increase-data-protection-for-existing-tags" class="section level4">
+<h4>Increase data protection for existing tags</h4>
+<p>For example, you could be using APIs in the client to several services to get meta-data about a user, such as their current location’s weather, customer segments or past campaign info. Currently this data could be intercepted by motivated scrapers or even other 3rd party scripts on your page, with a risk of data leakage that carries GDPR fines.</p>
+<p>GTM-ServerSide enables all those calls to be done more safely, with the client side only seeing a pseudoanonymous ID. Send that and other info you may need to your <code>/custom-endpoint</code> and then let your tags trigger server-side instead to send data further on to various services in a protected environment.</p>
+<p><em>This is script is inspired by this excellent article on <a href="https://levelup.gitconnected.com/google-tag-manager-server-side-how-to-manage-custom-vendor-tags-21bef51bc89e">creating an AT Internet custom GTM serverside tag by Nicholas Hinternesch</a></em></p>
+<pre><code>===== GTM CLIENT
+const claimRequest = require(&#39;claimRequest&#39;);
+const getRequestPath = require(&#39;getRequestPath&#39;);
+const getRequestQueryParameter = require(&#39;getRequestQueryParameter&#39;);
+const getRequestHeader = require(&#39;getRequestHeader&#39;);
+const returnResponse = require(&#39;returnResponse&#39;);
+const runContainer = require(&#39;runContainer&#39;);
+const getRemoteAddress = require(&#39;getRemoteAddress&#39;);
+
+// get info from request
+const requestPath = getRequestPath();
+const queryParameters = getRequestQueryParameters();
+const ua = getRequestHeader(&#39;user-agent&#39;);
+const referer = getRequestHeader(&#39;referer&#39;);
+const ip = getRemoteAddress();
+
+// you send requests here instead of to client side endpoints
+// e.g. gtm.markedmondson.me/custom-endpoint?custom1=my-special-id
+if (requestPath == &quot;/custom-endpoint&quot;)  {
+  claimRequest();
+  
+  // construct the event to send to your server side services
+  const event = {
+    event_name: &quot;Cusom ID Event&quot;,
+    custom1: queryParameters.custom1,
+    custom2: queryParameters.custom2,
+    ...etc...
+    
+    ip_override: ip,
+    user_agent: ua,
+    referer: referer,
+  };
+  
+  // runs the actual container, with a tag you specify below
+  runContainer(event, () =&gt; returnResponse());
+  
+}
+
+========GTM TAG
+// a custom tag for a service could then look like:
+const getAllEventData = require(&#39;getAllEventData&#39;);
+const sendHttpGet = require(&#39;sendHttpGet&#39;);
+const setResponseBody = require(&#39;setResponseBody&#39;);
+const setResponseHeader = require(&#39;setResponseHeader&#39;);
+const setResponseStatus = require(&#39;setResponseStatus&#39;);
+const encodeUriComponent = require(&#39;encodeUriComponent&#39;);
+
+const collectDomain = &quot;https://www.api-service.com&quot;;
+const event = getAllEventData();
+
+var url = collectDomain + &#39;/api-call?&#39; +
+    &#39;custom1=&#39; + encodeUriComponent(event.custom1) + &#39;&amp;&#39; +
+    &#39;custom2=&#39; + encodeUriComponent(event.custom2) + &#39;&amp;&#39; +
+    ...etc...
+
+var headers = {};
+headers[&quot;referer&quot;] = event.referer;
+headers[&quot;user-agent&quot;] = event.user_agent;
+headers[&quot;x-forwarded-for&quot;] = event.ip_override;
+
+sendHttpGet(url, (headers) =&gt; {
+  setResponseHeader(&#39;cache-control&#39;, headers[&#39;cache-control&#39;]);
+}, {headers: headers });
+
+data.gtmOnSuccess();</code></pre>
+</div>
+<div id="data-sanitisation-of-sensitive-data" class="section level4">
+<h4>Data Sanitisation of sensitive data</h4>
+<p>Data Sanitisation can also be performed. If there is a risk of personal information being accidentally passed into your systems, from say a search box where users accidental add their email (I’ve seen this due to bad website UX), rather than having to search through your data each time to delete it you can sanitise it before it even reaches Google Analytics. This code also runs on the server and not in the user’s browser, so offers speedups over other solutions out there <a href="https://www.simoahava.com/gtm-tips/remove-pii-google-analytics-hits/">using GTM customTasks</a>.</p>
+<p>The example below assumes your URLs could contain an email. I’m just looking for @ so this is a crude example, you may like <a href="https://brianclifton.com/blog/2017/09/07/remove-pii-from-google-analytics/">this post by Brian Clifton for regex’s to tackle other privacy concerns</a> to add more relevant ones for you.</p>
+<pre class="js"><code>const isRequestMpv1 = require(&#39;isRequestMpv1&#39;);
+const extractEventsFromMpv1 = require(&#39;extractEventsFromMpv1&#39;);
+
+// Check if request is Measurement Protocol
+if (isRequestMpv1()) {
+
+  const events = extractEventsFromMpv1();
+  events.forEach((event, i) =&gt; {
+  
+    // if event is a page_view
+    if(event.event_name === &quot;page_view&quot;){
+      // we have suspected email address
+      if(event.page_location.contains(&quot;@&quot;)){
+        event.page_location = &quot;[redacted]&quot;
+      }
+    }
+    
+    ...etc...
+  });
+  
+  
+}</code></pre>
+</div>
+<div id="ip-anonymisation" class="section level4">
+<h4>IP Anonymisation</h4>
+<p>IP addresses are explicitly mentioned in GDPR as personal identifiers. They are not recorded in Google Analytics but each request to Google’s servers do include one for spam and geo-location purposes - Google says this data is then quickly discarded. For some privacy doves this is not enough assurance, so instead you can roll your own ip anonymisation and geo targeting, never sending Google any ip information. (See <a href="https://www.simoahava.com/gtm-tips/get-true-ip-anonymization-server-side-tagging/">here if you don’t mind Google getting the IP</a>)</p>
+<p>Losing ip information also means losing geography dimensions, so see also this <a href="https://www.simoahava.com/gtm-tips/utilize-app-engine-headers-server-side-tagging/">handy tip from Simo</a>, which takes the geo-targeting info from the App Engine headers if you want to keep those.</p>
+<p>Repeat for all fields you would like to control before Google sees them, such as User Agent.</p>
+<pre class="js"><code>...etc...
+// Get IP from incoming request
+const ip = getRemoteAddress();
+
+// anonymise the ip address yourself
+ip_split = ip.split(&quot;.&quot;)
+anon_ip = ips[1]+&quot;.&quot;+ips[2]+&quot;.&quot;+ips[3]+&quot;.000&quot;
+
+// Check if request is Measurement Protocol
+if (isRequestMpv1()) {
+
+    // Claim the request
+    claimRequest();
+
+    const events = extractEventsFromMpv1();
+    const max = events.length - 1;
+    events.forEach((event, i) =&gt; {
+
+        // Overwrite IP and UA with correct values
+        if (!event.ip_override &amp;&amp; ip) event.ip_override = anon_ip;
+        //.. etc..
+    }
+});</code></pre>
+</div>
+<div id="creating-psuedoanonymous-identifiers" class="section level4">
+<h4>Creating Psuedoanonymous identifiers</h4>
+<p>It may be you have some identifier for a user that you do not want to send to Google, or you want to perform psuedoanonymisation. Hashing algorithms are available in GTM server-side, meaning you can use those with a salt to create an ID that no-one at Google’s end could ever decode or link to other sources - much better to assure privacy doves that data could potentially be exposed or linked at Google’s end.</p>
+<pre><code>const claimRequest = require(&#39;claimRequest&#39;);
+const getRemoteAddress = require(&#39;getRemoteAddress&#39;);
+const getRequestHeader = require(&#39;getRequestHeader&#39;);
+const sha256Sync = require(&#39;sha256Sync&#39;);
+
+// Get User-Agent and IP from incoming request
+const ua = getRequestHeader(&#39;user-agent&#39;);
+const ip = getRemoteAddress();
+
+// pick your own salt
+salt = &#39;doyouthinkshesawus?&#39;
+
+// Create a hashed ID from the IP and User Agent
+const paid = sha256Sync(salt + ip + ua);
+...etc...</code></pre>
+</div>
+</div>
+<div id="eprivacy-code-examples" class="section level3">
+<h3>ePrivacy Code Examples</h3>
+<p>Google Consent Mode is a new product which integrates with services such as cookie consent banners to turn off cookies for both Google Analytics and Google Ads. Google Consent Mode offers a way to block cookies but preserve at least an anonymous hit for statistical use.</p>
+<pre><code>&lt;script&gt;
+window.dataLayer = window.dataLayer || [];
+function gtag() { dataLayer.push(arguments); }
+
+// these should be changed upon user consent/denied
+gtag(&#39;consent&#39;, &#39;default&#39;, 
+    { &#39;ad_storage&#39;: &#39;denied&#39;, &#39;analytics_storage&#39;: &#39;denied&#39;, &#39;wait_for_update&#39;: 500 });
+gtag(&#39;set&#39;, &#39;url_passthrough&#39;, true);
+&lt;/script&gt;</code></pre>
+<p>When Consent Mode is active and set to denied cookies, GA hits still occur and request a cookie but the responses do not include them. This means that every hit will generate a new cookieId (cid). Its just launched so more features are coming, but the hints are that Google will use machine learning to estimate sessions and goals with this data, without having personal data. <a href="https://www.simoahava.com/analytics/consent-mode-google-tags/">See this guide from Simo on the nuts and bolts</a>.</p>
+<p>The requests also add a <code>gcs=G100</code> parameter which when set means no data shows up in your Google Analytics account (aside the real-time reports). This may be ok for the privacy doves, at least those who don’t object to data still being seen by Google, but the more privacy hawkish may consider this non-consented, but anonymous data as value to also push to their own Google Analytics.</p>
+<p>If you modify the <code>gcs</code> parameter, you can get the data into your GA account, but with the proviso that it will be 1 user, 1 session for each pageview as the cid is changing each time. For this reason you may want to send the data to a different view or property. Since we can change the measurementId in the request and don’t have cookies to worry about, you can modify that directly via the <code>x-ga-measurement_id</code> parameter.</p>
+<p>This sets up separate data streams for your opt-in and opt-out users:</p>
+<p><em>Thanks to <a href="https://gunnargriese.com/">Gunnar Griese</a>, my colleague at IIH Nordic for help with the below</em></p>
+<pre class="js"><code>...etc...
+if (isRequestMpv1()) {
+    // Claim the request
+    claimRequest();
+
+    const events = extractEventsFromMpv1();
+    const max = events.length - 1;
+    events.forEach((event, i) =&gt; {
+
+        // Make unconsented hits appear in GA
+        const consentMode = event[&#39;x-ga-gcs&#39;];
+        if (consentMode == &quot;G100&quot;) {
+          event[&#39;x-ga-gcs&#39;] = &quot;G111&quot;;
+          // change the measurementId to one for receiving opt-out users 
+          event[&#39;x-ga-measurement_id&#39;] = &quot;UA-12345-3&quot;
+        }
+        ...etc...
+    })
+
+}</code></pre>
+</div>
+<div id="itp-code-examples" class="section level3">
+<h3>ITP Code Examples</h3>
+<p>ITP at the moment seems largely aimed at the cross-domain trackers that are building user profiles across many websites, such as display advertising networks. This means that measures are largely aimed at their techniques such as 3rd party cookies and CNAME cloaking, mostly by limiting cookie timeouts to 7 days. Privacy hawks can avoid being affected by those measures by using GTM Server Side to re-write cookies to HTTP (not affected by ITP).</p>
+<p>The easiest method is to just activate the FPID in the default Google Analytics client in GTM, which migrates cookies over to HTTP. However, you may want to change the expiry period or have more control over these cookies, in which case see the script below taken <a href="https://www.simoahava.com/gtm-tips/build-custom-universal-analytics-client-server-side-tagging/">from this post by Simo</a></p>
+<pre class="js"><code>const claimRequest = require(&#39;claimRequest&#39;);
+const extractEventsFromMpv1 = require(&#39;extractEventsFromMpv1&#39;);
+const getCookie = require(&#39;getCookieValues&#39;);
+const getRemoteAddress = require(&#39;getRemoteAddress&#39;);
+const getRequestHeader = require(&#39;getRequestHeader&#39;);
+const isRequestMpv1 = require(&#39;isRequestMpv1&#39;);
+const returnResponse = require(&#39;returnResponse&#39;);
+const runContainer = require(&#39;runContainer&#39;);
+const setCookie = require(&#39;setCookie&#39;);
+const setPixelResponse = require(&#39;setPixelResponse&#39;);
+const setResponseHeader = require(&#39;setResponseHeader&#39;);
+
+// Get User-Agent and IP from incoming request
+const ua = getRequestHeader(&#39;user-agent&#39;);
+const ip = getRemoteAddress();
+
+// Check if request is Measurement Protocol
+if (isRequestMpv1()) {
+  // Claim the request
+  claimRequest();
+  
+  const events = extractEventsFromMpv1();
+  const max = events.length - 1;
+  events.forEach((event, i) =&gt; {
+    // Unless the event had IP and user-agent overrides, manually
+    // override them with the IP and user-agent from the request
+    // That way the GA collect call will appear to have originated
+    // from the user&#39;s browser / device.
+    if(!event.ip_override &amp;&amp; ip) event.ip_override = ip;
+    if(!event.user_agent &amp;&amp; ua) event.user_agent = ua;
+    
+    // Pass the event to a virtual container
+    runContainer(event, () =&gt; {
+      
+      if (i === max) {
+        
+        // Rewrite the _ga cookie to avoid Safari expiration.
+        const ga = getCookie(&#39;_ga&#39;);
+        if (ga &amp;&amp; ga.length) {
+          setCookie(&#39;_ga&#39;, ga[0], {
+            domain: &#39;auto&#39;,
+            &#39;max-age&#39;: 63072000,
+            path: &#39;/&#39;,
+            secure: true,
+            sameSite: &#39;lax&#39;
+          });
+        }
+        setPixelResponse();
+        
+        // Make sure no CORS errors pop up with the response
+        const origin = getRequestHeader(&#39;Origin&#39;);
+        if (origin) {
+          setResponseHeader(&#39;Access-Control-Allow-Origin&#39;, origin);
+          setResponseHeader(&#39;Access-Control-Allow-Credentials&#39;, &#39;true&#39;);
+        }
+        returnResponse();
+      }
+    });
+  });
+}</code></pre>
+<p>As another browser based measure, you can also self-host your analytics script to avoid some Ad Blockers blocking your tracking scripts.</p>
+<pre><code>// analytics.js
+if (getRequestPath() === &#39;/analytics.js&#39;) {
+  claimRequest();
+  
+  getGoogleScript(&#39;ANALYTICS&#39;, (script, metadata) =&gt; {
+  
+    for (let header in metadata) {
+      setResponseHeader(header, metadata[header]);
+    }
+    
+    const origin = getRequestHeader(&#39;Origin&#39;);
+    if (origin) {
+      setResponseHeader(&#39;Access-Control-Allow-Origin&#39;, origin);
+      setResponseHeader(&#39;Access-Control-Allow-Credentials&#39;, &#39;true&#39;);
+    }
+    
+    setResponseHeader(&#39;content-type&#39;, &#39;text/javascript&#39;);
+    setResponseBody(script);
+    returnResponse();
+  
+  });
+  
+}</code></pre>
+</div>
+</div>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<p>The best way to get good feedback on a subject is to confidently publish the wrong answer to the internet, so I hope that if I’ve made some glaring mistakes above someone will be kind enough to point it out in the comments below :)</p>
+<p>Although a bit wary of the subject in the beginning I can see some exciting work in data privacy engineering, which lacks black and white certainties and so fosters interesting debates on ethics and how we want our digital society to look. Myself I am active in protecting my own personal data from being abused by companies on the web, as I know the value of it from working in the industry, and I want other people to have that level of awareness and be able to make informed choices.</p>
+<p>There is also a big question mark on how improved data privacy will change the web, since a lot of the current legal targets look to be those companies that are driving revenue for news media, which in this age of alternative facts we have need of more than ever. It seems we also need to think about the business models to work alongside this improved privacy to make it all stick. Supporting publishers with subscriptions seems to be the way this is going, but for those to work even more data about subscribers will be needed by them to optimise their experience. Trust is a big factor in all of this, and if I was a brand I would be considering that a KPI to make long term gains.</p>
+</div>
+
+        </div>
+        <footer class="article-footer">
+    <a data-url="https://code.markedmondson.me/data-privacy-gtm/" data-id="1bda46c9126653b815237f5e7e87e731" class="article-share-link">
+        <i class="fa fa-share"></i>
+        Share
+    </a>
+    
+    <a href="https://code.markedmondson.me/data-privacy-gtm/#disqus_thread" class="article-comment-link">
+        Comments
+    </a>
+    
+
+    <script>
+    (function ($) {
+        
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+    </script>
+</footer>
+
+    </div>
+
+    
+<nav id="article-nav">
+    
+    <a href="https://code.markedmondson.me/gtm-serverside-webhooks/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">
+          Older
+      </strong>
+      <div class="article-nav-title">Using Google Tag Manager Server Side to Trigger Webhook Events</div>
+    </a>
+    
+
+    
+</nav>
+
+
+</article>
+
+
+<section id="comments">
+    <div id="disqus_thread">
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "markedmondson" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+</section>
+
+
+    </section>
+
+   	
+    	<aside id="sidebar">
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/data-privacy-gtm/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/hawks-and-doves.jpg)" alt="Data Privacy Engineering with Google Tag Manager Server Side and Consent Mode" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/data-privacy-gtm/" class="title">Data Privacy Engineering with Google Tag Manager Server Side and Consent Mode</a></p>
+                    <p class="item-date">
+                        <time datetime="2020-11-27 09:29:50 &#43;0100 CET" itemprop="datePublished">2020-11-27</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/gtm-serverside-webhooks/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/gtm-serverside-events.png)" alt="Data Privacy Engineering with Google Tag Manager Server Side and Consent Mode" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/gtm-serverside-webhooks/" class="title">Using Google Tag Manager Server Side to Trigger Webhook Events</a></p>
+                    <p class="item-date">
+                        <time datetime="2020-09-04 12:50:50 &#43;0100 &#43;0100" itemprop="datePublished">2020-09-04</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/gtm-serverside-cloudrun/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/princess-gtm.png)" alt="Data Privacy Engineering with Google Tag Manager Server Side and Consent Mode" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/gtm-serverside-cloudrun/" class="title">Google Tag Manager Server Side on Cloud Run - Pros and Cons</a></p>
+                    <p class="item-date">
+                        <time datetime="2020-08-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-21</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/shiny-cloudrun/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/shiny-clouds.jpg)" alt="Data Privacy Engineering with Google Tag Manager Server Side and Consent Mode" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/shiny-cloudrun/" class="title">Shiny on Google Cloud Run - Scale-to-Zero R Web Apps</a></p>
+                    <p class="item-date">
+                        <time datetime="2020-08-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-01</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/datascience-aas/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/piketty-capital.png)" alt="Data Privacy Engineering with Google Tag Manager Server Side and Consent Mode" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/datascience-aas/" class="title">Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions</a></p>
+                    <p class="item-date">
+                        <time datetime="2020-06-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-06-28</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/r">
+                    R
+                </a>
+                <span class="category-list-count">20</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/big-query">
+                    big-query
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/blogging">
+                    blogging
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-functions">
+                    cloud-functions
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-run">
+                    cloud-run
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/docker">
+                    docker
+                </a>
+                <span class="category-list-count">9</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/firebase">
+                    firebase
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-analytics">
+                    google-analytics
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-app-engine">
+                    google-app-engine
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-auth">
+                    google-auth
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-cloud-storage">
+                    google-cloud-storage
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-compute-engine">
+                    google-compute-engine
+                </a>
+                <span class="category-list-count">7</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-language">
+                    google-language
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-tag-manager">
+                    google-tag-manager
+                </a>
+                <span class="category-list-count">6</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/python">
+                    python
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/rstudio-server">
+                    rstudio-server
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/search-console">
+                    search-console
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+
+    
+
+
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+    
+	</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script src="https://code.markedmondson.me/fancybox/jquery.fancybox.pack.js"></script>
+<script src="https://code.markedmondson.me/js/script.js"></script>
+<script src="https://code.markedmondson.me/js/highlight.pack.js"></script>
+
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+</body>
+</html>
