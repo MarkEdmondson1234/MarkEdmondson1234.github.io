@@ -35,7 +35,7 @@
 
 <meta itemprop="datePublished" content="2020-11-27T09:29:50&#43;01:00" />
 <meta itemprop="dateModified" content="2020-11-27T09:29:50&#43;01:00" />
-<meta itemprop="wordCount" content="4090">
+<meta itemprop="wordCount" content="4088">
 
 
 
@@ -283,7 +283,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2020-11-27 09:29:50 &#43;0100 CET" itemprop="datePublished">2020-11-27</time>
             &middot;
-            4090
+            4088
             words
             &middot;
             20
@@ -430,7 +430,7 @@ if (requestPath == &quot;/custom-endpoint&quot;)  {
   
   // construct the event to send to your server side services
   const event = {
-    event_name: &quot;Cusom ID Event&quot;,
+    event_name: &quot;CustomIDEvent&quot;,
     custom1: queryParameters.custom1,
     custom2: queryParameters.custom2,
     ...etc...
@@ -511,7 +511,7 @@ if (isRequestMpv1()) {
 const ip = getRemoteAddress();
 
 // anonymise the ip address yourself
-ip_split = ip.split(&quot;.&quot;)
+ips = ip.split(&quot;.&quot;)
 anon_ip = ips[1]+&quot;.&quot;+ips[2]+&quot;.&quot;+ips[3]+&quot;.000&quot;
 
 // Check if request is Measurement Protocol
