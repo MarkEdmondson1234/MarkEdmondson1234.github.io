@@ -35,7 +35,7 @@
 
 <meta itemprop="datePublished" content="2020-11-27T09:29:50&#43;01:00" />
 <meta itemprop="dateModified" content="2020-11-27T09:29:50&#43;01:00" />
-<meta itemprop="wordCount" content="4011">
+<meta itemprop="wordCount" content="4090">
 
 
 
@@ -283,10 +283,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2020-11-27 09:29:50 &#43;0100 CET" itemprop="datePublished">2020-11-27</time>
             &middot;
-            4011
+            4090
             words
             &middot;
-            19
+            20
             minute read
         </div>
         
@@ -317,7 +317,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 
 <p>A new interest at the moment is engineering through various data privacy requirements with some of the new tools Google has available. With respect to my guiding principle of blogging about what I wish I could have read 6 months ago, I thought it worth writing about what is now possible. Data privacy engineering also requires clear thinking about the legal and technical details and so this will also help organise my communication around the subject.</p>
-<p>It comes with great thanks to the #measure community that has helped discuss these topics, in particular the #data-privacy channel in <a href="https://www.measure.chat/">Measure Slack</a> and a lot of the code snippets I’ve taken from <a href="https://www.simoahava.com">Simo Ahava’s examples</a>.</p>
+<p>It comes with great thanks to the #measure community that has helped discuss these topics, in particular the #data-protection-priv channel in <a href="https://www.measure.chat/">Measure Slack</a> and a lot of the code snippets I’ve taken from <a href="https://www.simoahava.com">Simo Ahava’s examples</a>.</p>
 <blockquote>
 <p>The usual disclaimers about this subject apply, that this is just free rantings so I’m not liable for anything I say here and you should seek your own legal advice.</p>
 </blockquote>
@@ -354,7 +354,7 @@ A <strong>privacy dove</strong> takes the position that all tracking is now forb
 <div id="itp-browser-based-data-protections" class="section level3">
 <h3>ITP / Browser based data protections</h3>
 <p>ITP is the most rapidly changing in its reach and capabilities, but as its motivated by the richest company in the world’s market position (Apple) and not legislation, privacy hawks are more eager to circumnavigate around it, making it more like an arms race in measures and counter measures. ITP is a leader in the general trend of web browsers to respect privacy, with Firefox, Brave and even Chrome heading down the same path, and are arguably more powerful than governments in enforcing user privacy.</p>
-<p>Apples moral authority in privacy is not helped as they are currently targets for complaints to do with violating the ePrivacy above, <a href="https://noyb.eu/en/noyb-files-complaints-against-apples-tracking-code-idfa">creating an advertisment ID (IDFA) for every iPhone on the planet with user consent</a>.</p>
+<p>Apple’s moral authority in privacy is not helped whilst they are targets for complaints to do with violating the ePrivacy above, <a href="https://noyb.eu/en/noyb-files-complaints-against-apples-tracking-code-idfa">creating an advertisment ID (IDFA) for every iPhone on the planet with user consent</a>.</p>
 <blockquote>
 <p>Each iPhone runs on Apple’s iOS operating system. By default, iOS automatically generates a unique “IDFA” (short for Identifier for Advertisers) for each iPhone. Just like a license plate this unique string of numbers and characters allows Apple and other third parties to identify users across applications and even connect online and mobile behaviour (“cross device tracking”). Apple’s operating system creates the IDFA without user’s knowledge or consent. After its creation, Apple and third parties (e.g. applications providers and advertisers) can access the IDFA to track users’ behaviour, elaborate consumption preferences and provide personalised advertising. Such tracking is strictly regulated by the EU “Cookie Law” (Article 5(3) of the e-Privacy Directive) and requires the users’ informed and unambiguous consent.</p>
 </blockquote>
@@ -377,7 +377,7 @@ A <strong>privacy dove</strong> takes the position that all tracking is now forb
 <h4>Privacy Shield</h4>
 <p><img src="/images/privacy_shield.png" /></p>
 <p>The latest chapter has been the loss of Privacy Shield in summer of 2020, which was a legal mechanism used to allow US companies to process EU data.</p>
-<p>A <a href="http://curia.europa.eu/juris/document/document.jsf?text=&amp;docid=228677&amp;pageIndex=0&amp;doclang=en&amp;mode=lst&amp;dir=&amp;occ=first&amp;part=1&amp;cid=16606736">key compliant from the records of the ruling</a> was about how Facebook would be compelled to give EU citizen data to United States authorities such as the NSA or FBI, so violating that EU citizens GDPR protected rights:</p>
+<p>A <a href="http://curia.europa.eu/juris/document/document.jsf?text=&amp;docid=228677&amp;pageIndex=0&amp;doclang=en&amp;mode=lst&amp;dir=&amp;occ=first&amp;part=1&amp;cid=16606736">key compliant from the records of the ruling</a> was about how Facebook could be compelled to give EU citizen data to United States authorities such as the NSA or FBI, so violating that EU citizen’s GDPR protected rights:</p>
 <blockquote>
 <p>In his reformulated complaint lodged on 1 December 2015, Mr Schrems claimed, inter alia, that United States law requires Facebook Inc. to make the personal data transferred to it available to certain United States authorities, such as the National Security Agency (NSA) and the Federal Bureau of Investigation (FBI). He submitted that, since that data was used in the context of various monitoring programmes in a manner incompatible with Articles 7, 8 and 47 of the Charter, the SCC Decision cannot justify the transfer of that data to the United States. In those circumstances, Mr Schrems asked the Commissioner to prohibit or suspend the transfer of his personal data to Facebook Inc.</p>
 </blockquote>
@@ -387,7 +387,7 @@ A <strong>privacy dove</strong> takes the position that all tracking is now forb
 </div>
 <div id="new-privacy-engineering-tech-from-google" class="section level2">
 <h2>New privacy engineering tech from Google</h2>
-<p>We now have two new products in beta from the Google Tag Manager team - <a href="https://support.google.com/analytics/answer/9976101?hl=en">Google Consent Mode</a> and <a href="https://developers.google.com/tag-manager/serverside">Google Tag Manager - Server Side</a>. Both allow a more nuanced approach to data collection for Google data products. With a combination of GTM-Server Side clients and Google Consent Mode, you can modify requests before the tags process it to help with your data privacy compliance: some proof of concepts are below.</p>
+<p>We now have two new products in beta from the Google Tag Manager team - <a href="https://support.google.com/analytics/answer/9976101?hl=en">Google Consent Mode</a> and <a href="https://developers.google.com/tag-manager/serverside">Google Tag Manager - Server Side</a>. Both allow a more nuanced approach to data collection for Google data products. With a combination of GTM-Server Side clients and Google Consent Mode, you can modify requests before the tags process it to help with your data privacy compliance. Some proof of concepts are below.</p>
 <div class="figure">
 <img src="/images/server-side-tagging-outline.jpg" alt="" />
 <p class="caption">Image from Simo Ahava’s post - <a href="https://www.simoahava.com/analytics/server-side-tagging-google-tag-manager/" class="uri">https://www.simoahava.com/analytics/server-side-tagging-google-tag-manager/</a></p>
@@ -400,7 +400,7 @@ A <strong>privacy dove</strong> takes the position that all tracking is now forb
 <ul>
 <li>personal information - also known as PII. Things that can be read to identify one person, such as emails, names, or addresses. It is best not to pass this unless absolutely necessary, as you will have to keep track of where it is stored so you can retrieve or delete it again later.</li>
 <li>pseudoanonymous - Use these instead if you can: its an ID that on its own gives no personal info, but once linked to other data can uniquely ID a user. <a href="https://gdpr-info.eu/recitals/no-30/">UserIds, CookieIDs, IP addresses</a> fall under here. <a href="https://gdpr-info.eu/recitals/no-28/">GDPR encourages use of pseudoanonyminity</a> as it means you can delete the personal data in one place, then destroy the psuedoanonymous keys to securely protect data, but you do need to protect that pseudoanonymous ID as you would personal data until that link is impossible.</li>
-<li>anonymous - Data that can not be used to identify (or re-identify) a user. This is useful as if you can make your data truly anonymous then <a href="https://gdpr-info.eu/recitals/no-26/">GDPR does not apply</a>.</li>
+<li>anonymous - Data that can not be used to identify (or re-identify) a user. This is useful as if you can make your data truly anonymous then <a href="https://gdpr-info.eu/recitals/no-26/">GDPR does not apply</a>. There is a great resource on what anonymisation you can do from the <a href="https://ico.org.uk/media/1061/anonymisation-code.pdf">UK’s ICO that covers a lot of techniques</a>.</li>
 </ul>
 <div id="increase-data-protection-for-existing-tags" class="section level4">
 <h4>Increase data protection for existing tags</h4>
@@ -479,10 +479,11 @@ data.gtmOnSuccess();</code></pre>
 <p>The example below assumes your URLs could contain an email. I’m just looking for @ so this is a crude example, you may like <a href="https://brianclifton.com/blog/2017/09/07/remove-pii-from-google-analytics/">this post by Brian Clifton for regex’s to tackle other privacy concerns</a> to add more relevant ones for you.</p>
 <pre class="js"><code>const isRequestMpv1 = require(&#39;isRequestMpv1&#39;);
 const extractEventsFromMpv1 = require(&#39;extractEventsFromMpv1&#39;);
+const claimRequest = require(&#39;claimRequest&#39;);
 
 // Check if request is Measurement Protocol
 if (isRequestMpv1()) {
-
+  claimRequest();
   const events = extractEventsFromMpv1();
   events.forEach((event, i) =&gt; {
   
@@ -502,8 +503,8 @@ if (isRequestMpv1()) {
 </div>
 <div id="ip-anonymisation" class="section level4">
 <h4>IP Anonymisation</h4>
-<p>IP addresses are explicitly mentioned in GDPR as personal identifiers. They are not recorded in Google Analytics but each request to Google’s servers do include one for spam and geo-location purposes - Google says this data is then quickly discarded. For some privacy doves this is not enough assurance, so instead you can roll your own ip anonymisation and geo targeting, never sending Google any ip information. (See <a href="https://www.simoahava.com/gtm-tips/get-true-ip-anonymization-server-side-tagging/">here if you don’t mind Google getting the IP</a>)</p>
-<p>Losing ip information also means losing geography dimensions, so see also this <a href="https://www.simoahava.com/gtm-tips/utilize-app-engine-headers-server-side-tagging/">handy tip from Simo</a>, which takes the geo-targeting info from the App Engine headers if you want to keep those.</p>
+<p>IP addresses are explicitly mentioned in GDPR as personal identifiers. They are not recorded in Google Analytics but each request to Google’s servers do include one for spam and geo-location purposes - Google says this data is then quickly discarded. For some privacy doves this is not enough assurance, so instead you can roll your own ip anonymisation and geo targeting, never sending Google any ip information. (See <a href="https://www.simoahava.com/gtm-tips/get-true-ip-anonymization-server-side-tagging/">here for setting an override in the GTM UI</a>.)</p>
+<p>Losing ip information also means losing geography dimensions, so see also this <a href="https://www.simoahava.com/gtm-tips/utilize-app-engine-headers-server-side-tagging/">handy tip from Simo</a>, which takes the geo-targeting info from the App Engine headers if you want to keep those, although then Google is receiving and processing an ip address.</p>
 <p>Repeat for all fields you would like to control before Google sees them, such as User Agent.</p>
 <pre class="js"><code>...etc...
 // Get IP from incoming request
@@ -515,7 +516,6 @@ anon_ip = ips[1]+&quot;.&quot;+ips[2]+&quot;.&quot;+ips[3]+&quot;.000&quot;
 
 // Check if request is Measurement Protocol
 if (isRequestMpv1()) {
-
     // Claim the request
     claimRequest();
 
@@ -541,8 +541,8 @@ const sha256Sync = require(&#39;sha256Sync&#39;);
 const ua = getRequestHeader(&#39;user-agent&#39;);
 const ip = getRemoteAddress();
 
-// pick your own salt
-salt = &#39;doyouthinkshesawus?&#39;
+// pick your own salt - can be anything
+salt = &#39;dontknowwhattoputhere&#39;
 
 // Create a hashed ID from the IP and User Agent
 const paid = sha256Sync(salt + ip + ua);
@@ -651,7 +651,7 @@ if (isRequestMpv1()) {
     });
   });
 }</code></pre>
-<p>As another browser based measure, you can also self-host your analytics script to avoid some Ad Blockers blocking your tracking scripts.</p>
+<p>As another browser based measure, you can also self-host your analytics script to avoid some Ad Blockers blocking your tracking scripts. Soon you will be able to host the Google Tag Manager script as well.</p>
 <pre><code>// analytics.js
 if (getRequestPath() === &#39;/analytics.js&#39;) {
   claimRequest();
@@ -679,8 +679,8 @@ if (getRequestPath() === &#39;/analytics.js&#39;) {
 </div>
 <div id="summary" class="section level2">
 <h2>Summary</h2>
-<p>The best way to get good feedback on a subject is to confidently publish the wrong answer to the internet, so I hope that if I’ve made some glaring mistakes above someone will be kind enough to point it out in the comments below :)</p>
-<p>Although a bit wary of the subject in the beginning I can see some exciting work in data privacy engineering, which lacks black and white certainties and so fosters interesting debates on ethics and how we want our digital society to look. Myself I am active in protecting my own personal data from being abused by companies on the web, as I know the value of it from working in the industry, and I want other people to have that level of awareness and be able to make informed choices.</p>
+<p>The best way to get good feedback on a subject is to confidently publish the wrong answer to the internet, so I hope that if I’ve made some glaring mistakes above someone will be kind enough to point it out in the comments below :) Its a big subject, this post is one of my longest, so I must have missed something.</p>
+<p>Although a bit wary of the subject in the beginning I can see some exciting work in data privacy engineering, which lacks black and white certainties and so fosters interesting debates on ethics and how we want our digital society to look. As I know the value of my data from working in the industry, I am active in protecting my own personal data from being abused by companies on the web. I want other people to have that level of awareness and control and be able to make informed choices on what personal data they do give out.</p>
 <p>There is also a big question mark on how improved data privacy will change the web, since a lot of the current legal targets look to be those companies that are driving revenue for news media, which in this age of alternative facts we have need of more than ever. It seems we also need to think about the business models to work alongside this improved privacy to make it all stick. Supporting publishers with subscriptions seems to be the way this is going, but for those to work even more data about subscribers will be needed by them to optimise their experience. Trust is a big factor in all of this, and if I was a brand I would be considering that a KPI to make long term gains.</p>
 </div>
 
