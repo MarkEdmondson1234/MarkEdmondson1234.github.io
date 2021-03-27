@@ -44,12 +44,6 @@
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/tags/google-analytics/</loc>
-    <lastmod>2021-03-21T09:29:50+01:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>https://code.markedmondson.me/tags/google-tag-manager/</loc>
     <lastmod>2021-03-21T09:29:50+01:00</lastmod>
     <priority>0</priority>
@@ -58,6 +52,12 @@
   <url>
     <loc>https://code.markedmondson.me/data-privacy-gtm/</loc>
     <lastmod>2020-11-27T09:29:50+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://code.markedmondson.me/tags/google-analytics/</loc>
+    <lastmod>2020-11-27T09:29:50+01:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
