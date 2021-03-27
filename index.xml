@@ -6,10 +6,20 @@
     <description>Recent content on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
-    <lastBuildDate>Fri, 27 Nov 2020 09:29:50 +0100</lastBuildDate>
+    <lastBuildDate>Sun, 21 Mar 2021 09:29:50 +0100</lastBuildDate>
     
 	<atom:link href="https://code.markedmondson.me/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Creating your own cookieless analytics tool with GTM Server Side, Cloud Run, BigQuery and Shiny</title>
+      <link>https://code.markedmondson.me/edmondlytica/</link>
+      <pubDate>Sun, 21 Mar 2021 09:29:50 +0100</pubDate>
+      
+      <guid>https://code.markedmondson.me/edmondlytica/</guid>
+      <description>This is an example of how GTM server side can be used to create your own digital analytics tool. It’s a proof of concept of what you can do given the power of GTM serverside and its BigQuery integration. I customise the stream by adding cookieless tracking, displaying the data in Shiny and running it all on Cloud Run to keep costs down but performance good.
+I shall dub this tool Edmonlytica.</description>
+    </item>
     
     <item>
       <title>Data Privacy Engineering with Google Tag Manager Server Side and Consent Mode</title>
@@ -120,6 +130,7 @@ The code is available in this GitHub repo for useful cloud functions with Google
       
       <guid>https://code.markedmondson.me/talking-google-analytics-dashboards/</guid>
       <description>
+&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
 
 
 &lt;p&gt;What really makes Google Analytics stand apart from other analytics solutions for me is its integration with the Google Cloud, such as BigQuery and its machine learning APIs. An example of this integration is given in this workshop video that details how to use the &lt;a href=&#34;https://developers.google.com/analytics/devguides/reporting/core/v4/&#34;&gt;Google Analytics&lt;/a&gt; and &lt;a href=&#34;https://cloud.google.com/text-to-speech/&#34;&gt;Text-to-speech&lt;/a&gt; APIs to create a dashboard that talks through your statistics.&lt;/p&gt;
@@ -179,6 +190,7 @@ TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically
       
       <guid>https://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/</guid>
       <description>
+&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
 
 
 &lt;p&gt;A common question I come across is how to automate scheduling of R scripts downloading data. This post goes through some options that I have played around with, which I’ve mostly used for downloading API data such as Google Analytics using the Google Cloud platform, but the same principles could apply for AWS or Azure.&lt;/p&gt;

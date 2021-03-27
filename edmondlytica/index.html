@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <title>Creating your own cookieless analytics tool with GTM Server Side, Cloud Run, BigQuery and Shiny &middot; Mark Edmondson</title>
+    <meta name="generator" content="Hugo 0.55.5" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Mark Edmondson">
+    
+      <meta name="description" content="The code bit of the blog">
+    
+    
+    <link rel="canonical" href="https://code.markedmondson.me/edmondlytica/"/>
+    <link rel="icon" href="https://code.markedmondson.me/favicon.ico">
+    <link rel="apple-touch-icon" href="https://code.markedmondson.me/apple-touch-icon.png"/>
+    <link rel="stylesheet" href="https://code.markedmondson.me/css/style.css">
+    <link rel="stylesheet" href="https://code.markedmondson.me/css/github.css" rel="stylesheet" id="theme-stylesheet">
+    <link rel="stylesheet" href="https://code.markedmondson.me/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://code.markedmondson.me/fancybox/jquery.fancybox.css">
+    
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+    <meta property="og:title" content="Creating your own cookieless analytics tool with GTM Server Side, Cloud Run, BigQuery and Shiny" />
+<meta property="og:description" content="This is an example of how GTM server side can be used to create your own digital analytics tool. It’s a proof of concept of what you can do given the power of GTM serverside and its BigQuery integration. I customise the stream by adding cookieless tracking, displaying the data in Shiny and running it all on Cloud Run to keep costs down but performance good.
+I shall dub this tool Edmonlytica." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://code.markedmondson.me/edmondlytica/" />
+<meta property="article:published_time" content="2021-03-21T09:29:50&#43;01:00"/>
+<meta property="article:modified_time" content="2021-03-21T09:29:50&#43;01:00"/>
+
+    
+    
+<meta itemprop="name" content="Creating your own cookieless analytics tool with GTM Server Side, Cloud Run, BigQuery and Shiny">
+<meta itemprop="description" content="This is an example of how GTM server side can be used to create your own digital analytics tool. It’s a proof of concept of what you can do given the power of GTM serverside and its BigQuery integration. I customise the stream by adding cookieless tracking, displaying the data in Shiny and running it all on Cloud Run to keep costs down but performance good.
+I shall dub this tool Edmonlytica.">
+
+
+<meta itemprop="datePublished" content="2021-03-21T09:29:50&#43;01:00" />
+<meta itemprop="dateModified" content="2021-03-21T09:29:50&#43;01:00" />
+<meta itemprop="wordCount" content="1691">
+
+
+
+<meta itemprop="keywords" content="R,google-analytics,cloud-run,google-tag-manager,big-query," />
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Creating your own cookieless analytics tool with GTM Server Side, Cloud Run, BigQuery and Shiny"/>
+<meta name="twitter:description" content="This is an example of how GTM server side can be used to create your own digital analytics tool. It’s a proof of concept of what you can do given the power of GTM serverside and its BigQuery integration. I customise the stream by adding cookieless tracking, displaying the data in Shiny and running it all on Cloud Run to keep costs down but performance good.
+I shall dub this tool Edmonlytica."/>
+<meta name="twitter:site" content="@HoloMarkeD"/>
+
+    
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//gtm2.markedmondson.me/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WFFMBH');</script>
+
+
+
+    <script src="https://code.markedmondson.me/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+
+
+<div id="container">
+	<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="https://code.markedmondson.me/" id="logo">
+          
+          <i class="logo" style="background-image: url('https://code.markedmondson.me/images/greenhand.png')"></i>
+          
+          <span class="site-title">Mark Edmondson</span>
+      </a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="https://code.markedmondson.me/">Home</a>
+          
+          
+          
+          
+          
+          
+
+          
+          <a class="main-nav-link" href="/r-packages/">My R Packages</a>
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.markedmondson.me/posts/">Non-code blog</a>
+          
+          
+          
+          <a class="main-nav-link" href="https://www.markedmondson.me/static/presentations/">Past Presentations</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="https://code.markedmondson.me/images/gde_avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+              <input type="hidden" name="sitesearch" value="https://code.markedmondson.me/" />
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="https://code.markedmondson.me/">Home</a></td>
+          
+          
+          
+          
+          
+          
+
+          
+          <td><a class="main-nav-link" href="/r-packages/">My R Packages</a></td>
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.markedmondson.me/posts/">Non-code blog</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="https://www.markedmondson.me/static/presentations/">Past Presentations</a></td>
+          
+          
+          <td>
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" class="search-form-input" placeholder="Search">
+          <input type="hidden" name="sitesearch" value="https://code.markedmondson.me/" />
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+   	
+   	<div class="outer">
+   	
+    	<aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      
+      <img id="avatar" src="https://code.markedmondson.me/images/gde_avatar.jpg">
+      
+      <h2 id="name">Mark Edmondson</h2>
+      <h3 id="title">Coding in digital analytics</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Copenhagen, Denmark</span>
+      
+          <a id="follow" href="https://github.com/MarkEdmondson1234">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+      <div class="article-info-block">
+        29
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          17
+        
+        <span>
+            Tags
+        </span>
+      </div>
+    </div>
+    <div class="profile-block social-links">
+      <table>
+        <tr>
+          
+<td><a href="//github.com/MarkEdmondson1234" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/MarkEdmondsonAtHome" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//linkedin.com/in/markpeteredmondson" target="_blank" title="LinkedIn"><i class="fa fa-linkedin"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/HoloMarkeD" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="https://code.markedmondson.me/index.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</aside>
+
+    
+
+    <section id="main">
+    
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+            <img src="https://code.markedmondson.me/banners/edmonlytica-shiny1.png" class="article-banner">
+        
+
+        <header class="article-header">
+    <a href="https://code.markedmondson.me/edmondlytica/">
+    <h1 class="article-title" itemprop="name">
+        Creating your own cookieless analytics tool with GTM Server Side, Cloud Run, BigQuery and Shiny
+    </h1>
+    </a>
+    <div class="article-meta">
+
+        
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2021-03-21 09:29:50 &#43;0100 CET" itemprop="datePublished">2021-03-21</time>
+            &middot;
+            1691
+            words
+            &middot;
+            8
+            minute read
+        </div>
+        
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/r">R</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/google-analytics">google-analytics</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/cloud-run">cloud-run</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/google-tag-manager">google-tag-manager</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/big-query">big-query</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+        <div class="article-entry" itemprop="articleBody">
+            
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<p>This is an example of how <a href="https://developers.google.com/tag-manager/serverside">GTM server side</a> can be used to create your own digital analytics tool. It’s a proof of concept of what you can do given the power of GTM serverside and its BigQuery integration. I customise the stream by adding cookieless tracking, displaying the data in Shiny and running it all on Cloud Run to keep costs down but performance good.</p>
+<p>I shall dub this tool <strong>Edmonlytica</strong>.</p>
+<p>Edmonlytica has these features:</p>
+<ul>
+<li>KISS metrics: hits + page views + sessions</li>
+<li>No cookies</li>
+<li>Control entire data flow</li>
+<li>Real-time data stream I/O using BigQuery</li>
+<li>R Shiny front end to plug into R package ecosystem</li>
+<li>AI!!! (Not really)</li>
+<li>Runs on infrastructure that scales with you, from 0 cost for light usage.</li>
+</ul>
+<p>I think the above is all that is needed for my blog, and probably a lot of others. It wouldn’t be suitable for advanced website analytics, but the framework could be used to make tools that slot into those more sophisticated systems.</p>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<p>The information for this post is gathered from various sources:</p>
+<ul>
+<li><a href="https://developers.google.com/tag-manager/serverside/how-to-build-a-server-tag">Baz Analytics</a> in the GTM server side documentation</li>
+<li>Nicolas Hinternesch’s post on creating a <a href="https://levelup.gitconnected.com/google-tag-manager-server-side-how-to-manage-custom-vendor-tags-21bef51bc89e">custom GTM-SS client for AT-Internet</a></li>
+<li>My previous post on running a <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/">real-time forecasting dashboard using GTM, GCP and Shiny</a></li>
+<li>My other post about <a href="https://code.markedmondson.me/gtm-serverside-cloudrun/">deploying GTM Server Side on Cloud Run</a></li>
+</ul>
+</div>
+<div id="the-plan" class="section level2">
+<h2>The Plan</h2>
+<p>The things to configure are:</p>
+<ul>
+<li>GTM Browser side tag - capturing the data and sending it to <code>/edmonlytica</code></li>
+<li>GTM Server side client - recieving the payload from <code>/edmonlytica</code>, adding a hashed userID and putting the data into a GTM event format</li>
+<li>GTM Server side tag - taking the GTM event format and sending it to BigQuery</li>
+<li>BigQuery - real-time capture, storage, aggregation and analysis of the data streams</li>
+<li>Shiny - connecting to BigQuery to process the data and display information based on the data</li>
+</ul>
+<p><img src="/images/edmonlytica-overview.png" /></p>
+</div>
+<div id="gtm-browser-side-configuration" class="section level2">
+<h2>GTM Browser Side Configuration</h2>
+<p>Deploy GTM browser side on your website, changing the tracking script to point at your GTM Server Side URL instead of <code>www.googletagmanager.com</code> e.g. for my GTM SS URL of <code>https://gtm2.markedmondson.me</code> its:</p>
+<pre><code>&lt;script&gt;(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({&#39;gtm.start&#39;:
+new Date().getTime(),event:&#39;gtm.js&#39;});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!=&#39;dataLayer&#39;?&#39;&amp;l=&#39;+l:&#39;&#39;;j.async=true;j.src=
+&#39;//gtm2.markedmondson.me/gtm.js?id=&#39;+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,&#39;script&#39;,&#39;dataLayer&#39;,&#39;GTM-WFFMBH&#39;);&lt;/script&gt;</code></pre>
+<div id="making-a-browser-side-tag-to-send-in-the-events." class="section level3">
+<h3>Making a browser side tag to send in the events.</h3>
+<p>This will send in GTM events as per traditional GTM setups.</p>
+<p>I choose not to ride on the back of the GA events like the <a href="https://developers.google.com/tag-manager/serverside/how-to-build-a-server-tag">Baz Analytics</a> example, so will need to send to my own endpoint.
+It sends it to the GTM server side endpoint <code>/edmondlytica</code> reading the event name from the GTM trigger the tag is set up for.</p>
+<p>It includes a timestamp and the eventId as they could be useful.</p>
+<pre class="js"><code>const log = require(&#39;logToConsole&#39;);
+const copyFromDataLayer = require(&#39;copyFromDataLayer&#39;);
+const encodeUri = require(&#39;encodeUri&#39;);
+const sendPixel = require(&#39;sendPixel&#39;);
+const getReferrerUrl = require(&#39;getReferrerUrl&#39;);
+const encodeUriComponent = require(&#39;encodeUriComponent&#39;);
+log(&#39;data =&#39;, data);
+
+const gtm = copyFromDataLayer(&#39;gtm&#39;);
+
+const the_url = data.transport_url + &#39;/edmonlytica&#39; +
+    &#39;?event=&#39; + copyFromDataLayer(&#39;event&#39;) + 
+    &#39;&amp;referrer=&#39; + getReferrerUrl() + 
+    &#39;&amp;ts=&#39; + gtm.start + 
+    &#39;&amp;eventId=&#39; + data.gtmEventId +
+    &#39;&amp;custom=&#39; + data.custom +
+    &#39;&amp;page=&#39; + data.pagepath;
+
+log(&#39;the_url:&#39;, encodeUri(the_url));
+
+sendPixel(encodeUri(the_url), data.gtmOnSuccess(), data.gtmOnFailure());</code></pre>
+<p>This code is set via a tag template, with a <code>data.transport_url</code> field to swap out which GTM server-side instance you want to use. My default is set to <code>https://gtm2.markedmondson.me</code>. I also have a field for custom variables that can be set with GTM macros - I’d like the URL people click on for my external link clicks trigger so will use <code>{{Click URL}}</code> and the <code>{{Page URL}}</code>.</p>
+<div class="figure">
+<img src="/images/edmonlytica-browser-fields.png" alt="" />
+<p class="caption">Edmonlytica GTM Browser tag template data fields</p>
+</div>
+<p>I now create an instance of my tag and choose what triggers it - for me pageviews and external link triggers but you could add any other GTM trigger you have created - the tag will capture the event details for that trigger.</p>
+<div class="figure">
+<img src="/images/edmonlytica-browser-tag.png" alt="" />
+<p class="caption">Edmonlytica GTM Browser-side tag</p>
+</div>
+<p>Publishing the tag or in preview mode I can see the logs showing the URL is being formed correctly, but getting a 400 error as we haven’t setup the server-side yet. In my case the triggers for a pageview = <code>gtm.js</code> and for an external link click = <code>gtm.linkClick</code></p>
+<div class="figure">
+<img src="/images/edmonlytica-tag-console-logs.png" alt="" />
+<p class="caption">Logs in Web Console Network tab - (click to make larger)</p>
+</div>
+<p>Now I need the GTM Server Side Client that will accept the <code>/edmonlytica</code> endpoint, process it and send it into BigQuery.</p>
+</div>
+</div>
+<div id="gtm-server-side" class="section level2">
+<h2>GTM Server Side</h2>
+<p>The GTM Server Side Client accepts calls from Edmonlytica GTM Browser Tag and parses them out into an GTM event object ready for server side tags to consume.</p>
+<p>The GTM Server Side Tag will consume the event object and do the call to BigQuery.</p>
+<div id="the-gtm-server-side-client" class="section level3">
+<h3>The GTM Server Side Client</h3>
+<p>The GTM Server Side Client accepts the endpoint request from the browser-side tag, puts it into an event format then runs it against the server-side tag. If successful, it returns a 200 response back to the browser as a pixel.</p>
+<p>It includes a hashing of an anonymised ip address for a session/userId. This isn’t as reliable as using cookies for identifying sessions and users, but deemed fine for the scope of this use case. See these 4000 words on <a href="https://code.markedmondson.me/data-privacy-gtm/">data privacy engineering and GTM server-side</a> for background.</p>
+<pre class="js"><code>const claimRequest = require(&#39;claimRequest&#39;);
+const getRequestPath = require(&#39;getRequestPath&#39;);
+const getRequestQueryParameters = require(&#39;getRequestQueryParameters&#39;);
+const log = require(&#39;logToConsole&#39;);
+const runContainer = require(&#39;runContainer&#39;);
+const returnResponse = require(&#39;returnResponse&#39;);
+const setPixelResponse = require(&#39;setPixelResponse&#39;);
+const sha256Sync = require(&#39;sha256Sync&#39;);
+const getRemoteAddress = require(&#39;getRemoteAddress&#39;);
+
+if(getRequestPath() == &quot;/edmonlytica&quot;){
+  
+  claimRequest();
+  
+  const ips = getRemoteAddress().split(&quot;.&quot;);
+  const anon_ip = ips[1]+&quot;.&quot;+ips[2]+&quot;.&quot;+ips[3]+&quot;.000&quot;;
+  
+  const queryParameters = getRequestQueryParameters();
+  const hashedip = sha256Sync(anon_ip + &#39;salted&#39;);
+  
+  // create event schema 
+  const event = {
+    event_name: &quot;edmonlytica&quot;,
+    event:  queryParameters.event,
+    referrer:  queryParameters.referrer,
+    ts:  queryParameters.ts,
+    eventId: queryParameters.eventId,
+    custom: queryParameters.custom,
+    sessionId: hashedip,
+    page: queryParameters.page
+  };
+  
+  log(&quot;Edmonlytica request event:&quot;, event);
+  
+  runContainer(event, () =&gt; returnResponse());
+  
+  setPixelResponse();
+  
+  returnResponse();
+}</code></pre>
+<p>Remember to set the appropriate permissions as documented in the <a href="https://developers.google.com/tag-manager/serverside/api#getremoteaddress">server-side tagging APIs</a>.</p>
+</div>
+<div id="the-gtm-server-side-tag" class="section level3">
+<h3>The GTM Server Side Tag</h3>
+<p>The Server Side tag will do the actual sending to BigQuery of your data.</p>
+<pre class="js"><code>const log = require(&#39;logToConsole&#39;);
+const getAllEventData = require(&#39;getAllEventData&#39;);
+const BigQuery = require(&#39;BigQuery&#39;);
+const JSON = require(&#39;JSON&#39;);
+
+// need a list of event data
+const event = getAllEventData();
+
+// this should match the BigQuery schema
+let row = [];
+row.push(event);
+
+log(&#39;array to push to BigQuery: &#39;, row);
+
+BigQuery.insert({
+  projectId: data.projectId,
+  datasetId: data.dataset,
+  tableId: data.table,
+}, row, {}, () =&gt; {
+  log(&#39;BigQuery Success&#39;);
+  data.gtmOnSuccess();
+}, (errors) =&gt; {
+  log(&#39;BigQuery Failure&#39;);
+  log(JSON.stringify(errors));
+  data.gtmOnFailure();
+});</code></pre>
+<p>Its possible to push many rows at once, but for this application it only does one at a time.</p>
+<p>Once you have created the template, deploy the instances of them to the Clients and Tags and create a trigger:</p>
+<p><img src="/images/edmonlytica-deploy-client.png" alt="Edmonlytica GTM Server Side Client" />
+<img src="/images/edmonlytica-client-trigger.png" alt="Edmonlytica Server Side Trigger" />
+<img src="/images/edmonlytica-server-tag.png" alt="Edmonlytica Server Side Tag" /></p>
+</div>
+</div>
+<div id="bigquery" class="section level2">
+<h2>BigQuery</h2>
+<p>The GTM tag won’t create the table, so you need to pre-create the schema. I also added DATE partitioning.</p>
+<div class="figure">
+<img src="/images/edmonlytica-bigquery-schema.png" alt="" />
+<p class="caption">BigQuery schema</p>
+</div>
+<p>Once you have all your tags firing successfully in preview mode, you should start to see data in BigQuery. Study the GTM preview logs in the console if any problems, usually related to formatting the projectId/datasetId/tableId, the BigQuery data schema and similar.</p>
+<p>Data will be flowing into the real-time BigQuery buffer, so you will want to disable cached results when testing your data stream. Queries like</p>
+<pre class="sql"><code>SELECT * FROM `edmonlytica.code_markedmondson_me` LIMIT 1000</code></pre>
+<p>Should give you back results.</p>
+<div class="figure">
+<img src="/images/edmonlytica-bigquery-settings.png" alt="" />
+<p class="caption">Untick the ‘Use cached results’ box</p>
+</div>
+<p>The hard bits done! Data should now be flowing in as user browse the website.</p>
+<div id="handy-sql" class="section level3">
+<h3>Handy SQL</h3>
+<p>This is where off-the-shelf analytics tools earn their keep by making these aggregations for you, but for simple data models like this it doesn’t take too long to extract some useful data tables. The common ones could be made into their own tables or views for convenience.</p>
+<ul>
+<li>Number of pageviews per YYYY-mm-dd hour</li>
+</ul>
+<pre class="sql"><code>SELECT FORMAT_TIMESTAMP(&quot;%Y%m%d-%H00&quot;,
+         TIMESTAMP_MILLIS(CAST(ts AS INT64))) AS timestamp, 
+         count(1) as pageviews
+FROM `edmonlytica.code_markedmondson_me` 
+WHERE event = &quot;gtm.js&quot; 
+group by timestamp</code></pre>
+<ul>
+<li>Number of external link clicks per YYYY-mm-dd</li>
+</ul>
+<pre class="sql"><code>SELECT custom as URL,
+       FORMAT_TIMESTAMP(&quot;%Y%m%d&quot;,TIMESTAMP_MILLIS(CAST(ts AS INT64))) AS timestamp, 
+       count(1) AS linkClicks 
+FROM `edmonlytica.code_markedmondson_me` 
+WHERE event = &quot;gtm.linkClick&quot; 
+group by URL, timestamp</code></pre>
+<ul>
+<li>Number of unique hashed ips visiting from referrers per landing page</li>
+</ul>
+<pre class="sql"><code>SELECT
+  referrer, page,
+  FORMAT_TIMESTAMP(&quot;%Y%m%d %H00&quot;,TIMESTAMP_MILLIS(CAST(ts AS INT64))) AS timestamp,
+  COUNT(DISTINCT sessionId) AS visits
+FROM
+  `edmonlytica.code_markedmondson_me`
+WHERE
+  event = &quot;gtm.js&quot; 
+  AND page is not null 
+  AND referrer IS NOT NULL AND referrer != &quot;&quot;
+  AND NOT STARTS_WITH(referrer, &quot;https://code.markedmondson.me&quot;)
+GROUP BY
+  referrer, page, timestamp</code></pre>
+<p>You could connect to BigQuery with Data Studio or lots of other visualisation products, but I would like to connect via R Shiny.</p>
+</div>
+</div>
+<div id="shiny" class="section level2">
+<h2>Shiny</h2>
+<p>I want to see my data in a Shiny dashboard. This app is deployed to Cloud Run as well. It includes visualizations of hit trends, top referrers and landing pages and some analysis tools such as forecasts and anomaly detection.</p>
+<div class="figure">
+<img src="/images/edmonlytica-shiny1.png" alt="" />
+<p class="caption">pageviews per page</p>
+</div>
+<div class="figure">
+<img src="/images/edmonlytica-shiny2.png" alt="" />
+<p class="caption">referrers and landing page</p>
+</div>
+<div class="figure">
+<img src="/images/edmonlytica-shiny-3.png" alt="" />
+<p class="caption">realtime hits and forecast</p>
+</div>
+<div id="shiny-deployment-on-cloud-run" class="section level3">
+<h3>Shiny deployment on Cloud Run</h3>
+<p>The Shiny app code is here: <a href="https://github.com/MarkEdmondson1234/edmonlytica" class="uri">https://github.com/MarkEdmondson1234/edmonlytica</a></p>
+<p>I used the SQL examples above to help build the datasets for Shiny to process and display.</p>
+<p><a href="https://code.markedmondson.me/bigQueryR/"><code>bigQueryR</code></a> was used within my Shiny app, then since Cloud Run is running on GCP in the same project as the BigQuery dataset I could use <code>googleAuthR::gar_gce_auth()</code> to use the default authentication service account without needing to upload any auth keys.</p>
+<p>I used <a href="https://jkunst.com/highcharter/"><code>highcharter</code></a> as was used in my previous Shiny app (<a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/">real-time forecasting dashboard using GTM, GCP and Shiny</a>) as it makes pretty plots, and also kept the forecasting capabilities from that post for my trended hits via <a href="https://pkg.robjhyndman.com/forecast/"><code>forecast</code></a>.</p>
+<p>The deployment followed the <a href="https://code.markedmondson.me/shiny-cloudrun/">deploy Shiny on Cloud Run</a> instructions and once the Dockerfile was built could be deployed by googleCloudRunner via:</p>
+<pre class="r"><code>library(googleCloudRuner)
+
+# deploy to Cloud Run
+cr_run(sprintf(&quot;gcr.io/%s/shiny-edmonlytica:latest&quot;,cr_project_get()),
+       name = &quot;shiny-edmonlytica&quot;,
+       concurrency = 80,
+       max_instances = 1,
+       memory = &quot;2Gi&quot;)</code></pre>
+</div>
+</div>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<p>Creating your own digital analytics data flow is much easier these days as more and more useful tools come out. The Cloud is the enabler in most of these cases as it provides the scale but also cost savings - the most expensive aspect of the above setup will be the BigQuery query costs as for my blog it should otherwise keep well underneath the free tiers.</p>
+<p>I hope it also demonstrates who the tools such as GA360 and GA4 can also be complimented with your own data streams for not too much development time, and look forward to the publication of pre-made GTM tags and clients to help even those with no coding experience benefit.</p>
+</div>
+
+        </div>
+        <footer class="article-footer">
+    <a data-url="https://code.markedmondson.me/edmondlytica/" data-id="22a0b4a0a0fbb4396f44baee14374969" class="article-share-link">
+        <i class="fa fa-share"></i>
+        Share
+    </a>
+    
+    <a href="https://code.markedmondson.me/edmondlytica/#disqus_thread" class="article-comment-link">
+        Comments
+    </a>
+    
+
+    <script>
+    (function ($) {
+        
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+    </script>
+</footer>
+
+    </div>
+
+    
+<nav id="article-nav">
+    
+    <a href="https://code.markedmondson.me/data-privacy-gtm/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">
+          Older
+      </strong>
+      <div class="article-nav-title">Data Privacy Engineering with Google Tag Manager Server Side and Consent Mode</div>
+    </a>
+    
+
+    
+</nav>
+
+
+</article>
+
+
+<section id="comments">
+    <div id="disqus_thread">
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "markedmondson" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+</section>
+
+
+    </section>
+
+   	
+    	<aside id="sidebar">
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/edmondlytica/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/edmonlytica-shiny1.png)" alt="Creating your own cookieless analytics tool with GTM Server Side, Cloud Run, BigQuery and Shiny" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/edmondlytica/" class="title">Creating your own cookieless analytics tool with GTM Server Side, Cloud Run, BigQuery and Shiny</a></p>
+                    <p class="item-date">
+                        <time datetime="2021-03-21 09:29:50 &#43;0100 CET" itemprop="datePublished">2021-03-21</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/data-privacy-gtm/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/hawks-and-doves.jpg)" alt="Creating your own cookieless analytics tool with GTM Server Side, Cloud Run, BigQuery and Shiny" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/data-privacy-gtm/" class="title">Data Privacy Engineering with Google Tag Manager Server Side and Consent Mode</a></p>
+                    <p class="item-date">
+                        <time datetime="2020-11-27 09:29:50 &#43;0100 CET" itemprop="datePublished">2020-11-27</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/gtm-serverside-webhooks/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/gtm-serverside-events.png)" alt="Creating your own cookieless analytics tool with GTM Server Side, Cloud Run, BigQuery and Shiny" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/gtm-serverside-webhooks/" class="title">Using Google Tag Manager Server Side to Trigger Webhook Events</a></p>
+                    <p class="item-date">
+                        <time datetime="2020-09-04 12:50:50 &#43;0100 &#43;0100" itemprop="datePublished">2020-09-04</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/gtm-serverside-cloudrun/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/princess-gtm.png)" alt="Creating your own cookieless analytics tool with GTM Server Side, Cloud Run, BigQuery and Shiny" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/gtm-serverside-cloudrun/" class="title">Google Tag Manager Server Side on Cloud Run - Pros and Cons</a></p>
+                    <p class="item-date">
+                        <time datetime="2020-08-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-21</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/shiny-cloudrun/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/shiny-clouds.jpg)" alt="Creating your own cookieless analytics tool with GTM Server Side, Cloud Run, BigQuery and Shiny" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/shiny-cloudrun/" class="title">Shiny on Google Cloud Run - Scale-to-Zero R Web Apps</a></p>
+                    <p class="item-date">
+                        <time datetime="2020-08-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-01</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Donate
+    </h3>
+    <div class="widget">
+       	<script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="marked" data-description="Support me on Buy me a coffee!" data-message="" data-color="#FFDD00" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+       	<iframe src="https://github.com/sponsors/MarkEdmondson1234/button" title="Sponsor MarkEdmondson1234" height="35" width="116" style="border: 0;"></iframe>
+    </div>
+</div>
+
+
+    
+
+
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/R">
+                    R
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/big-query">
+                    big-query
+                </a>
+                <span class="category-list-count">6</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/blogging">
+                    blogging
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-functions">
+                    cloud-functions
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-run">
+                    cloud-run
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/docker">
+                    docker
+                </a>
+                <span class="category-list-count">9</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/firebase">
+                    firebase
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-analytics">
+                    google-analytics
+                </a>
+                <span class="category-list-count">11</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-app-engine">
+                    google-app-engine
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-auth">
+                    google-auth
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-cloud-storage">
+                    google-cloud-storage
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-compute-engine">
+                    google-compute-engine
+                </a>
+                <span class="category-list-count">7</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-language">
+                    google-language
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-tag-manager">
+                    google-tag-manager
+                </a>
+                <span class="category-list-count">7</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/python">
+                    python
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/rstudio-server">
+                    rstudio-server
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/search-console">
+                    search-console
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+
+    
+
+
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+    
+	</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script src="https://code.markedmondson.me/fancybox/jquery.fancybox.pack.js"></script>
+<script src="https://code.markedmondson.me/js/script.js"></script>
+<script src="https://code.markedmondson.me/js/highlight.pack.js"></script>
+
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+</body>
+</html>

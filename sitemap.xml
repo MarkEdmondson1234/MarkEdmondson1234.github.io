@@ -3,38 +3,61 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://code.markedmondson.me/data-privacy-gtm/</loc>
-    <lastmod>2020-11-27T09:29:50+01:00</lastmod>
+    <loc>https://code.markedmondson.me/edmondlytica/</loc>
+    <lastmod>2021-03-21T09:29:50+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://code.markedmondson.me/</loc>
-    <lastmod>2020-11-27T09:29:50+01:00</lastmod>
+    <lastmod>2021-03-21T09:29:50+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://code.markedmondson.me/post/</loc>
-    <lastmod>2020-11-27T09:29:50+01:00</lastmod>
+    <lastmod>2021-03-21T09:29:50+01:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://code.markedmondson.me/tags/R/</loc>
+    <lastmod>2021-03-21T09:29:50+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://code.markedmondson.me/tags/</loc>
-    <lastmod>2020-11-27T09:29:50+01:00</lastmod>
+    <lastmod>2021-03-21T09:29:50+01:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://code.markedmondson.me/tags/big-query/</loc>
+    <lastmod>2021-03-21T09:29:50+01:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://code.markedmondson.me/tags/cloud-run/</loc>
+    <lastmod>2021-03-21T09:29:50+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://code.markedmondson.me/tags/google-analytics/</loc>
-    <lastmod>2020-11-27T09:29:50+01:00</lastmod>
+    <lastmod>2021-03-21T09:29:50+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://code.markedmondson.me/tags/google-tag-manager/</loc>
-    <lastmod>2020-11-27T09:29:50+01:00</lastmod>
+    <lastmod>2021-03-21T09:29:50+01:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://code.markedmondson.me/data-privacy-gtm/</loc>
+    <lastmod>2020-11-27T09:29:50+01:00</lastmod>
   </url>
   
   <url>
@@ -54,20 +77,8 @@
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/tags/cloud-run/</loc>
-    <lastmod>2020-08-21T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>https://code.markedmondson.me/tags/docker/</loc>
     <lastmod>2020-08-21T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://code.markedmondson.me/tags/R/</loc>
-    <lastmod>2020-08-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -134,12 +145,6 @@
   <url>
     <loc>https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/</loc>
     <lastmod>2018-10-09T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://code.markedmondson.me/tags/big-query/</loc>
-    <lastmod>2018-10-09T00:00:00+00:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>

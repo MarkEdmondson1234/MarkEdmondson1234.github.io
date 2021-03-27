@@ -6,15 +6,42 @@
     <description>Recent content in Tags on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
-    <lastBuildDate>Fri, 27 Nov 2020 09:29:50 +0100</lastBuildDate>
+    <lastBuildDate>Sun, 21 Mar 2021 09:29:50 +0100</lastBuildDate>
     
 	<atom:link href="https://code.markedmondson.me/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>R</title>
+      <link>https://code.markedmondson.me/tags/R/</link>
+      <pubDate>Sun, 21 Mar 2021 09:29:50 +0100</pubDate>
+      
+      <guid>https://code.markedmondson.me/tags/R/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>big-query</title>
+      <link>https://code.markedmondson.me/tags/big-query/</link>
+      <pubDate>Sun, 21 Mar 2021 09:29:50 +0100</pubDate>
+      
+      <guid>https://code.markedmondson.me/tags/big-query/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>cloud-run</title>
+      <link>https://code.markedmondson.me/tags/cloud-run/</link>
+      <pubDate>Sun, 21 Mar 2021 09:29:50 +0100</pubDate>
+      
+      <guid>https://code.markedmondson.me/tags/cloud-run/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>google-analytics</title>
       <link>https://code.markedmondson.me/tags/google-analytics/</link>
-      <pubDate>Fri, 27 Nov 2020 09:29:50 +0100</pubDate>
+      <pubDate>Sun, 21 Mar 2021 09:29:50 +0100</pubDate>
       
       <guid>https://code.markedmondson.me/tags/google-analytics/</guid>
       <description></description>
@@ -23,7 +50,7 @@
     <item>
       <title>google-tag-manager</title>
       <link>https://code.markedmondson.me/tags/google-tag-manager/</link>
-      <pubDate>Fri, 27 Nov 2020 09:29:50 +0100</pubDate>
+      <pubDate>Sun, 21 Mar 2021 09:29:50 +0100</pubDate>
       
       <guid>https://code.markedmondson.me/tags/google-tag-manager/</guid>
       <description></description>
@@ -39,29 +66,11 @@
     </item>
     
     <item>
-      <title>cloud-run</title>
-      <link>https://code.markedmondson.me/tags/cloud-run/</link>
-      <pubDate>Fri, 21 Aug 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://code.markedmondson.me/tags/cloud-run/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>docker</title>
       <link>https://code.markedmondson.me/tags/docker/</link>
       <pubDate>Fri, 21 Aug 2020 00:00:00 +0000</pubDate>
       
       <guid>https://code.markedmondson.me/tags/docker/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>R</title>
-      <link>https://code.markedmondson.me/tags/R/</link>
-      <pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://code.markedmondson.me/tags/R/</guid>
       <description></description>
     </item>
     
@@ -107,15 +116,6 @@
       <pubDate>Thu, 29 Nov 2018 00:00:00 +0000</pubDate>
       
       <guid>https://code.markedmondson.me/tags/google-cloud-storage/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>big-query</title>
-      <link>https://code.markedmondson.me/tags/big-query/</link>
-      <pubDate>Tue, 09 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://code.markedmondson.me/tags/big-query/</guid>
       <description></description>
     </item>
     

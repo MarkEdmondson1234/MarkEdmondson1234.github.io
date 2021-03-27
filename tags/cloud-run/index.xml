@@ -6,10 +6,20 @@
     <description>Recent content in cloud-run on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
-    <lastBuildDate>Fri, 21 Aug 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 21 Mar 2021 09:29:50 +0100</lastBuildDate>
     
 	<atom:link href="https://code.markedmondson.me/tags/cloud-run/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Creating your own cookieless analytics tool with GTM Server Side, Cloud Run, BigQuery and Shiny</title>
+      <link>https://code.markedmondson.me/edmondlytica/</link>
+      <pubDate>Sun, 21 Mar 2021 09:29:50 +0100</pubDate>
+      
+      <guid>https://code.markedmondson.me/edmondlytica/</guid>
+      <description>This is an example of how GTM server side can be used to create your own digital analytics tool. It’s a proof of concept of what you can do given the power of GTM serverside and its BigQuery integration. I customise the stream by adding cookieless tracking, displaying the data in Shiny and running it all on Cloud Run to keep costs down but performance good.
+I shall dub this tool Edmonlytica.</description>
+    </item>
     
     <item>
       <title>Google Tag Manager Server Side on Cloud Run - Pros and Cons</title>
