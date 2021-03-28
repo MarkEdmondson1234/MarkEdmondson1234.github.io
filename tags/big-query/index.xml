@@ -17,8 +17,7 @@
       <pubDate>Sun, 21 Mar 2021 09:29:50 +0100</pubDate>
       
       <guid>https://code.markedmondson.me/edmondlytica/</guid>
-      <description>This is an example of how GTM server side can be used to create your own digital analytics tool. It’s a proof of concept of what you can do given the power of GTM serverside and its BigQuery integration. I customise the stream by adding cookieless tracking, displaying the data in Shiny and running it all on Cloud Run to keep costs down but performance good.
-I shall dub this tool Edmonlytica.</description>
+      <description>This is an example of how GTM server side can be used to create your own digital analytics tool. It is a proof of concept of what you can do given the power of GTM server side and its BigQuery integration. I customise the stream by adding cookieless tracking, displaying the data in Shiny and running it all on Cloud Run to keep costs down but performance good.</description>
     </item>
     
     <item>
