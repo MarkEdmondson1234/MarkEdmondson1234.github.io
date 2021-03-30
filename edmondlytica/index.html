@@ -35,7 +35,7 @@
 
 <meta itemprop="datePublished" content="2021-03-21T09:29:50&#43;01:00" />
 <meta itemprop="dateModified" content="2021-03-21T09:29:50&#43;01:00" />
-<meta itemprop="wordCount" content="1789">
+<meta itemprop="wordCount" content="1907">
 
 
 
@@ -284,7 +284,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2021-03-21 09:29:50 &#43;0100 CET" itemprop="datePublished">2021-03-21</time>
             &middot;
-            1789
+            1907
             words
             &middot;
             9
@@ -348,6 +348,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li>My previous post on running a <a href="http://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/">real-time forecasting dashboard using GTM, GCP and Shiny</a></li>
 <li>My other post about <a href="https://code.markedmondson.me/gtm-serverside-cloudrun/">deploying GTM Server Side on Cloud Run</a></li>
 </ul>
+<p>The template exports for the tags below are available on GitHub:</p>
+<ul>
+<li><a href="https://github.com/MarkEdmondson1234/edmonlytica-browser-template">Edmonlytica Browser Tag</a></li>
+<li><a href="https://github.com/MarkEdmondson1234/edmonlytica-server-side-client">Edmonlytica Server Side Client</a></li>
+<li><a href="https://github.com/MarkEdmondson1234/edmonlytica-server-side-tag">Edmonlytica Server Side Tag</a></li>
+</ul>
 </div>
 <div id="the-plan" class="section level2">
 <h2>The Plan</h2>
@@ -397,16 +403,26 @@ const the_url = data.transport_url + &#39;/edmonlytica&#39; +
 log(&#39;the_url:&#39;, encodeUri(the_url));
 
 sendPixel(encodeUri(the_url), data.gtmOnSuccess(), data.gtmOnFailure());</code></pre>
-<p>This code is set via a tag template, with a <code>data.transport_url</code> field to swap out which GTM server-side instance you want to use. My default is set to <code>https://gtm2.markedmondson.me</code>. I also have a field for custom variables that can be set with GTM macros - I’d like the URL people click on for my external link clicks trigger so will use <code>{{Click URL}}</code> and the <code>{{Page URL}}</code>. This gives some flexibility on precisely what URL information is sent, such as stripping out parameters or not, via GTM trigger configuration.</p>
+<p>This code is set via a tag template, with a <code>data.transport_url</code> field to swap out which GTM server-side instance you want to use. My default is set to <code>https://gtm2.markedmondson.me</code>.</p>
+<p>I also have a field for variables that can be set with GTM macros such as <code>{{Click URL}}</code> and instead of hardcoding the page that will be sent in the tag use by default the macro <code>{{Page URL}}</code>. This gives some flexibility on precisely what information is sent, such as stripping out parameters or not, via GTM trigger configuration.</p>
 <div class="figure">
 <img src="/images/edmonlytica-browser-fields.png" alt="" />
 <p class="caption">Edmonlytica GTM Browser tag template data fields</p>
 </div>
-<p>I now create an instance of my tag and choose what triggers it - for me pageviews and external link triggers but you could add any other GTM trigger you have created - the tag will capture the event details for that trigger.</p>
-<div class="figure">
-<img src="/images/edmonlytica-browser-tag.png" alt="" />
-<p class="caption">Edmonlytica GTM Browser-side tag</p>
 </div>
+<div id="making-the-tag-instances-using-the-custom-field" class="section level3">
+<h3>Making the tag instances + using the custom field</h3>
+<p>Edmonlytica only has one custom field, which is used to send in unique data for the trigger you are using.</p>
+<p>By default with no custom field you are only collecting page views.</p>
+<p>I also added two other instances - one linked to my External Link Clicks trigger (all those linkCicks that do not go to my own website), and the Scroll Depth trigger. See the other <a href="https://support.google.com/tagmanager/answer/7182738?hl=en&amp;ref_topic=7182737">Built-in GTM variables</a> for other ideas, or use JavaScript to make your own.</p>
+<p>I now create instances of my tag and choose what triggers it - for me pageviews, external link triggers and scroll events for 50% and 90% of the page length, but you could add any other GTM trigger you have created. The tag will capture the event details for that trigger.</p>
+<div class="figure">
+<img src="/images/edmonlytica-all-browser-tags.png" alt="" />
+<p class="caption">Edmonlytica GTM Browser-side tag instances</p>
+</div>
+<p><img src="/images/edmonlytica-pageview-tag.png" alt="Page Views Tag" />
+<img src="/images/edmonlytica-linkclick-tag.png" alt="External Link Click Tag" />
+<img src="/images/edmonlytica-scroll-tag.png" alt="Scrolling Tag" /></p>
 <p>Publishing the tag or in preview mode I can see the logs showing the URL is being formed correctly, but getting a 400 error as we haven’t setup the server-side yet. In my case the triggers for a pageview = <code>gtm.js</code> and for an external link click = <code>gtm.linkClick</code></p>
 <div class="figure">
 <img src="/images/edmonlytica-tag-console-logs.png" alt="" />
