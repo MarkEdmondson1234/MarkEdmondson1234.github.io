@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <title>googleAnalyticsR v1.0.0 - GA4 API, Automatic Shiny Dashboarding, Improved UI &middot; Mark Edmondson</title>
+    <meta name="generator" content="Hugo 0.55.5" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Mark Edmondson">
+    
+      <meta name="description" content="The code bit of the blog">
+    
+    
+    <link rel="canonical" href="https://code.markedmondson.me/googleanalyticsr-100-release/"/>
+    <link rel="icon" href="https://code.markedmondson.me/favicon.ico">
+    <link rel="apple-touch-icon" href="https://code.markedmondson.me/apple-touch-icon.png"/>
+    <link rel="stylesheet" href="https://code.markedmondson.me/css/style.css">
+    <link rel="stylesheet" href="https://code.markedmondson.me/css/github.css" rel="stylesheet" id="theme-stylesheet">
+    <link rel="stylesheet" href="https://code.markedmondson.me/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://code.markedmondson.me/fancybox/jquery.fancybox.css">
+    
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+    <meta property="og:title" content="googleAnalyticsR v1.0.0 - GA4 API, Automatic Shiny Dashboarding, Improved UI" />
+<meta property="og:description" content="The original intention for this blog was to announce updates to my R packages, but I tend to rely more on Twitter and other social media for that these days. A lot of documentation is also written for the package websites so I feel little need to put it on this blog as well.
+But for googleAnalyticsR v1.0.0 there are so many cool new things that I think it deserves a bit more limelight." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://code.markedmondson.me/googleanalyticsr-100-release/" />
+<meta property="article:published_time" content="2021-04-17T09:29:50&#43;01:00"/>
+<meta property="article:modified_time" content="2021-04-17T09:29:50&#43;01:00"/>
+
+    
+    
+<meta itemprop="name" content="googleAnalyticsR v1.0.0 - GA4 API, Automatic Shiny Dashboarding, Improved UI">
+<meta itemprop="description" content="The original intention for this blog was to announce updates to my R packages, but I tend to rely more on Twitter and other social media for that these days. A lot of documentation is also written for the package websites so I feel little need to put it on this blog as well.
+But for googleAnalyticsR v1.0.0 there are so many cool new things that I think it deserves a bit more limelight.">
+
+
+<meta itemprop="datePublished" content="2021-04-17T09:29:50&#43;01:00" />
+<meta itemprop="dateModified" content="2021-04-17T09:29:50&#43;01:00" />
+<meta itemprop="wordCount" content="3512">
+
+
+
+<meta itemprop="keywords" content="R,google-analytics," />
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="googleAnalyticsR v1.0.0 - GA4 API, Automatic Shiny Dashboarding, Improved UI"/>
+<meta name="twitter:description" content="The original intention for this blog was to announce updates to my R packages, but I tend to rely more on Twitter and other social media for that these days. A lot of documentation is also written for the package websites so I feel little need to put it on this blog as well.
+But for googleAnalyticsR v1.0.0 there are so many cool new things that I think it deserves a bit more limelight."/>
+<meta name="twitter:site" content="@HoloMarkeD"/>
+
+    
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://gtm2.markedmondson.me/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WFFMBH');</script>
+
+
+
+    <script src="https://code.markedmondson.me/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+
+
+<div id="container">
+	<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="https://code.markedmondson.me/" id="logo">
+          
+          <i class="logo" style="background-image: url('https://code.markedmondson.me/images/greenhand.png')"></i>
+          
+          <span class="site-title">Mark Edmondson</span>
+      </a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="https://code.markedmondson.me/">Home</a>
+          
+          
+          
+          
+          
+          
+
+          
+          <a class="main-nav-link" href="/r-packages/">My R Packages</a>
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.markedmondson.me/posts/">Non-code blog</a>
+          
+          
+          
+          <a class="main-nav-link" href="https://www.markedmondson.me/static/presentations/">Past Presentations</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="https://code.markedmondson.me/images/gde_avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+              <input type="hidden" name="sitesearch" value="https://code.markedmondson.me/" />
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="https://code.markedmondson.me/">Home</a></td>
+          
+          
+          
+          
+          
+          
+
+          
+          <td><a class="main-nav-link" href="/r-packages/">My R Packages</a></td>
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.markedmondson.me/posts/">Non-code blog</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="https://www.markedmondson.me/static/presentations/">Past Presentations</a></td>
+          
+          
+          <td>
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" class="search-form-input" placeholder="Search">
+          <input type="hidden" name="sitesearch" value="https://code.markedmondson.me/" />
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+   	
+   	<div class="outer">
+   	
+    	<aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      
+      <img id="avatar" src="https://code.markedmondson.me/images/gde_avatar.jpg">
+      
+      <h2 id="name">Mark Edmondson</h2>
+      <h3 id="title">Coding in digital analytics</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Copenhagen, Denmark</span>
+      
+          <a id="follow" href="https://github.com/MarkEdmondson1234">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+      <div class="article-info-block">
+        30
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          17
+        
+        <span>
+            Tags
+        </span>
+      </div>
+    </div>
+    <div class="profile-block social-links">
+      <table>
+        <tr>
+          
+<td><a href="//github.com/MarkEdmondson1234" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/MarkEdmondsonAtHome" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//linkedin.com/in/markpeteredmondson" target="_blank" title="LinkedIn"><i class="fa fa-linkedin"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/HoloMarkeD" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="https://code.markedmondson.me/index.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</aside>
+
+    
+
+    <section id="main">
+    
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+            <img src="https://code.markedmondson.me/banners/GA4-090.png" class="article-banner">
+        
+
+        <header class="article-header">
+    <a href="https://code.markedmondson.me/googleanalyticsr-100-release/">
+    <h1 class="article-title" itemprop="name">
+        googleAnalyticsR v1.0.0 - GA4 API, Automatic Shiny Dashboarding, Improved UI
+    </h1>
+    </a>
+    <div class="article-meta">
+
+        
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2021-04-17 09:29:50 &#43;0100 &#43;0100" itemprop="datePublished">2021-04-17</time>
+            &middot;
+            3512
+            words
+            &middot;
+            17
+            minute read
+        </div>
+        
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/r">R</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/google-analytics">google-analytics</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+        <div class="article-entry" itemprop="articleBody">
+            
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+<script src="/rmarkdown-libs/htmlwidgets/htmlwidgets.js"></script>
+<script src="/rmarkdown-libs/plotly-binding/plotly.js"></script>
+<script src="/rmarkdown-libs/typedarray/typedarray.min.js"></script>
+<script src="/rmarkdown-libs/jquery/jquery.min.js"></script>
+<link href="/rmarkdown-libs/crosstalk/css/crosstalk.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/crosstalk/js/crosstalk.min.js"></script>
+<link href="/rmarkdown-libs/plotly-htmlwidgets-css/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/plotly-main/plotly-latest.min.js"></script>
+
+
+<p>The original intention for this blog was to announce updates to <a href="https://code.markedmondson.me/r-packages/">my R packages</a>, but I tend to rely more on Twitter and other social media for that these days. A lot of documentation is also written for the package websites so I feel little need to put it on this blog as well.</p>
+<p>But for <a href="https://code.markedmondson.me/googleAnalyticsR/"><code>googleAnalyticsR v1.0.0</code></a> there are so many cool new things that I think it deserves a bit more limelight. They are mostly the result of my R programming improving over the almost five years since <a href="https://github.com/MarkEdmondson1234/googleAnalyticsR/releases/tag/v0.1.1">version 0.1.1</a>, the cool new tools available in the R ecosystem created by the R community plus the new capabilities of the Google Analytics APIs we’re connecting to.</p>
+<div id="overview-of-cool-features" class="section level2">
+<h2>Overview of cool features</h2>
+<p>As mentioned before the in-depth documentation is on the website:</p>
+<ul>
+<li>Google Analytics 4 support - <a href="https://code.markedmondson.me/googleAnalyticsR/articles/reporting-ga4.html">Data API</a>, Admin API and <a href="https://code.markedmondson.me/googleAnalyticsR/articles/measurement-protocol-v2.html">Measurement Protocol v2</a></li>
+<li>Shiny model templates - Create <a href="https://code.markedmondson.me/googleAnalyticsR/articles/model-templates.html">automatic Shiny dashboards</a> from GA model objects</li>
+<li>Various UI tweaks and quality of life improvements - <a href="https://code.markedmondson.me/googleAnalyticsR/news/index.html">read it in the NEWS</a></li>
+</ul>
+<p>For this blog post, I’ll then concentrate more on what you can do now that you couldn’t before.</p>
+</div>
+<div id="google-analytics-4-support" class="section level2">
+<h2>Google Analytics 4 support</h2>
+<p>There is a video!</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/5Itz6xfJGDk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
+<p>So yeah, basically you can now get GA4 in R, which in a couple of years will probably be the majority of digital analytics systems on the web.</p>
+<p>I have to also thank <a href="https://github.com/MarkEdmondson1234/googleAnalyticsR/issues/222">Hadley for his drive-by issue on GitHub</a> which pushed me to create a domain specific language (DSL) for googleAnalyticsR’s GA4 functions. The main benefit should be an intuitive UI you don’t need to look up all the time - e.g. unlike <a href="https://code.markedmondson.me/googleAnalyticsR/reference/filter_clause_ga4.html"><code>filter_clause_ga4()</code></a> - I wrote the code and still need to look up how it works sometimes!</p>
+<p>See a comparison on the same filters:</p>
+<p>In the older reporting API you have to construct the filter object yourself with three different functions:</p>
+<pre class="r"><code># reporting v4 filter
+mf &lt;- met_filter(&quot;bounces&quot;, &quot;GREATER_THAN&quot;, 0)
+mf2 &lt;- met_filter(&quot;sessions&quot;, &quot;GREATER&quot;, 2)
+
+df &lt;- dim_filter(&quot;source&quot;,&quot;BEGINS_WITH&quot;,&quot;1&quot;,not = TRUE)
+df2 &lt;- dim_filter(&quot;source&quot;,&quot;BEGINS_WITH&quot;,&quot;a&quot;,not = TRUE)
+
+fc2 &lt;- filter_clause_ga4(list(df, df2), operator = &quot;AND&quot;)
+fc &lt;- filter_clause_ga4(list(mf, mf2), operator = &quot;AND&quot;)
+
+ga_v4 &lt;- google_analytics(ga_id, 
+                          date_range = c(&quot;2015-07-30&quot;,&quot;2015-10-01&quot;),
+                          dimensions=&#39;source&#39;, 
+                          metrics = &#39;sessions&#39;, 
+                          met_filters = fc, 
+                          dim_filters = fc2)</code></pre>
+<p>In GA4, there is a more intuitive interface using a more tidyverse-like <a href="http://adv-r.had.co.nz/Computing-on-the-language.html">NSE</a>:</p>
+<pre class="r"><code>fc2 &lt;- ga_data_filter(!source %begins% &quot;1&quot; &amp; !source %begins% &quot;a&quot;)
+fc  &lt;- ga_data_filter(bounces &gt; 0 &amp; sessions &gt; 2)
+
+ga4_data &lt;- ga_data(ga4_id, 
+                   date_range = c(&quot;2015-07-30&quot;,&quot;2015-10-01&quot;),
+                   dimensions=&#39;sessionSource&#39;, 
+                   metrics = &#39;sessions&#39;, 
+                   met_filters = fc, 
+                   dim_filters = fc2)
+</code></pre>
+<div id="workflows-with-ga4" class="section level3">
+<h3>Workflows with GA4</h3>
+<p>Below is an example workflow using the GA4 APIs - the use case here is to analyse the first and last touch of users. It incorporates some of the new features of the API, such as the filters, creating your own dimensions and ordering the results. Personally I find it much easier to use, so it encourages more ‘flow’ in my analysis of the data.</p>
+<pre class="r"><code>library(googleAnalyticsR)
+# ✓ Setting client.id from /Users/mark/clients/my_client.json
+ga_auth()
+# ℹ 2021-02-21 16:23:02 &gt; Using email from GARGLE_EMAIL env var: me@email.com</code></pre>
+<pre class="r"><code># I&#39;ve forgot my GA4 property Id so lets fetch them
+al &lt;- ga_account_list(&quot;data&quot;)</code></pre>
+<pre><code>## Auto-refreshing stale OAuth token.</code></pre>
+<pre class="r"><code># ah yes this is my website
+my_id &lt;- 206670707
+
+# what metrics/dimensions can I fetch again? Include my custom fields
+custom_meta &lt;- ga_meta(&quot;data&quot;, propertyId = my_id)</code></pre>
+<pre><code>## ℹ 2021-04-17 13:57:39 &gt; Metadata for propertyId 206670707</code></pre>
+<pre><code>## ℹ 2021-04-17 13:57:40 &gt; Caching new meta data</code></pre>
+<pre class="r"><code># last year
+last_year &lt;- c(&quot;2020-01-01&quot;,&quot;2021-01-01&quot;)
+
+# I want to cross reference first user source and last user source
+ga_data(my_id, 
+        metrics = &quot;sessions&quot;,
+        date_range = last_year,
+        dimensions = c(&quot;firstUserMedium&quot;,&quot;sessionMedium&quot;))</code></pre>
+<pre><code>## ℹ 2021-04-17 13:57:41 &gt; Downloaded [ 29 ] of total [ 29 ] rows</code></pre>
+<pre><code>## # A tibble: 29 x 3
+##    firstUserMedium sessionMedium sessions
+##    &lt;chr&gt;           &lt;chr&gt;            &lt;dbl&gt;
+##  1 organic         organic          17557
+##  2 (none)          (none)            5750
+##  3 referral        referral          3982
+##  4 organic         referral          1165
+##  5 (none)          referral           951
+##  6 (none)          organic            656
+##  7 referral        organic            362
+##  8 email           email              246
+##  9 organic         (not set)          148
+## 10 (none)          (not set)          127
+## # … with 19 more rows</code></pre>
+<pre class="r"><code># what about only users from twitter? First check the sources
+ga_data(my_id, 
+        metrics = NULL, # to only return unique dimensions
+        date_range = last_year,
+        dimensions = &quot;firstUserSource&quot;)</code></pre>
+<pre><code>## ℹ 2021-04-17 13:57:43 &gt; Downloaded [ 100 ] of total [ 193 ] rows</code></pre>
+<pre><code>## # A tibble: 100 x 1
+##    firstUserSource
+##    &lt;chr&gt;          
+##  1 (direct)       
+##  2 127.0.0.1:17923
+##  3 127.0.0.1:19409
+##  4 127.0.0.1:20644
+##  5 127.0.0.1:21594
+##  6 127.0.0.1:23734
+##  7 127.0.0.1:23960
+##  8 127.0.0.1:25447
+##  9 127.0.0.1:25537
+## 10 127.0.0.1:28513
+## # … with 90 more rows</code></pre>
+<pre class="r"><code># oh dear lots of ip address - lets filter those out
+ip_filter &lt;- ga_data_filter(!firstUserSource %begins% &quot;127.0.0.1&quot;)
+ga_data(
+  my_id, 
+  metrics = NULL,
+  date_range = last_year,
+  dimensions = &quot;firstUserSource&quot;, 
+  dim_filters = ip_filter, # apply filter
+  limit = -1) # all results</code></pre>
+<pre><code>## ℹ 2021-04-17 13:57:44 &gt; Downloaded [ 167 ] of total [ 167 ] rows</code></pre>
+<pre><code>## # A tibble: 167 x 1
+##    firstUserSource        
+##    &lt;chr&gt;                  
+##  1 (direct)               
+##  2 185.199.111.153:6080   
+##  3 34.66.89.215           
+##  4 ActiveCampaign         
+##  5 ConversionWorksBlog    
+##  6 Data_Elixir_222        
+##  7 Iterable               
+##  8 aboutdata.atlassian.net
+##  9 adelachrist.top        
+## 10 affecheafe             
+## # … with 157 more rows</code></pre>
+<pre class="r"><code># twitter filter: list shows &#39;t.co&#39;, &#39;twitter&#39; and &#39;twitter.com&#39; 
+twit &lt;- ga_data_filter(firstUserSource == c(&quot;twitter&quot;,&quot;twitter.com&quot;,&quot;t.co&quot;))
+
+# did anyone who first arrived by Twitter later come back via other channels?
+ga_data(
+  my_id, 
+  metrics = &quot;sessions&quot;,
+  date_range = last_year,
+  dimensions = 
+    c(&quot;firstUserSource&quot;,
+      lastMediumSource = &quot;sessionMedium/sessionSource&quot;), #dynamic dimension
+  dim_filters = twit)</code></pre>
+<pre><code>## ℹ 2021-04-17 13:57:45 &gt; Downloaded [ 15 ] of total [ 15 ] rows</code></pre>
+<pre><code>## # A tibble: 15 x 3
+##    firstUserSource lastMediumSource               sessions
+##    &lt;chr&gt;           &lt;chr&gt;                             &lt;dbl&gt;
+##  1 t.co            referral/t.co                       801
+##  2 t.co            referral/code.markedmondson.me       73
+##  3 t.co            organic/google                       41
+##  4 t.co            (none)/(direct)                       8
+##  5 t.co            referral/disq.us                      7
+##  6 twitter         social/twitter                        7
+##  7 t.co            referral/github.com                   4
+##  8 t.co            (not set)/(not set)                   2
+##  9 t.co            social/meetedgar.com                  2
+## 10 t.co            referral/alexbirkett.com              1
+## 11 t.co            referral/linkedin.com                 1
+## 12 t.co            referral/mark.shinyapps.io            1
+## 13 t.co            referral/markedmondson.me             1
+## 14 t.co            referral/rweekly.org                  1
+## 15 twitter.com     social/twitter.com                    1</code></pre>
+<pre class="r"><code># lets take out self referrals and those coming back by twitter
+me &lt;- ga_data_filter(!sessionSource %contains% &quot;markedmondson.me&quot;)
+nottwit &lt;- ga_data_filter(!sessionSource == c(&quot;twitter&quot;,&quot;twitter.com&quot;,&quot;t.co&quot;))
+
+# and change the metrics/dimensions
+ga_data(
+  my_id, 
+  metrics = c(&quot;engagementRate&quot;,&quot;activeUsers&quot;),
+  date_range = last_year,
+  dimensions = 
+    c(&quot;unifiedScreenName&quot;,
+      lastMediumSource = &quot;sessionMedium/sessionSource&quot;), #dynamic dimension
+  dim_filters = ga_data_filter(twit &amp; me &amp; nottwit), # combine filters
+  orderBys = ga_data_order(-activeUsers) # order by activeUsers metric
+  )</code></pre>
+<pre><code>## ℹ 2021-04-17 13:57:46 &gt; Downloaded [ 40 ] of total [ 40 ] rows</code></pre>
+<pre><code>## # A tibble: 40 x 4
+##    unifiedScreenName                 lastMediumSource engagementRate activeUsers
+##    &lt;chr&gt;                             &lt;chr&gt;                     &lt;dbl&gt;       &lt;dbl&gt;
+##  1 Mark Edmondson                    organic/google              1             6
+##  2 Welcome to bigQueryR              organic/google              0.5           5
+##  3 Launch RStudio Server in the Goo… organic/google              0.5           4
+##  4 Google Tag Manager Server Side o… organic/google              0.4           4
+##  5 Introducing googleCloudRunner - … organic/google              0.4           4
+##  6 Shiny on Google Cloud Run - Scal… (none)/(direct)             1             3
+##  7 Five Ways to Schedule R scripts … organic/google              0.8           3
+##  8 BigQuery Queries                  organic/google              0             3
+##  9 Google Tag Manager Server Side o… (none)/(direct)             1             2
+## 10 Turning GA360 BigQuery exports i… organic/google              1             2
+## # … with 30 more rows</code></pre>
+<p>So for Twitter first time referrals, it seems most people used Google to come back to visit my home page, which is not surprising.</p>
+</div>
+<div id="sending-in-measurement-protocol-hits-and-seeing-them-in-real-time" class="section level3">
+<h3>Sending in Measurement Protocol hits and seeing them in real-time</h3>
+<p>The <a href="https://developers.google.com/analytics/devguides/collection/protocol/ga4">Measurement Protocol v2 for GA4</a> is less open and so can’t be spammed. It works using a server key so it seems useful to include in the package. Thank <a href="https://www.martijnvanvreeden.nl/">Martijn van Vreeden</a> for the encouragement in making this feature.</p>
+<p><code>googleAnalyticsR</code> includes functions to call the measurement Protocol API, but it itself depends on a smaller library (new on CRAN v0.1.0) dedicated to <a href="https://code.markedmondson.me/measurementProtocol/">measurementProtocol hits</a>. This is so you can use the measurement protocol without needing to import all the other dependencies <code>googleAnalyticsR</code> uses, which can be quite heavy as its focused on usability of the data.</p>
+<p>Once you have the measurement ID and stream secret then you can send in events associated with a clientId like so:</p>
+<pre class="r"><code># preferably set this in .Renviron - take from the webUI
+Sys.setenv(GA_MP_SECRET=&quot;MY_SECRET&quot;)
+
+# your GA4 settings
+my_measurement_id &lt;- &quot;G-43MDXK6CLZ&quot;
+my_connection &lt;- ga_mp_connection(my_measurement_id)
+
+a_client_id &lt;- ga_mp_cid()
+
+event &lt;- ga_mp_event(&quot;an_event&quot;)
+ga_mp_send(event, a_client_id, my_connection, debug_call = TRUE)</code></pre>
+<p>As we also have the real-time API incorporated, it can be quickly verified which hits are going in:</p>
+<p><img src="/images/ga-mp-event-realtime.jpg" /></p>
+<p>This has wide applications to send in analytics hits with R, such as adding customer segments to GA4 BigQuery exports using R to model the clusters.</p>
+<p>It is also compatible with GTM server-side, which can hold a measurement protocol client. Simply change your <code>mp_connection</code> object to point at your GTM endpoint instead:</p>
+<pre class="r"><code># custom GTM server side endpoint
+my_custom_connection &lt;- mp_connection(
+   my_measurement_id,
+   endpoint = &quot;https://gtm.example.com&quot;,
+   preview_header = &quot;ZW52LTV8OWdPOExNWFkYjA0Njk4NmQ=&quot;
+ )</code></pre>
+<p>This holds many possibilities for enriching your data streams.</p>
+<div id="tracking-usage-of-googleanalyticsr" class="section level4">
+<h4>Tracking usage of googleAnalyticsR</h4>
+<p>One use case for the measurement protocol I have implemented is using it to track usage of the <code>googleAnalyticsR</code> library itself. I asked and got feedback that the digital analytics community using the library are ok with tracking if its opt-in and no personal data.</p>
+<p>This gives birth then to the <code>ga_trackme()</code> function which allows people to opt-in to tracking each time the library is loaded via the <code>ga_trackme_event()</code> function. Users can see what is sent by calling <code>ga_trackme_event(debug_call=TRUE)</code>:</p>
+<pre><code>ℹ 2021-03-05 09:36:46 &gt; MP Request: https://www.google-analytics.com/debug/mp/collect?measurement_id=G-XXX&amp;api_secret=_XXXXXX 
+ {
+  &quot;client_id&quot;: &quot;XXXXXX&quot;,
+  &quot;non_personalized_ads&quot;: true,
+  &quot;events&quot;: {
+    &quot;name&quot;: &quot;googleanalyticsr_loaded&quot;,
+    &quot;params&quot;: {
+      &quot;r_version&quot;: &quot;R version 3.6.3 (2020-02-29)&quot;,
+      &quot;r_platform&quot;: &quot;x86_64-apple-darwin15.6.0 (64-bit)&quot;,
+      &quot;r_locale&quot;: &quot;en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8&quot;,
+      &quot;r_system&quot;: &quot;macOS  10.16&quot;,
+      &quot;package&quot;: &quot;googleAnalyticsR 0.8.0.9000&quot;
+    }
+  }
+}
+ℹ 2021-03-05 09:36:46 &gt; Response:  200</code></pre>
+<p>And I thought it would be fun for people to have the option of sending their own messages to my GA4 account so it includes a <code>say_hello</code> argument:</p>
+<pre><code>ga_trackme_event(debug_call=TRUE, say_hello = &quot;Hello from Denmark!&quot;)
+...
+ {
+  &quot;client_id&quot;: &quot;XXXXX&quot;,
+  &quot;non_personalized_ads&quot;: true,
+  &quot;events&quot;: {
+    &quot;name&quot;: &quot;googleanalyticsr_loaded&quot;,
+    &quot;params&quot;: {
+      ...
+      &quot;say_hello&quot;: &quot;Hello from Denmark!&quot;,
+      ...
+    }
+  }
+}</code></pre>
+<p>I can use the info to see what systems and versions of the library are being used over time.</p>
+</div>
+</div>
+</div>
+<div id="shiny-model-templates" class="section level2">
+<h2>Shiny Model Templates</h2>
+<p>I should do a video of this stuff, and will do when I can and update this sentence.</p>
+<div id="a-reminder-about-ga_model" class="section level3">
+<h3>A reminder about ga_model()</h3>
+<p>I think its probably only me who is using <a href="https://code.markedmondson.me/googleAnalyticsR/articles/models.html"><code>ga_model()</code></a> at the moment, but I hope that the utility of these Shiny functions will help drive adoption (please comment if you do use them!) as I think they are a bit of an undiscovered gem within the googleAnalyticsR package.</p>
+<p>As I’ve described before, I enjoy finding the meta of the thing I am doing now, and for <code>googleAnalyticsR</code> that has developed into an idea of it not just being able to download GA data, but becoming a platform for analysis of that data too.</p>
+<p>Democratising advanced statistical and modelling tools so they are more easily available could potentially drive up the value of the GA API data, and this is what the <code>ga_model()</code> function offers - others can create the analysis and package it up into special <code>.gamr</code> files, and you can call that analysis to your own data by downloading that <code>.gamr</code> file and supplying your own GA viewID.</p>
+<p>Take for example this great practical analysis <a href="http://www.dartistics.com/googleanalytics/int-time-normalized.html">created by Tim Wilson within Dartistics</a> to show the velocity of pageviews for different type of content - now not only can you read the code but try it out on your data.</p>
+<pre class="r"><code>library(googleAnalyticsR)
+
+tn_model &lt;- ga_model_example(&quot;time-normalised.gamr&quot;)
+
+# replace with your own GA viewId
+view_id &lt;- 81416156
+result &lt;- ga_model(view_id, tn_model, 
+                   page_filter_regex = &quot;/googleAnalyticsR/&quot;,
+                   date_range = c(&quot;2021-01-01&quot;,&quot;2021-02-01&quot;))</code></pre>
+<pre class="r"><code>result$plot</code></pre>
+<div id="htmlwidget-1" style="width:576px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"data":[{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32],"y":[11,21,33,57,114,156,194,224,231,239,293,338,364,393,429,452,461,487,515,548,590,625,637,647,699,737,771,813,844,850,863,893],"text":["days_live:  1<br />cumulative_uniquePageviews:  11<br />page: /googleAnalyticsR/","days_live:  2<br />cumulative_uniquePageviews:  21<br />page: /googleAnalyticsR/","days_live:  3<br />cumulative_uniquePageviews:  33<br />page: /googleAnalyticsR/","days_live:  4<br />cumulative_uniquePageviews:  57<br />page: /googleAnalyticsR/","days_live:  5<br />cumulative_uniquePageviews: 114<br />page: /googleAnalyticsR/","days_live:  6<br />cumulative_uniquePageviews: 156<br />page: /googleAnalyticsR/","days_live:  7<br />cumulative_uniquePageviews: 194<br />page: /googleAnalyticsR/","days_live:  8<br />cumulative_uniquePageviews: 224<br />page: /googleAnalyticsR/","days_live:  9<br />cumulative_uniquePageviews: 231<br />page: /googleAnalyticsR/","days_live: 10<br />cumulative_uniquePageviews: 239<br />page: /googleAnalyticsR/","days_live: 11<br />cumulative_uniquePageviews: 293<br />page: /googleAnalyticsR/","days_live: 12<br />cumulative_uniquePageviews: 338<br />page: /googleAnalyticsR/","days_live: 13<br />cumulative_uniquePageviews: 364<br />page: /googleAnalyticsR/","days_live: 14<br />cumulative_uniquePageviews: 393<br />page: /googleAnalyticsR/","days_live: 15<br />cumulative_uniquePageviews: 429<br />page: /googleAnalyticsR/","days_live: 16<br />cumulative_uniquePageviews: 452<br />page: /googleAnalyticsR/","days_live: 17<br />cumulative_uniquePageviews: 461<br />page: /googleAnalyticsR/","days_live: 18<br />cumulative_uniquePageviews: 487<br />page: /googleAnalyticsR/","days_live: 19<br />cumulative_uniquePageviews: 515<br />page: /googleAnalyticsR/","days_live: 20<br />cumulative_uniquePageviews: 548<br />page: /googleAnalyticsR/","days_live: 21<br />cumulative_uniquePageviews: 590<br />page: /googleAnalyticsR/","days_live: 22<br />cumulative_uniquePageviews: 625<br />page: /googleAnalyticsR/","days_live: 23<br />cumulative_uniquePageviews: 637<br />page: /googleAnalyticsR/","days_live: 24<br />cumulative_uniquePageviews: 647<br />page: /googleAnalyticsR/","days_live: 25<br />cumulative_uniquePageviews: 699<br />page: /googleAnalyticsR/","days_live: 26<br />cumulative_uniquePageviews: 737<br />page: /googleAnalyticsR/","days_live: 27<br />cumulative_uniquePageviews: 771<br />page: /googleAnalyticsR/","days_live: 28<br />cumulative_uniquePageviews: 813<br />page: /googleAnalyticsR/","days_live: 29<br />cumulative_uniquePageviews: 844<br />page: /googleAnalyticsR/","days_live: 30<br />cumulative_uniquePageviews: 850<br />page: /googleAnalyticsR/","days_live: 31<br />cumulative_uniquePageviews: 863<br />page: /googleAnalyticsR/","days_live: 32<br />cumulative_uniquePageviews: 893<br />page: /googleAnalyticsR/"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(248,118,109,1)","dash":"solid"},"hoveron":"points","name":"/googleAnalyticsR/","legendgroup":"/googleAnalyticsR/","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32],"y":[2,3,4,6,9,13,20,28,28,29,38,41,44,49,53,53,53,61,66,69,72,76,76,76,83,93,95,100,102,102,102,108],"text":["days_live:  1<br />cumulative_uniquePageviews:   2<br />page: /googleAnalyticsR/articles/management.html","days_live:  2<br />cumulative_uniquePageviews:   3<br />page: /googleAnalyticsR/articles/management.html","days_live:  3<br />cumulative_uniquePageviews:   4<br />page: /googleAnalyticsR/articles/management.html","days_live:  4<br />cumulative_uniquePageviews:   6<br />page: /googleAnalyticsR/articles/management.html","days_live:  5<br />cumulative_uniquePageviews:   9<br />page: /googleAnalyticsR/articles/management.html","days_live:  6<br />cumulative_uniquePageviews:  13<br />page: /googleAnalyticsR/articles/management.html","days_live:  7<br />cumulative_uniquePageviews:  20<br />page: /googleAnalyticsR/articles/management.html","days_live:  8<br />cumulative_uniquePageviews:  28<br />page: /googleAnalyticsR/articles/management.html","days_live:  9<br />cumulative_uniquePageviews:  28<br />page: /googleAnalyticsR/articles/management.html","days_live: 10<br />cumulative_uniquePageviews:  29<br />page: /googleAnalyticsR/articles/management.html","days_live: 11<br />cumulative_uniquePageviews:  38<br />page: /googleAnalyticsR/articles/management.html","days_live: 12<br />cumulative_uniquePageviews:  41<br />page: /googleAnalyticsR/articles/management.html","days_live: 13<br />cumulative_uniquePageviews:  44<br />page: /googleAnalyticsR/articles/management.html","days_live: 14<br />cumulative_uniquePageviews:  49<br />page: /googleAnalyticsR/articles/management.html","days_live: 15<br />cumulative_uniquePageviews:  53<br />page: /googleAnalyticsR/articles/management.html","days_live: 16<br />cumulative_uniquePageviews:  53<br />page: /googleAnalyticsR/articles/management.html","days_live: 17<br />cumulative_uniquePageviews:  53<br />page: /googleAnalyticsR/articles/management.html","days_live: 18<br />cumulative_uniquePageviews:  61<br />page: /googleAnalyticsR/articles/management.html","days_live: 19<br />cumulative_uniquePageviews:  66<br />page: /googleAnalyticsR/articles/management.html","days_live: 20<br />cumulative_uniquePageviews:  69<br />page: /googleAnalyticsR/articles/management.html","days_live: 21<br />cumulative_uniquePageviews:  72<br />page: /googleAnalyticsR/articles/management.html","days_live: 22<br />cumulative_uniquePageviews:  76<br />page: /googleAnalyticsR/articles/management.html","days_live: 23<br />cumulative_uniquePageviews:  76<br />page: /googleAnalyticsR/articles/management.html","days_live: 24<br />cumulative_uniquePageviews:  76<br />page: /googleAnalyticsR/articles/management.html","days_live: 25<br />cumulative_uniquePageviews:  83<br />page: /googleAnalyticsR/articles/management.html","days_live: 26<br />cumulative_uniquePageviews:  93<br />page: /googleAnalyticsR/articles/management.html","days_live: 27<br />cumulative_uniquePageviews:  95<br />page: /googleAnalyticsR/articles/management.html","days_live: 28<br />cumulative_uniquePageviews: 100<br />page: /googleAnalyticsR/articles/management.html","days_live: 29<br />cumulative_uniquePageviews: 102<br />page: /googleAnalyticsR/articles/management.html","days_live: 30<br />cumulative_uniquePageviews: 102<br />page: /googleAnalyticsR/articles/management.html","days_live: 31<br />cumulative_uniquePageviews: 102<br />page: /googleAnalyticsR/articles/management.html","days_live: 32<br />cumulative_uniquePageviews: 108<br />page: /googleAnalyticsR/articles/management.html"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(183,159,0,1)","dash":"solid"},"hoveron":"points","name":"/googleAnalyticsR/articles/management.html","legendgroup":"/googleAnalyticsR/articles/management.html","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],"y":[4,6,18,38,61,73,89,92,99,115,137,145,174,181,184,187,200,223,244,267,287,289,296,322,339,351,373,388,394,396,403],"text":["days_live:  1<br />cumulative_uniquePageviews:   4<br />page: /googleAnalyticsR/articles/setup.html","days_live:  2<br />cumulative_uniquePageviews:   6<br />page: /googleAnalyticsR/articles/setup.html","days_live:  3<br />cumulative_uniquePageviews:  18<br />page: /googleAnalyticsR/articles/setup.html","days_live:  4<br />cumulative_uniquePageviews:  38<br />page: /googleAnalyticsR/articles/setup.html","days_live:  5<br />cumulative_uniquePageviews:  61<br />page: /googleAnalyticsR/articles/setup.html","days_live:  6<br />cumulative_uniquePageviews:  73<br />page: /googleAnalyticsR/articles/setup.html","days_live:  7<br />cumulative_uniquePageviews:  89<br />page: /googleAnalyticsR/articles/setup.html","days_live:  8<br />cumulative_uniquePageviews:  92<br />page: /googleAnalyticsR/articles/setup.html","days_live:  9<br />cumulative_uniquePageviews:  99<br />page: /googleAnalyticsR/articles/setup.html","days_live: 10<br />cumulative_uniquePageviews: 115<br />page: /googleAnalyticsR/articles/setup.html","days_live: 11<br />cumulative_uniquePageviews: 137<br />page: /googleAnalyticsR/articles/setup.html","days_live: 12<br />cumulative_uniquePageviews: 145<br />page: /googleAnalyticsR/articles/setup.html","days_live: 13<br />cumulative_uniquePageviews: 174<br />page: /googleAnalyticsR/articles/setup.html","days_live: 14<br />cumulative_uniquePageviews: 181<br />page: /googleAnalyticsR/articles/setup.html","days_live: 15<br />cumulative_uniquePageviews: 184<br />page: /googleAnalyticsR/articles/setup.html","days_live: 16<br />cumulative_uniquePageviews: 187<br />page: /googleAnalyticsR/articles/setup.html","days_live: 17<br />cumulative_uniquePageviews: 200<br />page: /googleAnalyticsR/articles/setup.html","days_live: 18<br />cumulative_uniquePageviews: 223<br />page: /googleAnalyticsR/articles/setup.html","days_live: 19<br />cumulative_uniquePageviews: 244<br />page: /googleAnalyticsR/articles/setup.html","days_live: 20<br />cumulative_uniquePageviews: 267<br />page: /googleAnalyticsR/articles/setup.html","days_live: 21<br />cumulative_uniquePageviews: 287<br />page: /googleAnalyticsR/articles/setup.html","days_live: 22<br />cumulative_uniquePageviews: 289<br />page: /googleAnalyticsR/articles/setup.html","days_live: 23<br />cumulative_uniquePageviews: 296<br />page: /googleAnalyticsR/articles/setup.html","days_live: 24<br />cumulative_uniquePageviews: 322<br />page: /googleAnalyticsR/articles/setup.html","days_live: 25<br />cumulative_uniquePageviews: 339<br />page: /googleAnalyticsR/articles/setup.html","days_live: 26<br />cumulative_uniquePageviews: 351<br />page: /googleAnalyticsR/articles/setup.html","days_live: 27<br />cumulative_uniquePageviews: 373<br />page: /googleAnalyticsR/articles/setup.html","days_live: 28<br />cumulative_uniquePageviews: 388<br />page: /googleAnalyticsR/articles/setup.html","days_live: 29<br />cumulative_uniquePageviews: 394<br />page: /googleAnalyticsR/articles/setup.html","days_live: 30<br />cumulative_uniquePageviews: 396<br />page: /googleAnalyticsR/articles/setup.html","days_live: 31<br />cumulative_uniquePageviews: 403<br />page: /googleAnalyticsR/articles/setup.html"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(0,186,56,1)","dash":"solid"},"hoveron":"points","name":"/googleAnalyticsR/articles/setup.html","legendgroup":"/googleAnalyticsR/articles/setup.html","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32],"y":[1,2,2,8,10,16,21,23,23,24,26,34,37,41,44,46,46,48,50,50,53,57,58,59,68,74,80,85,90,92,97,105],"text":["days_live:  1<br />cumulative_uniquePageviews:   1<br />page: /googleAnalyticsR/articles/user-activity.html","days_live:  2<br />cumulative_uniquePageviews:   2<br />page: /googleAnalyticsR/articles/user-activity.html","days_live:  3<br />cumulative_uniquePageviews:   2<br />page: /googleAnalyticsR/articles/user-activity.html","days_live:  4<br />cumulative_uniquePageviews:   8<br />page: /googleAnalyticsR/articles/user-activity.html","days_live:  5<br />cumulative_uniquePageviews:  10<br />page: /googleAnalyticsR/articles/user-activity.html","days_live:  6<br />cumulative_uniquePageviews:  16<br />page: /googleAnalyticsR/articles/user-activity.html","days_live:  7<br />cumulative_uniquePageviews:  21<br />page: /googleAnalyticsR/articles/user-activity.html","days_live:  8<br />cumulative_uniquePageviews:  23<br />page: /googleAnalyticsR/articles/user-activity.html","days_live:  9<br />cumulative_uniquePageviews:  23<br />page: /googleAnalyticsR/articles/user-activity.html","days_live: 10<br />cumulative_uniquePageviews:  24<br />page: /googleAnalyticsR/articles/user-activity.html","days_live: 11<br />cumulative_uniquePageviews:  26<br />page: /googleAnalyticsR/articles/user-activity.html","days_live: 12<br />cumulative_uniquePageviews:  34<br />page: /googleAnalyticsR/articles/user-activity.html","days_live: 13<br />cumulative_uniquePageviews:  37<br />page: /googleAnalyticsR/articles/user-activity.html","days_live: 14<br />cumulative_uniquePageviews:  41<br />page: /googleAnalyticsR/articles/user-activity.html","days_live: 15<br />cumulative_uniquePageviews:  44<br />page: /googleAnalyticsR/articles/user-activity.html","days_live: 16<br />cumulative_uniquePageviews:  46<br />page: /googleAnalyticsR/articles/user-activity.html","days_live: 17<br />cumulative_uniquePageviews:  46<br />page: /googleAnalyticsR/articles/user-activity.html","days_live: 18<br />cumulative_uniquePageviews:  48<br />page: /googleAnalyticsR/articles/user-activity.html","days_live: 19<br />cumulative_uniquePageviews:  50<br />page: /googleAnalyticsR/articles/user-activity.html","days_live: 20<br />cumulative_uniquePageviews:  50<br />page: /googleAnalyticsR/articles/user-activity.html","days_live: 21<br />cumulative_uniquePageviews:  53<br />page: /googleAnalyticsR/articles/user-activity.html","days_live: 22<br />cumulative_uniquePageviews:  57<br />page: /googleAnalyticsR/articles/user-activity.html","days_live: 23<br />cumulative_uniquePageviews:  58<br />page: /googleAnalyticsR/articles/user-activity.html","days_live: 24<br />cumulative_uniquePageviews:  59<br />page: /googleAnalyticsR/articles/user-activity.html","days_live: 25<br />cumulative_uniquePageviews:  68<br />page: /googleAnalyticsR/articles/user-activity.html","days_live: 26<br />cumulative_uniquePageviews:  74<br />page: /googleAnalyticsR/articles/user-activity.html","days_live: 27<br />cumulative_uniquePageviews:  80<br />page: /googleAnalyticsR/articles/user-activity.html","days_live: 28<br />cumulative_uniquePageviews:  85<br />page: /googleAnalyticsR/articles/user-activity.html","days_live: 29<br />cumulative_uniquePageviews:  90<br />page: /googleAnalyticsR/articles/user-activity.html","days_live: 30<br />cumulative_uniquePageviews:  92<br />page: /googleAnalyticsR/articles/user-activity.html","days_live: 31<br />cumulative_uniquePageviews:  97<br />page: /googleAnalyticsR/articles/user-activity.html","days_live: 32<br />cumulative_uniquePageviews: 105<br />page: /googleAnalyticsR/articles/user-activity.html"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(0,191,196,1)","dash":"solid"},"hoveron":"points","name":"/googleAnalyticsR/articles/user-activity.html","legendgroup":"/googleAnalyticsR/articles/user-activity.html","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32],"y":[5,18,23,40,72,94,127,148,153,160,190,226,256,294,320,334,341,367,392,420,449,480,489,497,525,553,582,611,627,638,643,671],"text":["days_live:  1<br />cumulative_uniquePageviews:   5<br />page: /googleAnalyticsR/articles/v4.html","days_live:  2<br />cumulative_uniquePageviews:  18<br />page: /googleAnalyticsR/articles/v4.html","days_live:  3<br />cumulative_uniquePageviews:  23<br />page: /googleAnalyticsR/articles/v4.html","days_live:  4<br />cumulative_uniquePageviews:  40<br />page: /googleAnalyticsR/articles/v4.html","days_live:  5<br />cumulative_uniquePageviews:  72<br />page: /googleAnalyticsR/articles/v4.html","days_live:  6<br />cumulative_uniquePageviews:  94<br />page: /googleAnalyticsR/articles/v4.html","days_live:  7<br />cumulative_uniquePageviews: 127<br />page: /googleAnalyticsR/articles/v4.html","days_live:  8<br />cumulative_uniquePageviews: 148<br />page: /googleAnalyticsR/articles/v4.html","days_live:  9<br />cumulative_uniquePageviews: 153<br />page: /googleAnalyticsR/articles/v4.html","days_live: 10<br />cumulative_uniquePageviews: 160<br />page: /googleAnalyticsR/articles/v4.html","days_live: 11<br />cumulative_uniquePageviews: 190<br />page: /googleAnalyticsR/articles/v4.html","days_live: 12<br />cumulative_uniquePageviews: 226<br />page: /googleAnalyticsR/articles/v4.html","days_live: 13<br />cumulative_uniquePageviews: 256<br />page: /googleAnalyticsR/articles/v4.html","days_live: 14<br />cumulative_uniquePageviews: 294<br />page: /googleAnalyticsR/articles/v4.html","days_live: 15<br />cumulative_uniquePageviews: 320<br />page: /googleAnalyticsR/articles/v4.html","days_live: 16<br />cumulative_uniquePageviews: 334<br />page: /googleAnalyticsR/articles/v4.html","days_live: 17<br />cumulative_uniquePageviews: 341<br />page: /googleAnalyticsR/articles/v4.html","days_live: 18<br />cumulative_uniquePageviews: 367<br />page: /googleAnalyticsR/articles/v4.html","days_live: 19<br />cumulative_uniquePageviews: 392<br />page: /googleAnalyticsR/articles/v4.html","days_live: 20<br />cumulative_uniquePageviews: 420<br />page: /googleAnalyticsR/articles/v4.html","days_live: 21<br />cumulative_uniquePageviews: 449<br />page: /googleAnalyticsR/articles/v4.html","days_live: 22<br />cumulative_uniquePageviews: 480<br />page: /googleAnalyticsR/articles/v4.html","days_live: 23<br />cumulative_uniquePageviews: 489<br />page: /googleAnalyticsR/articles/v4.html","days_live: 24<br />cumulative_uniquePageviews: 497<br />page: /googleAnalyticsR/articles/v4.html","days_live: 25<br />cumulative_uniquePageviews: 525<br />page: /googleAnalyticsR/articles/v4.html","days_live: 26<br />cumulative_uniquePageviews: 553<br />page: /googleAnalyticsR/articles/v4.html","days_live: 27<br />cumulative_uniquePageviews: 582<br />page: /googleAnalyticsR/articles/v4.html","days_live: 28<br />cumulative_uniquePageviews: 611<br />page: /googleAnalyticsR/articles/v4.html","days_live: 29<br />cumulative_uniquePageviews: 627<br />page: /googleAnalyticsR/articles/v4.html","days_live: 30<br />cumulative_uniquePageviews: 638<br />page: /googleAnalyticsR/articles/v4.html","days_live: 31<br />cumulative_uniquePageviews: 643<br />page: /googleAnalyticsR/articles/v4.html","days_live: 32<br />cumulative_uniquePageviews: 671<br />page: /googleAnalyticsR/articles/v4.html"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(97,156,255,1)","dash":"solid"},"hoveron":"points","name":"/googleAnalyticsR/articles/v4.html","legendgroup":"/googleAnalyticsR/articles/v4.html","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],"y":[2,4,6,13,18,23,26,29,30,34,41,43,49,51,52,53,60,64,66,68,72,72,72,83,88,90,94,98,100,101,107],"text":["days_live:  1<br />cumulative_uniquePageviews:   2<br />page: /googleAnalyticsR/index.html","days_live:  2<br />cumulative_uniquePageviews:   4<br />page: /googleAnalyticsR/index.html","days_live:  3<br />cumulative_uniquePageviews:   6<br />page: /googleAnalyticsR/index.html","days_live:  4<br />cumulative_uniquePageviews:  13<br />page: /googleAnalyticsR/index.html","days_live:  5<br />cumulative_uniquePageviews:  18<br />page: /googleAnalyticsR/index.html","days_live:  6<br />cumulative_uniquePageviews:  23<br />page: /googleAnalyticsR/index.html","days_live:  7<br />cumulative_uniquePageviews:  26<br />page: /googleAnalyticsR/index.html","days_live:  8<br />cumulative_uniquePageviews:  29<br />page: /googleAnalyticsR/index.html","days_live:  9<br />cumulative_uniquePageviews:  30<br />page: /googleAnalyticsR/index.html","days_live: 10<br />cumulative_uniquePageviews:  34<br />page: /googleAnalyticsR/index.html","days_live: 11<br />cumulative_uniquePageviews:  41<br />page: /googleAnalyticsR/index.html","days_live: 12<br />cumulative_uniquePageviews:  43<br />page: /googleAnalyticsR/index.html","days_live: 13<br />cumulative_uniquePageviews:  49<br />page: /googleAnalyticsR/index.html","days_live: 14<br />cumulative_uniquePageviews:  51<br />page: /googleAnalyticsR/index.html","days_live: 15<br />cumulative_uniquePageviews:  52<br />page: /googleAnalyticsR/index.html","days_live: 16<br />cumulative_uniquePageviews:  53<br />page: /googleAnalyticsR/index.html","days_live: 17<br />cumulative_uniquePageviews:  60<br />page: /googleAnalyticsR/index.html","days_live: 18<br />cumulative_uniquePageviews:  64<br />page: /googleAnalyticsR/index.html","days_live: 19<br />cumulative_uniquePageviews:  66<br />page: /googleAnalyticsR/index.html","days_live: 20<br />cumulative_uniquePageviews:  68<br />page: /googleAnalyticsR/index.html","days_live: 21<br />cumulative_uniquePageviews:  72<br />page: /googleAnalyticsR/index.html","days_live: 22<br />cumulative_uniquePageviews:  72<br />page: /googleAnalyticsR/index.html","days_live: 23<br />cumulative_uniquePageviews:  72<br />page: /googleAnalyticsR/index.html","days_live: 24<br />cumulative_uniquePageviews:  83<br />page: /googleAnalyticsR/index.html","days_live: 25<br />cumulative_uniquePageviews:  88<br />page: /googleAnalyticsR/index.html","days_live: 26<br />cumulative_uniquePageviews:  90<br />page: /googleAnalyticsR/index.html","days_live: 27<br />cumulative_uniquePageviews:  94<br />page: /googleAnalyticsR/index.html","days_live: 28<br />cumulative_uniquePageviews:  98<br />page: /googleAnalyticsR/index.html","days_live: 29<br />cumulative_uniquePageviews: 100<br />page: /googleAnalyticsR/index.html","days_live: 30<br />cumulative_uniquePageviews: 101<br />page: /googleAnalyticsR/index.html","days_live: 31<br />cumulative_uniquePageviews: 107<br />page: /googleAnalyticsR/index.html"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(245,100,227,1)","dash":"solid"},"hoveron":"points","name":"/googleAnalyticsR/index.html","legendgroup":"/googleAnalyticsR/index.html","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":43.7625570776256,"r":7.30593607305936,"b":40.1826484018265,"l":43.1050228310502},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"title":{"text":"Unique Pageviews by Day from Launch","font":{"color":"rgba(0,0,0,1)","family":"","size":17.5342465753425},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-0.55,33.55],"tickmode":"array","ticktext":["0","10","20","30"],"tickvals":[0,10,20,30],"categoryorder":"array","categoryarray":["0","10","20","30"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.65296803652968,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"# of Days Since Page Launched","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-43.6,937.6],"tickmode":"array","ticktext":["0","250","500","750"],"tickvals":[0,250,500,750],"categoryorder":"array","categoryarray":["0","250","500","750"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.65296803652968,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(204,204,204,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x","title":{"text":"Cumulative Unique Pageviews","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","showSendToCloud":false},"source":"A","attrs":{"e2e5541034e":{"x":{},"y":{},"colour":{},"type":"scatter"}},"cur_data":"e2e5541034e","visdat":{"e2e5541034e":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p>To seed this I am always thankful when anyone blogs or writes about googleAnalyticsR’s usage, so my idea is to take the code from some of those tutorials (see googleAnalyticsR’s homepage tutorial section) and convert them into <code>.gamr</code> files like above - let me know if you’d like to contribute, either as further examples kept within the package or stored elsewhere.</p>
+</div>
+<div id="the-new-ga_model_shiny-feature---shiny-apps" class="section level3">
+<h3>The new ga_model_shiny() feature - Shiny Apps!</h3>
+<p>A natural next step is to present that analysis. Shiny provides a route to this by enabling responsive web dashboards, but Shiny is definitely a steep learning curve. I look to flatten that curve with the ability to <a href="https://code.markedmondson.me/googleAnalyticsR/articles/model-templates.html">re-use and swap out models and Shiny templates easily</a>.</p>
+<p><code>googleAnalyticsR</code> now provides a framework for people to share Shiny themes on top of the <code>ga_models</code> available - it should be the simplest way to make Shiny apps out of GA data.</p>
+<p>The <code>ga_models</code> and Shiny themes can be combined to make Shiny apps with pre-made features such as OAuth2 login, caching and date pickers. Quick iteration between styles is possible and even for advanced users this should lower development time for advanced GA dashboard applications.</p>
+<p>Some quick examples of the same model being used with different example templates - the major point being you can swap between totally different Shiny UI themes with just one line of code:</p>
+<ul>
+<li>Shinythemes</li>
+</ul>
+<pre class="r"><code>m3 &lt;- ga_model_example(&quot;time-normalised.gamr&quot;)
+m4 &lt;- ga_model_example(&quot;ga-effect.gamr&quot;)
+
+ga_model_shiny(list(m4, m3), 
+               auth_dropdown = &quot;universal&quot;, 
+               template = ga_model_shiny_template(&quot;shinythemes&quot;), 
+               theme = &quot;cerulean&quot;)</code></pre>
+<p><img src="/images/ga_model_shiny1.png" /></p>
+<ul>
+<li>bslib</li>
+</ul>
+<pre class="r"><code>m3 &lt;- ga_model_example(&quot;time-normalised.gamr&quot;)
+m4 &lt;- ga_model_example(&quot;ga-effect.gamr&quot;)
+
+ga_model_shiny(list(m4, m3), auth_dropdown = &quot;universal&quot;,
+               template = ga_model_shiny_template(&quot;basic_bslib&quot;), 
+               bg = &quot;white&quot;, fg = &quot;red&quot;, primary = &quot;grey&quot;)</code></pre>
+<p><img src="/images/ga_model_shiny2.png" /></p>
+<ul>
+<li>argonDash</li>
+</ul>
+<pre class="r"><code>model &lt;- ga_model_example(&quot;ga-effect.gamr&quot;)
+
+ga_model_shiny(
+  model,
+  title = &quot;Argon Demo&quot;,
+  auth_dropdown = &quot;universal&quot;,
+  template = ga_model_shiny_template(&quot;argonDash&quot;))</code></pre>
+<p><img src="/images/ga_model_shiny4.png" /></p>
+<p>In particular, the Shiny apps created are all using the latest Shiny 1.6 features, such as <a href="https://shiny.rstudio.com/articles/modules.html">Shiny Modules</a>, <a href="https://shiny.rstudio.com/app-stories/weather-lookup-caching.html"><code>bindCache()</code></a> and styling via <a href="https://rstudio.github.io/bslib/">bslibs</a> so you have access to advanced Shiny features without needing to code them, and of course the latest thinking of <a href="https://code.markedmondson.me/googleAuthR/articles/google-authentication-types.html#gar_shiny_-functions-example">OAuth2 authentication from my own <code>googleAuthR</code> using <code>gar_shiny_auth()</code></a> etc. is incorporated. The Shiny apps can be exported to code so you can tweak them as you require, and written to a folder including a Dockerfile for deployment to your favourite Shiny hosting solution. I’m using <a href="https://code.markedmondson.me/googleCloudRunner/articles/usecase-shiny-cloudrun.html">googleCloudRunner’s Shiny deployments on Cloud Run</a>.</p>
+</div>
+</div>
+<div id="all-the-other-stuff" class="section level2">
+<h2>All the other stuff</h2>
+<p>As usual there is also lots of minor changes that are mostly found by user feedback or fixing minor frustrations when I am using the package.</p>
+<ul>
+<li>No need for client Id when doing authentication with a service key JSON file - should make it smoother for authenticating Rmd files on a server</li>
+<li>Cleaner NAMESPACE for finding help files - the auto-complete should throw up more useful functions</li>
+<li>Nicer looking messaging in the R console - the <a href="https://cli.r-lib.org/"><code>cli</code> package</a> has been used more extensively to give more attractive message feedback with attractive green ticks etc.</li>
+<li>Dev website - from this release there will be a dev website with all GitHub changes (<a href="https://code.markedmondson.me/googleAnalyticsR/dev/" class="uri">https://code.markedmondson.me/googleAnalyticsR/dev/</a>) but the CRAN version will only hold the ‘official’ docs (<a href="https://code.markedmondson.me/googleAnalyticsR/" class="uri">https://code.markedmondson.me/googleAnalyticsR/</a>)</li>
+</ul>
+</div>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<p>I’d like to thank all the people who have used <code>googleAnalyticsR</code> up until now and especially those who have given feedback on how they use it. Its been my introduction to open-source and I’ve got a lot out of it - it feels good to contribute to the community.</p>
+<p>If you have any ideas on what else could be done with the package (or find a bug!) please do let me know via <a href="https://twitter.com/HoloMarkeD">Twitter at HoloMarkeD</a>, the <a href="https://docs.google.com/forms/d/e/1FAIpQLSerjirmMpB3b7LmBs_Vx_XPIE9IrhpCpPg1jUcpfBcivA3uBw/viewform">#googleAuthRverse Slack group</a> or via <a href="https://github.com/MarkEdmondson1234/googleAnalyticsR/issues">GitHub issues</a>.</p>
+</div>
+
+        </div>
+        <footer class="article-footer">
+    <a data-url="https://code.markedmondson.me/googleanalyticsr-100-release/" data-id="678495798b88a52368929a725ef92aef" class="article-share-link">
+        <i class="fa fa-share"></i>
+        Share
+    </a>
+    
+
+    <script>
+    (function ($) {
+        
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+    </script>
+</footer>
+
+    </div>
+
+    
+<nav id="article-nav">
+    
+    <a href="https://code.markedmondson.me/edmondlytica/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">
+          Older
+      </strong>
+      <div class="article-nav-title">Creating your own cookieless analytics tool with GTM Server Side, Cloud Run, BigQuery and Shiny</div>
+    </a>
+    
+
+    
+</nav>
+
+
+</article>
+
+
+<section id="comments">
+    <div id="utterances_thread">
+        <script src="https://utteranc.es/client.js"
+    repo="MarkEdmondson1234/markedmondson.me-hugo"
+    issue-term="pathname"
+    label="comment"
+    theme="github-light"
+    crossorigin="anonymous"
+    async>
+</script>
+    </div>
+</section>
+
+
+    </section>
+
+   	
+    	<aside id="sidebar">
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/googleanalyticsr-100-release/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/GA4-090.png)" alt="googleAnalyticsR v1.0.0 - GA4 API, Automatic Shiny Dashboarding, Improved UI" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/googleanalyticsr-100-release/" class="title">googleAnalyticsR v1.0.0 - GA4 API, Automatic Shiny Dashboarding, Improved UI</a></p>
+                    <p class="item-date">
+                        <time datetime="2021-04-17 09:29:50 &#43;0100 &#43;0100" itemprop="datePublished">2021-04-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/edmondlytica/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/edmonlytica-shiny1.png)" alt="googleAnalyticsR v1.0.0 - GA4 API, Automatic Shiny Dashboarding, Improved UI" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/edmondlytica/" class="title">Creating your own cookieless analytics tool with GTM Server Side, Cloud Run, BigQuery and Shiny</a></p>
+                    <p class="item-date">
+                        <time datetime="2021-03-21 09:29:50 &#43;0100 CET" itemprop="datePublished">2021-03-21</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/data-privacy-gtm/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/hawks-and-doves.jpg)" alt="googleAnalyticsR v1.0.0 - GA4 API, Automatic Shiny Dashboarding, Improved UI" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/data-privacy-gtm/" class="title">Data Privacy Engineering with Google Tag Manager Server Side and Consent Mode</a></p>
+                    <p class="item-date">
+                        <time datetime="2020-11-27 09:29:50 &#43;0100 CET" itemprop="datePublished">2020-11-27</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/gtm-serverside-webhooks/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/gtm-serverside-events.png)" alt="googleAnalyticsR v1.0.0 - GA4 API, Automatic Shiny Dashboarding, Improved UI" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/gtm-serverside-webhooks/" class="title">Using Google Tag Manager Server Side to Trigger Webhook Events</a></p>
+                    <p class="item-date">
+                        <time datetime="2020-09-04 12:50:50 &#43;0100 &#43;0100" itemprop="datePublished">2020-09-04</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/gtm-serverside-cloudrun/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/princess-gtm.png)" alt="googleAnalyticsR v1.0.0 - GA4 API, Automatic Shiny Dashboarding, Improved UI" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/gtm-serverside-cloudrun/" class="title">Google Tag Manager Server Side on Cloud Run - Pros and Cons</a></p>
+                    <p class="item-date">
+                        <time datetime="2020-08-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-21</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Donate
+    </h3>
+    <div class="widget">
+       	<script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="marked" data-description="Support me on Buy me a coffee!" data-message="" data-color="#FFDD00" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+       	<iframe src="https://github.com/sponsors/MarkEdmondson1234/button" title="Sponsor MarkEdmondson1234" height="35" width="116" style="border: 0;"></iframe>
+    </div>
+</div>
+
+
+    
+
+
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/r">
+                    R
+                </a>
+                <span class="category-list-count">22</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/big-query">
+                    big-query
+                </a>
+                <span class="category-list-count">6</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/blogging">
+                    blogging
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-functions">
+                    cloud-functions
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-run">
+                    cloud-run
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/docker">
+                    docker
+                </a>
+                <span class="category-list-count">9</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/firebase">
+                    firebase
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-analytics">
+                    google-analytics
+                </a>
+                <span class="category-list-count">11</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-app-engine">
+                    google-app-engine
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-auth">
+                    google-auth
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-cloud-storage">
+                    google-cloud-storage
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-compute-engine">
+                    google-compute-engine
+                </a>
+                <span class="category-list-count">7</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-language">
+                    google-language
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-tag-manager">
+                    google-tag-manager
+                </a>
+                <span class="category-list-count">7</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/python">
+                    python
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/rstudio-server">
+                    rstudio-server
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/search-console">
+                    search-console
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+
+    
+
+
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+    
+	</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script src="https://code.markedmondson.me/fancybox/jquery.fancybox.pack.js"></script>
+<script src="https://code.markedmondson.me/js/script.js"></script>
+<script src="https://code.markedmondson.me/js/highlight.pack.js"></script>
+
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+</body>
+</html>

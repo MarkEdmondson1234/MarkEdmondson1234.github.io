@@ -3,32 +3,43 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://code.markedmondson.me/edmondlytica/</loc>
-    <lastmod>2021-03-21T09:29:50+01:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://code.markedmondson.me/</loc>
-    <lastmod>2021-03-21T09:29:50+01:00</lastmod>
+    <lastmod>2021-04-17T09:29:50+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://code.markedmondson.me/post/</loc>
-    <lastmod>2021-03-21T09:29:50+01:00</lastmod>
+    <lastmod>2021-04-17T09:29:50+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://code.markedmondson.me/tags/R/</loc>
-    <lastmod>2021-03-21T09:29:50+01:00</lastmod>
+    <lastmod>2021-04-17T09:29:50+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://code.markedmondson.me/tags/</loc>
-    <lastmod>2021-03-21T09:29:50+01:00</lastmod>
+    <lastmod>2021-04-17T09:29:50+01:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://code.markedmondson.me/tags/google-analytics/</loc>
+    <lastmod>2021-04-17T09:29:50+01:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://code.markedmondson.me/googleanalyticsr-100-release/</loc>
+    <lastmod>2021-04-17T09:29:50+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://code.markedmondson.me/edmondlytica/</loc>
+    <lastmod>2021-03-21T09:29:50+01:00</lastmod>
   </url>
   
   <url>
@@ -52,12 +63,6 @@
   <url>
     <loc>https://code.markedmondson.me/data-privacy-gtm/</loc>
     <lastmod>2020-11-27T09:29:50+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://code.markedmondson.me/tags/google-analytics/</loc>
-    <lastmod>2020-11-27T09:29:50+01:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>

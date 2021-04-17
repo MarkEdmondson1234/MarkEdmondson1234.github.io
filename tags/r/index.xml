@@ -6,10 +6,20 @@
     <description>Recent content in R on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
-    <lastBuildDate>Sun, 21 Mar 2021 09:29:50 +0100</lastBuildDate>
+    <lastBuildDate>Sat, 17 Apr 2021 09:29:50 +0100</lastBuildDate>
     
 	<atom:link href="https://code.markedmondson.me/tags/R/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>googleAnalyticsR v1.0.0 - GA4 API, Automatic Shiny Dashboarding, Improved UI</title>
+      <link>https://code.markedmondson.me/googleanalyticsr-100-release/</link>
+      <pubDate>Sat, 17 Apr 2021 09:29:50 +0100</pubDate>
+      
+      <guid>https://code.markedmondson.me/googleanalyticsr-100-release/</guid>
+      <description>The original intention for this blog was to announce updates to my R packages, but I tend to rely more on Twitter and other social media for that these days. A lot of documentation is also written for the package websites so I feel little need to put it on this blog as well.
+But for googleAnalyticsR v1.0.0 there are so many cool new things that I think it deserves a bit more limelight.</description>
+    </item>
     
     <item>
       <title>Creating your own cookieless analytics tool with GTM Server Side, Cloud Run, BigQuery and Shiny</title>
