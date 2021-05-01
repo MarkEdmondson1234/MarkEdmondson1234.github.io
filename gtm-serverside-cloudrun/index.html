@@ -35,7 +35,7 @@
 
 <meta itemprop="datePublished" content="2020-08-21T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2020-08-21T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="1313">
+<meta itemprop="wordCount" content="1629">
 
 
 
@@ -284,10 +284,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2020-08-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-21</time>
             &middot;
-            1313
+            1629
             words
             &middot;
-            7
+            8
             minute read
         </div>
         
@@ -350,13 +350,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <h2 id="why-not-gtm-serverside-on-cloud-run">Why not GTM Serverside on Cloud Run?</h2>
 
-<p>Currently its a bit awkward to have the debug container displayed in the GTM interface - this is because debug requests go to <code>/gtm/*</code> on a debug specified container, and Cloud Run does not support routing requests to folders.</p>
+<p><s>Currently its a bit awkward to have the debug container displayed in the GTM interface - this is because debug requests go to <code>/gtm/*</code> on a debug specified container, and Cloud Run does not support routing requests to folders.</p>
 
-<p>There are work-arounds, but that makes it deployment more convoluted, but hopefully GTM serverside container will be easier to support different platforms, to make it not only more compatible with Cloud Run but other cloud services such as AWS and Azure container services.</p>
+<p>There are work-arounds, but that makes it deployment more convoluted, but hopefully GTM serverside container will be easier to support different platforms, to make it not only more compatible with Cloud Run but other cloud services such as AWS and Azure container services.</s></p>
+
+<p><em>Edit: May 2021 - Now the debug server can be supported on Cloud Run!  The deployment section below is updated to show how this is done.</em></p>
 
 <p>The costs for high volume websites as well may be more for Cloud Run once the bill goes over $120.  The best I can figure out from my limited running so far it works out around 1USD for 10000 requests so it may only make sense for websites under 1million hits per month.  But this is work in progress, will update here once I know more.</p>
 
 <h2 id="how-to-deploy-gtm-serverside-to-cloud-run">How to deploy GTM Serverside to Cloud Run</h2>
+
+<p>This is all information you can see in the Google&rsquo;s <a href="https://developers.google.com/tag-manager/serverside/manual-setup-guide">GTM Manual Setup Guide docs</a>.</p>
 
 <p>When considering the Cloud Run configuration, you can refer to the deployment script given in the documentation for upgrading to a App Engine flexible service.  The most critical information you need is the docker image it deploys, which at time of writing is <code>gcr.io/cloud-tagging-10302018/gtm-cloud-image:stable</code></p>
 
@@ -391,7 +395,43 @@ Options:
 
 <p>For our initial purposes, the most pertinent is the <code>CONTAINER_CONFIG</code> env arg, which is how the Docker image knows which GTM serverside its working for.  Its also good to see that <code>PORT</code> is configurable as well, as that is a recommended setting for Cloud Run.</p>
 
+<p>The <code>RUN_AS_PREVIW_SERVER</code> is also available, so we will actually deploy two Cloud Run instances - one for production and one for the preview debug server.  Since it scales to 0, this should represent no extra cost.</p>
+
+<p>Once the debug server is deployed, we will then add its URL as the <code>PREVIEW_SERVER_URL</code></p>
+
 <h3 id="cloud-run-setup">Cloud Run setup</h3>
+
+<h4 id="deploy-the-debug-preview-server-first">Deploy the debug preview server first</h4>
+
+<p>We first need a URL to give to the production URL for the debug requests, so create the debug server first.</p>
+
+<p>Since its only for previews, you need minimal resources.</p>
+
+<ul>
+<li>Container image URL: <code>gcr.io/cloud-tagging-10302018/gtm-cloud-image:stable</code></li>
+<li>Container port: Leave as <code>8080</code></li>
+<li>Capacity: Leave as default <code>256Mi</code></li>
+<li>CPU Allocated: Leave as <code>1</code></li>
+<li>Request timeout: Leave as <code>300</code></li>
+<li>Maximum requests per container: Not important as its just you, the default is fine.</li>
+<li>Variables (second tab):
+
+<ul>
+<li><code>RUN_AS_PREVIEW_SERVER</code> = <code>true</code></li>
+<li><code>CONTAINER_CONFIG</code> = <code>{ContainerId given to you on GTM Serverside setup}</code>
+<br /></li>
+</ul></li>
+</ul>
+
+<p>Deploy it and wait for it to do its initial launch.</p>
+
+<p>Note you don&rsquo;t need to map this URL to a custom domain if you don&rsquo;t want to (its not going to set cookies) but it doesn&rsquo;t matter if you do.</p>
+
+<p>Once you get a Green Tick then you need to copy the URL to point the production server at - see below:</p>
+
+<h4 id="deploy-the-production-server">Deploy the production server</h4>
+
+<p>This is the instance that will server your main analytics requests.  The URL of the debug server is needed from above to add as the <code>PREVIEW_SERVER_URL</code> environment variable.</p>
 
 <p>For initial deployment I tried to copy the resource requirements from the <a href="https://developers.google.com/tag-manager/serverside/script-user-guide">App Engine Flexible configuration that you can read about here</a>.  From the shell script there we have enough to configure Cloud Run:</p>
 
@@ -405,18 +445,16 @@ Options:
 <li>Variables (second tab):
 
 <ul>
-<li><code>CONTAINER_CONFIG</code> = <code>{ContainerId given to you on GTM Serverside setup}</code>
-<br /></li>
+<li><code>CONTAINER_CONFIG</code> = <code>{ContainerId given to you on GTM Serverside setup}</code></li>
+<li><code>PREVIEW_SERVER_URL</code> = <code>{THE URL OF THE DEBUG SERVER YOU DEPLOYED ABOVE}</code></li>
 </ul></li>
 </ul>
-
-<p>It should look a bit like below:</p>
-
-<p><img src="/images/cloudrun-gtm-setup.png" alt="" /></p>
 
 <p>Once the Cloud Run is running with a green tick you should have a URL you could use, but for cookies its better for it to be running on a subdomain of your website domain.  This involves going to the <a href="https://console.cloud.google.com/run/domains">Domain Mappings in Cloud Run</a> and verifying your domain with Search Console then selecting the subdomain.  A https certificate will be created for you, and after you have changed your DNS settings via a CNAME record you can then use the new URL in your GTM serverside tags.</p>
 
 <p><img src="/images/cloudrun-domain-mapping.png" alt="" /></p>
+
+<p>Since its running on Google Cloud Platform, you don&rsquo;t need to worry about supplying an authentication service key for say the BigQuery GTM API as you would if you were deploying on another cloud provider.</p>
 
 <h2 id="summary">Summary</h2>
 
