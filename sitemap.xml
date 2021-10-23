@@ -4,30 +4,41 @@
   
   <url>
     <loc>https://code.markedmondson.me/</loc>
-    <lastmod>2021-04-17T09:29:50+01:00</lastmod>
+    <lastmod>2021-10-23T11:04:50+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://code.markedmondson.me/post/</loc>
-    <lastmod>2021-04-17T09:29:50+01:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://code.markedmondson.me/tags/R/</loc>
-    <lastmod>2021-04-17T09:29:50+01:00</lastmod>
+    <lastmod>2021-10-23T11:04:50+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://code.markedmondson.me/tags/</loc>
-    <lastmod>2021-04-17T09:29:50+01:00</lastmod>
+    <lastmod>2021-10-23T11:04:50+01:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://code.markedmondson.me/writing-a-book/</loc>
+    <lastmod>2021-10-23T11:04:50+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://code.markedmondson.me/tags/blogging/</loc>
+    <lastmod>2021-10-23T11:04:50+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://code.markedmondson.me/tags/google-analytics/</loc>
+    <lastmod>2021-10-23T11:04:50+01:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://code.markedmondson.me/tags/R/</loc>
     <lastmod>2021-04-17T09:29:50+01:00</lastmod>
     <priority>0</priority>
   </url>
@@ -214,12 +225,6 @@
   <url>
     <loc>https://code.markedmondson.me/new-blog-down/</loc>
     <lastmod>2017-01-23T22:45:03+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://code.markedmondson.me/tags/blogging/</loc>
-    <lastmod>2017-01-23T22:45:03+01:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>

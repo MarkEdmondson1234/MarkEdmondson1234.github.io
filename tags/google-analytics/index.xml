@@ -6,10 +6,20 @@
     <description>Recent content in google-analytics on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
-    <lastBuildDate>Sat, 17 Apr 2021 09:29:50 +0100</lastBuildDate>
+    <lastBuildDate>Sat, 23 Oct 2021 11:04:50 +0100</lastBuildDate>
     
 	<atom:link href="https://code.markedmondson.me/tags/google-analytics/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Why and How I&#39;m writing a GA4 book called &#39;Learning Google Analytics&#39; for O&#39;Reilly</title>
+      <link>https://code.markedmondson.me/writing-a-book/</link>
+      <pubDate>Sat, 23 Oct 2021 11:04:50 +0100</pubDate>
+      
+      <guid>https://code.markedmondson.me/writing-a-book/</guid>
+      <description>If you’ve been within two meters of me recently you may have heard I’m writing a book on Google Analytics 4 and I’m very excited about it. In this blog post I want to write about how it came about, and to give some love to the blog to show its not being neglected for its younger cousin, The Book.
+I want to cover how the deal came about in case you are also thinking about writing a book and would like some tips on how to get published, the process of writing itself and how my attitude to writing has changed as a result.</description>
+    </item>
     
     <item>
       <title>googleAnalyticsR v1.0.0 - GA4 API, Automatic Shiny Dashboarding, Improved UI</title>

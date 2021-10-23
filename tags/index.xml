@@ -6,10 +6,28 @@
     <description>Recent content in Tags on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
-    <lastBuildDate>Sat, 17 Apr 2021 09:29:50 +0100</lastBuildDate>
+    <lastBuildDate>Sat, 23 Oct 2021 11:04:50 +0100</lastBuildDate>
     
 	<atom:link href="https://code.markedmondson.me/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>blogging</title>
+      <link>https://code.markedmondson.me/tags/blogging/</link>
+      <pubDate>Sat, 23 Oct 2021 11:04:50 +0100</pubDate>
+      
+      <guid>https://code.markedmondson.me/tags/blogging/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>google-analytics</title>
+      <link>https://code.markedmondson.me/tags/google-analytics/</link>
+      <pubDate>Sat, 23 Oct 2021 11:04:50 +0100</pubDate>
+      
+      <guid>https://code.markedmondson.me/tags/google-analytics/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>R</title>
@@ -17,15 +35,6 @@
       <pubDate>Sat, 17 Apr 2021 09:29:50 +0100</pubDate>
       
       <guid>https://code.markedmondson.me/tags/R/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>google-analytics</title>
-      <link>https://code.markedmondson.me/tags/google-analytics/</link>
-      <pubDate>Sat, 17 Apr 2021 09:29:50 +0100</pubDate>
-      
-      <guid>https://code.markedmondson.me/tags/google-analytics/</guid>
       <description></description>
     </item>
     
@@ -152,15 +161,6 @@
       <pubDate>Tue, 05 Sep 2017 13:55:57 +0100</pubDate>
       
       <guid>https://code.markedmondson.me/tags/rstudio-server/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>blogging</title>
-      <link>https://code.markedmondson.me/tags/blogging/</link>
-      <pubDate>Mon, 23 Jan 2017 22:45:03 +0100</pubDate>
-      
-      <guid>https://code.markedmondson.me/tags/blogging/</guid>
       <description></description>
     </item>
     
