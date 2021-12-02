@@ -719,7 +719,7 @@ def website_alert(event, context):
     </h3>
     <script>
       function submitDL(value){
-        dataLayer.push({'form_submit':value});
+        dataLayer.push({'event':'form_submit','form_submit':value});
         
         document.getElementById('email').value = 'Not working yet - see future blog post :)'
       }

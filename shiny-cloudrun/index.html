@@ -775,7 +775,7 @@ cr_deploy_run(&quot;shiny_cloudrun/app/&quot;,
     </h3>
     <script>
       function submitDL(value){
-        dataLayer.push({'form_submit':value});
+        dataLayer.push({'event':'form_submit','form_submit':value});
         
         document.getElementById('email').value = 'Not working yet - see future blog post :)'
       }

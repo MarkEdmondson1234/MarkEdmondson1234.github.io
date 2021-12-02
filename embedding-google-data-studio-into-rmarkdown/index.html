@@ -597,7 +597,7 @@ style=&quot;border:0&quot; allowfullscreen&gt;&lt;/iframe&gt;</code></pre>
     </h3>
     <script>
       function submitDL(value){
-        dataLayer.push({'form_submit':value});
+        dataLayer.push({'event':'form_submit','form_submit':value});
         
         document.getElementById('email').value = 'Not working yet - see future blog post :)'
       }
