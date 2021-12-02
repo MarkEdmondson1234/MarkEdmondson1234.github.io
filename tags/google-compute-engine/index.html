@@ -552,12 +552,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         Get your GA4 history
     </h3>
     <script>
-      function submitDL(value){
+      function submitDL(id){
+        var value = document.getElementById(id).value
         dataLayer.push({'event':'form_submit','form_submit':value});
         
-        document.getElementById('email').value = 'Not working yet - see future blog post :)'
+        document.getElementById(id).value = 'Not working yet - see future blog post :)'
       }
-        
     </script>
     <div>
         <input type="email" name="email"  id="email"
@@ -565,7 +565,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           minlength="8"
           placeholder="you@email.com">
         <button 
-          onclick="javascript:submitDL(document.getElementById('email').value);"
+          onclick="javascript:submitDL('email'));"
          >Send</button>
     </div>
 </div>
