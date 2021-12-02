@@ -749,12 +749,12 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
         Get your GA4 history
     </h3>
     <script>
-      function submitDL(id){
-        var value = document.getElementById(id).value
+      function submitDL(value){
         dataLayer.push({'event':'form_submit','form_submit':value});
         
-        document.getElementById(id).value = 'Not working yet - see future blog post :)'
+        document.getElementById('email').value = 'Not working yet - see future blog post :)'
       }
+        
     </script>
     <div>
         <input type="email" name="email"  id="email"
@@ -762,7 +762,7 @@ query &lt;- bqr_query(&quot;big-query-database&quot;, &quot;my_data&quot;,
           minlength="8"
           placeholder="you@email.com">
         <button 
-          onclick="javascript:submitDL('email'));"
+          onclick="javascript:submitDL(document.getElementById('email').value);"
          >Send</button>
     </div>
 </div>
