@@ -2155,3 +2155,4 @@ ol.toc {
 .highlight .code .selector-id {
   font-weight: bold;
 }
+.description { display:none; }
