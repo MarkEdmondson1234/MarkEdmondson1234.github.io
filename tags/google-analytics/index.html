@@ -661,19 +661,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <h3 class="widget-title">
         Get your GA4 history
     </h3>
+    <script>
+      function submitDL(value){
+        dataLayer.push({'form_submit':value});
+        document.getElementById('email').value = 'Submitted! See inbox'
+      }
+        
+    </script>
     <div>
-        <form action="https://code.markedmondson.me/sending-ga4-events-pubsub"
-        method="GET" accept-charset="UTF-8">
-            <input type="email" name="email" 
-              required 
-              minlength="4"
-              placeholder="you@email.com">
-            <label class="description">description</label>
-<input class="description" name="description"
-          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-          placeholder="name@domain.com">
-            <button type="submit">Send</button>
-        </form>
+        <input type="email" name="email"  id="email"
+          required 
+          minlength="4"
+          placeholder="you@email.com">
+        <button 
+          onclick="javascript:submitDL(document.getElementById('email').value);"
+         >Send</button>
     </div>
 </div>
 
