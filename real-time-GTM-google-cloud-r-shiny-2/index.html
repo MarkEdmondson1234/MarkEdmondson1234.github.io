@@ -902,6 +902,8 @@ shinyUI(fluidPage(
       function submitDL(value){
         dataLayer.push({'event':'ga4_email','ga4_email':value});
         document.getElementById('email').value = 'Submitted! See inbox'
+        var button = document.getElementById('email_button');
+        button.disabled = true;
       }
         
     </script>
@@ -910,7 +912,7 @@ shinyUI(fluidPage(
           required 
           minlength="8"
           placeholder="you@email.com">
-        <button 
+        <button id='email_button'
           onclick="javascript:submitDL(document.getElementById('email').value);"
          >Send</button>
     </div>

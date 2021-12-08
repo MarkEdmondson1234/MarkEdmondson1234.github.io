@@ -909,6 +909,8 @@ cr_deploy_r(&quot;your-script.R&quot;, schedule = &quot;5 15 * * *&quot;)</code>
       function submitDL(value){
         dataLayer.push({'event':'ga4_email','ga4_email':value});
         document.getElementById('email').value = 'Submitted! See inbox'
+        var button = document.getElementById('email_button');
+        button.disabled = true;
       }
         
     </script>
@@ -917,7 +919,7 @@ cr_deploy_r(&quot;your-script.R&quot;, schedule = &quot;5 15 * * *&quot;)</code>
           required 
           minlength="8"
           placeholder="you@email.com">
-        <button 
+        <button id='email_button'
           onclick="javascript:submitDL(document.getElementById('email').value);"
          >Send</button>
     </div>
