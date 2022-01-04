@@ -3,20 +3,61 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://code.markedmondson.me/sending-ga4-events-pubsub/</loc>
+    <lastmod>2021-11-19T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://code.markedmondson.me/</loc>
-    <lastmod>2021-10-23T11:04:50+01:00</lastmod>
+    <lastmod>2021-11-19T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://code.markedmondson.me/post/</loc>
-    <lastmod>2021-10-23T11:04:50+01:00</lastmod>
+    <lastmod>2021-11-19T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://code.markedmondson.me/tags/</loc>
-    <lastmod>2021-10-23T11:04:50+01:00</lastmod>
+    <lastmod>2021-11-19T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://code.markedmondson.me/tags/big-query/</loc>
+    <lastmod>2021-11-19T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://code.markedmondson.me/tags/cloud-functions/</loc>
+    <lastmod>2021-11-19T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://code.markedmondson.me/tags/google-analytics/</loc>
+    <lastmod>2021-11-19T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://code.markedmondson.me/tags/google-tag-manager/</loc>
+    <lastmod>2021-11-19T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://code.markedmondson.me/tags/pubsub/</loc>
+    <lastmod>2021-11-19T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://code.markedmondson.me/tags/python/</loc>
+    <lastmod>2021-11-19T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -27,12 +68,6 @@
   
   <url>
     <loc>https://code.markedmondson.me/tags/blogging/</loc>
-    <lastmod>2021-10-23T11:04:50+01:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://code.markedmondson.me/tags/google-analytics/</loc>
     <lastmod>2021-10-23T11:04:50+01:00</lastmod>
     <priority>0</priority>
   </url>
@@ -54,19 +89,7 @@
   </url>
   
   <url>
-    <loc>https://code.markedmondson.me/tags/big-query/</loc>
-    <lastmod>2021-03-21T09:29:50+01:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>https://code.markedmondson.me/tags/cloud-run/</loc>
-    <lastmod>2021-03-21T09:29:50+01:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://code.markedmondson.me/tags/google-tag-manager/</loc>
     <lastmod>2021-03-21T09:29:50+01:00</lastmod>
     <priority>0</priority>
   </url>
@@ -79,12 +102,6 @@
   <url>
     <loc>https://code.markedmondson.me/gtm-serverside-webhooks/</loc>
     <lastmod>2020-09-04T12:50:50+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://code.markedmondson.me/tags/cloud-functions/</loc>
-    <lastmod>2020-09-04T12:50:50+01:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>
@@ -116,12 +133,6 @@
   
   <url>
     <loc>https://code.markedmondson.me/tags/google-auth/</loc>
-    <lastmod>2020-06-28T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://code.markedmondson.me/tags/python/</loc>
     <lastmod>2020-06-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>

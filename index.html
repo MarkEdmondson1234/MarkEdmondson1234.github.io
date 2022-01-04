@@ -28,7 +28,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://code.markedmondson.me/" />
 
-<meta property="og:updated_time" content="2021-10-23T11:04:50&#43;01:00"/>
+<meta property="og:updated_time" content="2021-11-19T00:00:00&#43;00:00"/>
 
     
     
@@ -174,12 +174,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        31
+        32
         <span>Posts</span>
       </div>
       <div class="article-info-block">
         
-          17
+          18
         
         <span>
             Tags
@@ -261,6 +261,163 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <section id="main">
     
     
+
+<article class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        <a href="https://code.markedmondson.me/sending-ga4-events-pubsub/" itemprop="url">
+            <img src="https://code.markedmondson.me/banners/sun-outburst.jpg" class="article-banner">
+        
+        </a>
+
+        <header class="article-header">
+    <a href="https://code.markedmondson.me/sending-ga4-events-pubsub/">
+    <h1 class="article-title" itemprop="name">
+        Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit
+    </h1>
+    </a>
+    <div class="article-meta">
+
+        
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2021-11-19 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-11-19</time>
+            &middot;
+            3245
+            words
+            &middot;
+            16
+            minute read
+        </div>
+        
+        
+            
+            
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/google-analytics">google-analytics</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/google-tag-manager">google-tag-manager</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/cloud-functions">cloud-functions</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/python">python</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/big-query">big-query</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/pubsub">pubsub</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+        <div class="article-entry" itemprop="articleBody">
+            <p>
+                <p><em>Image from <a href="https://solarsystem.nasa.gov/resources/758/brief-outburst/?category=solar-system_sun">https://solarsystem.nasa.gov/resources/758/brief-outburst/?category=solar-system_sun</a></em></p>
+
+<p>With Google Tag Manager Server-side (GTM-SS), the scope on what you can do with your GA4 events is much enhanced, since using GTM-SS you have the ability to interact easily with other GCP services, in particular easier Google authentication.  This integration can allow you to enrich your data streams or send your GA4 data to different locations other than the Google Marketing Platform.  The first example of this has been using the BigQuery API in your GTM-SS templates to export your event data, but what if you need your event data on a more real-time basis?  For that, there is <a href="https://cloud.google.com/pubsub/docs/overview">Google Pub/Sub</a>.</p>
+            </p>
+            <p class="article-more-link">
+                <a href="https://code.markedmondson.me/sending-ga4-events-pubsub/">
+                    Read more
+                </a>
+            </p>
+        </div>
+        <footer class="article-footer">
+    <a data-url="https://code.markedmondson.me/sending-ga4-events-pubsub/" data-id="44bbf3eb49f73a64efc3e3207a5504c0" class="article-share-link">
+        <i class="fa fa-share"></i>
+        Share
+    </a>
+    
+
+    <script>
+    (function ($) {
+        
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+    </script>
+</footer>
+
+    </div>
+</article>
 
 <article class="article article-type-post" itemscope="" itemprop="blogPost">
     <div class="article-inner">
@@ -2952,168 +3109,6 @@ TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically
     </div>
 </article>
 
-<article class="article article-type-post" itemscope="" itemprop="blogPost">
-    <div class="article-inner">
-        
-        <a href="https://code.markedmondson.me/r-packages/" itemprop="url">
-            <img src="https://code.markedmondson.me/banners/packages.jpeg" class="article-banner">
-        
-        </a>
-
-        <header class="article-header">
-    <a href="https://code.markedmondson.me/r-packages/">
-    <h1 class="article-title" itemprop="name">
-        My R Packages
-    </h1>
-    </a>
-    <div class="article-meta">
-
-        
-        <div class="article-date">
-            <i class="fa fa-calendar"></i>
-            <time datetime="2017-01-24 21:20:50 &#43;0100 CET" itemprop="datePublished">2017-01-24</time>
-            &middot;
-            261
-            words
-            &middot;
-            2
-            minute read
-        </div>
-        
-        
-
-        
-            
-            
-            <div class="article-category">
-                <i class="fa fa-tags"></i>
-                
-                
-                <a class="article-category-link" href="https://code.markedmondson.me/tags/r">R</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="https://code.markedmondson.me/tags/google-auth">google-auth</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="https://code.markedmondson.me/tags/big-query">big-query</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="https://code.markedmondson.me/tags/google-analytics">google-analytics</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="https://code.markedmondson.me/tags/google-cloud-storage">google-cloud-storage</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="https://code.markedmondson.me/tags/google-compute-engine">google-compute-engine</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="https://code.markedmondson.me/tags/google-tag-manager">google-tag-manager</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="https://code.markedmondson.me/tags/search-console">search-console</a>
-                
-                
-            </div>
-            
-        
-    </div>
-</header>
-
-        <div class="article-entry" itemprop="articleBody">
-            <p>
-                A full list of R packages I have published are on my Github, but some notable ones are below.
-Some are part of the cloudyR project, which has many packages useful for using R in the cloud. I concentrate on the Google cloud below, but be sure to check out the other packages if you’re looking to work with AWS or other cloud based services.
-CRAN     Status URL Description     googleAuthR The central workhorse for authentication on Google APIs   googleAnalyticsR Works with Google Analytics Reporting V3/V4 and Management APIs   googleComputeEngineR Launch Virtual Machines within the Google Cloud, via templates or your own Docker containers.
-            </p>
-            <p class="article-more-link">
-                <a href="https://code.markedmondson.me/r-packages/">
-                    Read more
-                </a>
-            </p>
-        </div>
-        <footer class="article-footer">
-    <a data-url="https://code.markedmondson.me/r-packages/" data-id="5e53a7a6681989d05d797d473db51871" class="article-share-link">
-        <i class="fa fa-share"></i>
-        Share
-    </a>
-    
-
-    <script>
-    (function ($) {
-        
-        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
-            __SHARE_BUTTON_BINDED__ = true;
-        } else {
-            return;
-        }
-        $('body').on('click', function() {
-            $('.article-share-box.on').removeClass('on');
-        }).on('click', '.article-share-link', function(e) {
-            e.stopPropagation();
-
-            var $this = $(this),
-                url = $this.attr('data-url'),
-                encodedUrl = encodeURIComponent(url),
-                id = 'article-share-box-' + $this.attr('data-id'),
-                offset = $this.offset(),
-                box;
-
-            if ($('#' + id).length) {
-                box = $('#' + id);
-
-                if (box.hasClass('on')){
-                    box.removeClass('on');
-                    return;
-                }
-            } else {
-                var html = [
-                    '<div id="' + id + '" class="article-share-box">',
-                        '<input class="article-share-input" value="' + url + '">',
-                        '<div class="article-share-links">',
-                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
-                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
-                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
-                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
-                        '</div>',
-                    '</div>'
-                ].join('');
-
-              box = $(html);
-
-              $('body').append(box);
-            }
-
-            $('.article-share-box.on').hide();
-
-            box.css({
-                top: offset.top + 25,
-                left: offset.left
-            }).addClass('on');
-
-        }).on('click', '.article-share-box', function (e) {
-            e.stopPropagation();
-        }).on('click', '.article-share-box-input', function () {
-            $(this).select();
-        }).on('click', '.article-share-box-link', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
-        });
-    })(jQuery);
-    </script>
-</footer>
-
-    </div>
-</article>
-
 
 <nav id="page-nav">
 
@@ -3138,6 +3133,25 @@ CRAN     Status URL Description     googleAuthR The central workhorse for authen
     </h3>
     <div class="widget">
         <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/sending-ga4-events-pubsub/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/sun-outburst.jpg)" alt="Mark Edmondson" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/sending-ga4-events-pubsub/" class="title">Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit</a></p>
+                    <p class="item-date">
+                        <time datetime="2021-11-19 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-11-19</time>
+                    </p>
+                </div>
+            </li>
             
             <li>
                 <div class="item-thumbnail">
@@ -3203,23 +3217,6 @@ CRAN     Status URL Description     googleAuthR The central workhorse for authen
                     <p class="item-title"><a href="https://code.markedmondson.me/data-privacy-gtm/" class="title">Data Privacy Engineering with Google Tag Manager Server Side and Consent Mode</a></p>
                     <p class="item-date">
                         <time datetime="2020-11-27 09:29:50 &#43;0100 CET" itemprop="datePublished">2020-11-27</time>
-                    </p>
-                </div>
-            </li>
-            
-            <li>
-                <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/gtm-serverside-webhooks/" class="thumbnail">
-                    
-                        <span style="background-image:url(https://code.markedmondson.me/banners/gtm-serverside-events.png)" alt="Mark Edmondson" class="thumbnail-image"></span>
-                    
-                    </a>
-                </div>
-                <div class="item-inner">
-                    
-                    <p class="item-title"><a href="https://code.markedmondson.me/gtm-serverside-webhooks/" class="title">Using Google Tag Manager Server Side to Trigger Webhook Events</a></p>
-                    <p class="item-date">
-                        <time datetime="2020-09-04 12:50:50 &#43;0100 &#43;0100" itemprop="datePublished">2020-09-04</time>
                     </p>
                 </div>
             </li>
@@ -3296,7 +3293,7 @@ CRAN     Status URL Description     googleAuthR The central workhorse for authen
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/big-query">
                     big-query
                 </a>
-                <span class="category-list-count">6</span>
+                <span class="category-list-count">7</span>
             </li>
             
             <li class="category-list-item">
@@ -3312,7 +3309,7 @@ CRAN     Status URL Description     googleAuthR The central workhorse for authen
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-functions">
                     cloud-functions
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">5</span>
             </li>
             
             <li class="category-list-item">
@@ -3344,7 +3341,7 @@ CRAN     Status URL Description     googleAuthR The central workhorse for authen
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-analytics">
                     google-analytics
                 </a>
-                <span class="category-list-count">12</span>
+                <span class="category-list-count">13</span>
             </li>
             
             <li class="category-list-item">
@@ -3392,7 +3389,15 @@ CRAN     Status URL Description     googleAuthR The central workhorse for authen
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-tag-manager">
                     google-tag-manager
                 </a>
-                <span class="category-list-count">7</span>
+                <span class="category-list-count">8</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/pubsub">
+                    pubsub
+                </a>
+                <span class="category-list-count">1</span>
             </li>
             
             <li class="category-list-item">
@@ -3400,7 +3405,7 @@ CRAN     Status URL Description     googleAuthR The central workhorse for authen
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/python">
                     python
                 </a>
-                <span class="category-list-count">5</span>
+                <span class="category-list-count">6</span>
             </li>
             
             <li class="category-list-item">

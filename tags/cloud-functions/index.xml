@@ -6,10 +6,21 @@
     <description>Recent content in cloud-functions on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
-    <lastBuildDate>Fri, 04 Sep 2020 12:50:50 +0100</lastBuildDate>
+    <lastBuildDate>Fri, 19 Nov 2021 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://code.markedmondson.me/tags/cloud-functions/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit</title>
+      <link>https://code.markedmondson.me/sending-ga4-events-pubsub/</link>
+      <pubDate>Fri, 19 Nov 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://code.markedmondson.me/sending-ga4-events-pubsub/</guid>
+      <description>&lt;p&gt;&lt;em&gt;Image from &lt;a href=&#34;https://solarsystem.nasa.gov/resources/758/brief-outburst/?category=solar-system_sun&#34;&gt;https://solarsystem.nasa.gov/resources/758/brief-outburst/?category=solar-system_sun&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;With Google Tag Manager Server-side (GTM-SS), the scope on what you can do with your GA4 events is much enhanced, since using GTM-SS you have the ability to interact easily with other GCP services, in particular easier Google authentication.  This integration can allow you to enrich your data streams or send your GA4 data to different locations other than the Google Marketing Platform.  The first example of this has been using the BigQuery API in your GTM-SS templates to export your event data, but what if you need your event data on a more real-time basis?  For that, there is &lt;a href=&#34;https://cloud.google.com/pubsub/docs/overview&#34;&gt;Google Pub/Sub&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Using Google Tag Manager Server Side to Trigger Webhook Events</title>

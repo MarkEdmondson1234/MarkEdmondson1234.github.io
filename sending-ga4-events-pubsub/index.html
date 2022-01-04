@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <title>Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit &middot; Mark Edmondson</title>
+    <meta name="generator" content="Hugo 0.55.5" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Mark Edmondson">
+    
+      <meta name="description" content="The code bit of the blog">
+    
+    
+    <link rel="canonical" href="https://code.markedmondson.me/sending-ga4-events-pubsub/"/>
+    <link rel="icon" href="https://code.markedmondson.me/favicon.ico">
+    <link rel="apple-touch-icon" href="https://code.markedmondson.me/apple-touch-icon.png"/>
+    <link rel="stylesheet" href="https://code.markedmondson.me/css/style.css">
+    <link rel="stylesheet" href="https://code.markedmondson.me/css/github.css" rel="stylesheet" id="theme-stylesheet">
+    <link rel="stylesheet" href="https://code.markedmondson.me/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://code.markedmondson.me/fancybox/jquery.fancybox.css">
+    
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+    <meta property="og:title" content="Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit" />
+<meta property="og:description" content="Image from https://solarsystem.nasa.gov/resources/758/brief-outburst/?category=solar-system_sun
+
+With Google Tag Manager Server-side (GTM-SS), the scope on what you can do with your GA4 events is much enhanced, since using GTM-SS you have the ability to interact easily with other GCP services, in particular easier Google authentication.  This integration can allow you to enrich your data streams or send your GA4 data to different locations other than the Google Marketing Platform.  The first example of this has been using the BigQuery API in your GTM-SS templates to export your event data, but what if you need your event data on a more real-time basis?  For that, there is Google Pub/Sub." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://code.markedmondson.me/sending-ga4-events-pubsub/" />
+<meta property="article:published_time" content="2021-11-19T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2021-11-19T00:00:00&#43;00:00"/>
+
+    
+    
+<meta itemprop="name" content="Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit">
+<meta itemprop="description" content="Image from https://solarsystem.nasa.gov/resources/758/brief-outburst/?category=solar-system_sun
+
+With Google Tag Manager Server-side (GTM-SS), the scope on what you can do with your GA4 events is much enhanced, since using GTM-SS you have the ability to interact easily with other GCP services, in particular easier Google authentication.  This integration can allow you to enrich your data streams or send your GA4 data to different locations other than the Google Marketing Platform.  The first example of this has been using the BigQuery API in your GTM-SS templates to export your event data, but what if you need your event data on a more real-time basis?  For that, there is Google Pub/Sub.">
+
+
+<meta itemprop="datePublished" content="2021-11-19T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2021-11-19T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="3245">
+
+
+
+<meta itemprop="keywords" content="google-analytics,google-tag-manager,cloud-functions,python,big-query,pubsub," />
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit"/>
+<meta name="twitter:description" content="Image from https://solarsystem.nasa.gov/resources/758/brief-outburst/?category=solar-system_sun
+
+With Google Tag Manager Server-side (GTM-SS), the scope on what you can do with your GA4 events is much enhanced, since using GTM-SS you have the ability to interact easily with other GCP services, in particular easier Google authentication.  This integration can allow you to enrich your data streams or send your GA4 data to different locations other than the Google Marketing Platform.  The first example of this has been using the BigQuery API in your GTM-SS templates to export your event data, but what if you need your event data on a more real-time basis?  For that, there is Google Pub/Sub."/>
+<meta name="twitter:site" content="@HoloMarkeD"/>
+
+    
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://gtm2.markedmondson.me/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WFFMBH');</script>
+
+
+
+    <script src="https://code.markedmondson.me/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+
+
+<div id="container">
+	<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="https://code.markedmondson.me/" id="logo">
+          
+          <i class="logo" style="background-image: url('https://code.markedmondson.me/images/greenhand.png')"></i>
+          
+          <span class="site-title">Mark Edmondson</span>
+      </a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="https://code.markedmondson.me/">Home</a>
+          
+          
+          
+          
+          
+          
+
+          
+          <a class="main-nav-link" href="/r-packages/">My R Packages</a>
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.markedmondson.me/posts/">Non-code blog</a>
+          
+          
+          
+          <a class="main-nav-link" href="https://www.markedmondson.me/static/presentations/">Past Presentations</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="https://code.markedmondson.me/images/gde_avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+              <input type="hidden" name="sitesearch" value="https://code.markedmondson.me/" />
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="https://code.markedmondson.me/">Home</a></td>
+          
+          
+          
+          
+          
+          
+
+          
+          <td><a class="main-nav-link" href="/r-packages/">My R Packages</a></td>
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.markedmondson.me/posts/">Non-code blog</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="https://www.markedmondson.me/static/presentations/">Past Presentations</a></td>
+          
+          
+          <td>
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" class="search-form-input" placeholder="Search">
+          <input type="hidden" name="sitesearch" value="https://code.markedmondson.me/" />
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+   	
+   	<div class="outer">
+   	
+    	<aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      
+      <img id="avatar" src="https://code.markedmondson.me/images/gde_avatar.jpg">
+      
+      <h2 id="name">Mark Edmondson</h2>
+      <h3 id="title">Coding in digital analytics</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Copenhagen, Denmark</span>
+      
+          <a id="follow" href="https://github.com/MarkEdmondson1234">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+      <div class="article-info-block">
+        32
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          18
+        
+        <span>
+            Tags
+        </span>
+      </div>
+    </div>
+    <div class="profile-block social-links">
+      <table>
+        <tr>
+          
+<td><a href="//github.com/MarkEdmondson1234" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/MarkEdmondsonAtHome" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//linkedin.com/in/markpeteredmondson" target="_blank" title="LinkedIn"><i class="fa fa-linkedin"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/HoloMarkeD" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="https://code.markedmondson.me/index.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</aside>
+
+    
+
+    <section id="main">
+    
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+            <img src="https://code.markedmondson.me/banners/sun-outburst.jpg" class="article-banner">
+        
+
+        <header class="article-header">
+    <a href="https://code.markedmondson.me/sending-ga4-events-pubsub/">
+    <h1 class="article-title" itemprop="name">
+        Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit
+    </h1>
+    </a>
+    <div class="article-meta">
+
+        
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2021-11-19 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-11-19</time>
+            &middot;
+            3245
+            words
+            &middot;
+            16
+            minute read
+        </div>
+        
+        
+            
+            
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/google-analytics">google-analytics</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/google-tag-manager">google-tag-manager</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/cloud-functions">cloud-functions</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/python">python</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/big-query">big-query</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/pubsub">pubsub</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+        <div class="article-entry" itemprop="articleBody">
+            <p><em>Image from <a href="https://solarsystem.nasa.gov/resources/758/brief-outburst/?category=solar-system_sun">https://solarsystem.nasa.gov/resources/758/brief-outburst/?category=solar-system_sun</a></em></p>
+
+<p>With Google Tag Manager Server-side (GTM-SS), the scope on what you can do with your GA4 events is much enhanced, since using GTM-SS you have the ability to interact easily with other GCP services, in particular easier Google authentication.  This integration can allow you to enrich your data streams or send your GA4 data to different locations other than the Google Marketing Platform.  The first example of this has been using the BigQuery API in your GTM-SS templates to export your event data, but what if you need your event data on a more real-time basis?  For that, there is <a href="https://cloud.google.com/pubsub/docs/overview">Google Pub/Sub</a>.</p>
+
+<p>Pub/Sub is a way for you to react to your GA4 real-time event data with any GCP system such as Dataflow, Cloud Run, Cloud Build or Cloud Functions.  This post will look at how to implement it and some applications.</p>
+
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/cvu53CnZmGI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<h2 id="why-send-ga4-data-to-pub-sub">Why send GA4 data to Pub/Sub</h2>
+
+<p>Lukas Oldenburg has written about this before with regards to using <a href="https://lukas-oldenburg.medium.com/use-google-tag-manager-server-side-for-visitor-stitching-by-querying-a-gcp-database-in-real-time-644001068a1c">GTM-SS for visitor stitching</a> and I&rsquo;ve touched on it with my using <a href="https://code.markedmondson.me/gtm-serverside-webhooks/">GTM-SS to trigger Slack webhook events</a> so this post expands upon those as I&rsquo;ve worked with it over the last year.   This latest iteration is I think the most robust so far - expandable to many applications and using the right tool for each job via PubSub, Cloud build and GTM Clients.</p>
+
+<p>Once you have your data flowing through Pub/Sub, you can route it directly to a whole slew of GCP services, such as Cloud Functions, Cloud Run, DataFlow, BigQuery, Cloud Build and others. These services can do more above and beyond what a JavaScript tag or client can do, so subsequently you can expand the horizons on what your digital analytics data can do.</p>
+
+<p>This can include triggering workflows for:</p>
+
+<ul>
+<li>sending emails or triggers to yourself (A customer just bought this!)</li>
+<li>sending something to the customer themselves if you know them (You just bought this!)</li>
+<li>Transforming and filtering your GA4 data, perhaps by using the Data Loss Prevention API to redact credit card numbers, email address etc before it hits BigQuery</li>
+<li>Enriching GA4 data with other data (such as 1st or 2nd party data)</li>
+</ul>
+
+<p>For my own blog I didn&rsquo;t know anything that would be actually useful so worth writing about, until I came across an idea of sending your own data to you in an email for your blog browsing history (yes dear reader, YOUR data).  For this I would want to cross reference your <code>cookie_id</code> (you can see this value if you examine your cookies as you read this page) with an email form.  This I think would be very nice to be available on more websites, giving the privacy climate and GDPR philosophy of control of your own data - a website who let you do this demonstrates trust I think.  I can also think e-commerce websites would benefit from a form to easily send customers all the products they have browsed in their historic sessions, in a kind of automatically created shopping list.</p>
+
+<p>For this use case I&rsquo;ll show how GA4, GTM-SS and GCP can achieve this so as perhaps you can develop it for something useful for your own website.</p>
+
+<p>The dataflow will be:</p>
+
+<ul>
+<li>Web form with email push to GTM dataLayer for event <code>ga4_email</code></li>
+<li>Create a GA4 event from the dataLayer event <code>ga4_email</code> and send to my GTM-SS</li>
+<li>Use a PubSub tag in my GTM-SS to send the <code>ga4_email</code> data to a PubSub topic: <code>gtm-ss-form_submit</code></li>
+<li>Trigger a Cloud Build that will cross reference your cookie_id history in the GA4 BigQuery export, then send it to the email you have provided.</li>
+</ul>
+
+<p><img src="images/gtm-form.png" alt="" />
+<em>Data architecture for code included in this blog post</em></p>
+
+<p>This is using technology I am writing about in the upcoming <a href="https://code.markedmondson.me/writing-a-book/">Learning Google Analytics - GA4 cloud applications book</a>.  I&rsquo;ll try to highlight what part of the data architecture I&rsquo;m talking about via some red rectangles.</p>
+
+<h3 id="triggering-email-flows-with-ga4">Triggering email flows with GA4</h3>
+
+<p>The first section is about how to get the data from the web form to GTM-SS.</p>
+
+<p><img src="images/gtm-form-1.png" alt="" />
+<em>This section tackles moving data from the dataLayer to GTM-SS</em></p>
+
+<p>A new form has appeared on my blog that allows you to get the GA4 browsing history of your cookie_id sent to your email.  This form takes the email you put in it and pushes it to the <code>dataLayer()</code> in an event called <code>ga4_email</code>, and should be similar to other website form tracking.</p>
+
+<pre><code class="language-html">&lt;script&gt;
+  function submitDL(value){
+    dataLayer.push({'event':'ga4_email','ga4_email':value});
+    document.getElementById('email').value = 'Submitted! See inbox'
+    var button = document.getElementById('email_button');
+    button.disabled = true;
+  }
+    
+&lt;/script&gt;
+&lt;div&gt;
+    &lt;input type=&quot;email&quot; name=&quot;email&quot;  id=&quot;email&quot;
+      required 
+      minlength=&quot;8&quot;
+      placeholder=&quot;you@email.com&quot;&gt;
+    &lt;button id='email_button'
+      onclick=&quot;javascript:submitDL(document.getElementById('email').value);&quot;
+     &gt;Send&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+
+<p><em>Code example 1: HTML to set up a simple form that will send the contents to the GTM dataLayer</em></p>
+
+<p>This makes the form to the right → or at the bottom of the page on mobile ↓.</p>
+
+<p><img src="images/blog-email-submit.png" alt="" />
+<em>rendered HTML form in the blog&rsquo;s right sidebar</em></p>
+
+<p>I send the email you fill in to the GA4 tag - oh no!  I&rsquo;m not allowed to send PII into Google Analytics though right?  Yes - so the GA4 tag is only used to send in the data to GTM-SS (so we only need one tag firing), and then we exclude that parameter in the GA4 server-side tag:</p>
+
+<p><img src="images/ga4-redact-form-submit.png" alt="" />
+<em>Redacting the ga4_email event from the GA4 tag to avoid sending PII</em></p>
+
+<p>We would like to send the email to a more secure platform, but piggy back off the GA4 tag.  This is much in keeping with my new philosophy for server-side tracking, trying to minimise the amount of tags browser-side and moving the work to the server to improve security and performance.</p>
+
+<h2 id="sending-the-ga4-ga4-email-to-gtm-ss">Sending the GA4 ga4_email to GTM-SS</h2>
+
+<p>Within GTM browser side I use Simo&rsquo;s handy <a href="https://www.simoahava.com/custom-templates/gtag-get-api/">GTAG GET API tag template</a> to pick up the dataLayer value and send it as a GA4 event tag. I need the <code>client_id</code>, <code>session_id</code> and the value of the <code>ga4_email</code> dataLayer variable, and trigger the GA4 tag to fire on the dataLayer&rsquo;s <code>ga4_email</code> event that the email submission created.  The GA4 tag is using the GA settings that send to my GTM-SS instance on <code>https://gtm2.markedmondson.me</code> (the <a href="https://code.markedmondson.me/gtm-serverside-cloudrun/">GTM-SS deployed on Cloud Run</a>)</p>
+
+<p><img src="images/gtm-ga4-fetch-from-data.png" alt="" />
+<em>Setting up the GA4 event tag for the ga4_email event</em></p>
+
+<p>This sends in the data into GTM-SS with the value of the email and the other Ids I&rsquo;ll use down stream.</p>
+
+<p><img src="images/gtm-ga4-send-hit.png" alt="" />
+<em>Debugging preview showing successful sending of the ga4_email event from the client side GTM</em></p>
+
+<h3 id="gtm-serverside-tag-for-ga4-events-http-cloud-function">GTM-ServerSide Tag for GA4 Events -&gt; HTTP Cloud Function</h3>
+
+<p><img src="images/gtm-form-2.png" alt="" />
+<em>This section sends the data hitting GTM-SS to a Cloud Function</em></p>
+
+<p>Once the event hits GTM-SS, we want to turn that event data into a PubSub topic.  I&rsquo;ll do this with the GTM-SS tag template below, which assumes you have deployed a HTTP Cloud Function we will cover in the next section.</p>
+
+<p>When creating tags in GTM Server-Side you need to make them via the template feature with a sandboxed version of JavaScript.  A possible implementation is shown below:</p>
+
+<pre><code class="language-js">const getAllEventData = require('getAllEventData');
+const log = require(&quot;logToConsole&quot;);
+const JSON = require(&quot;JSON&quot;);
+const sendHttpRequest = require('sendHttpRequest');
+
+log(data);
+
+const postBody = JSON.stringify(getAllEventData());
+
+log('postBody parsed to:', postBody);
+
+const url = data.endpoint + '/' + data.topic_path;
+
+log('Sending event data to:' + url);
+
+const options = {method: 'POST', 
+                 headers: {'Content-Type':'application/json'}};
+
+// Sends a POST request
+sendHttpRequest(url, (statusCode) =&gt; {
+  if (statusCode &gt;= 200 &amp;&amp; statusCode &lt; 300) {
+    data.gtmOnSuccess();
+  } else {
+    data.gtmOnFailure();
+  }
+}, options, postBody);
+</code></pre>
+
+<p><em>Code example 2: GTM Server Side template code for a tag to send all GTM-SS event data to your HTTP endpoint</em></p>
+
+<p>The GTM tag calls for two data fields to be added:</p>
+
+<ul>
+<li><p><em>data.endpoint</em>  - This will be the URL of your deployed Cloud Function given to you after your deployment, which will look something like <code>https://europe-west3-project-id.cloudfunctions.net/http-to-pubsub</code></p></li>
+
+<li><p><em>data.topic_path</em> - This will be the name of the Pub/Sub topic it will create.</p></li>
+</ul>
+
+<p>Its a small template, as all it really does is forward on the event to the HTTP endpoint.</p>
+
+<p>We will want a tag created from this template to trigger on the <code>ga4_email</code> event sent in via GA4 in the previous section. You could also trigger it on every event for other downstream purposes, such as sending everything to DataFlow or BigQuery, but we only need it for this particular event.</p>
+
+<p><img src="images/form-submit-trigger.png" alt="" />
+<em>A trigger for ga4_email in GTM-SS for the PubSub tag</em></p>
+
+<p>You can then create the tag from the template and trigger it with the above, filling in the HTTP endpoint for the Cloud Function we will talk about next.  I guess if you are following this in chronological order just save the tag for now and come back and fill in the HTTP value.  I had one I had prepared earlier (for the book) so I can just fill it in here.</p>
+
+<p>Its a nice process as it will create the PubSub topic for you based off the name of the URL path you put in the GTM-SS tag configuration, and you can control what data gets published via the GTM triggers so all familiar if you are used to configuring other tags.</p>
+
+<p><img src="images/form_submit_to_pubsub.png" alt="" />
+<em>Setting up the PubSub GTM-SS tag</em></p>
+
+<p>Now when you publish and debug via preview you should see the GTM client side sending the event, and the GTM server-side tag responding with the PubSub tag:</p>
+
+<p><img src="images/gtm-pubsub-tag-debug.png" alt="" />
+<em>A debug preview session showing a successful GTM-SS tag triggered</em></p>
+
+<h3 id="cloud-function-for-http-pub-sub">Cloud Function for HTTP-&gt; Pub/Sub</h3>
+
+<p><img src="images/gtm-form-3.png" alt="" />
+<em>This section turns the HTTP Cloud Function request into a PubSub topic</em></p>
+
+<p>Next the data will move to the Cloud Function that will turn the HTTP data sent from GTM-SS (or any other source if you want) and turn it into a PubSub topic.  This function has been created to be as generic as possible so will pass on data you push into it and create PubSub topics as necessary.</p>
+
+<p>The Cloud Function is written in Python 3.9, and will take any HTTP POST request and turn its body data into a PubSub topic the same name as its endpoint path (e.g. POST to <code>/hello-mum</code> with a HTTP body of <code>{&quot;mydata&quot;:{&quot;key1&quot;:&quot;value1&quot;}}</code> will turn it into a Pub/Sub topic of the same with the data as the event message for consumption by downstream subscriptions - the code to achieve this is as shown below:</p>
+
+<pre><code class="language-python">import os, json
+from google.cloud import pubsub_v1 # google-cloud-pubsub==2.8.0
+
+def http_to_pubsub(request):
+    request_json = request.get_json()
+
+    print('Request json: {}'.format(request_json))
+
+    if request_json:
+        res = trigger(json.dumps(request_json).encode('utf-8'), request.path)
+        return res
+    else:
+        return 'No data found', 204
+
+
+def trigger(data, topic_name):
+  publisher = pubsub_v1.PublisherClient()
+
+  topic_name = 'projects/{project_id}/topics{topic}'.format(
+    project_id=os.getenv('GCP_PROJECT'),
+    topic=topic_name,
+  )
+
+  print ('Publishing message to topic {}'.format(topic_name))
+  
+  # create topic if necessary
+  try:
+    future = publisher.publish(topic_name, data)
+    future_return = future.result()
+    print('Published message {}'.format(future_return))
+
+    return future_return
+
+  except Exception as e:
+    print('Topic {} does not exist? Attempting to create it'.format(topic_name))
+    print('Error: {}'.format(e))
+
+    publisher.create_topic(name=topic_name)
+    print ('Topic created ' + topic_name)
+
+    return 'Topic Created', 201
+</code></pre>
+
+<p><em>Code example 3: This Cloud Function will take a HTTP hit and turn the event data into a Pub/Sub topic of the same name as the endpoint path (e.g. POST to <code>/hello-mum</code> with a HTTP body of <code>{&quot;mydata&quot;:{&quot;key1&quot;:&quot;value1&quot;}}</code> creates a PubSub topic called <code>hello-mum</code> if required)</em></p>
+
+<p>Remember the <code>requirements.txt</code> file in the same folder with <code>google-cloud-pubsub==2.8.0</code> to pin the version of the PubSub library, and use the entry point as the function <code>http_to_pubsub()</code>.</p>
+
+<p>You could paste this code in the WebUI for Cloud Functions, or the code can be deployed via <code>gcloud</code> as shown below, which once complete will give you a URL that you can use to POST your data to from any system.</p>
+
+<pre><code class="language-sh">gcloud functions deploy http-to-pubsub \
+        --entry-point=http_to_pubsub \
+        --runtime=python37 \
+        --region=europe-west3 \
+        --trigger-http \
+        --allow-unauthenticated
+</code></pre>
+
+<p><em>Deploying the Python Cloud Function.  This will create a HTTP URL for you to use in other applications such as GTM-SS</em></p>
+
+<p>I can be more relaxed about authentication since this will only be exposed server-side, although you could put more restrictions on it if you have a need such as an API key.</p>
+
+<p>Once deployed you should have a URL you can put into the GTM-SS PubSub tag from the earlier section, of the form <code>https://region-project.cloudfunctions.net/http-to-pusub</code>.</p>
+
+<p>Take that URL and plop it into the configuration of the PubSub GTM-SS tag, publish the tag and then make a few test form submissions. You should pretty quickly (within 60 seconds) see the hits in the PubSub queue and invoking your Cloud Function:</p>
+
+<p><img src="images/cloud-function-metrics.png" alt="" />
+<em>Metrics for the Cloud function being invoked from HTTP requests</em></p>
+
+<p>Subsequently you should see <a href="https://console.cloud.google.com/cloudpubsub/topic/list">a listing for PubSub topic created</a> with the same name as the URL path stem from the GTM-SS config (<code>gtm-ss-form_submit</code> in my example).  I tend to make a simple subscription to the PubSub topics called <code>topic-debug</code> so I can examine the messages sent.  Doing that I see message content for the <code>ga4_email</code> in my PubSub message queue:</p>
+
+<p><img src="images/pubsub-messages-recieved.png" alt="" />
+<em>Messages received in the PubSub Topic</em></p>
+
+<p>This PubSub topic can be used for a variety of purposes but for this example I&rsquo;ll consume the data to trigger a Cloud Build that will send the GA4 data to the email provided.  I choose Cloud Build as its very flexible so long as you have a Docker container to run your code within.</p>
+
+<h3 id="cloud-build-for-fetching-bigquery-data-sending-the-email">Cloud Build for fetching BigQuery data, sending the email</h3>
+
+<p><img src="images/gtm-form-4.png" alt="" />
+<em>This section takes the data coming in from the PubSub topic and runs a script that queries BigQuery and sends an email</em></p>
+
+<p>Now you have the event coming in to Pub/Sub, you can take that event and pass it to other systems.  For this example, we will use it to trigger Cloud Build using a feature I just added to <code>googleCloudRunner</code>, where you can pass parameters from a PubSub message into a Cloud Build to parametrise its action (some documentation on <a href="https://code.markedmondson.me/googleCloudRunner/articles/cloudbuild.html#pub-sub-triggered-cloud-builds">Pub/Sub triggered cloud builds here</a>).</p>
+
+<p>It is a bit slower than other choices though, since it needs to download and run the docker containers involved.  For more responsiveness you may want to look at DataFlow or Cloud Run/Functions.</p>
+
+<p>The form of the PubSub message coming in is something like the below example which is an event from myself checking it in the GTM preview:</p>
+
+<pre><code class="language-json">{&quot;x-ga-protocol_version&quot;: &quot;2&quot;, 
+&quot;x-ga-measurement_id&quot;: &quot;G-43MDXK6CLZ&quot;, 
+&quot;x-ga-gtm_version&quot;: &quot;2rec10&quot;, 
+&quot;x-ga-page_id&quot;: 761826058, 
+&quot;screen_resolution&quot;: &quot;2560x1440&quot;, 
+&quot;x-ga-system_properties&quot;: {&quot;dbg&quot;: &quot;1&quot;}, 
+&quot;language&quot;: &quot;en-gb&quot;, 
+&quot;client_id&quot;: &quot;1768696203.151234345&quot;, 
+&quot;x-ga-request_count&quot;: 5, 
+&quot;page_location&quot;: &quot;https://code.markedmondson.me/?gtm_debug=1638524719562&quot;, 
+&quot;page_referrer&quot;: &quot;https://tagassistant.google.com/&quot;, 
+&quot;page_title&quot;: &quot;Mark Edmondson&quot;, 
+&quot;ga_session_id&quot;: &quot;1638520154&quot;, 
+&quot;ga_session_number&quot;: 345, 
+&quot;x-ga-mp2-seg&quot;: &quot;1&quot;, 
+&quot;event_name&quot;: &quot;ga4_email&quot;, 
+&quot;engagement_time_msec&quot;: 1, 
+&quot;debug_mode&quot;: &quot;true&quot;, 
+&quot;custom_session_id&quot;: &quot;1638520154.&quot;, 
+&quot;ga4_email&quot;: &quot;an_email@gmail.com&quot;, 
+&quot;ip_override&quot;: &quot;123.456.789.876&quot;, 
+&quot;user_agent&quot;: &quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:94.0) Gecko/20100101 Firefox/94.0&quot;, 
+&quot;x-ga-gcs-origin&quot;: &quot;not-specified&quot;, 
+&quot;user_id&quot;: &quot;xloAW6qkF2NSc0xqQ45otXXXXXXpYGY=&quot;} 
+</code></pre>
+
+<p><em>Sample JSON from a PubSub event populated by the GA4 tag</em></p>
+
+<p>For the script I only need the <code>ga4_email</code> email address and the <code>client_id</code> which is the ID in the cookie.  Following the documentation for <a href="https://cloud.google.com/build/docs/configuring-builds/use-bash-and-bindings-in-substitutions">Cloud Build payload bindings</a> these can be used within a PubSub triggered Cloud Build via:</p>
+
+<pre><code class="language-yaml">steps:
+- name: 'rocker/r-base'
+  id: Echo PubSub vars
+  args: [&quot;Rscript&quot;, &quot;-e&quot;, &quot;paste('From PubSub message:', '${_EMAIL}', '${_CLIENT_ID}')&quot;]
+substitutions:
+  _EMAIL: '$(body.message.data.ga4_email)'
+  _CLIENT_ID: '$(body.message.data.client_id)'
+</code></pre>
+
+<p><em>Example cloudbuild.yml for Cloud Build to pick up values from the PubSub message that triggers the build</em></p>
+
+<p>I used an R step just to demo it can be any language you use within it.</p>
+
+<p>I&rsquo;ll just deploy that first quickly in the console to see if its coming in ok - setting up a new Cloud Build invoked by the <code>gtm-ss-form_submit</code> PubSub topic and using the in-line editor to put in the YAML:</p>
+
+<p><img src="images/cloud-build-pubsub-trigger-test.png" alt="" />
+<em>Setting up a Cloud Build trigger using the inline configuration within the GCP console</em></p>
+
+<p>I go to my website and submit a test email, and within a few seconds I see a <a href="https://console.cloud.google.com/cloud-build/builds">build in the log for the trigger I created</a>.  The build log runs the R code and it echoes back the form data - we are nearly there!</p>
+
+<p><img src="images/cloud-build-pubsub-trigger-test-pass.png" alt="" />
+<em>Inspecting the Cloud Build logs to see if the build trigger worked</em></p>
+
+<p>Now I only need an script to take my variables and do &ldquo;stuff&rdquo;, and since we&rsquo;re on Cloud build it can be any language since its Docker container led in each step.</p>
+
+<p>The SQL for the report I want is generated by this:</p>
+
+<pre><code class="language-sql">SELECT
+    timestamp_micros(event_timestamp) as event_timestamp,
+    user_pseudo_id ,
+    event_name,
+    TIMESTAMP_MICROS(user_first_touch_timestamp) as first_touch,
+    (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'page_location') as page_location,
+    (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'page_referrer') as page_referrer
+FROM
+    `my-project.analytics_206671234.events_*`
+WHERE
+    _table_suffix between format_date('%Y%m%d',date_sub(current_date(), interval 90 day)) 
+       and format_date('%Y%m%d',date_sub(current_date(), interval 0 day))
+    and event_name = 'page_view' 
+    and user_pseudo_id = '${_CLIENT_ID}'
+</code></pre>
+
+<p><em>SQL to return the page_view events for a specific client_id from a BigQuery GA4 export</em></p>
+
+<p>I have a <code>gcr.io/gcer-public/googleauthr-verse</code> docker container that contains all of my R packages, including <code>bigQueryR</code> that can query the GA4 dataset, and I&rsquo;ve added <a href="https://pkgs.rstudio.com/blastula"><code>blastula</code> a package for sending nice emails</a> using <a href="https://code.markedmondson.me/googleCloudRunner/reference/cr_deploy_docker_trigger.html"><code>googleAuthR::cr_deploy_docker_trigger()</code></a> to create it, giving me a <code>gcr.io/gcer-public/googleauthr-blast</code> docker image I can use as the R environment for my build steps.  I have to say <code>googleCloudRunner</code> has saved me personally a lot of time automating set-ups like this, and is my favourite tool.</p>
+
+<h4 id="calling-bigquery">Calling BigQuery</h4>
+
+<p>Now I have my Docker environment set-up, I need the script to call BigQuery and send the email.  <a href="https://code.markedmondson.me/bigQueryR/">bigQueryR</a> can take advantage of itself running on Cloud Build to auto-authenticate itself so long as you add the Cloud Build email as a BigQuery Admin in the IAM.</p>
+
+<pre><code class="language-r">library(bigQueryR)
+googleAuthR::gar_gce_auth()
+
+# the GA4 dataset
+bqr_global_dataset(&quot;analytics_206670707&quot;)
+
+query_client_id &lt;- function(client_id, sql_file){
+
+  # read in SQL file and interpolate client_id
+  sql &lt;- readChar(sql_file, file.size(sql_file))
+  sql_client_id &lt;- sprintf(sql, client_id)
+  
+  results &lt;- bqr_query(
+    query = sql_client_id,
+    useLegacySql=FALSE
+  )
+  
+  if(nrow(results) &gt; 0){
+    message(&quot;Writing &quot;, nrow(results), &quot; rows to bigquery_results.csv&quot;)
+    write.csv(results, file = &quot;bigquery_results.csv&quot;, row.names = FALSE)
+  } else {
+    message(&quot;No data found for &quot;, client_id)
+  }
+  
+  TRUE
+
+}
+</code></pre>
+
+<p><em>R code running in a Cloud Build step to query BigQuery for the client_id data and save to a CSV</em></p>
+
+<p>You could replace this with <code>gcloud</code> or <code>python</code> or any code you like to query BigQuery, I just have this all handy from other work so its a quick start up time to reuse it.</p>
+
+<h4 id="sending-the-email">Sending the email</h4>
+
+<p>The <a href="https://github.com/rstudio/blastula">R library blastula</a> has the ability to make markdown emails which render to <a href="https://solutions.rstudio.com/r/blastula/">beautiful HTML emails</a>, so I use that to generate the email itself.  This email doesn&rsquo;t showcase its capabilities but when I expand on this privately it will be the framework to use.</p>
+
+<pre><code class="language-r">library(blastula)
+creds &lt;- creds_file(&quot;/workspace/blastula_gmail_creds&quot;)
+email %&gt;%
+  smtp_send(
+    to = &quot;jane_doe@example.com&quot;,
+    from = &quot;joe_public@example.net&quot;,
+    subject = &quot;Testing the `smtp_send()` function&quot;,
+    credentials = creds
+  )
+</code></pre>
+
+<h4 id="build-yaml-to-coordinate-the-steps">Build yaml to coordinate the steps</h4>
+
+<p>I then used <code>googleCloudRunner</code> to generate the YAML below for my Cloud Build, that uses the Docker containers and scripts within to</p>
+
+<ul>
+<li>Download my secret email credentials</li>
+<li>Query BigQuery for the data for the client_id</li>
+<li>Send an email with the BigQuery data to the user&rsquo;s email</li>
+</ul>
+
+<pre><code class="language-yaml">steps:
+  - name: gcr.io/cloud-builders/gcloud
+    args:
+      - '-c'
+      - &gt;-
+        gcloud secrets versions access latest --secret=blastula_gmail_creds  &gt;
+        /workspace/blastula_gmail_creds
+    entrypoint: bash
+  - name: gcr.io/gcer-public/googleauthr-blast
+    env:
+      - BQ_DEFAULT_PROJECT_ID=$PROJECT_ID
+      - 'CLIENT_ID=${_CLIENT_ID}'
+    args:
+      - Rscript
+      - /workspace/bigquery-clientid.R
+  - name: gcr.io/gcer-public/googleauthr-blast
+    env:
+      - 'EMAIL=${_EMAIL}'
+    args:
+      - Rscript
+      - /workspace/send_email.R
+substitutions:
+  _CLIENT_ID: $(body.message.data.client_id)
+  _EMAIL: $(body.message.data.ga4_email)
+</code></pre>
+
+<h2 id="summary">Summary</h2>
+
+<p>This may have been a wild tour through a GA4 data pipeline, but I hope if not followed in full at least components of it may spark your interest for your own use cases.  The advantages of involving PubSub in your workflows is having this loosely coupled message queue that micro-services that can all react to - for instance I could quite easily swap or add DataFlow as my activation channel, and quickly add new GA4 events to the stream since the GTM tag, Cloud Function etc. are all set up already.  With the tools in the tool box such as the Cloud Function and the GTM-SS tag template I am ready to respond to many other use cases taht come up and I anticipate 2022 will make use of these heavily.</p>
+        </div>
+        <footer class="article-footer">
+    <a data-url="https://code.markedmondson.me/sending-ga4-events-pubsub/" data-id="44bbf3eb49f73a64efc3e3207a5504c0" class="article-share-link">
+        <i class="fa fa-share"></i>
+        Share
+    </a>
+    
+
+    <script>
+    (function ($) {
+        
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+    </script>
+</footer>
+
+    </div>
+
+    
+<nav id="article-nav">
+    
+    <a href="https://code.markedmondson.me/writing-a-book/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">
+          Older
+      </strong>
+      <div class="article-nav-title">Why and How I&#39;m writing a GA4 book called &#39;Learning Google Analytics&#39; for O&#39;Reilly</div>
+    </a>
+    
+
+    
+</nav>
+
+
+</article>
+
+
+<section id="comments">
+    <div id="utterances_thread">
+        <script src="https://utteranc.es/client.js"
+    repo="MarkEdmondson1234/markedmondson.me-hugo"
+    issue-term="pathname"
+    label="comment"
+    theme="github-light"
+    crossorigin="anonymous"
+    async>
+</script>
+    </div>
+</section>
+
+
+    </section>
+
+   	
+    	<aside id="sidebar">
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/sending-ga4-events-pubsub/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/sun-outburst.jpg)" alt="Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/sending-ga4-events-pubsub/" class="title">Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit</a></p>
+                    <p class="item-date">
+                        <time datetime="2021-11-19 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-11-19</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/writing-a-book/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/proto-book.png)" alt="Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/writing-a-book/" class="title">Why and How I&#39;m writing a GA4 book called &#39;Learning Google Analytics&#39; for O&#39;Reilly</a></p>
+                    <p class="item-date">
+                        <time datetime="2021-10-23 11:04:50 &#43;0100 &#43;0100" itemprop="datePublished">2021-10-23</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/googleanalyticsr-100-release/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/GA4-090.png)" alt="Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/googleanalyticsr-100-release/" class="title">googleAnalyticsR v1.0.0 - GA4 API, Automatic Shiny Dashboarding, Improved UI</a></p>
+                    <p class="item-date">
+                        <time datetime="2021-04-17 09:29:50 &#43;0100 &#43;0100" itemprop="datePublished">2021-04-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/edmondlytica/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/edmonlytica-shiny1.png)" alt="Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/edmondlytica/" class="title">Creating your own cookieless analytics tool with GTM Server Side, Cloud Run, BigQuery and Shiny</a></p>
+                    <p class="item-date">
+                        <time datetime="2021-03-21 09:29:50 &#43;0100 CET" itemprop="datePublished">2021-03-21</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/data-privacy-gtm/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/hawks-and-doves.jpg)" alt="Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/data-privacy-gtm/" class="title">Data Privacy Engineering with Google Tag Manager Server Side and Consent Mode</a></p>
+                    <p class="item-date">
+                        <time datetime="2020-11-27 09:29:50 &#43;0100 CET" itemprop="datePublished">2020-11-27</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Donate
+    </h3>
+    <div class="widget">
+       	<script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="marked" data-description="Support me on Buy me a coffee!" data-message="" data-color="#FFDD00" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+       	<iframe src="https://github.com/sponsors/MarkEdmondson1234/button" title="Sponsor MarkEdmondson1234" height="35" width="116" style="border: 0;"></iframe>
+    </div>
+</div>
+
+
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Get your GA4 history
+    </h3>
+    <script>
+      function submitDL(value){
+        dataLayer.push({'event':'ga4_email','ga4_email':value});
+        document.getElementById('email').value = 'Submitted! See inbox'
+        var button = document.getElementById('email_button');
+        button.disabled = true;
+      }
+        
+    </script>
+    <div>
+        <input type="email" name="email"  id="email"
+          required 
+          minlength="8"
+          placeholder="you@email.com">
+        <button id='email_button'
+          onclick="javascript:submitDL(document.getElementById('email').value);"
+         >Send</button>
+    </div>
+</div>
+
+
+    
+
+
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/r">
+                    R
+                </a>
+                <span class="category-list-count">22</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/big-query">
+                    big-query
+                </a>
+                <span class="category-list-count">7</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/blogging">
+                    blogging
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-functions">
+                    cloud-functions
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-run">
+                    cloud-run
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/docker">
+                    docker
+                </a>
+                <span class="category-list-count">9</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/firebase">
+                    firebase
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-analytics">
+                    google-analytics
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-app-engine">
+                    google-app-engine
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-auth">
+                    google-auth
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-cloud-storage">
+                    google-cloud-storage
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-compute-engine">
+                    google-compute-engine
+                </a>
+                <span class="category-list-count">7</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-language">
+                    google-language
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-tag-manager">
+                    google-tag-manager
+                </a>
+                <span class="category-list-count">8</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/pubsub">
+                    pubsub
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/python">
+                    python
+                </a>
+                <span class="category-list-count">6</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/rstudio-server">
+                    rstudio-server
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/search-console">
+                    search-console
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+
+    
+
+
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+    
+	</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script src="https://code.markedmondson.me/fancybox/jquery.fancybox.pack.js"></script>
+<script src="https://code.markedmondson.me/js/script.js"></script>
+<script src="https://code.markedmondson.me/js/highlight.pack.js"></script>
+
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+</body>
+</html>
