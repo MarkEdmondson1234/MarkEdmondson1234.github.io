@@ -39,7 +39,7 @@ With Google Tag Manager Server-side (GTM-SS), the scope on what you can do with 
 
 <meta itemprop="datePublished" content="2021-11-19T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2021-11-19T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="3245">
+<meta itemprop="wordCount" content="3324">
 
 
 
@@ -290,7 +290,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2021-11-19 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-11-19</time>
             &middot;
-            3245
+            3324
             words
             &middot;
             16
@@ -362,7 +362,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li>Enriching GA4 data with other data (such as 1st or 2nd party data)</li>
 </ul>
 
-<p>For my own blog I didn&rsquo;t know anything that would be actually useful so worth writing about, until I came across an idea of sending your own data to you in an email for your blog browsing history (yes dear reader, YOUR data).  For this I would want to cross reference your <code>cookie_id</code> (you can see this value if you examine your cookies as you read this page) with an email form.  This I think would be very nice to be available on more websites, giving the privacy climate and GDPR philosophy of control of your own data - a website who let you do this demonstrates trust I think.  I can also think e-commerce websites would benefit from a form to easily send customers all the products they have browsed in their historic sessions, in a kind of automatically created shopping list.</p>
+<p>For my own blog I didn&rsquo;t know anything that would be actually useful so worth writing about, until I came across an idea of sending your own data to you in an email for your blog browsing history (yes dear reader, YOUR data).  For this I would want to cross reference your <code>cookie_id</code> (you can see this value if you examine your cookies as you read this page) with an email form.  This I think would be very nice to be available on more websites, giving the privacy climate and GDPR philosophy of control of your own data - a website who lets you do this demonstrates trust I think, and Trust is a KPI now.  I can also think e-commerce websites would benefit from a form to easily send customers all the products they have browsed in their historic sessions, in a kind of automatically created shopping list.</p>
 
 <p>For this use case I&rsquo;ll show how GA4, GTM-SS and GCP can achieve this so as perhaps you can develop it for something useful for your own website.</p>
 
@@ -671,7 +671,7 @@ WHERE
 
 <p><em>SQL to return the page_view events for a specific client_id from a BigQuery GA4 export</em></p>
 
-<p>I have a <code>gcr.io/gcer-public/googleauthr-verse</code> docker container that contains all of my R packages, including <code>bigQueryR</code> that can query the GA4 dataset, and I&rsquo;ve added <a href="https://pkgs.rstudio.com/blastula"><code>blastula</code> a package for sending nice emails</a> using <a href="https://code.markedmondson.me/googleCloudRunner/reference/cr_deploy_docker_trigger.html"><code>googleAuthR::cr_deploy_docker_trigger()</code></a> to create it, giving me a <code>gcr.io/gcer-public/googleauthr-blast</code> docker image I can use as the R environment for my build steps.  I have to say <code>googleCloudRunner</code> has saved me personally a lot of time automating set-ups like this, and is my favourite tool.</p>
+<p>I have a <code>gcr.io/gcer-public/googleauthr-verse</code> docker container that contains all of my R packages, including <code>bigQueryR</code> that can query the GA4 dataset, and I&rsquo;ve added <a href="https://pkgs.rstudio.com/blastula"><code>blastula</code> a package for sending nice emails</a> using <a href="https://code.markedmondson.me/googleCloudRunner/reference/cr_deploy_docker_trigger.html"><code>googleAuthR::cr_deploy_docker_trigger()</code></a> to create it, giving me a <code>gcr.io/gcer-public/googleauthr-blast</code> docker image I can use as the R environment for my build steps.  I have to say <a href="https://code.markedmondson.me/googleCloudRunner/"><code>googleCloudRunner</code></a> has saved me personally a lot of time automating set-ups like this, and is my favourite tool.</p>
 
 <h4 id="calling-bigquery">Calling BigQuery</h4>
 
@@ -708,7 +708,7 @@ query_client_id &lt;- function(client_id, sql_file){
 
 <p><em>R code running in a Cloud Build step to query BigQuery for the client_id data and save to a CSV</em></p>
 
-<p>You could replace this with <code>gcloud</code> or <code>python</code> or any code you like to query BigQuery, I just have this all handy from other work so its a quick start up time to reuse it.</p>
+<p>You could replace this with <code>gcloud</code> or Python or any code you like to query BigQuery, I just have this all handy from other work so its a quick start up time to reuse it.</p>
 
 <h4 id="sending-the-email">Sending the email</h4>
 
@@ -760,6 +760,21 @@ substitutions:
   _CLIENT_ID: $(body.message.data.client_id)
   _EMAIL: $(body.message.data.ga4_email)
 </code></pre>
+
+<p>After deployment, now when I submit the form on the website I see:</p>
+
+<ol>
+<li>A dataLayer push</li>
+<li>The GA4 tag firing sending data to GTM-SS</li>
+<li>The GTM-SS tag passing on the data to Pub/Sub</li>
+<li>The Pub/Sub triggering the Cloud Build</li>
+<li>The Cloud Build trigger running my build steps above.<br /></li>
+</ol>
+
+<p>Those build steps read in the email and client.id, create the email and send it to the email provided.</p>
+
+<p><img src="images/email-sent.png" alt="" />
+<em>The email appearing in my inbox</em></p>
 
 <h2 id="summary">Summary</h2>
 
