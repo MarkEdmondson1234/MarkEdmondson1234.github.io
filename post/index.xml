@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on Mark Edmondson</title>
@@ -6,11 +6,7 @@
     <description>Recent content in Posts on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
-    <lastBuildDate>Tue, 04 Jan 2022 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://code.markedmondson.me/post/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Tue, 04 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://code.markedmondson.me/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit</title>
       <link>https://code.markedmondson.me/sending-ga4-events-pubsub/</link>
@@ -18,7 +14,6 @@
       
       <guid>https://code.markedmondson.me/sending-ga4-events-pubsub/</guid>
       <description>&lt;p&gt;&lt;em&gt;Image from &lt;a href=&#34;https://solarsystem.nasa.gov/resources/758/brief-outburst/?category=solar-system_sun&#34;&gt;https://solarsystem.nasa.gov/resources/758/brief-outburst/?category=solar-system_sun&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
-
 &lt;p&gt;With Google Tag Manager Server-side (GTM-SS), the scope on what you can do with your GA4 events is much enhanced, since using GTM-SS you have the ability to interact easily with other GCP services, in particular easier Google authentication.  This integration can allow you to enrich your data streams or send your GA4 data to different locations other than the Google Marketing Platform.  The first example of this has been using the BigQuery API in your GTM-SS templates to export your event data, but what if you need your event data on a more real-time basis?  For that, there is &lt;a href=&#34;https://cloud.google.com/pubsub/docs/overview&#34;&gt;Google Pub/Sub&lt;/a&gt;.&lt;/p&gt;</description>
     </item>
     
@@ -174,11 +169,8 @@ The code is available in this GitHub repo for useful cloud functions with Google
       
       <guid>https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts/</guid>
       <description>&lt;h2 id=&#34;why-run-r-on-kubernetes&#34;&gt;Why run R on Kubernetes?&lt;/h2&gt;
-
 &lt;p&gt;&lt;a href=&#34;https://kubernetes.io/&#34;&gt;Kubernetes&lt;/a&gt; is a free and open-source utility to run jobs within a computer cluster.  It abstracts away the servers the jobs are running on so you need only worry about the code to run.  It has features such as &lt;a href=&#34;https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/&#34;&gt;scheduling&lt;/a&gt;, &lt;a href=&#34;https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler&#34;&gt;auto-scaling&lt;/a&gt;, and auto-healing to replace nodes if they breakdown.&lt;/p&gt;
-
 &lt;p&gt;If you only need to run R on a single machine, then its probably a bit OTT to use Kubernetes, but if you are starting to work with multiple Docker containers and/or VMs it gets more and more attractive to have a way to easily orchestrate them.&lt;/p&gt;
-
 &lt;p&gt;Kubernetes works via &lt;a href=&#34;https://www.docker.com/&#34;&gt;Docker&lt;/a&gt; containers, so if you are already familiar with using Docker for abstracting away code environments, it should be a short step up to abstracting away the computers those Docker containers run upon.&lt;/p&gt;</description>
     </item>
     

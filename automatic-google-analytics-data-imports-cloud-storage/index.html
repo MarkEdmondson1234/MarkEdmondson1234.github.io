@@ -2,7 +2,7 @@
 <html lang="en-GB">
 <head>
     <title>Auto Google Analytics Data Imports from Cloud Storage &middot; Mark Edmondson</title>
-    <meta name="generator" content="Hugo 0.55.5" />
+    <meta name="generator" content="Hugo 0.92.0" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
@@ -23,24 +23,17 @@
     <meta property="og:title" content="Auto Google Analytics Data Imports from Cloud Storage" />
 <meta property="og:description" content="Use Google Cloud Functions to auto-load your data imports into Google Analytics form Cloud Storage" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://code.markedmondson.me/automatic-google-analytics-data-imports-cloud-storage/" />
-<meta property="article:published_time" content="2018-11-29T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2018-11-29T00:00:00&#43;00:00"/>
+<meta property="og:url" content="https://code.markedmondson.me/automatic-google-analytics-data-imports-cloud-storage/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2018-11-29T00:00:00+00:00" />
+<meta property="article:modified_time" content="2018-11-29T00:00:00+00:00" />
+
 
     
-    
-<meta itemprop="name" content="Auto Google Analytics Data Imports from Cloud Storage">
-<meta itemprop="description" content="Use Google Cloud Functions to auto-load your data imports into Google Analytics form Cloud Storage">
-
-
-<meta itemprop="datePublished" content="2018-11-29T00:00:00&#43;00:00" />
-<meta itemprop="dateModified" content="2018-11-29T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="1854">
-
-
-
+    <meta itemprop="name" content="Auto Google Analytics Data Imports from Cloud Storage">
+<meta itemprop="description" content="Use Google Cloud Functions to auto-load your data imports into Google Analytics form Cloud Storage"><meta itemprop="datePublished" content="2018-11-29T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2018-11-29T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1844">
 <meta itemprop="keywords" content="google-cloud-storage,python,google-analytics,cloud-functions,pubsub," />
-
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Auto Google Analytics Data Imports from Cloud Storage"/>
 <meta name="twitter:description" content="Use Google Cloud Functions to auto-load your data imports into Google Analytics form Cloud Storage"/>
@@ -284,7 +277,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2018-11-29 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-11-29</time>
             &middot;
-            1854
+            1844
             words
             &middot;
             9
@@ -326,49 +319,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
         <div class="article-entry" itemprop="articleBody">
-            
-
-<p>Continuing my infatuation with cloud functions (see last post on using cloud functions to manipulate BigQuery exports) this is a post showing how to bring together various code examples out there so that you can easily upload custom data imports from a Google cloud storage bucket.</p>
-
+            <p>Continuing my infatuation with cloud functions (see last post on using cloud functions to manipulate BigQuery exports) this is a post showing how to bring together various code examples out there so that you can easily upload custom data imports from a Google cloud storage bucket.</p>
 <p>The code is available in this <a href="https://github.com/MarkEdmondson1234/google-analytics-cloud-functions">GitHub repo for useful cloud functions with Google Analytics</a></p>
-
 <h2 id="extended-data-imports">Extended data imports</h2>
-
 <p>Google Analytics offers various versions of uploads.</p>
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/leqMQK-cuwk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
+<!-- raw HTML omitted -->
 <p>This post is about the <a href="https://support.google.com/analytics/answer/6066725">user level extended-data imports</a>.</p>
-
 <p>For these imports you can do historic and <a href="https://support.google.com/analytics/answer/6071511?hl=en&amp;ref_topic=6064627">query time</a> (if you are using GA360).</p>
-
 <p>Historic data imports can&rsquo;t be changed once uploaded as they are joined with the data upon <strong>collection</strong>, so suits things like date of birth (which shouldn&rsquo;t change per user).</p>
-
 <p>Query time imports join with the data at the time you <strong>request</strong> the data, so can be used for more dynamic data such as which segment that user is in at the time.  That data could be computed offline in your CRM database or similar, and then made available to Google Analytics so you can create segments for Google Ads or Google Optimize.  You can do a lot more interesting things with it, which is why its a GA360 feature.</p>
-
 <h2 id="why-automate-uploads">Why automate uploads?</h2>
-
 <p>You can upload the data manually via the Google Analytics web UI, but when it comes to query time imports that can change often, that could mean daily updates.  It also takes a few hours to be available, so the earlier you can do it the better.</p>
-
 <p>Both these requirements make it a good fit for cloud functions, since you can create a trigger that will run as soon as the data is available (not on a schedule) and trigger on demand.</p>
-
 <h2 id="why-use-google-cloud-storage">Why use Google Cloud Storage?</h2>
-
-<p>Google Cloud Storage is a generic blob store of bytes that is very quick and can hold many TBs of data.  It has many APIs and integrations (including <a href="http://code.markedmondson.me/googleCloudStorageR/">googleCloudStorageR</a> ) with the rest of the Google Cloud Platform and beyond, and I treat it as the central backbone for all my data storage.<br />
+<p>Google Cloud Storage is a generic blob store of bytes that is very quick and can hold many TBs of data.  It has many APIs and integrations (including <a href="http://code.markedmondson.me/googleCloudStorageR/">googleCloudStorageR</a> ) with the rest of the Google Cloud Platform and beyond, and I treat it as the central backbone for all my data storage.<br>
 The idea is if the Cloud Function can take care of the link between Cloud Storage and Google Analytics, then its flexible how that file arrives at Cloud Storage.  It could be an R script, a BigQuery extract or an Airflow DAG that puts the file in the bucket, but once its there you know it will be uploaded to Google Analytics.</p>
-
 <h2 id="preparation">Preparation</h2>
-
 <h3 id="create-the-google-analytics-custom-data-import">Create the Google Analytics custom data import</h3>
-
 <p>Within the Google Analytics Web UI, you need to create the custom data import&rsquo;s specifications.  In this case it would be a user custom data upload, query time and you then specify the key you are joining with, along with which dimensions you want to populate for that user.  Usually these are custom dimensions you have also previously created.</p>
-
 <p>Once created you should get a schema you will use to create the correct data, and a custom upload ID that you will use within the upload script.</p>
-
 <h3 id="create-an-authentication-file">Create an authentication file</h3>
-
 <p>To run the script, since it deals with Google Analytics you need to create a service authentication file the script can use to allow it access to upload data.  You don&rsquo;t normally need this if using Google cloud services such as BigQuery, as the authentication is baked in, but as Google Analytics is not a cloud product, in this case we do.</p>
-
 <ol>
 <li>Reuse or create a Google Cloud Project with billing enabled.</li>
 <li>Service accounts can be created <a href="https://console.cloud.google.com/iam-admin/serviceaccounts/create">here</a></li>
@@ -378,255 +349,208 @@ The idea is if the Cloud Function can take care of the link between Cloud Storag
 <li>Login to Google Analytics and add the user at Web Property level with <strong>Edit</strong> permissions.</li>
 <li>Make sure the GCP project the service key is for has Analytics API access enabled.</li>
 </ol>
-
 <p>You should now be able to use the JSON auth file to authenticate with Google Analytics API.</p>
-
 <h3 id="create-a-google-cloud-storage-bucket">Create a Google Cloud Storage bucket</h3>
-
 <p>Now we will create a Google Cloud storage bucket, and upload the authentication file to it.  We do this instead of uploading the authentication file with the Cloud function, as it keeps the Cloud function generic enough you can use it for other accounts by just pointing at a different bucket when you deploy.</p>
-
 <p>You create a bucket from <a href="https://console.cloud.google.com/storage/browser">here</a> once you have your Google Cloud Project.</p>
-
 <p>Once you have your bucket upload the <code>auth.json</code> file to the bucket, and then create a folder within the bucket which is where your uploads will be delivered to,</p>
-
 <h2 id="the-code">The code</h2>
-
 <p>The code is available in this <a href="https://github.com/MarkEdmondson1234/google-analytics-cloud-functions">GitHub repo for useful cloud functions with Google Analytics</a> which you can clone, modify and use.</p>
-
 <p>You will need to specify the <code>pip</code> requirements for your code in a <code>requirements.txt</code> file, but you don&rsquo;t have to actually upload the libraries as you do for say App Engine.  Cloud Functions will download them for you when you deploy.</p>
-
 <p>Create a <code>requirements.txt</code> file with these pinned dependencies:</p>
-
-<pre><code>google-api-python-client==1.7.4
+<pre tabindex="0"><code>google-api-python-client==1.7.4
 google-cloud-storage==1.13.0
 oauth2client==4.1.3
-</code></pre>
+</code></pre><p>The full script to upload to Cloud functions after you fill in your details is below.  It should be saved to a file called <code>main.py</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> logging
+<span style="color:#f92672">import</span> base64
+<span style="color:#f92672">import</span> json
+<span style="color:#f92672">import</span> os
+<span style="color:#f92672">from</span> urllib.error <span style="color:#f92672">import</span> HTTPError
+<span style="color:#f92672">from</span> apiclient.discovery <span style="color:#f92672">import</span> build
+<span style="color:#f92672">from</span> oauth2client.service_account <span style="color:#f92672">import</span> ServiceAccountCredentials
+<span style="color:#f92672">from</span> apiclient.http <span style="color:#f92672">import</span> MediaFileUpload
+<span style="color:#f92672">from</span> google.cloud <span style="color:#f92672">import</span> storage
 
-<p>The full script to upload to Cloud functions after you fill in your details is below.  It should be saved to a file called <code>main.py</code></p>
+<span style="color:#75715e"># set these to your details</span>
+ACCOUNTID<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;123456&#39;</span>
+WEBPROPERTYID<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;UA-123456-2&#39;</span>
+CUSTOM_DATASOURCE_ID<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;data_source_id&#39;</span>
+FOLDER<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;source_folder_in_gcs_bucket&#39;</span>
 
-<pre><code class="language-python">import logging
-import base64
-import json
-import os
-from urllib.error import HTTPError
-from apiclient.discovery import build
-from oauth2client.service_account import ServiceAccountCredentials
-from apiclient.http import MediaFileUpload
-from google.cloud import storage
+<span style="color:#75715e"># save file to /tmp only as cloud functions only supports that to write to</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">download_gcs_file</span>(obj, to, bucket):
+    client <span style="color:#f92672">=</span> storage<span style="color:#f92672">.</span>Client()
+    bucket <span style="color:#f92672">=</span> client<span style="color:#f92672">.</span>get_bucket(bucket)
+    blob <span style="color:#f92672">=</span> bucket<span style="color:#f92672">.</span>blob(obj)
 
-# set these to your details
-ACCOUNTID='123456'
-WEBPROPERTYID='UA-123456-2'
-CUSTOM_DATASOURCE_ID='data_source_id'
-FOLDER='source_folder_in_gcs_bucket'
+    blob<span style="color:#f92672">.</span>download_to_filename(to)
+    logging<span style="color:#f92672">.</span>debug(<span style="color:#e6db74">&#39;downloaded file </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> to </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(obj, to))
 
-# save file to /tmp only as cloud functions only supports that to write to
-def download_gcs_file(obj, to, bucket):
-    client = storage.Client()
-    bucket = client.get_bucket(bucket)
-    blob = bucket.blob(obj)
+<span style="color:#75715e"># needs an auth.json file as cloud auth not working for analytics requests</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_ga_service</span>(bucket):
 
-    blob.download_to_filename(to)
-    logging.debug('downloaded file {} to {}'.format(obj, to))
+    download_gcs_file(<span style="color:#e6db74">&#39;auth.json&#39;</span>, <span style="color:#e6db74">&#39;/tmp/auth.json&#39;</span>, bucket)
+    credentials <span style="color:#f92672">=</span> ServiceAccountCredentials<span style="color:#f92672">.</span>from_json_keyfile_name(
+            <span style="color:#e6db74">&#39;/tmp/auth.json&#39;</span>,
+            scopes<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;https://www.googleapis.com/auth/analytics&#39;</span>,
+                    <span style="color:#e6db74">&#39;https://www.googleapis.com/auth/analytics.edit&#39;</span>])
 
-# needs an auth.json file as cloud auth not working for analytics requests
-def get_ga_service(bucket):
+    <span style="color:#75715e"># Build the service object.</span>
+    <span style="color:#66d9ef">return</span> build(<span style="color:#e6db74">&#39;analytics&#39;</span>, <span style="color:#e6db74">&#39;v3&#39;</span>, credentials<span style="color:#f92672">=</span>credentials, cache_discovery<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
 
-    download_gcs_file('auth.json', '/tmp/auth.json', bucket)
-    credentials = ServiceAccountCredentials.from_json_keyfile_name(
-            '/tmp/auth.json',
-            scopes=['https://www.googleapis.com/auth/analytics',
-                    'https://www.googleapis.com/auth/analytics.edit'])
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">upload_ga</span>(obj_name, bucket):
 
-    # Build the service object.
-    return build('analytics', 'v3', credentials=credentials, cache_discovery=False)
-
-def upload_ga(obj_name, bucket):
-
-    filename = '/tmp/{}'.format(os.path.basename(obj_name))
+    filename <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;/tmp/</span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>basename(obj_name))
 
     download_gcs_file(obj_name, filename, bucket)
 
-    analytics = get_ga_service(bucket)
+    analytics <span style="color:#f92672">=</span> get_ga_service(bucket)
 
-    try:
-      media = MediaFileUpload(filename,
-                              mimetype='application/octet-stream',
-                              resumable=False)
+    <span style="color:#66d9ef">try</span>:
+      media <span style="color:#f92672">=</span> MediaFileUpload(filename,
+                              mimetype<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;application/octet-stream&#39;</span>,
+                              resumable<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
 
-      daily_upload = analytics.management().uploads().uploadData(
-          accountId=ACCOUNTID,
-          webPropertyId=WEBPROPERTYID,
-          customDataSourceId=CUSTOM_DATASOURCE_ID,
-          media_body=media).execute()
+      daily_upload <span style="color:#f92672">=</span> analytics<span style="color:#f92672">.</span>management()<span style="color:#f92672">.</span>uploads()<span style="color:#f92672">.</span>uploadData(
+          accountId<span style="color:#f92672">=</span>ACCOUNTID,
+          webPropertyId<span style="color:#f92672">=</span>WEBPROPERTYID,
+          customDataSourceId<span style="color:#f92672">=</span>CUSTOM_DATASOURCE_ID,
+          media_body<span style="color:#f92672">=</span>media)<span style="color:#f92672">.</span>execute()
 
-      logging.info('Uploaded file: {}'.format(json.dumps(daily_upload)))
+      logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">&#39;Uploaded file: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(json<span style="color:#f92672">.</span>dumps(daily_upload)))
 
-    except TypeError as error:
-      # Handle errors in constructing a query.
-      logging.error('There was an error in constructing your query : {}'.format(error))
+    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">TypeError</span> <span style="color:#66d9ef">as</span> error:
+      <span style="color:#75715e"># Handle errors in constructing a query.</span>
+      logging<span style="color:#f92672">.</span>error(<span style="color:#e6db74">&#39;There was an error in constructing your query : </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(error))
 
-    except HTTPError as error:
-      # Handle API errors.
-      logging.error('There was an API error : {} : {}'.format(error.resp.status, error.resp.reason))
+    <span style="color:#66d9ef">except</span> HTTPError <span style="color:#66d9ef">as</span> error:
+      <span style="color:#75715e"># Handle API errors.</span>
+      logging<span style="color:#f92672">.</span>error(<span style="color:#e6db74">&#39;There was an API error : </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> : </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(error<span style="color:#f92672">.</span>resp<span style="color:#f92672">.</span>status, error<span style="color:#f92672">.</span>resp<span style="color:#f92672">.</span>reason))
 
-    return
+    <span style="color:#66d9ef">return</span>
 
-def gcs_to_ga(data, context):
-    &quot;&quot;&quot;Background Cloud Function to be triggered by Pub/Sub subscription.
-       This functions copies the triggering BQ table and copies it to an aggregate dataset.
-    Args:
-        data (dict): The Cloud Functions event payload.
-        context (google.cloud.functions.Context): Metadata of triggering event.
-    Returns:
-        None; the output is written to Stackdriver Logging
-    &quot;&quot;&quot;
-    logging.info('Bucket: {} File: {} Created: {} Updated: {}'.format(data['bucket'],
-                                                                      data['name'],
-                                                                      data['timeCreated'],
-                                                                      data['updated']))
-    folder = FOLDER
-    object_name = data['name']
-    bucket = data['bucket']
-    if object_name.startswith(folder):
-      logging.info('File matches folder {}'.format(folder))
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">gcs_to_ga</span>(data, context):
+    <span style="color:#e6db74">&#34;&#34;&#34;Background Cloud Function to be triggered by Pub/Sub subscription.
+</span><span style="color:#e6db74">       This functions copies the triggering BQ table and copies it to an aggregate dataset.
+</span><span style="color:#e6db74">    Args:
+</span><span style="color:#e6db74">        data (dict): The Cloud Functions event payload.
+</span><span style="color:#e6db74">        context (google.cloud.functions.Context): Metadata of triggering event.
+</span><span style="color:#e6db74">    Returns:
+</span><span style="color:#e6db74">        None; the output is written to Stackdriver Logging
+</span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
+    logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">&#39;Bucket: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> File: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> Created: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> Updated: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(data[<span style="color:#e6db74">&#39;bucket&#39;</span>],
+                                                                      data[<span style="color:#e6db74">&#39;name&#39;</span>],
+                                                                      data[<span style="color:#e6db74">&#39;timeCreated&#39;</span>],
+                                                                      data[<span style="color:#e6db74">&#39;updated&#39;</span>]))
+    folder <span style="color:#f92672">=</span> FOLDER
+    object_name <span style="color:#f92672">=</span> data[<span style="color:#e6db74">&#39;name&#39;</span>]
+    bucket <span style="color:#f92672">=</span> data[<span style="color:#e6db74">&#39;bucket&#39;</span>]
+    <span style="color:#66d9ef">if</span> object_name<span style="color:#f92672">.</span>startswith(folder):
+      logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">&#39;File matches folder </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(folder))
 
       upload_ga(object_name, bucket)
       
-    return
-</code></pre>
-
-<p>A walk-through of the functions is below:</p>
-
-<h3 id="handling-pub-sub-functions">Handling pub/sub functions</h3>
-
+    <span style="color:#66d9ef">return</span>
+</code></pre></div><p>A walk-through of the functions is below:</p>
+<h3 id="handling-pubsub-functions">Handling pub/sub functions</h3>
 <p>This function is the main entry point of the code.  When a new file arrives on Google Cloud Storage, it creates a Pub/Sub trigger with the meta data of the file and sends it to the trigger we will create when we deploy.</p>
-
 <p>The <code>FOLDER</code> variable is so you can limit the function triggering to just a specific folder on the Google Cloud Bucket.  This is convenient so you can make sure only upload files trigger the function, and not say the authentcation files.</p>
-
-<pre><code class="language-python">def gcs_to_ga(data, context):
-    &quot;&quot;&quot;Background Cloud Function to be triggered by Pub/Sub subscription.
-       This functions copies the triggering BQ table and copies it to an aggregate dataset.
-    Args:
-        data (dict): The Cloud Functions event payload.
-        context (google.cloud.functions.Context): Metadata of triggering event.
-    Returns:
-        None; the output is written to Stackdriver Logging
-    &quot;&quot;&quot;
-    logging.info('Bucket: {} File: {} Created: {} Updated: {}'.format(data['bucket'],
-                                                                      data['name'],
-                                                                      data['timeCreated'],
-                                                                      data['updated']))
-    folder = FOLDER
-    object_name = data['name']
-    bucket = data['bucket']
-    if object_name.startswith(folder):
-      logging.info('File matches folder {}'.format(folder))
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">gcs_to_ga</span>(data, context):
+    <span style="color:#e6db74">&#34;&#34;&#34;Background Cloud Function to be triggered by Pub/Sub subscription.
+</span><span style="color:#e6db74">       This functions copies the triggering BQ table and copies it to an aggregate dataset.
+</span><span style="color:#e6db74">    Args:
+</span><span style="color:#e6db74">        data (dict): The Cloud Functions event payload.
+</span><span style="color:#e6db74">        context (google.cloud.functions.Context): Metadata of triggering event.
+</span><span style="color:#e6db74">    Returns:
+</span><span style="color:#e6db74">        None; the output is written to Stackdriver Logging
+</span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
+    logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">&#39;Bucket: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> File: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> Created: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> Updated: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(data[<span style="color:#e6db74">&#39;bucket&#39;</span>],
+                                                                      data[<span style="color:#e6db74">&#39;name&#39;</span>],
+                                                                      data[<span style="color:#e6db74">&#39;timeCreated&#39;</span>],
+                                                                      data[<span style="color:#e6db74">&#39;updated&#39;</span>]))
+    folder <span style="color:#f92672">=</span> FOLDER
+    object_name <span style="color:#f92672">=</span> data[<span style="color:#e6db74">&#39;name&#39;</span>]
+    bucket <span style="color:#f92672">=</span> data[<span style="color:#e6db74">&#39;bucket&#39;</span>]
+    <span style="color:#66d9ef">if</span> object_name<span style="color:#f92672">.</span>startswith(folder):
+      logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">&#39;File matches folder </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(folder))
 
       upload_ga(object_name, bucket)
       
-    return
-</code></pre>
-
-<h3 id="downloading-files-from-google-cloud-storage">Downloading files from Google Cloud Storage</h3>
-
+    <span style="color:#66d9ef">return</span>
+</code></pre></div><h3 id="downloading-files-from-google-cloud-storage">Downloading files from Google Cloud Storage</h3>
 <p>This code reuses the authentication of the function and downloads the file to it.  It can only download to the <code>/tmp</code> folder of the Cloud Function.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">download_gcs_file</span>(obj, to, bucket):
+    client <span style="color:#f92672">=</span> storage<span style="color:#f92672">.</span>Client()
+    bucket <span style="color:#f92672">=</span> client<span style="color:#f92672">.</span>get_bucket(bucket)
+    blob <span style="color:#f92672">=</span> bucket<span style="color:#f92672">.</span>blob(obj)
 
-<pre><code class="language-python">def download_gcs_file(obj, to, bucket):
-    client = storage.Client()
-    bucket = client.get_bucket(bucket)
-    blob = bucket.blob(obj)
-
-    blob.download_to_filename(to)
-    logging.debug('downloaded file {} to {}'.format(obj, to))
-</code></pre>
-
-<h3 id="creating-the-google-analytics-object">Creating the Google Analytics object</h3>
-
+    blob<span style="color:#f92672">.</span>download_to_filename(to)
+    logging<span style="color:#f92672">.</span>debug(<span style="color:#e6db74">&#39;downloaded file </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> to </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(obj, to))
+</code></pre></div><h3 id="creating-the-google-analytics-object">Creating the Google Analytics object</h3>
 <p>This downloads the <code>auth.json</code> file from Cloud Storage, and uses it to create an authenticated session with Google Analytics:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># needs an auth.json file as cloud auth not working for analytics requests</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_ga_service</span>(bucket):
 
-<pre><code class="language-python"># needs an auth.json file as cloud auth not working for analytics requests
-def get_ga_service(bucket):
+    download_gcs_file(<span style="color:#e6db74">&#39;auth.json&#39;</span>, <span style="color:#e6db74">&#39;/tmp/auth.json&#39;</span>, bucket)
+    credentials <span style="color:#f92672">=</span> ServiceAccountCredentials<span style="color:#f92672">.</span>from_json_keyfile_name(
+            <span style="color:#e6db74">&#39;/tmp/auth.json&#39;</span>,
+            scopes<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;https://www.googleapis.com/auth/analytics&#39;</span>,
+                    <span style="color:#e6db74">&#39;https://www.googleapis.com/auth/analytics.edit&#39;</span>])
 
-    download_gcs_file('auth.json', '/tmp/auth.json', bucket)
-    credentials = ServiceAccountCredentials.from_json_keyfile_name(
-            '/tmp/auth.json',
-            scopes=['https://www.googleapis.com/auth/analytics',
-                    'https://www.googleapis.com/auth/analytics.edit'])
-
-    # Build the service object.
-    return build('analytics', 'v3', credentials=credentials, cache_discovery=False)
-</code></pre>
-
-<h3 id="download-from-cloud-storage-and-upload-to-ga">Download from Cloud Storage and upload to GA</h3>
-
+    <span style="color:#75715e"># Build the service object.</span>
+    <span style="color:#66d9ef">return</span> build(<span style="color:#e6db74">&#39;analytics&#39;</span>, <span style="color:#e6db74">&#39;v3&#39;</span>, credentials<span style="color:#f92672">=</span>credentials, cache_discovery<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</code></pre></div><h3 id="download-from-cloud-storage-and-upload-to-ga">Download from Cloud Storage and upload to GA</h3>
 <p>This does the work of downloading the file and uploading again to GA.  It uses the variables defined at the start of the script to determine where to upload it, but you could modify this to use a configuration file or loop over several uploads.</p>
-
 <p>Code is adapted from <a href="https://developers.google.com/analytics/devguides/config/mgmt/v3/mgmtReference/management/uploads/uploadData">here</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">upload_ga</span>(obj_name, bucket):
 
-<pre><code class="language-python">def upload_ga(obj_name, bucket):
-
-    filename = '/tmp/{}'.format(os.path.basename(obj_name))
+    filename <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;/tmp/</span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>basename(obj_name))
 
     download_gcs_file(obj_name, filename, bucket)
 
-    analytics = get_ga_service(bucket)
+    analytics <span style="color:#f92672">=</span> get_ga_service(bucket)
 
-    try:
-      media = MediaFileUpload(filename,
-                              mimetype='application/octet-stream',
-                              resumable=False)
+    <span style="color:#66d9ef">try</span>:
+      media <span style="color:#f92672">=</span> MediaFileUpload(filename,
+                              mimetype<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;application/octet-stream&#39;</span>,
+                              resumable<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
 
-      daily_upload = analytics.management().uploads().uploadData(
-          accountId=ACCOUNTID,
-          webPropertyId=WEBPROPERTYID,
-          customDataSourceId=CUSTOM_DATASOURCE_ID,
-          media_body=media).execute()
+      daily_upload <span style="color:#f92672">=</span> analytics<span style="color:#f92672">.</span>management()<span style="color:#f92672">.</span>uploads()<span style="color:#f92672">.</span>uploadData(
+          accountId<span style="color:#f92672">=</span>ACCOUNTID,
+          webPropertyId<span style="color:#f92672">=</span>WEBPROPERTYID,
+          customDataSourceId<span style="color:#f92672">=</span>CUSTOM_DATASOURCE_ID,
+          media_body<span style="color:#f92672">=</span>media)<span style="color:#f92672">.</span>execute()
 
-      logging.info('Uploaded file: {}'.format(json.dumps(daily_upload)))
+      logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">&#39;Uploaded file: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(json<span style="color:#f92672">.</span>dumps(daily_upload)))
 
-    except TypeError as error:
-      # Handle errors in constructing a query.
-      logging.error('There was an error in constructing your query : {}'.format(error))
+    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">TypeError</span> <span style="color:#66d9ef">as</span> error:
+      <span style="color:#75715e"># Handle errors in constructing a query.</span>
+      logging<span style="color:#f92672">.</span>error(<span style="color:#e6db74">&#39;There was an error in constructing your query : </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(error))
 
-    except HTTPError as error:
-      # Handle API errors.
-      logging.error('There was an API error : {} : {}'.format(error.resp.status, error.resp.reason))
+    <span style="color:#66d9ef">except</span> HTTPError <span style="color:#66d9ef">as</span> error:
+      <span style="color:#75715e"># Handle API errors.</span>
+      logging<span style="color:#f92672">.</span>error(<span style="color:#e6db74">&#39;There was an API error : </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> : </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(error<span style="color:#f92672">.</span>resp<span style="color:#f92672">.</span>status, error<span style="color:#f92672">.</span>resp<span style="color:#f92672">.</span>reason))
 
-    return
+    <span style="color:#66d9ef">return</span>
 
-</code></pre>
-
-<h2 id="deployment">Deployment</h2>
-
+</code></pre></div><h2 id="deployment">Deployment</h2>
 <p>The full code above needs to be saved to a file called <code>main.py</code> and then put into the same folder as <code>requirements.txt</code>:</p>
-
-<pre><code>-|
+<pre tabindex="0"><code>-|
  |- main.py
  |- requirements.txt
-</code></pre>
-
-<p>You may need to then install the <code>gcloud beta</code> components to deploy the python.  See the <a href="https://cloud.google.com/functions/docs/quickstart">guide</a> here.</p>
-
+</code></pre><p>You may need to then install the <code>gcloud beta</code> components to deploy the python.  See the <a href="https://cloud.google.com/functions/docs/quickstart">guide</a> here.</p>
 <p>After you have it installed, browse to the folder holding your code in your console, and then issue the <code>gcloud</code> commands to deploy the files.  It takes around 2 mins.</p>
-
 <p>You need to specify the function that will trigger.  In our case this is the function that receives the data, <code>def gcs_to_ga(data, context)</code>.  We also need to specify its a Python file, and what the trigger will be.</p>
-
 <p>If the file to upload is big, then you may also need a bigger Cloud function instance than the default 256MB.  The max file size that can be uploaded to Google Analytics is 1GB, so the largest 2048MB cloud function should cover that - the <code>gcloud</code> below shows how to specify that size of function:</p>
-
-<pre><code class="language-sh">gcloud functions deploy gcs_to_ga --runtime python37 \
-                                  --trigger-resource your-bucket \
-                                  --trigger-event google.storage.object.finalize \
-                                  --region europe-west1 \
-                                  --memory=2048MB
-</code></pre>
-
-<h2 id="summary">Summary</h2>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">gcloud functions deploy gcs_to_ga --runtime python37 <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>                                  --trigger-resource your-bucket <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>                                  --trigger-event google.storage.object.finalize <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>                                  --region europe-west1 <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>                                  --memory<span style="color:#f92672">=</span>2048MB
+</code></pre></div><h2 id="summary">Summary</h2>
 <p>Upon successful deployment, you should be able to monitor the function in the <a href="https://console.cloud.google.com/logs/viewer">logs</a>.  Each time you upload a file to your bucket into the right folder, it will start a job to upload that file to Google Analytics.</p>
-
 <p>It can take a couple of hours for the data to appear within Google Analytics reports.</p>
-
 <p>This is a nice example of some functional &ldquo;glue&rdquo; that uncouples how to upload to GA from the file creation itself.  For example, it could be BigQuery exports that are creating the file, but that can switch to Airflow if the data transformations to create the files get more complicated or need special considerations.  The code is only intended as a starting point for you to customise and adapt to your needs.</p>
 
         </div>

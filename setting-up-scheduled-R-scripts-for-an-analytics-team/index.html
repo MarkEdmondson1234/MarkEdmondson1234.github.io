@@ -2,7 +2,7 @@
 <html lang="en-GB">
 <head>
     <title>Scheduling R scripts for a team using RStudio Server, Docker, Github and Google Compute Engine &middot; Mark Edmondson</title>
-    <meta name="generator" content="Hugo 0.55.5" />
+    <meta name="generator" content="Hugo 0.92.0" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
@@ -25,26 +25,19 @@
 This blog will give you steps that allows you to run on Google Compute Engine a server that has these features:
  RStudio Server instance with multiple login. Apache to host a welcome webpage." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/" />
-<meta property="article:published_time" content="2016-04-21T23:03:57&#43;01:00"/>
-<meta property="article:modified_time" content="2016-04-21T23:03:57&#43;01:00"/>
+<meta property="og:url" content="https://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2016-04-21T23:03:57+01:00" />
+<meta property="article:modified_time" content="2016-04-21T23:03:57+01:00" />
+
 
     
-    
-<meta itemprop="name" content="Scheduling R scripts for a team using RStudio Server, Docker, Github and Google Compute Engine">
+    <meta itemprop="name" content="Scheduling R scripts for a team using RStudio Server, Docker, Github and Google Compute Engine">
 <meta itemprop="description" content="edit 20th November, 2016 - now everything in this post is abstracted away and available in the googleComputeEngineR package - I would say its a lot easier to use that. Here is a post on getting started with it. http://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/
 This blog will give you steps that allows you to run on Google Compute Engine a server that has these features:
- RStudio Server instance with multiple login. Apache to host a welcome webpage.">
-
-
-<meta itemprop="datePublished" content="2016-04-21T23:03:57&#43;01:00" />
-<meta itemprop="dateModified" content="2016-04-21T23:03:57&#43;01:00" />
-<meta itemprop="wordCount" content="2955">
-
-
-
+ RStudio Server instance with multiple login. Apache to host a welcome webpage."><meta itemprop="datePublished" content="2016-04-21T23:03:57+01:00" />
+<meta itemprop="dateModified" content="2016-04-21T23:03:57+01:00" />
+<meta itemprop="wordCount" content="2952">
 <meta itemprop="keywords" content="R,docker,rstudio-server,google-compute-engine," />
-
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Scheduling R scripts for a team using RStudio Server, Docker, Github and Google Compute Engine"/>
 <meta name="twitter:description" content="edit 20th November, 2016 - now everything in this post is abstracted away and available in the googleComputeEngineR package - I would say its a lot easier to use that. Here is a post on getting started with it. http://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/
@@ -290,7 +283,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2016-04-21 23:03:57 &#43;0100 &#43;0100" itemprop="datePublished">2016-04-21</time>
             &middot;
-            2955
+            2952
             words
             &middot;
             14
@@ -328,37 +321,23 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
         <div class="article-entry" itemprop="articleBody">
-            
-
-<p><em>edit 20th November, 2016 - now everything in this post is abstracted away and available in the googleComputeEngineR package - I would say its a lot easier to use that.  Here is a post on getting started with it. <a href="http://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/">http://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/</a></em></p>
-
+            <p><em>edit 20th November, 2016 - now everything in this post is abstracted away and available in the googleComputeEngineR package - I would say its a lot easier to use that.  Here is a post on getting started with it. <a href="http://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/">http://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/</a></em></p>
 <p>This blog will give you steps that allows you to run on Google Compute Engine a server that has these features:</p>
-
 <ul>
 <li>RStudio Server instance with multiple login.</li>
 <li>Apache to host a welcome webpage.</li>
-<li>Restart the server to securely load private Github R packages / Docker images.<br /></li>
+<li>Restart the server to securely load private Github R packages / Docker images.</li>
 <li>A shared cron folder that runs every day at 0630 that user&rsquo;s can put their own scripts into.</li>
 </ul>
-
 <p>It is inspired by conversations with <a href="https://twitter.com/chipoglesby"><code>@Chipoglesby</code></a> and <a href="https://twitter.com/RichardFergie"><code>@RichardFergie</code></a> on twitter about this kind of setup, and was useful to me as a way to organise my thoughts on the subject ;).  If you have any suggestions on improvements please tweet to me at <a href="https://twitter.com/HoloMarkeD"><code>@HoloMarkeD</code></a> or email via the blog.</p>
-
 <h2 id="motivation-in-search-of-a-4-day-work-week">Motivation: In search of a 4-day work week</h2>
-
 <p>I&rsquo;ve just started a new job at <a href="http://iihnordic.dk/">IIH Nordic</a> where a part of my duties is to look for ways to automate the boring tasks that come up in a digital web analytics team.</p>
-
 <p>IIH Nordic have an aim to introduce a 4-day work week within a couple of years, so the motivation is to find out how to save 20% of the current work schedule without harming productivity.  Downloading data and creating reports is a big time-sink that looks ripe for optimisation.</p>
-
 <h3 id="introducing-the-wonders-of-r-to-a-team">Introducing the wonders of R to a team</h3>
-
 <p>The current strategy is to introduce the team to R and train everyone up in running simple scripts that download the data they need for their reports.  We will tackle data transformation/ETL, statistics and visualisation/presentation later, but the first goal is to solve the &ldquo;How can I get data&rdquo; problem.</p>
-
 <p>I&rsquo;m well placed to help due to writing <a href="https://github.com/MarkEdmondson1234/googleAuthR"><code>googleAuthR</code></a>, so have played with R libraries with simple authentication and functions to download from <a href="https://github.com/MarkEdmondson1234/googleAnalyticsR_public"><code>Google Analytics</code></a>, <a href="https://github.com/MarkEdmondson1234/searchConsoleR"><code>Search Console</code></a>, <a href="https://github.com/MarkEdmondson1234/bigQueryR"><code>BigQuery</code></a>, as well as using Randy Zwitch&rsquo;s <a href="https://github.com/randyzwitch/RSiteCatalyst"><code>Adobe Analytics</code></a> package.  These libraries alone cover 90% of the data sources we need.</p>
-
 <h3 id="why-use-rstudio-server-in-the-cloud">Why use RStudio Server in the cloud?</h3>
-
 <p>We&rsquo;ve had a few internal workshops now and the team look comfortable writing the R-scripts, but during the process I noticed a few issues that are solved using RStudio Server.  Using it means:</p>
-
 <ul>
 <li>Everyone is working on the same versions and libraries.</li>
 <li>Scripts can be logged for quality and errors.</li>
@@ -367,116 +346,72 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li>Web accessible private login for remote working.</li>
 <li>Can use R from an iPad or Google Chromebook!</li>
 </ul>
-
 <h2 id="setting-up-rstudio-server-on-google-cloud-compute-gce">Setting up RStudio Server on Google Cloud Compute (GCE)</h2>
-
 <p>I have a old blog post on the <a href="http://markedmondson.me/run-r-rstudio-and-opencpu-on-google-compute-engine-free-vm-image">installation of RStudio Server on GCE</a>, but this will update that since technology and my understanding has improved.</p>
-
 <p>A brief overview of the components are below:</p>
-
 <h3 id="docker">Docker</h3>
-
 <p><a href="https://www.docker.com/">Docker</a> is a virtual machine-lite that can run on anything, which means that the set-up is very transferable to other operating systems like Windows or OSX.</p>
-
 <p>It offers easier set-up via pre-created Docker images, and is embraced and <a href="https://cloud.google.com/compute/docs/containers/container_vms">well supported by Google</a> via its <a href="https://cloud.google.com/container-registry/docs/">container registry</a>, giving you unlimited private repositories, unlike Docker Hub that gives you only one.  It provides reproducibility and scale.</p>
-
 <h3 id="github">Github</h3>
-
 <p>Github is the go-to place to review and share code, and offers web-hooks that means it can push updates when you update a repository.  Every coder should use a version control system so its good practice to introduce it to the team, and it also allows installation of experimental and private R packages via <code>devtools::install_github</code> command.</p>
-
 <p>Google also has support for using Github via its <a href="https://cloud.google.com/source-repositories/docs/setting-up-repositories">Cloud Source Repositories</a>.</p>
-
 <h3 id="google-compute-engine">Google Compute Engine</h3>
-
 <p>The up-and-coming pretender to AWS&rsquo;s cloud computing crown, the Google Cloud is a natural choice for me as it offers integrations for Google Analytics and BigQuery.  The server images it offers have a great API and user interface, and it offers very quick I/O and restart times on Google&rsquo;s world-class infrastructure, and the Docker container support as mentioned makes things more simple to scale in the future.</p>
-
 <h2 id="setup-steps">Setup steps</h2>
-
 <p>Now we get to the actual commands you use to get things up and running.  It will give you:</p>
-
 <ul>
 <li>RStudio Server instance with multiple login.</li>
 <li>Apache to host a welcome webpage.</li>
-<li>Restart the server to load your private Github R packages if you have any.<br /></li>
+<li>Restart the server to load your private Github R packages if you have any.</li>
 <li>A shared cron folder that runs every day at 0430 that user&rsquo;s can put their own scripts into.</li>
 </ul>
-
 <p>In general I use the command line from a local terminal, but all actions can also be carried out within the <a href="https://console.cloud.google.com/compute/instances">Compute Engine web interface</a>.</p>
-
 <h3 id="create-the-google-cloud-engine">Create the Google Cloud Engine</h3>
-
 <p>Here is a reference for <a href="https://cloud.google.com/compute/docs/containers/vm-image/">GCE docker enabled VMs</a>.</p>
-
 <ol>
 <li>Download and install the <a href="https://cloud.google.com/sdk/">Google Cloud SDK</a></li>
 <li>Authorize and set-up billing for a Google Project</li>
 <li>Start up your terminal and set your project and zone:</li>
 </ol>
-
-<pre><code class="language-sh">  gcloud auth login
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">  gcloud auth login
   
   gcloud config set project your-project-name
   
   gcloud config set compute/region europe-west1
   
   gcloud config set compute/zone europe-west1-b
-</code></pre>
-
-<ol>
+</code></pre></div><ol start="4">
 <li>Issue this <a href="https://cloud.google.com/sdk/gcloud/reference/compute/instances/create">gcloud create command</a> to start up a docker enabled instance:</li>
 </ol>
-
 <p><em>edit 18th September 2016 to update to new images as per <a href="https://cloud.google.com/compute/docs/containers/vm-image/">https://cloud.google.com/compute/docs/containers/vm-image/</a></em></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">gcloud compute instances create your-r-server-name <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  --image-family gci-stable <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  --image-project google-containers <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  --tags http-server
+  --scopes https://www.googleapis.com/auth/devstorage.read_write <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  --machine-type n1-standard-1
 
-<pre><code class="language-sh">gcloud compute instances create your-r-server-name \
-  --image-family gci-stable \
-  --image-project google-containers \
-  --tags http-server
-  --scopes https://www.googleapis.com/auth/devstorage.read_write \
-  --machine-type n1-standard-1
-
-</code></pre>
-
-<p>Unlike previously, this new (from Aug 2016) container ready VM comes with Google Cloud Storage scopes already set, so you can use private docker repos.</p>
-
+</code></pre></div><p>Unlike previously, this new (from Aug 2016) container ready VM comes with Google Cloud Storage scopes already set, so you can use private docker repos.</p>
 <p>The <code>--tags</code> flag sets the default http firewall rules to apply to this instance so we can reach it via the internet on port 80.</p>
-
 <p>You should now be able to see your instance has launched in the <a href="https://console.cloud.google.com/compute/instances">Google Compute Dashboard</a></p>
-
 <h3 id="create-persistent-disks">Create persistent disks</h3>
-
 <p>Anything new in the Docker container will disappear on a restart if you also don&rsquo;t commit and push the image, so to avoid that data and scripts are linked to the container via the <code>--volumes</code> command.</p>
-
 <p>We also link to persistent disk rather than the VM&rsquo;s own, which has the advantage of being able to connect (read-only) to multiple servers at the same time, should you need it.  This also means if you need a more powerful server, you can safely create one knowing you will have the same data and scripts available.</p>
-
-<pre><code class="language-sh">gcloud compute disks create --size=200GB my-data-disk
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">gcloud compute disks create --size<span style="color:#f92672">=</span>200GB my-data-disk
 gcloud compute instances attach-disk your-r-server-name --disk my-data-disk
-</code></pre>
-
-<h3 id="initial-configuration-on-google-compute-engine">Initial Configuration on Google Compute Engine</h3>
-
+</code></pre></div><h3 id="initial-configuration-on-google-compute-engine">Initial Configuration on Google Compute Engine</h3>
 <ol>
 <li>Login to GCE</li>
 </ol>
-
-<pre><code class="language-sh">  gcloud compute ssh your-r-server-name
-</code></pre>
-
-<p>We are now making commands from within the GCE VM.</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">gcloud compute ssh your-r-server-name
+</code></pre></div><p>We are now making commands from within the GCE VM.</p>
 <p>If you have any problems, use the web interface to login via the Cloud Shell.  Sometimes you had to add your username to the instance, and then login with that user like:</p>
-
-<pre><code class="language-sh">  gcloud compute ssh user@your-r-server-name
-</code></pre>
-
-<p>See <a href="https://cloud.google.com/compute/docs/troubleshooting#ssherrors">here</a> for more diagnostics help.</p>
-
-<ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">gcloud compute ssh user@your-r-server-name
+</code></pre></div><p>See <a href="https://cloud.google.com/compute/docs/troubleshooting#ssherrors">here</a> for more diagnostics help.</p>
+<ol start="2">
 <li>Format and mount the persistent disk</li>
 </ol>
-
 <p>See instructions <a href="https://cloud.google.com/compute/docs/disks/persistent-disks">here.</a></p>
-
 <pre><code>```sh
 sudo mkfs.ext4 -F -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/disk/by-id/google-persistent-disk-1
 
@@ -497,87 +432,69 @@ sudo chmod a+w /mnt/data
 echo '/dev/disk/by-id/google-persistent-disk-1 /mnt/data ext4 discard,defaults 1 1' | sudo tee -a /etc/fstab
 ```
 </code></pre>
-
-<ol>
+<ol start="3">
 <li>Install and Configure Apache</li>
 </ol>
-
 <p>This gives you a user-friendly webpage pointing to the RStudio login, and I also use it as a place to put training material such as RMarkdown documents.</p>
-
 <p>I suppose this could also be done via another Docker container if you have a more complicated Apache setup to use.</p>
-
 <p>The ProxyPassMatch line is needed for the Shiny engine thats within RStudio Server to work.</p>
-
-<pre><code class="language-sh">sudo apt-get update
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">sudo apt-get update
 sudo apt-get -y install apache2
 
-## Need proxy and proxy_http to create nice URLs, proxy_wstunnel for Shiny
+<span style="color:#75715e">## Need proxy and proxy_http to create nice URLs, proxy_wstunnel for Shiny</span>
 sudo a2enmod proxy proxy_http proxy_wstunnel
 
-## this may be 000-default.conf rather than 000-default 
-## depending on version of apache
-echo '&lt;VirtualHost *:80&gt;
-        ServerAdmin your@email.com
-
-        DocumentRoot /var/www
-
-        ProxyPassMatch ^/rstudio/p/([0-9]+)/(websocket|.*/websocket)/$ ws://localhost:8787/p/$1/$2/
-        ProxyPass /rstudio/ http://localhost:8787/
-        ProxyPassReverse /rstudio/ http://localhost:8787/
-        RedirectMatch permanent ^/rstudio$ /rstudio/
-
-        ErrorLog ${APACHE_LOG_DIR}/error.log
-
-        LogLevel warn
-
-        CustomLog ${APACHE_LOG_DIR}/access.log combined
-
-&lt;/VirtualHost&gt;' | sudo tee /etc/apache2/sites-enabled/000-default
+<span style="color:#75715e">## this may be 000-default.conf rather than 000-default </span>
+<span style="color:#75715e">## depending on version of apache</span>
+echo <span style="color:#e6db74">&#39;&lt;VirtualHost *:80&gt;
+</span><span style="color:#e6db74">        ServerAdmin your@email.com
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">        DocumentRoot /var/www
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">        ProxyPassMatch ^/rstudio/p/([0-9]+)/(websocket|.*/websocket)/$ ws://localhost:8787/p/$1/$2/
+</span><span style="color:#e6db74">        ProxyPass /rstudio/ http://localhost:8787/
+</span><span style="color:#e6db74">        ProxyPassReverse /rstudio/ http://localhost:8787/
+</span><span style="color:#e6db74">        RedirectMatch permanent ^/rstudio$ /rstudio/
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">        ErrorLog ${APACHE_LOG_DIR}/error.log
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">        LogLevel warn
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">        CustomLog ${APACHE_LOG_DIR}/access.log combined
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">&lt;/VirtualHost&gt;&#39;</span> | sudo tee /etc/apache2/sites-enabled/000-default
 
 sudo service apache2 restart
 
-## A startup HTML page for you to customise
-echo '&lt;!doctype html&gt;&lt;html&gt;&lt;body&gt;&lt;h1&gt;RStudio on Google Cloud Compute&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;a href=&quot;./rstudio/&quot;&gt;RStudio Server&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;' | sudo tee /var/www/index.html
-</code></pre>
-
-<p>You should now be able to see your server running Apache.</p>
-
+<span style="color:#75715e">## A startup HTML page for you to customise</span>
+echo <span style="color:#e6db74">&#39;&lt;!doctype html&gt;&lt;html&gt;&lt;body&gt;&lt;h1&gt;RStudio on Google Cloud Compute&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;a href=&#34;./rstudio/&#34;&gt;RStudio Server&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;&#39;</span> | sudo tee /var/www/index.html
+</code></pre></div><p>You should now be able to see your server running Apache.</p>
 <p>I then upload a website to <code>/var/www/</code> via the <a href="https://cloud.google.com/sdk/gcloud/reference/compute/copy-files"><code>gcloud copy-files</code> command</a></p>
-
 <p>An example, assuming your website is in your local folder <code>~/dev/website/www/</code></p>
-
-<pre><code class="language-sh">sudo gcloud --project your-project-name compute copy-files ~/dev/website/www/ your-r-server-name:/var/
-</code></pre>
-
-<p>Here is what we have at IIH Nordic:</p>
-
-<p><img src="../images/rstudio-server-webpage.png" alt="batching_example" /></p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">sudo gcloud --project your-project-name compute copy-files ~/dev/website/www/ your-r-server-name:/var/
+</code></pre></div><p>Here is what we have at IIH Nordic:</p>
+<p><img src="../images/rstudio-server-webpage.png" alt="batching_example"></p>
 <h4 id="a-download-folder">A download folder</h4>
-
 <p>Now, you may want to have a dropbox style folder for the data your scripts are running, say scheduled data downloads.  There are a few ways to skin this cat, such as uploading to cloud storage in your script, but the simplest way for me was to use the Apache functionality to create a logged in download area.</p>
-
 <p>For this, you need to:</p>
-
 <ol>
-<li><p>Create a folder on your data disk where scripts will dump their data:</p>
-
-<pre><code>mkdir /mnt/data/downloads
+<li>
+<p>Create a folder on your data disk where scripts will dump their data:</p>
+<pre tabindex="0"><code>mkdir /mnt/data/downloads
 </code></pre></li>
-
-<li><p>Create a symlink to an Apache web server folder</p>
-
-<pre><code>ln -s /mnt/data/downloads /var/www/downloads
+<li>
+<p>Create a symlink to an Apache web server folder</p>
+<pre tabindex="0"><code>ln -s /mnt/data/downloads /var/www/downloads
 </code></pre></li>
-
-<li><p>[optional] Style the folder with CSS so it looks nice using say <a href="http://adamwhitcroft.com/apaxy/">Apaxy</a></p></li>
-
-<li><p>Update your Apache config to have logged in access to the folder.</p></li>
+<li>
+<p>[optional] Style the folder with CSS so it looks nice using say <a href="http://adamwhitcroft.com/apaxy/">Apaxy</a></p>
+</li>
+<li>
+<p>Update your Apache config to have logged in access to the folder.</p>
+</li>
 </ol>
-
 <p>The extra Apache config is below.  It requires installation of <code>sudo a2enmod headers</code> and a restart.</p>
-
-<pre><code>### In download folder, auto-download .txt,.csv, and .pdf files
+<pre tabindex="0"><code>### In download folder, auto-download .txt,.csv, and .pdf files
 ### Protect with a password
 &lt;Directory /var/www/downloads/&gt;
       &lt;FilesMatch &quot;.+\.(txt|csv|pdf)$&quot;&gt;
@@ -593,76 +510,47 @@ echo '&lt;!doctype html&gt;&lt;html&gt;&lt;body&gt;&lt;h1&gt;RStudio on Google C
       Options Indexes FollowSymLinks
       AllowOverride All
 &lt;/Directory&gt;
-</code></pre>
-
-<h3 id="download-and-run-the-rstudio-server-docker-image">Download and Run the RStudio Server Docker image</h3>
-
+</code></pre><h3 id="download-and-run-the-rstudio-server-docker-image">Download and Run the RStudio Server Docker image</h3>
 <p>We first download a pre-prepared RStudio Docker container created by the <a href="http://dirk.eddelbuettel.com/blog/2014/10/23/">Rocker</a> team led by Dirk Eddelbuettel. This is what our custom image will be based upon.  Here we download a variant that also loads <a href="https://hub.docker.com/r/rocker/hadleyverse/">RStudio and all of Hadley&rsquo;s packages</a> to give us a great base to work from.</p>
-
 <p>Most of the below is gleaned from the <a href="https://github.com/rocker-org/rocker/wiki">Rocker Wiki</a>.</p>
-
 <p>The below docker command runs the docker image - if that image is not available it will look for the image on Docker hub and download. This will take a long time as it downloads everything, perhaps time to put the kettle on.</p>
-
 <p>Subsequent times will load quickly from local version.</p>
-
 <p>We run it with a custom username and password we want, as this will be exposed to the web and we don&rsquo;t want the defaults to be exposed.</p>
-
-<pre><code class="language-sh">## Run the docker image with RStudio and Hadley Universe
-sudo docker run --name rstudio-server -d -p 8787:8787 \
-     -e USER=YOUR_USERNAME -e PASSWORD=YOUR_PW \
-     -v /mnt/data/:/home/ \
-     rocker/hadleyverse
-</code></pre>
-
-<h3 id="configure-rstudio-server-docker-image">Configure RStudio Server Docker image</h3>
-
-<p>Now it could be that you are done from here - you should have a working RStudio interface available on the IP of your container (<a href="http://your-vm-ip-address/rstudio/auth-sign-in">http://your-vm-ip-address/rstudio/auth-sign-in</a>).</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e">## Run the docker image with RStudio and Hadley Universe</span>
+sudo docker run --name rstudio-server -d -p 8787:8787 <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>     -e USER<span style="color:#f92672">=</span>YOUR_USERNAME -e PASSWORD<span style="color:#f92672">=</span>YOUR_PW <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>     -v /mnt/data/:/home/ <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>     rocker/hadleyverse
+</code></pre></div><h3 id="configure-rstudio-server-docker-image">Configure RStudio Server Docker image</h3>
+<p>Now it could be that you are done from here - you should have a working RStudio interface available on the IP of your container (http://your-vm-ip-address/rstudio/auth-sign-in).</p>
 <p>But we will configure it a bit more, adding users, more packages, and scheduled jobs.</p>
-
 <p><strong>If you have a lot of configurations then it is better to create your own <a href="https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/">DOCKERFILE</a> and build the image yourself.</strong></p>
-
 <p>We log in to the running docker container here:</p>
-
-<pre><code class="language-sh">sudo docker exec -it rstudio-server bash
-</code></pre>
-
-<p>This is a good one to remember for when you are doing future customisation.</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">sudo docker exec -it rstudio-server bash
+</code></pre></div><p>This is a good one to remember for when you are doing future customisation.</p>
 <p>You are now in the Docker container.</p>
-
 <p>Install stuff then CTRL-D to come out again to commit and push your changes.</p>
-
-<pre><code class="language-sh">## Make users that will create a directory on the data disk
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e">## Make users that will create a directory on the data disk</span>
 adduser mark
 
-## [Optional] Install packages
-## install as sudo to ensure all user's have access
-sudo su - -c &quot;R -e \&quot;install.packages('abc', repos='http://cran.rstudio.com/')\&quot;&quot;
+<span style="color:#75715e">## [Optional] Install packages</span>
+<span style="color:#75715e">## install as sudo to ensure all user&#39;s have access</span>
+sudo su - -c <span style="color:#e6db74">&#34;R -e \&#34;install.packages(&#39;abc&#39;, repos=&#39;http://cran.rstudio.com/&#39;)\&#34;&#34;</span>
 
-## [Optional] Install libraries from Github packages
-sudo su - -c &quot;R -e \&quot;devtools::install_github('MarkEdmondson1234/bigQueryR')\&quot;&quot;
+<span style="color:#75715e">## [Optional] Install libraries from Github packages</span>
+sudo su - -c <span style="color:#e6db74">&#34;R -e \&#34;devtools::install_github(&#39;MarkEdmondson1234/bigQueryR&#39;)\&#34;&#34;</span>
 
-## [Optional] Install libraries from private Github packages
-sudo su - -c &quot;R -e \&quot;devtools::install_github('MarkEdmondson1234/privatePackge', auth_token=YOUR_GITHUB_PAT)\&quot;&quot;
-````
-
-### Configure scheduling via CRON
-
-A big reason to have a server is for the team to schedule their data fetching scripts.  We achieve this by running CRON within the Docker container (to ensure all packages are installed) and then providing a link to a folder that runs the script when they need it.
-
-First we install CRON in the container:
-
-```sh
-## Download and install cron
+<span style="color:#75715e">## [Optional] Install libraries from private Github packages</span>
+sudo su - -c <span style="color:#e6db74">&#34;R -e \&#34;devtools::install_github(&#39;MarkEdmondson1234/privatePackge&#39;, auth_token=YOUR_GITHUB_PAT)\&#34;&#34;</span>
+</code></pre></div><h3 id="configure-scheduling-via-cron">Configure scheduling via CRON</h3>
+<p>A big reason to have a server is for the team to schedule their data fetching scripts.  We achieve this by running CRON within the Docker container (to ensure all packages are installed) and then providing a link to a folder that runs the script when they need it.</p>
+<p>First we install CRON in the container:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e">## Download and install cron</span>
 sudo apt-get update
 sudo apt-get -y install cron nano
 sudo service cron start
-</code></pre>
-
-<p>We can then schedule scripts via RScript to run daily.</p>
-
-<pre><code>## annoying nano bug in Docker
+</code></pre></div><p>We can then schedule scripts via RScript to run daily.</p>
+<pre tabindex="0"><code>## annoying nano bug in Docker
 export TERM=xterm
 
 ## open up the cron editor (select 2)
@@ -674,193 +562,143 @@ sudo crontab -e
 20 4 * * * /home/cron/r-cron.R &gt;/home/cron/cronlog.log 2&gt;&amp;1
 
 ## CTRL-X and Y to save changes
-</code></pre>
-
-<p>The <code>r-cron.R</code> script needs to have <code>#!/usr/bin/Rscript</code> at the top to run correctly.</p>
-
-<pre><code class="language-r">#!/usr/bin/Rscript
-cat(&quot;Cron script started: &quot;, date())
+</code></pre><p>The <code>r-cron.R</code> script needs to have <code>#!/usr/bin/Rscript</code> at the top to run correctly.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#75715e">#!/usr/bin/Rscript</span>
+<span style="color:#a6e22e">cat</span>(<span style="color:#e6db74">&#34;Cron script started: &#34;</span>, <span style="color:#a6e22e">date</span>())
 
 ....do R stuff
 
-cat(&quot;Cron script stopped: &quot;, date())
-</code></pre>
-
-<p>Repeat for all scripts you want to run.</p>
-
+<span style="color:#a6e22e">cat</span>(<span style="color:#e6db74">&#34;Cron script stopped: &#34;</span>, <span style="color:#a6e22e">date</span>())
+</code></pre></div><p>Repeat for all scripts you want to run.</p>
 <h3 id="sending-emails">Sending emails</h3>
-
 <p>Its useful to send an email once a script has run successfully (or not), one that uses Mailrun is below:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#75715e">#&#39; Email a user a report is ready</span>
+<span style="color:#75715e">#&#39;</span>
+<span style="color:#75715e">#&#39; Requires an account at Mailgun: https://mailgun.com</span>
+<span style="color:#75715e">#&#39; Pre-verification can only send to a whitelist of emails you configure</span>
+<span style="color:#75715e">#&#39;</span>
+<span style="color:#75715e">#&#39; @param email Email to send to</span>
+<span style="color:#75715e">#&#39; @param mail_message Any extra info</span>
+<span style="color:#75715e">#&#39;</span>
+<span style="color:#75715e">#&#39; @return TRUE if successful email sent</span>
+<span style="color:#75715e">#&#39; @import httr</span>
+<span style="color:#75715e">#&#39; @export</span>
+sendEmail <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function</span>(email <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;XXXXX@you.com&#34;</span>,
+                      mail_message <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Hello&#34;</span>){
 
-<pre><code class="language-r">#' Email a user a report is ready
-#'
-#' Requires an account at Mailgun: https://mailgun.com
-#' Pre-verification can only send to a whitelist of emails you configure
-#'
-#' @param email Email to send to
-#' @param mail_message Any extra info
-#'
-#' @return TRUE if successful email sent
-#' @import httr
-#' @export
-sendEmail &lt;- function(email = &quot;XXXXX@you.com&quot;,
-                      mail_message = &quot;Hello&quot;){
-
-  url &lt;- &quot;https://api.mailgun.net/v3/sandbox5f2XXXXXXXa.mailgun.org/messages&quot;
-  ## username:password so api_key is all after the api:
-  api_key &lt;- &quot;key-c5957XXXXXXXXXXXbb9cf8ce&quot;
-  the_body &lt;-
-    list(
-      from=&quot;Mailgun Sandbox &lt;postmaster@sandbox5XXXXXXXXa.mailgun.org&gt;&quot;,
-      to=email,
-      subject=&quot;Mailgun from R&quot;,
-      text=mailmessage,
+  url <span style="color:#f92672">&lt;-</span> <span style="color:#e6db74">&#34;https://api.mailgun.net/v3/sandbox5f2XXXXXXXa.mailgun.org/messages&#34;</span>
+  <span style="color:#75715e">## username:password so api_key is all after the api:</span>
+  api_key <span style="color:#f92672">&lt;-</span> <span style="color:#e6db74">&#34;key-c5957XXXXXXXXXXXbb9cf8ce&#34;</span>
+  the_body <span style="color:#f92672">&lt;-</span>
+    <span style="color:#a6e22e">list</span>(
+      from<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Mailgun Sandbox &lt;postmaster@sandbox5XXXXXXXXa.mailgun.org&gt;&#34;</span>,
+      to<span style="color:#f92672">=</span>email,
+      subject<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Mailgun from R&#34;</span>,
+      text<span style="color:#f92672">=</span>mailmessage,
     )
 
-  req &lt;- httr::POST(url,
-                    httr::authenticate(&quot;api&quot;, api_key),
-                    encode = &quot;form&quot;,
-                    body = the_body)
+  req <span style="color:#f92672">&lt;-</span> httr<span style="color:#f92672">::</span><span style="color:#a6e22e">POST</span>(url,
+                    httr<span style="color:#f92672">::</span><span style="color:#a6e22e">authenticate</span>(<span style="color:#e6db74">&#34;api&#34;</span>, api_key),
+                    encode <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;form&#34;</span>,
+                    body <span style="color:#f92672">=</span> the_body)
 
-  httr::stop_for_status(req)
+  httr<span style="color:#f92672">::</span><span style="color:#a6e22e">stop_for_status</span>(req)
   
-  TRUE
+  <span style="color:#66d9ef">TRUE</span>
 
 }
 
-</code></pre>
-
-<h3 id="scheduling-packages">Scheduling packages</h3>
-
+</code></pre></div><h3 id="scheduling-packages">Scheduling packages</h3>
 <p>There is also an R package that manages cron, <a href="https://github.com/bnosac/cronR">cronR</a> , which now has an RStudio Server addin, which looks like a good option.</p>
-
 <h2 id="pushing-the-docker-changes">Pushing the Docker changes</h2>
-
 <p>We now commit and push changes to the <a href="https://cloud.google.com/container-registry/docs/">Google Docker Hub</a>.  The Docker command docs are <a href="https://docs.docker.com/engine/reference/commandline/commit/">here</a>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e">## CTRL-D to come out of the docker container again</span>
 
-<pre><code class="language-sh">## CTRL-D to come out of the docker container again
-
-## to get the container id e.g. c3f279d17e0a
+<span style="color:#75715e">## to get the container id e.g. c3f279d17e0a</span>
 sudo docker ps 
 
-## commit with a message
-sudo docker commit -a &quot;Mark&quot; -m &quot;Added R stuff&quot; \
-    CONTAINER_ID yourname/your-new-docker-image
+<span style="color:#75715e">## commit with a message</span>
+sudo docker commit -a <span style="color:#e6db74">&#34;Mark&#34;</span> -m <span style="color:#e6db74">&#34;Added R stuff&#34;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    CONTAINER_ID yourname/your-new-docker-image
 
-## list your new image with the old
+<span style="color:#75715e">## list your new image with the old</span>
 sudo docker images
 
-## tag the image with the location
-sudo docker tag yourname/your-new-docker-image \
-                gcr.io/your-project-id/your-new-docker-image
+<span style="color:#75715e">## tag the image with the location</span>
+sudo docker tag yourname/your-new-docker-image <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>                gcr.io/your-project-id/your-new-docker-image
 
-## push to Google Docker registry
-sudo gcloud docker push \
-     gcr.io/your-project-id/your-new-docker-image
-</code></pre>
-
-<p>You could now pull this image using:</p>
-
-<pre><code class="language-sh">sudo gcloud docker pull \
-  gcr.io/your-project-id/your-new-image-name
-</code></pre>
-
-<p>&hellip;but this will be taken care of in the startup behaviour below.</p>
-
+<span style="color:#75715e">## push to Google Docker registry</span>
+sudo gcloud docker push <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>     gcr.io/your-project-id/your-new-docker-image
+</code></pre></div><p>You could now pull this image using:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">sudo gcloud docker pull <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  gcr.io/your-project-id/your-new-image-name
+</code></pre></div><p>&hellip;but this will be taken care of in the startup behaviour below.</p>
 <p>Remember to commit any changes each time you change the configuration of RStudio.</p>
-
 <h2 id="setup-restart-behaviour">Setup restart behaviour</h2>
-
 <p>Now we want to configure the above to happen everytime the VM starts up.  I use a startup script for pulling the latest docker image and updating any packages or data from github so to refresh I just need to restart the server.</p>
-
 <h3 id="download-latest-custom-packages-and-data">Download latest custom packages and data</h3>
-
 <p>In the custom metadata for the VM, we need the field <code>startup-script</code> and then optional other metadata.</p>
-
 <p>The metadata is kept seperate away from your running containers, but available via the Google metadata commands.  This can be used for things like passwords and security settings you would prefer not to be shipped in a Docker container, and is easier to manage - just edit the metadata keys.</p>
-
 <p>Create one metadata field per bash script variable - examples below:</p>
-
-<pre><code>github-user: your-githubname
+<pre tabindex="0"><code>github-user: your-githubname
 
 github-repo: your-github-repo
 
 github-data: your-github-data
 
 github-pat: your-github-pat
-</code></pre>
-
-<p>This startup script loads the metadata above and downloads custom R packages and data files from github.</p>
-
+</code></pre><p>This startup script loads the metadata above and downloads custom R packages and data files from github.</p>
 <p>You can save this locally as <code>startup.sh</code> and upload via <code>gcloud</code> or paste it into the interface into a metadata field called <code>startup-script</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e">#!/bin/bash
+</span><span style="color:#75715e"></span>GH_USER<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>curl http://metadata/computeMetadata/v1/instance/attributes/github-user -H <span style="color:#e6db74">&#34;Metadata-Flavor: Google&#34;</span><span style="color:#66d9ef">)</span>
+GH_REPO<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>curl http://metadata/computeMetadata/v1/instance/attributes/github-repo -H <span style="color:#e6db74">&#34;Metadata-Flavor: Google&#34;</span><span style="color:#66d9ef">)</span>
+GH_DATA<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>curl http://metadata/computeMetadata/v1/instance/attributes/github-data -H <span style="color:#e6db74">&#34;Metadata-Flavor: Google&#34;</span><span style="color:#66d9ef">)</span>
+GH_PAT<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>curl http://metadata/computeMetadata/v1/instance/attributes/github-pat -H <span style="color:#e6db74">&#34;Metadata-Flavor: Google&#34;</span><span style="color:#66d9ef">)</span>
 
-<pre><code class="language-sh">#!/bin/bash
-GH_USER=$(curl http://metadata/computeMetadata/v1/instance/attributes/github-user -H &quot;Metadata-Flavor: Google&quot;)
-GH_REPO=$(curl http://metadata/computeMetadata/v1/instance/attributes/github-repo -H &quot;Metadata-Flavor: Google&quot;)
-GH_DATA=$(curl http://metadata/computeMetadata/v1/instance/attributes/github-data -H &quot;Metadata-Flavor: Google&quot;)
-GH_PAT=$(curl http://metadata/computeMetadata/v1/instance/attributes/github-pat -H &quot;Metadata-Flavor: Google&quot;)
+<span style="color:#75715e">## Run Docker image</span>
+docker run --name rstudio-server <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>       -d -p 8787:8787 <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>       -e USER<span style="color:#f92672">=</span>ADMIN_USERNAME <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>       -e PASSWORD<span style="color:#f92672">=</span>ADMIN_PW <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>       -v /mnt/data/:/home/ <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>       gcr.io/your-project-name/your-image-name
 
-## Run Docker image
-docker run --name rstudio-server \
-       -d -p 8787:8787 \
-       -e USER=ADMIN_USERNAME \
-       -e PASSWORD=ADMIN_PW \
-       -v /mnt/data/:/home/ \
-       gcr.io/your-project-name/your-image-name
-
-## Data files: update from github
+<span style="color:#75715e">## Data files: update from github</span>
 cd /mnt/data/user_name/project_name/data
-git pull 'https://'$GH_USER':'$GH_PAT'@github.com/'$GH_USER'/'$GH_DATA'.git'
+git pull <span style="color:#e6db74">&#39;https://&#39;</span>$GH_USER<span style="color:#e6db74">&#39;:&#39;</span>$GH_PAT<span style="color:#e6db74">&#39;@github.com/&#39;</span>$GH_USER<span style="color:#e6db74">&#39;/&#39;</span>$GH_DATA<span style="color:#e6db74">&#39;.git&#39;</span>
 
-## Private packages 
-# 1. pull from github
+<span style="color:#75715e">## Private packages </span>
+<span style="color:#75715e"># 1. pull from github</span>
 cd /mnt/data/R/privatePackageName
-git pull 'https://'$GH_USER':'$GH_PAT'@github.com/'$GH_USER'/'$GH_REPO'.git'
+git pull <span style="color:#e6db74">&#39;https://&#39;</span>$GH_USER<span style="color:#e6db74">&#39;:&#39;</span>$GH_PAT<span style="color:#e6db74">&#39;@github.com/&#39;</span>$GH_USER<span style="color:#e6db74">&#39;/&#39;</span>$GH_REPO<span style="color:#e6db74">&#39;.git&#39;</span>
 
-# 2. Install the package from the local file you just updated from Git
-sudo docker exec -it rstudio-server \
-     sudo su - -c &quot;R -e \&quot;devtools::install('/home/R/localPackageName/')\&quot;&quot;
+<span style="color:#75715e"># 2. Install the package from the local file you just updated from Git</span>
+sudo docker exec -it rstudio-server <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>     sudo su - -c <span style="color:#e6db74">&#34;R -e \&#34;devtools::install(&#39;/home/R/localPackageName/&#39;)\&#34;&#34;</span>
 
-</code></pre>
-
-<p>You can debug your startup script by connecting to your instance and viewing <code>cat /var/log/startupscript.log</code></p>
-
+</code></pre></div><p>You can debug your startup script by connecting to your instance and viewing <code>cat /var/log/startupscript.log</code></p>
 <p>You could also have a <code>shutdown-script</code> that would execute before any shutdown.  Check out the <a href="https://cloud.google.com/compute/docs/metadata">list of metadata</a> you can pass into scripts.</p>
-
 <h2 id="launch">Launch</h2>
-
 <p>Now we relaunch the newly configured VM from your local computer, to test the startup script works.  This will copy over all the configurations from the RStudio server above.</p>
-
 <p>Save the <code>startup.sh</code> script to a file on your local machine, cd into the same folder and add the metadata:</p>
-
-<pre><code class="language-sh">gcloud compute instances add-metadata your-r-server-name \
-  --metadata-from-file startup-script=startup.sh \
-  --metadata github-user=YOUR-USER,github-repo=YOUR_REPO,github-data=YOUR_DATA,github-pat=YOUR_PAT
-</code></pre>
-
-<p>Now reset, cross fingers:</p>
-
-<pre><code class="language-sh">## reset
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">gcloud compute instances add-metadata your-r-server-name <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  --metadata-from-file startup-script<span style="color:#f92672">=</span>startup.sh <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  --metadata github-user<span style="color:#f92672">=</span>YOUR-USER,github-repo<span style="color:#f92672">=</span>YOUR_REPO,github-data<span style="color:#f92672">=</span>YOUR_DATA,github-pat<span style="color:#f92672">=</span>YOUR_PAT
+</code></pre></div><p>Now reset, cross fingers:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e">## reset</span>
 gcloud compute instances reset your-r-server-name
-</code></pre>
-
-<p>After a couple of minutes everything should now be running as configured before.</p>
-
+</code></pre></div><p>After a couple of minutes everything should now be running as configured before.</p>
 <p>If you want to stop or start the server again, use the below:</p>
-
-<pre><code class="language-sh">## stop (no billing) but not deleted
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e">## stop (no billing) but not deleted</span>
 gcloud compute instances stop your-r-server-name
 
-## start up a stopped server
+<span style="color:#75715e">## start up a stopped server</span>
 gcloud compute instances start your-r-server-name
-</code></pre>
-
-<h2 id="the-future">The future</h2>
-
+</code></pre></div><h2 id="the-future">The future</h2>
 <p>This should put you in a great position to support R-scripts to the team, but also in a scalable way where starting up faster and bigger machines is just a case of updating configuration files.</p>
-
 <p>I would like to start up containers using the container manifest syntax but couldn&rsquo;t get it to work for me yet, but for just one VM it means a few less lines in the start up script.</p>
-
 <p>We also have <a href="http://iihnordic.dk/blog/posts/2016/marts/creating-a-content-recommendation-engine-using-r-opencpu-and-gtm">OpenCPU</a> and <a href="https://www.rstudio.com/products/shiny/shiny-server/">Shiny Server</a> in the Google project, as we move into providing data output such as visualisations, APIs and dashboards.  They are setup in a similar fashion, just swap out the Docker image for the appropriate version you need.</p>
 
         </div>

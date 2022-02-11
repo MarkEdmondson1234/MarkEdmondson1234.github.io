@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>firebase on Mark Edmondson</title>
@@ -6,11 +6,7 @@
     <description>Recent content in firebase on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
-    <lastBuildDate>Sun, 28 Jun 2020 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://code.markedmondson.me/tags/firebase/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sun, 28 Jun 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://code.markedmondson.me/tags/firebase/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions</title>
       <link>https://code.markedmondson.me/datascience-aas/</link>

@@ -2,7 +2,7 @@
 <html lang="en-GB">
 <head>
     <title>Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two &middot; Mark Edmondson</title>
-    <meta name="generator" content="Hugo 0.55.5" />
+    <meta name="generator" content="Hugo 0.92.0" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
@@ -23,24 +23,17 @@
     <meta property="og:title" content="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" />
 <meta property="og:description" content="In part two of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&rsquo;s data streaming capability. In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in Shiny and the JavaScript visualisation library Highcharts." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/" />
-<meta property="article:published_time" content="2017-01-22T14:20:57&#43;01:00"/>
-<meta property="article:modified_time" content="2017-01-22T14:20:57&#43;01:00"/>
+<meta property="og:url" content="https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2017-01-22T14:20:57+01:00" />
+<meta property="article:modified_time" content="2017-01-22T14:20:57+01:00" />
+
 
     
-    
-<meta itemprop="name" content="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two">
-<meta itemprop="description" content="In part two of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&rsquo;s data streaming capability. In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in Shiny and the JavaScript visualisation library Highcharts.">
-
-
-<meta itemprop="datePublished" content="2017-01-22T14:20:57&#43;01:00" />
-<meta itemprop="dateModified" content="2017-01-22T14:20:57&#43;01:00" />
-<meta itemprop="wordCount" content="2132">
-
-
-
+    <meta itemprop="name" content="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two">
+<meta itemprop="description" content="In part two of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&rsquo;s data streaming capability. In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in Shiny and the JavaScript visualisation library Highcharts."><meta itemprop="datePublished" content="2017-01-22T14:20:57+01:00" />
+<meta itemprop="dateModified" content="2017-01-22T14:20:57+01:00" />
+<meta itemprop="wordCount" content="2131">
 <meta itemprop="keywords" content="python,google-app-engine,google-tag-manager,big-query,R," />
-
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two"/>
 <meta name="twitter:description" content="In part two of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&rsquo;s data streaming capability. In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in Shiny and the JavaScript visualisation library Highcharts."/>
@@ -284,7 +277,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2017-01-22 14:20:57 &#43;0100 CET" itemprop="datePublished">2017-01-22</time>
             &middot;
-            2132
+            2131
             words
             &middot;
             11
@@ -326,342 +319,259 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
         <div class="article-entry" itemprop="articleBody">
-            
-
-<p>In part two of this two part series we walk through the steps to stream data from a <a href="https://www.google.com/analytics/tag-manager/">Google Tag Manager</a> (GTM) implementation into a <a href="https://cloud.google.com/appengine/">Google App Engine</a> (GAE) web app, which then adds data to a <a href="https://cloud.google.com/bigquery/">BigQuery</a> table via BigQuery&rsquo;s data streaming capability.  In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in <a href="https://shiny.rstudio.com/">Shiny</a> and the JavaScript visualisation library <a href="http://jkunst.com/highcharter/">Highcharts</a>.</p>
-
+            <p>In part two of this two part series we walk through the steps to stream data from a <a href="https://www.google.com/analytics/tag-manager/">Google Tag Manager</a> (GTM) implementation into a <a href="https://cloud.google.com/appengine/">Google App Engine</a> (GAE) web app, which then adds data to a <a href="https://cloud.google.com/bigquery/">BigQuery</a> table via BigQuery&rsquo;s data streaming capability.  In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in <a href="https://shiny.rstudio.com/">Shiny</a> and the JavaScript visualisation library <a href="http://jkunst.com/highcharter/">Highcharts</a>.</p>
 <p>Read <a href="/real-time-GTM-google-cloud-r-shiny-1/">part one here</a>.</p>
-
 <p>The project combines several languages where their advantages lie: Python for its interaction with Google APIs and its quick start creating your own API on App Engine, SQL to query the BigQuery data itself, R for its forecasting libraries and the reactive Shiny framework, and JavaScript for the visualisation and data capture at the Google Tag Manager end.</p>
-
 <h2 id="thanks">Thanks</h2>
-
 <p>This project wouldn&rsquo;t have been possible without the help of the excellent work gone beforehand by <a href="https://www.analyticspros.com/blog/data-science/streaming-prebid-data-google-bigquery/">Luke Cempre&rsquo;s post on AnalyticsPros</a> for streaming data from Google Tag Manager to BigQuery, and <a href="http://jkunst.com/">Joshua Kunst</a> for his help with the Highcharts JavaScript.</p>
-
 <h2 id="data-flows">Data flows</h2>
-
 <p>There are two data flows in this project.  The first adds data to BigQuery:</p>
-
 <ol>
 <li>GTM collects data into its dataLayer from a web visit.</li>
 <li>A custom HTML tag in GTM collects the data you want to stream then calls an App Engine URL with its data payload.</li>
 <li>The app engine URL is sent to a queue to add the data to BigQuery.</li>
 <li>The data plus a timestamp is put into a BigQuery row.</li>
 </ol>
-
 <p>Then to read the data:</p>
-
 <ol>
 <li>The Shiny app calls Big Query every X seconds.</li>
 <li>The data is aggregated</li>
 <li>A forecast is made with the updated data.</li>
 <li>The Highcharts visualisation reads the changing dataset, and updates the visualisation.</li>
 </ol>
-
 <p>This blog will cover the second. A demo <a href="https://github.com/MarkEdmondson1234/realtimeShiny">Github repo for the Shiny app is available here</a>.</p>
-
 <h2 id="calling-data-your-options">Calling data: your options</h2>
-
 <p>The Google App Engine app on Github includes functions to both read and write data from BigQuery.  You can either call the data via the app engine app, which in turn reads the data via the Python BigQuery library, or if you are using a platform that supports reading the data from BigQuery then you can use that directly.</p>
-
 <p>In most cases, you will be better off with the latter, as you will be cutting out the middle man.  In some cases the app engine will time out so if you are using it you should make sure your app can handle null results.  But it is useful to have, for those platforms that do not have Big query SDKs, such as some visualisation BI tools.</p>
-
-<h3 id="option-1-google-app-engine-reading-realtime-data-from-bigquery">Option 1 - Google App Engine: Reading realtime data from BigQuery</h3>
-
+<h3 id="option-1---google-app-engine-reading-realtime-data-from-bigquery">Option 1 - Google App Engine: Reading realtime data from BigQuery</h3>
 <p>The full code for reading and writing data is available at the <a href="https://github.com/MarkEdmondson1234/ga-bq-stream">supporting Github repo here</a>.</p>
-
 <p>The first blog in this series went through its data input, we now look at the data output.  In production this may be separated out into a different app, but for brevity its here in the same application.</p>
-
 <p>We first define some environmental variables in the <code>app.yaml</code> setup file, with the dataset and table and a secret code word:</p>
-
-<pre><code>#[START env]
+<pre tabindex="0"><code>#[START env]
 env_variables:
   DATASET_ID: tests
   TABLE_ID: realtime_markedmondsonme
   SECRET_SALT: change_this_to_something_unique
 #[END env]
-</code></pre>
+</code></pre><p>The first function below then queries the BigQuery table we defined in the environmental variables, and turns it into JSON.  By default it will get the last row, or you can pass in the <code>limit</code> argument to get more rows, or your own <code>q</code> argument with custom SQL to query the table directly:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># queries and turns into JSON</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_data</span>(q, limit <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>):
+	datasetId <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#39;DATASET_ID&#39;</span>]
+	tableId   <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#39;TABLE_ID&#39;</span>]
 
-<p>The first function below then queries the BigQuery table we defined in the environmental variables, and turns it into JSON.  By default it will get the last row, or you can pass in the <code>limit</code> argument to get more rows, or your own <code>q</code> argument with custom SQL to query the table directly:</p>
+	<span style="color:#66d9ef">if</span> len(q) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>:
+		query <span style="color:#f92672">=</span> q <span style="color:#f92672">%</span> (datasetId, tableId)
+	<span style="color:#66d9ef">else</span>:
+		query <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;SELECT * FROM </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">.</span><span style="color:#e6db74">%s</span><span style="color:#e6db74"> ORDER BY ts DESC LIMIT </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> (datasetId, tableId, limit)
 
-<pre><code class="language-python"># queries and turns into JSON
-def get_data(q, limit = 1):
-	datasetId = os.environ['DATASET_ID']
-	tableId   = os.environ['TABLE_ID']
+	bqdata <span style="color:#f92672">=</span> sync_query(query)
 
-	if len(q) &gt; 0:
-		query = q % (datasetId, tableId)
-	else:
-		query = 'SELECT * FROM %s.%s ORDER BY ts DESC LIMIT %s' % (datasetId, tableId, limit)
-
-	bqdata = sync_query(query)
-
-	return json.dumps(bqdata)
+	<span style="color:#66d9ef">return</span> json<span style="color:#f92672">.</span>dumps(bqdata)
 	
-</code></pre>
-
-<p>This next class is called when the &ldquo;get data&rdquo; URL is requested.  A lot of headers are set to ensure no browser caching is done which we don&rsquo;t want since this is a realtime feed.</p>
-
+</code></pre></div><p>This next class is called when the &ldquo;get data&rdquo; URL is requested.  A lot of headers are set to ensure no browser caching is done which we don&rsquo;t want since this is a realtime feed.</p>
 <p>For security, we also test via a <code>hash</code> parameter to make sure its an authorised request, and decide how much data to return via the <code>limit</code> parameter.</p>
-
 <p>Finally we call the function above and write that out to the URL response.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">QueryTable</span>(webapp2<span style="color:#f92672">.</span>RequestHandler):
 
-<pre><code class="language-python">class QueryTable(webapp2.RequestHandler):
+	<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get</span>(self):
 
-	def get(self):
+    <span style="color:#75715e"># no caching</span>
+		self<span style="color:#f92672">.</span>response<span style="color:#f92672">.</span>headers<span style="color:#f92672">.</span>add_header(<span style="color:#e6db74">&#34;Access-Control-Allow-Origin&#34;</span>, <span style="color:#e6db74">&#34;*&#34;</span>)
+		self<span style="color:#f92672">.</span>response<span style="color:#f92672">.</span>headers<span style="color:#f92672">.</span>add_header(<span style="color:#e6db74">&#34;Pragma&#34;</span>, <span style="color:#e6db74">&#34;no-cache&#34;</span>)
+		self<span style="color:#f92672">.</span>response<span style="color:#f92672">.</span>headers<span style="color:#f92672">.</span>add_header(<span style="color:#e6db74">&#34;Cache-Control&#34;</span>, <span style="color:#e6db74">&#34;no-cache, no-store, must-revalidate, pre-check=0, post-check=0&#34;</span>)
+		self<span style="color:#f92672">.</span>response<span style="color:#f92672">.</span>headers<span style="color:#f92672">.</span>add_header(<span style="color:#e6db74">&#34;Expires&#34;</span>, <span style="color:#e6db74">&#34;Thu, 01 Dec 1994 16:00:00&#34;</span>)
+		self<span style="color:#f92672">.</span>response<span style="color:#f92672">.</span>headers<span style="color:#f92672">.</span>add_header(<span style="color:#e6db74">&#34;Content-Type&#34;</span>, <span style="color:#e6db74">&#34;application/json&#34;</span>)
 
-    # no caching
-		self.response.headers.add_header(&quot;Access-Control-Allow-Origin&quot;, &quot;*&quot;)
-		self.response.headers.add_header(&quot;Pragma&quot;, &quot;no-cache&quot;)
-		self.response.headers.add_header(&quot;Cache-Control&quot;, &quot;no-cache, no-store, must-revalidate, pre-check=0, post-check=0&quot;)
-		self.response.headers.add_header(&quot;Expires&quot;, &quot;Thu, 01 Dec 1994 16:00:00&quot;)
-		self.response.headers.add_header(&quot;Content-Type&quot;, &quot;application/json&quot;)
+		q      <span style="color:#f92672">=</span> cgi<span style="color:#f92672">.</span>escape(self<span style="color:#f92672">.</span>request<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;q&#34;</span>))
+		myhash <span style="color:#f92672">=</span> cgi<span style="color:#f92672">.</span>escape(self<span style="color:#f92672">.</span>request<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;hash&#34;</span>))
+		limit  <span style="color:#f92672">=</span> cgi<span style="color:#f92672">.</span>escape(self<span style="color:#f92672">.</span>request<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;limit&#34;</span>))
 
-		q      = cgi.escape(self.request.get(&quot;q&quot;))
-		myhash = cgi.escape(self.request.get(&quot;hash&quot;))
-		limit  = cgi.escape(self.request.get(&quot;limit&quot;))
+		salt <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#39;SECRET_SALT&#39;</span>]
+		test <span style="color:#f92672">=</span> hashlib<span style="color:#f92672">.</span>sha224(q<span style="color:#f92672">+</span>salt)<span style="color:#f92672">.</span>hexdigest()
 
-		salt = os.environ['SECRET_SALT']
-		test = hashlib.sha224(q+salt).hexdigest()
+		<span style="color:#66d9ef">if</span>(test <span style="color:#f92672">!=</span> myhash):
+			logging<span style="color:#f92672">.</span>debug(<span style="color:#e6db74">&#39;Expected hash: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(test))
+			logging<span style="color:#f92672">.</span>error(<span style="color:#e6db74">&#34;Incorrect hash&#34;</span>)
+			<span style="color:#66d9ef">return</span>
 
-		if(test != myhash):
-			logging.debug('Expected hash: {}'.format(test))
-			logging.error(&quot;Incorrect hash&quot;)
-			return
+		<span style="color:#66d9ef">if</span> len(limit) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
+			limit <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
 
-		if len(limit) == 0:
-			limit = 1
+		self<span style="color:#f92672">.</span>response<span style="color:#f92672">.</span>out<span style="color:#f92672">.</span>write(get_data(q, limit))
+</code></pre></div><p>To find the hash, you can run this line and copy the result:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">
+q <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># change to the query you use directly if you donøt use the default</span>
+salt <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#39;SECRET_SALT&#39;</span>] <span style="color:#75715e"># the secret passphrase</span>
+test <span style="color:#f92672">=</span> hashlib<span style="color:#f92672">.</span>sha224(q<span style="color:#f92672">+</span>salt)<span style="color:#f92672">.</span>hexdigest()
 
-		self.response.out.write(get_data(q, limit))
-</code></pre>
-
-<p>To find the hash, you can run this line and copy the result:</p>
-
-<pre><code class="language-python">
-q = &quot;&quot; # change to the query you use directly if you donøt use the default
-salt = os.environ['SECRET_SALT'] # the secret passphrase
-test = hashlib.sha224(q+salt).hexdigest()
-
-</code></pre>
-
-<p>&hellip;or easier is to just run one call, then check the logs for the hash in the debug messages:</p>
-
-<p><img src="/images/secrethash.png" alt="" /></p>
-
+</code></pre></div><p>&hellip;or easier is to just run one call, then check the logs for the hash in the debug messages:</p>
+<p><img src="/images/secrethash.png" alt=""></p>
 <h3 id="full-app-engine-script">Full App Engine Script</h3>
-
 <p>The full script uploaded is available in the Github repository here:  <a href="https://github.com/MarkEdmondson1234/ga-bq-stream/blob/master/main.py">main.py</a></p>
-
 <p>With this script you then need some configuration files for the app and upload it to your Google Project.  A guide on how to deploy this is and more is available from the <a href="https://github.com/MarkEdmondson1234/ga-bq-stream/blob/master/README.md">Github repository README</a>, but once done the app will be available at <code>https://YOUR-PROJECT-ID.appspot.com</code> and you will call the <code>/bq-streamer</code> and <code>/bq-get</code> URLs to send and get data.</p>
-
-<h3 id="option-2-calling-bigquery-directly">Option 2 - Calling BigQuery directly</h3>
-
+<h3 id="option-2---calling-bigquery-directly">Option 2 - Calling BigQuery directly</h3>
 <p>This is the preferred method, as it will be on average 5-10 seconds quicker to get your results, and avoid timeouts.</p>
-
 <p>I&rsquo;m using Shiny as it fits into existing work, but you may prefer to use some of the other <a href="https://cloud.google.com/bigquery/docs/reference/libraries">BigQuery SDKs out there</a>. I&rsquo;ll be using <a href="https://github.com/cloudyr/bigQueryR">Github version of bigQueryR</a> <code>&gt; 0.2.0.9000</code> as it has support for non-cached queries that are needed to see the tables update in realtime.</p>
-
 <p>A demo <a href="https://github.com/MarkEdmondson1234/realtimeShiny">Github repo for the Shiny app is available here</a>.</p>
-
 <p>In this case, the function in R that is in the Shiny <code>server.R</code> is below:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(bigQueryR)
 
-<pre><code class="language-r">library(bigQueryR)
 
+do_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function</span>(limit){
 
-do_bq &lt;- function(limit){
-
-  ## authenticate offline first, upload the .httr-oauth token
-  bqr_auth()
-  q &lt;- sprintf(&quot;SELECT * FROM [big-query-r:tests.realtime_markedmondsonme] ORDER BY ts DESC LIMIT %s&quot;, 
+  <span style="color:#75715e">## authenticate offline first, upload the .httr-oauth token</span>
+  <span style="color:#a6e22e">bqr_auth</span>()
+  q <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">sprintf</span>(<span style="color:#e6db74">&#34;SELECT * FROM [big-query-r:tests.realtime_markedmondsonme] ORDER BY ts DESC LIMIT %s&#34;</span>, 
                limit)
   
-  bqr_query(projectId = &quot;big-query-r&quot;, 
-            datasetId = &quot;tests&quot;, 
-            query = q, 
-            useQueryCache = FALSE)  
+  <span style="color:#a6e22e">bqr_query</span>(projectId <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;big-query-r&#34;</span>, 
+            datasetId <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;tests&#34;</span>, 
+            query <span style="color:#f92672">=</span> q, 
+            useQueryCache <span style="color:#f92672">=</span> <span style="color:#66d9ef">FALSE</span>)  
 }
-</code></pre>
-
-<p>The <code>bqr_auth()</code> if first run offline to generate the authentication token, which is then uploaded with the app.  Alternatively you can use the <a href="http://code.markedmondson.me/googleAuthR/reference/gar_auth_service.html">JSON service auth</a> or if deploying on Google Compute Engine the automatic Google Cloud auth features of googleAuthR (<code>googleAuthR::gar_gce_auth()</code>)</p>
-
+</code></pre></div><p>The <code>bqr_auth()</code> if first run offline to generate the authentication token, which is then uploaded with the app.  Alternatively you can use the <a href="http://code.markedmondson.me/googleAuthR/reference/gar_auth_service.html">JSON service auth</a> or if deploying on Google Compute Engine the automatic Google Cloud auth features of googleAuthR (<code>googleAuthR::gar_gce_auth()</code>)</p>
 <p>The query itself selects all the columns, and orders by the timestamp we supplied in the input post. The function has a parameter so you can select how many rows to collect, which we use later.</p>
-
 <p>Note the use of <code>useQueryCache = FALSE</code> to ensure you always get the freshest results.  If this wasn&rsquo;t selected queries of the same type will return the first result they queried, which is no good for these purposes.</p>
-
-<h2 id="reactivepoll-the-shiny-realtime-function">reactivePoll - the Shiny realtime function</h2>
-
+<h2 id="reactivepoll---the-shiny-realtime-function">reactivePoll - the Shiny realtime function</h2>
 <p>For realtime applications, <code>shiny::reactivePoll()</code> is a function that periodically checks a datasource for changes.</p>
-
 <p>Now, what constitutes &ldquo;realtime&rdquo; is debatable here - for my applications I really only need an update every ~30 seconds.  Practically the Shiny output dims when updating with data, so for periods less than say 10 seconds it may not be the best approach for you - updating directly via JavaScript libraries may be better, and rely on say OpenCPU to provide the forecasting or another JS library.</p>
-
 <p>However, for my purposes I just need something better than the Google Analytics 4-hour lag in data (for GA360) and this suits well, particularly as you can apply a whole host of R data functions to the output.</p>
-
 <p><code>reactivePoll</code> needs to be supplied with two functions: one to check if the data has changed, the other to make the complete fetch once a change is detected.  For these we just check if the timestamp of the last entry has changed, and if so, then fetch the last 1000 results to make the prediction:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#75715e">## get 1000 rows of data</span>
+get_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function</span>(){
 
-<pre><code class="language-r">## get 1000 rows of data
-get_bq &lt;- function(){
-
-  message(&quot;Getting new data...&quot;)
-  check &lt;- do_bq(1000)
+  <span style="color:#a6e22e">message</span>(<span style="color:#e6db74">&#34;Getting new data...&#34;</span>)
+  check <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">do_bq</span>(<span style="color:#ae81ff">1000</span>)
   
-  rt &lt;- as.data.frame(check, stringsAsFactors = FALSE)
-  names(rt) &lt;- c(&quot;pageURL&quot;,&quot;Referrer&quot;,&quot;ts&quot;)
+  rt <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as.data.frame</span>(check, stringsAsFactors <span style="color:#f92672">=</span> <span style="color:#66d9ef">FALSE</span>)
+  <span style="color:#a6e22e">names</span>(rt) <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#34;pageURL&#34;</span>,<span style="color:#e6db74">&#34;Referrer&#34;</span>,<span style="color:#e6db74">&#34;ts&#34;</span>)
   
-  ## turn string into JS timestamp
-  rt$timestamp &lt;- as.POSIXct(as.numeric(as.character(rt$ts)), origin=&quot;1970-01-01&quot;)
+  <span style="color:#75715e">## turn string into JS timestamp</span>
+  rt<span style="color:#f92672">$</span>timestamp <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as.POSIXct</span>(<span style="color:#a6e22e">as.numeric</span>(<span style="color:#a6e22e">as.character</span>(rt<span style="color:#f92672">$</span>ts)), origin<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1970-01-01&#34;</span>)
   
   rt
 }
 
-## get 1 row of data, output its timestamp
-check_bq &lt;- function(){
+<span style="color:#75715e">## get 1 row of data, output its timestamp</span>
+check_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function</span>(){
   
-  check &lt;- do_bq(1)
+  check <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">do_bq</span>(<span style="color:#ae81ff">1</span>)
   
-  message(&quot;Checking....check$ts: &quot;, check$ts)
-  check$ts
+  <span style="color:#a6e22e">message</span>(<span style="color:#e6db74">&#34;Checking....check$ts: &#34;</span>, check<span style="color:#f92672">$</span>ts)
+  check<span style="color:#f92672">$</span>ts
   
 }
 
-</code></pre>
-
-<p>This is then called in the Shiny server function like so, in this case every 5 seconds:</p>
-
-<pre><code class="language-r">shinyServer(function(input, output, session) {
+</code></pre></div><p>This is then called in the Shiny server function like so, in this case every 5 seconds:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">shinyServer</span>(<span style="color:#a6e22e">function</span>(input, output, session) {
   
-  ## checks every 5 seconds for changes
-  realtime_data &lt;- reactivePoll(5000, 
+  <span style="color:#75715e">## checks every 5 seconds for changes</span>
+  realtime_data <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">reactivePoll</span>(<span style="color:#ae81ff">5000</span>, 
                                 session, 
-                                checkFunc = check_bq, 
-                                valueFunc = get_bq)
+                                checkFunc <span style="color:#f92672">=</span> check_bq, 
+                                valueFunc <span style="color:#f92672">=</span> get_bq)
 
-  ### ... do stuff with realtime_data() ...
+  <span style="color:#75715e">### ... do stuff with realtime_data() ...</span>
 
 }
-</code></pre>
-
-<h2 id="transforming-data">Transforming data</h2>
-
+</code></pre></div><h2 id="transforming-data">Transforming data</h2>
 <p>We then need to make the forecast, and put the data into the correct format it can be used in the chosen visualisation library, <a href="http://jkunst.com/highcharter/">highcharter</a>.</p>
-
 <p>The next function takes the output of the <code>realtime_data()</code> function, aggregates per hour (my lowly blog hasn&rsquo;t enough data to make it worth doing per minute, but YNMV), turns the aggregation into time series objects suitable for the forecast and highcharts functions, then outputs a list.</p>
-
 <p>In this case I have chosen a very simple forecast function using all the defaults of <code>forecast::forecast()</code> but this should be tweaked to your particular use cases, such as taking more account of seasonality and so forth.</p>
-
-<pre><code class="language-r">transform_rt &lt;- function(rt){
-  ## aggregate per hour
-  rt_agg &lt;- rt %&gt;% 
-    mutate(hour = format(timestamp, format = &quot;%Y-%m-%d %H:00&quot;)) %&gt;% 
-    count(hour)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">transform_rt <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function</span>(rt){
+  <span style="color:#75715e">## aggregate per hour</span>
+  rt_agg <span style="color:#f92672">&lt;-</span> rt <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">mutate</span>(hour <span style="color:#f92672">=</span> <span style="color:#a6e22e">format</span>(timestamp, format <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;%Y-%m-%d %H:00&#34;</span>)) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">count</span>(hour)
   
-  rt_agg$hour &lt;- as.POSIXct(rt_agg$hour, origin=&quot;1970-01-01&quot;)
+  rt_agg<span style="color:#f92672">$</span>hour <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as.POSIXct</span>(rt_agg<span style="color:#f92672">$</span>hour, origin<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1970-01-01&#34;</span>)
   
-  # ## the number of hits per timestamp
-  rt_xts &lt;- xts::xts(rt_agg$n, frequency = 24, order.by = rt_agg$hour)
-  rt_ts &lt;- ts(rt_agg$n, frequency = 24)
+  <span style="color:#75715e"># ## the number of hits per timestamp</span>
+  rt_xts <span style="color:#f92672">&lt;-</span> xts<span style="color:#f92672">::</span><span style="color:#a6e22e">xts</span>(rt_agg<span style="color:#f92672">$</span>n, frequency <span style="color:#f92672">=</span> <span style="color:#ae81ff">24</span>, order.by <span style="color:#f92672">=</span> rt_agg<span style="color:#f92672">$</span>hour)
+  rt_ts <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">ts</span>(rt_agg<span style="color:#f92672">$</span>n, frequency <span style="color:#f92672">=</span> <span style="color:#ae81ff">24</span>)
   
-  list(forecast = forecast::forecast(rt_ts, h = 12),
-       xts = rt_xts)
+  <span style="color:#a6e22e">list</span>(forecast <span style="color:#f92672">=</span> forecast<span style="color:#f92672">::</span><span style="color:#a6e22e">forecast</span>(rt_ts, h <span style="color:#f92672">=</span> <span style="color:#ae81ff">12</span>),
+       xts <span style="color:#f92672">=</span> rt_xts)
 }
-</code></pre>
-
-<p>All that remains now is to apply this transformation to new data as it appears (e.g. for each new visit, the hourly aggregate for the last hour increases, and the forecast updates)</p>
-
-<pre><code class="language-r">  plot_data &lt;- reactive({
+</code></pre></div><p>All that remains now is to apply this transformation to new data as it appears (e.g. for each new visit, the hourly aggregate for the last hour increases, and the forecast updates)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">  plot_data <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">reactive</span>({
     
-    req(realtime_data())
-    rt &lt;- realtime_data()
-    message(&quot;plot_data()&quot;)
-    ## aggregate
-    transform_rt(rt)
+    <span style="color:#a6e22e">req</span>(<span style="color:#a6e22e">realtime_data</span>())
+    rt <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">realtime_data</span>()
+    <span style="color:#a6e22e">message</span>(<span style="color:#e6db74">&#34;plot_data()&#34;</span>)
+    <span style="color:#75715e">## aggregate</span>
+    <span style="color:#a6e22e">transform_rt</span>(rt)
     
   })
-</code></pre>
-
-<h2 id="output-to-highcharts">Output to Highcharts</h2>
-
+</code></pre></div><h2 id="output-to-highcharts">Output to Highcharts</h2>
 <p>The final output to Highcharts has been tweaked a bit to get the prediction intervals and so forth:</p>
-
-<pre><code class="language-r">  output$hc &lt;- renderHighchart({
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">  output<span style="color:#f92672">$</span>hc <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">renderHighchart</span>({
     
-    req(plot_data())
-    ## forcast values object
-    fc &lt;- plot_data()$forecast
+    <span style="color:#a6e22e">req</span>(<span style="color:#a6e22e">plot_data</span>())
+    <span style="color:#75715e">## forcast values object</span>
+    fc <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">plot_data</span>()<span style="color:#f92672">$</span>forecast
     
-    ## original data
-    raw_data &lt;- plot_data()$xts
+    <span style="color:#75715e">## original data</span>
+    raw_data <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">plot_data</span>()<span style="color:#f92672">$</span>xts
     
-    # plot last 48 hrs only, although forecast accounts for all data
-    raw_data &lt;- tail(raw_data, 48)
-    raw_x_date &lt;- as.numeric(index(raw_data)) * 1000
+    <span style="color:#75715e"># plot last 48 hrs only, although forecast accounts for all data</span>
+    raw_data <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">tail</span>(raw_data, <span style="color:#ae81ff">48</span>)
+    raw_x_date <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as.numeric</span>(<span style="color:#a6e22e">index</span>(raw_data)) <span style="color:#f92672">*</span> <span style="color:#ae81ff">1000</span>
     
-    ## start time in JS time
-    forecast_x_start &lt;- as.numeric(index(raw_data)[length(raw_data)])*1000
-    ## each hour after that in seconds, 
-    forecast_x_sequence &lt;- seq(3600000, by = 3600000, length.out = 12)
-    ## everything * 1000 to get to Javascript time
-    forecast_times &lt;- as.numeric(forecast_x_start + forecast_x_sequence)
+    <span style="color:#75715e">## start time in JS time</span>
+    forecast_x_start <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as.numeric</span>(<span style="color:#a6e22e">index</span>(raw_data)<span style="color:#a6e22e">[length</span>(raw_data)])<span style="color:#f92672">*</span><span style="color:#ae81ff">1000</span>
+    <span style="color:#75715e">## each hour after that in seconds, </span>
+    forecast_x_sequence <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">seq</span>(<span style="color:#ae81ff">3600000</span>, by <span style="color:#f92672">=</span> <span style="color:#ae81ff">3600000</span>, length.out <span style="color:#f92672">=</span> <span style="color:#ae81ff">12</span>)
+    <span style="color:#75715e">## everything * 1000 to get to Javascript time</span>
+    forecast_times <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as.numeric</span>(forecast_x_start <span style="color:#f92672">+</span> forecast_x_sequence)
     
-    forecast_values &lt;- as.numeric(fc$mean)
+    forecast_values <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as.numeric</span>(fc<span style="color:#f92672">$</span>mean)
     
-    hc &lt;- highchart() %&gt;%
-      hc_chart(zoomType = &quot;x&quot;) %&gt;%
-      hc_xAxis(type = &quot;datetime&quot;) %&gt;% 
-      hc_add_series(type = &quot;line&quot;,
-                    name = &quot;data&quot;,
-                    data = list_parse2(data.frame(date = raw_x_date, 
-                                                  value = raw_data))) %&gt;%
-      hc_add_series(type = &quot;arearange&quot;, 
-                    name = &quot;80%&quot;,
-                    fillOpacity = 0.3,
-                    data = list_parse2(data.frame(date = forecast_times,
-                                                  upper = as.numeric(fc$upper[,1]),
-                                                  lower = as.numeric(fc$lower[,1])))) %&gt;%
-      hc_add_series(type = &quot;arearange&quot;, 
-                    name = &quot;95%&quot;,
-                    fillOpacity = 0.3,
-                    data = list_parse2(data.frame(date = forecast_times,
-                                                  upper = as.numeric(fc$upper[,2]),
-                                                  lower = as.numeric(fc$lower[,2])))) %&gt;% 
-      hc_add_series(type = &quot;line&quot;,
-                    name = &quot;forecast&quot;,
-                    data = list_parse2(data.frame(date = forecast_times, 
-                                                  value = forecast_values)))
+    hc <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">highchart</span>() <span style="color:#f92672">%&gt;%</span>
+      <span style="color:#a6e22e">hc_chart</span>(zoomType <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;x&#34;</span>) <span style="color:#f92672">%&gt;%</span>
+      <span style="color:#a6e22e">hc_xAxis</span>(type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;datetime&#34;</span>) <span style="color:#f92672">%&gt;%</span> 
+      <span style="color:#a6e22e">hc_add_series</span>(type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;line&#34;</span>,
+                    name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;data&#34;</span>,
+                    data <span style="color:#f92672">=</span> <span style="color:#a6e22e">list_parse2</span>(<span style="color:#a6e22e">data.frame</span>(date <span style="color:#f92672">=</span> raw_x_date, 
+                                                  value <span style="color:#f92672">=</span> raw_data))) <span style="color:#f92672">%&gt;%</span>
+      <span style="color:#a6e22e">hc_add_series</span>(type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;arearange&#34;</span>, 
+                    name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;80%&#34;</span>,
+                    fillOpacity <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.3</span>,
+                    data <span style="color:#f92672">=</span> <span style="color:#a6e22e">list_parse2</span>(<span style="color:#a6e22e">data.frame</span>(date <span style="color:#f92672">=</span> forecast_times,
+                                                  upper <span style="color:#f92672">=</span> <span style="color:#a6e22e">as.numeric</span>(fc<span style="color:#f92672">$</span>upper[,<span style="color:#ae81ff">1</span>]),
+                                                  lower <span style="color:#f92672">=</span> <span style="color:#a6e22e">as.numeric</span>(fc<span style="color:#f92672">$</span>lower[,<span style="color:#ae81ff">1</span>])))) <span style="color:#f92672">%&gt;%</span>
+      <span style="color:#a6e22e">hc_add_series</span>(type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;arearange&#34;</span>, 
+                    name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;95%&#34;</span>,
+                    fillOpacity <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.3</span>,
+                    data <span style="color:#f92672">=</span> <span style="color:#a6e22e">list_parse2</span>(<span style="color:#a6e22e">data.frame</span>(date <span style="color:#f92672">=</span> forecast_times,
+                                                  upper <span style="color:#f92672">=</span> <span style="color:#a6e22e">as.numeric</span>(fc<span style="color:#f92672">$</span>upper[,<span style="color:#ae81ff">2</span>]),
+                                                  lower <span style="color:#f92672">=</span> <span style="color:#a6e22e">as.numeric</span>(fc<span style="color:#f92672">$</span>lower[,<span style="color:#ae81ff">2</span>])))) <span style="color:#f92672">%&gt;%</span> 
+      <span style="color:#a6e22e">hc_add_series</span>(type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;line&#34;</span>,
+                    name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;forecast&#34;</span>,
+                    data <span style="color:#f92672">=</span> <span style="color:#a6e22e">list_parse2</span>(<span style="color:#a6e22e">data.frame</span>(date <span style="color:#f92672">=</span> forecast_times, 
+                                                  value <span style="color:#f92672">=</span> forecast_values)))
     
     hc
     
   })
-</code></pre>
+</code></pre></div><p>This can then be displayed now in a very simple <code>ui.R</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(shiny)
+<span style="color:#a6e22e">library</span>(highcharter)
 
-<p>This can then be displayed now in a very simple <code>ui.R</code>:</p>
-
-<pre><code class="language-r">library(shiny)
-library(highcharter)
-
-shinyUI(fluidPage(
-  titlePanel(&quot;Realtime Shiny Dashboard from BigQuery&quot;),
-  highchartOutput(&quot;hc&quot;)
+<span style="color:#a6e22e">shinyUI</span>(<span style="color:#a6e22e">fluidPage</span>(
+  <span style="color:#a6e22e">titlePanel</span>(<span style="color:#e6db74">&#34;Realtime Shiny Dashboard from BigQuery&#34;</span>),
+  <span style="color:#a6e22e">highchartOutput</span>(<span style="color:#e6db74">&#34;hc&#34;</span>)
   )
 )
-</code></pre>
-
-<p>&hellip;to be tweaked and put into a template as needed.</p>
-
+</code></pre></div><p>&hellip;to be tweaked and put into a template as needed.</p>
 <p>The gif doesn&rsquo;t quite do it justice, but you get the idea:</p>
-
-<p><img src="../images/realtime_forcast.gif" alt="Update as visits registered to the blog" /></p>
-
+<p><img src="../images/realtime_forcast.gif" alt="Update as visits registered to the blog"></p>
 <h2 id="improvements">Improvements</h2>
-
 <p>Ideally I&rsquo;d like to avoid the Shiny grey-out when new data is fetched and the graph redraw - I fiddled a bit trying to get the JavaScript to take data from an R table and pull it in directly put that didn&rsquo;t work out - I may update it if its figured out later.</p>
-
 <p>However, as I said above for my application I needed an update only every 60 seconds so it wasn&rsquo;t worth too much trouble over.  But if say you needed (and who really <em>needs</em> this?) a smooth update every 5 seconds, the grey out would be too often to be useable.</p>
-
 <h2 id="summary">Summary</h2>
-
 <p>The full app then can be tested easily as its realtime :-)</p>
-
 <p>As I visit my blog it sends data from Google Tag Manager to BigQuery; that tables is queried every 5 seconds from the Shiny app to see if any new visits have occured; if they have the full data set is downloaded; a new forecast is made and output to the Highcharts.</p>
-
 <p>Whatever your application, the biggest thing I got from trying this project was it was a lot easier than I expected, which I credit the BigQuery platform for, so give it a go and let me know how it goes for you. Improve on the base I have made here, and I&rsquo;d be really interested in the applications beyond reporting you may use it for - real time traffic predictions that modify bids being one example.</p>
 
         </div>

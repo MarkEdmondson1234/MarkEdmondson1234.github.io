@@ -2,7 +2,7 @@
 <html lang="en-GB">
 <head>
     <title>SEO keyword research using searchConsoleR and googleAnalyticsR &middot; Mark Edmondson</title>
-    <meta name="generator" content="Hugo 0.55.5" />
+    <meta name="generator" content="Hugo 0.92.0" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
@@ -26,27 +26,20 @@ Overview Thanks to Vincent at data-seo.com who proof read and corrected some err
 Data comes from Google Search Console and Google Analytics.
 Search Console is used to provide the keywords in these days post (not provided)." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://code.markedmondson.me/search-console-google-analytics-r-keyword-research/" />
-<meta property="article:published_time" content="2016-06-21T23:03:57&#43;01:00"/>
-<meta property="article:modified_time" content="2016-06-21T23:03:57&#43;01:00"/>
+<meta property="og:url" content="https://code.markedmondson.me/search-console-google-analytics-r-keyword-research/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2016-06-21T23:03:57+01:00" />
+<meta property="article:modified_time" content="2016-06-21T23:03:57+01:00" />
+
 
     
-    
-<meta itemprop="name" content="SEO keyword research using searchConsoleR and googleAnalyticsR">
+    <meta itemprop="name" content="SEO keyword research using searchConsoleR and googleAnalyticsR">
 <meta itemprop="description" content="In this blog we look at a method to estimate where to prioritise your SEO resources, estimating which keywords will give the greatest increase in revenue if you could improve their Google rank.
 Overview Thanks to Vincent at data-seo.com who proof read and corrected some errors in the first draft
 Data comes from Google Search Console and Google Analytics.
-Search Console is used to provide the keywords in these days post (not provided).">
-
-
-<meta itemprop="datePublished" content="2016-06-21T23:03:57&#43;01:00" />
-<meta itemprop="dateModified" content="2016-06-21T23:03:57&#43;01:00" />
+Search Console is used to provide the keywords in these days post (not provided)."><meta itemprop="datePublished" content="2016-06-21T23:03:57+01:00" />
+<meta itemprop="dateModified" content="2016-06-21T23:03:57+01:00" />
 <meta itemprop="wordCount" content="1657">
-
-
-
 <meta itemprop="keywords" content="R,google-analytics,search-console," />
-
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="SEO keyword research using searchConsoleR and googleAnalyticsR"/>
 <meta name="twitter:description" content="In this blog we look at a method to estimate where to prioritise your SEO resources, estimating which keywords will give the greatest increase in revenue if you could improve their Google rank.
@@ -327,309 +320,246 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
         <div class="article-entry" itemprop="articleBody">
-            
-
-<p>In this blog we look at a method to estimate where to prioritise your SEO resources, estimating which keywords will give the greatest increase in revenue if you could improve their Google rank.</p>
-
+            <p>In this blog we look at a method to estimate where to prioritise your SEO resources, estimating which keywords will give the greatest increase in revenue if you could improve their Google rank.</p>
 <h2 id="overview">Overview</h2>
-
 <p><em>Thanks to <a href="https://data-seo.com/">Vincent at data-seo.com</a> who proof read and corrected some errors in the first draft</em></p>
-
 <p>Data comes from <a href="https://www.google.com/webmasters/tools/home">Google Search Console</a> and <a href="https://www.google.com/webmasters/tools/home?hl=en">Google Analytics</a>.</p>
-
 <p>Search Console is used to provide the keywords in these days post <a href="http://www.notprovidedcount.com/">(not provided)</a>.  We then link the two data sets by using the URLs as a key, and estimate how much each keyword made in revenue by splitting them in the same proportion as the traffic they have sent to the page.</p>
-
 <p>This approach assumes each keyword converts at the same rate once on the page, and will work better with some websites more than others - the best results I have seen are those websites with a lot of content on seperate URLs, such that they capture long-tail queries.  This is because the amount of keywords per URL is small, but with enough volume to make the estimates trustworthy.</p>
-
 <p>We also try to incorporate magins of error in the results.  This avoids situations where one click on position 40 gets a massive weighting in potential revenue, which in reality could have been a freak event.</p>
-
 <h2 id="summary">Summary</h2>
-
 <p>The method produced a targeted keyword list of 226 from an original seed list of ~21,000.  The top 30 revenue targets are shown in the plot below:</p>
-
-<p><img src="/images/see-potential.png" alt="seo-forecast-estimate" /></p>
-
+<p><img src="/images/see-potential.png" alt="seo-forecast-estimate"></p>
 <p>Read below on how the plot was generated and what the figures mean.</p>
-
 <h2 id="getting-the-data">Getting the data</h2>
-
 <p>Google Analytics recently provided more integration between the Search Console imports and the web session data, of which <a href="http://online-behavior.com/analytics/search-console">Daniel Waisberg has an excellent walk-through</a>, which could mean you can skip the first part of this script.</p>
-
 <p>However, there are circumstances where the integration won&rsquo;t work, such as when the URLs in Google Analytics are a different format to Search Console - with the below script you have control on how to link the URLs, by formatting them to look the same.</p>
-
 <p>Data is provided via my <a href="https://cran.r-project.org/web/packages/searchConsoleR/index.html">searchConsoleR</a> and <a href="http://code.markedmondson.me/googleAnalyticsR/">googleAnalyticsR</a> R packages.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(searchConsoleR)
+<span style="color:#a6e22e">library</span>(googleAnalyticsR)
 
-<pre><code class="language-r">library(searchConsoleR)
-library(googleAnalyticsR)
-
-## authentication with both GA and SC
-options(googleAuthR.scopes.selected = 
-  c(&quot;https://www.googleapis.com/auth/webmasters&quot;,
-    &quot;https://www.googleapis.com/auth/analytics&quot;,
-    &quot;https://www.googleapis.com/auth/analytics.readonly&quot;))
+<span style="color:#75715e">## authentication with both GA and SC</span>
+<span style="color:#a6e22e">options</span>(googleAuthR.scopes.selected <span style="color:#f92672">=</span> 
+  <span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#34;https://www.googleapis.com/auth/webmasters&#34;</span>,
+    <span style="color:#e6db74">&#34;https://www.googleapis.com/auth/analytics&#34;</span>,
+    <span style="color:#e6db74">&#34;https://www.googleapis.com/auth/analytics.readonly&#34;</span>))
     
-googleAuthR::gar_auth()
+googleAuthR<span style="color:#f92672">::</span><span style="color:#a6e22e">gar_auth</span>()
 
-## replace with your GA ID
-ga_id &lt;- 1111111 
+<span style="color:#75715e">## replace with your GA ID</span>
+ga_id <span style="color:#f92672">&lt;-</span> <span style="color:#ae81ff">1111111</span> 
 
-## date range to fetch
-start &lt;- as.character(Sys.Date() - 93)
-end &lt;- &quot;2016-06-01&quot;
+<span style="color:#75715e">## date range to fetch</span>
+start <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as.character</span>(<span style="color:#a6e22e">Sys.Date</span>() <span style="color:#f92672">-</span> <span style="color:#ae81ff">93</span>)
+end <span style="color:#f92672">&lt;-</span> <span style="color:#e6db74">&#34;2016-06-01&#34;</span>
 
-## Using new GA v4 API
-## GAv4 filters
-google_seo &lt;- 
-  filter_clause_ga4(list(dim_filter(&quot;medium&quot;, 
-                                     &quot;EXACT&quot;, 
-                                     &quot;organic&quot;),
-                          dim_filter(&quot;source&quot;, 
-                                     &quot;EXACT&quot;, 
-                                     &quot;google&quot;)),
-                     operator = &quot;AND&quot;)
+<span style="color:#75715e">## Using new GA v4 API</span>
+<span style="color:#75715e">## GAv4 filters</span>
+google_seo <span style="color:#f92672">&lt;-</span> 
+  <span style="color:#a6e22e">filter_clause_ga4</span>(<span style="color:#a6e22e">list</span>(<span style="color:#a6e22e">dim_filter</span>(<span style="color:#e6db74">&#34;medium&#34;</span>, 
+                                     <span style="color:#e6db74">&#34;EXACT&#34;</span>, 
+                                     <span style="color:#e6db74">&#34;organic&#34;</span>),
+                          <span style="color:#a6e22e">dim_filter</span>(<span style="color:#e6db74">&#34;source&#34;</span>, 
+                                     <span style="color:#e6db74">&#34;EXACT&#34;</span>, 
+                                     <span style="color:#e6db74">&#34;google&#34;</span>)),
+                     operator <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;AND&#34;</span>)
 
-## Getting the GA data
-gadata &lt;-
-  google_analytics_4(ga_id,
-                     date_range = c(start,end),
-                     metrics = c(&quot;sessions&quot;,
-                                 &quot;transactions&quot;,
-                                 &quot;transactionRevenue&quot;),
-                     dimensions = c(&quot;landingPagePath&quot;),
-                     dim_filters = google_seo,
-                     order = order_type(&quot;transactions&quot;, 
-                                        sort_order = &quot;DESC&quot;, 
-                                        orderType = &quot;VALUE&quot;),
-                     max = 20000)
+<span style="color:#75715e">## Getting the GA data</span>
+gadata <span style="color:#f92672">&lt;-</span>
+  <span style="color:#a6e22e">google_analytics_4</span>(ga_id,
+                     date_range <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(start,end),
+                     metrics <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#34;sessions&#34;</span>,
+                                 <span style="color:#e6db74">&#34;transactions&#34;</span>,
+                                 <span style="color:#e6db74">&#34;transactionRevenue&#34;</span>),
+                     dimensions <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#34;landingPagePath&#34;</span>),
+                     dim_filters <span style="color:#f92672">=</span> google_seo,
+                     order <span style="color:#f92672">=</span> <span style="color:#a6e22e">order_type</span>(<span style="color:#e6db74">&#34;transactions&#34;</span>, 
+                                        sort_order <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;DESC&#34;</span>, 
+                                        orderType <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;VALUE&#34;</span>),
+                     max <span style="color:#f92672">=</span> <span style="color:#ae81ff">20000</span>)
 
-## Getting the Search Console data
-## The development version &gt;0.2.0.9000 lets you get more than 5000 rows
-scdata &lt;- search_analytics(&quot;http://www.example.co.uk&quot;, 
-                           startDate = start, endDate = end,
-                           dimensions = c(&quot;page&quot;,&quot;query&quot;),
-                           rowLimit = 20000)
+<span style="color:#75715e">## Getting the Search Console data</span>
+<span style="color:#75715e">## The development version &gt;0.2.0.9000 lets you get more than 5000 rows</span>
+scdata <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">search_analytics</span>(<span style="color:#e6db74">&#34;http://www.example.co.uk&#34;</span>, 
+                           startDate <span style="color:#f92672">=</span> start, endDate <span style="color:#f92672">=</span> end,
+                           dimensions <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#34;page&#34;</span>,<span style="color:#e6db74">&#34;query&#34;</span>),
+                           rowLimit <span style="color:#f92672">=</span> <span style="color:#ae81ff">20000</span>)
 
-</code></pre>
-
-<h2 id="transforming-the-data">Transforming the data</h2>
-
+</code></pre></div><h2 id="transforming-the-data">Transforming the data</h2>
 <p>First we change the Search Console URLs into the same format as Google Analytics.  In this example, the hostname is appended to the GA URLs already (a reason why the native support won&rsquo;t work), but you may also need to append the hostname to the GA URLs via <code>paste0(&quot;www.yourdomain.com&quot;, gadata$page)</code>.</p>
-
 <p>We also get the search page result (e.g. Page 1 = 1-10, Page 2 = 11-20) as it may be useful.</p>
-
 <p>For the split of revenue later, the last call calculates the % of clicks going to each URL.</p>
-
 <h3 id="search-console-data-transformation">Search Console data transformation</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(dplyr)
 
-<pre><code class="language-r">library(dplyr)
+<span style="color:#75715e">## get urls in same format</span>
 
-## get urls in same format
+<span style="color:#75715e">## this will differ from website to website, </span>
+<span style="color:#75715e">## but in most cases you will need to add the domain to the GA urls:</span>
+<span style="color:#75715e">## gadata$page &lt;- paste0(&#34;www.yourdomain.com&#34;, gadata$landingPagePath)</span>
+<span style="color:#75715e">## gadata has urls www.example.com/pagePath</span>
+<span style="color:#75715e">## scdata has urls in http://www.example.com/pagePath</span>
+scdata<span style="color:#f92672">$</span>page2 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gsub</span>(<span style="color:#e6db74">&#34;http://&#34;</span>,<span style="color:#e6db74">&#34;&#34;</span>, scdata<span style="color:#f92672">$</span>page)
 
-## this will differ from website to website, 
-## but in most cases you will need to add the domain to the GA urls:
-## gadata$page &lt;- paste0(&quot;www.yourdomain.com&quot;, gadata$landingPagePath)
-## gadata has urls www.example.com/pagePath
-## scdata has urls in http://www.example.com/pagePath
-scdata$page2 &lt;- gsub(&quot;http://&quot;,&quot;&quot;, scdata$page)
+<span style="color:#75715e">## get SERP</span>
+scdata<span style="color:#f92672">$</span>serp <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">cut</span>(scdata<span style="color:#f92672">$</span>position, 
+                   breaks <span style="color:#f92672">=</span> <span style="color:#a6e22e">seq</span>(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">100</span>, <span style="color:#ae81ff">10</span>), 
+                   labels <span style="color:#f92672">=</span> <span style="color:#a6e22e">as.character</span>(<span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">9</span>),
+                   include.lowest <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>, 
+                   ordered_result <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>)
 
-## get SERP
-scdata$serp &lt;- cut(scdata$position, 
-                   breaks = seq(1, 100, 10), 
-                   labels = as.character(1:9),
-                   include.lowest = TRUE, 
-                   ordered_result = TRUE)
+<span style="color:#75715e">## % of SEO traffic to each page per keyword</span>
+scdata <span style="color:#f92672">&lt;-</span> scdata <span style="color:#f92672">%&gt;%</span> 
+  <span style="color:#a6e22e">group_by</span>(page2) <span style="color:#f92672">%&gt;%</span> 
+  <span style="color:#a6e22e">mutate</span>(clickP <span style="color:#f92672">=</span> clicks <span style="color:#f92672">/</span> <span style="color:#a6e22e">sum</span>(clicks)) <span style="color:#f92672">%&gt;%</span>
+  <span style="color:#a6e22e">ungroup</span>()
 
-## % of SEO traffic to each page per keyword
-scdata &lt;- scdata %&gt;% 
-  group_by(page2) %&gt;% 
-  mutate(clickP = clicks / sum(clicks)) %&gt;%
-  ungroup()
-
-</code></pre>
-
-<h3 id="merging-with-google-analytics">Merging with Google Analytics</h3>
-
+</code></pre></div><h3 id="merging-with-google-analytics">Merging with Google Analytics</h3>
 <p>Now we merge the data, and calculate the estimates of revenue, transactions and sessions.</p>
-
 <p>Why estimate sessions when we already have them?  This is how we assess how accurate this approach is - if the clicks is roughly the same as the estimated sessions, we can go further.</p>
-
 <p>The accuracy metric is assessed as the ratio between the estiamted sessions and the clicks, minus 1.  This will be 0 when 100% accuracy, and then the further away from 0 the figure is the less we trust the results.</p>
-
 <p>We also round the avergae position to the nearest whole number.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(dplyr)
 
-<pre><code class="language-r">library(dplyr)
+<span style="color:#75715e">## join data on page</span>
+joined_data <span style="color:#f92672">&lt;-</span> gadata <span style="color:#f92672">%&gt;%</span> 
+  <span style="color:#a6e22e">left_join</span>(scdata, by <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(landingPagePath <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;page2&#34;</span>)) <span style="color:#f92672">%&gt;%</span>
+  <span style="color:#a6e22e">mutate</span>(transactionsEst <span style="color:#f92672">=</span> clickP<span style="color:#f92672">*</span>transactions,
+         revenueEst <span style="color:#f92672">=</span> clickP<span style="color:#f92672">*</span>transactionRevenue,
+         sessionEst <span style="color:#f92672">=</span> clickP<span style="color:#f92672">*</span>sessions,
+         accuracyEst <span style="color:#f92672">=</span> ((sessionEst <span style="color:#f92672">/</span> clicks) <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>),
+         positionRound <span style="color:#f92672">=</span> <span style="color:#a6e22e">round</span>(position))
 
-## join data on page
-joined_data &lt;- gadata %&gt;% 
-  left_join(scdata, by = c(landingPagePath = &quot;page2&quot;)) %&gt;%
-  mutate(transactionsEst = clickP*transactions,
-         revenueEst = clickP*transactionRevenue,
-         sessionEst = clickP*sessions,
-         accuracyEst = ((sessionEst / clicks) - 1),
-         positionRound = round(position))
+<span style="color:#75715e">## we only want clicks over 0, and get rid of a few columns.</span>
+tidy_data <span style="color:#f92672">&lt;-</span> joined_data <span style="color:#f92672">%&gt;%</span> 
+  <span style="color:#a6e22e">filter</span>(clicks <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>) <span style="color:#f92672">%&gt;%</span> 
+  <span style="color:#a6e22e">select</span>(<span style="color:#f92672">-</span>page, <span style="color:#f92672">-</span>sessions, <span style="color:#f92672">-</span>transactions, <span style="color:#f92672">-</span>transactionRevenue) 
 
-## we only want clicks over 0, and get rid of a few columns.
-tidy_data &lt;- joined_data %&gt;% 
-  filter(clicks &gt; 0) %&gt;% 
-  select(-page, -sessions, -transactions, -transactionRevenue) 
-
-</code></pre>
-
-<h3 id="is-it-reliable">Is it reliable?</h3>
-
+</code></pre></div><h3 id="is-it-reliable">Is it reliable?</h3>
 <p>A histogram of the accuracy estimate shows we consistently over estimate but the clicks and estimated sessions are within a magnitude:</p>
-
-<p><img src="/images/histogram1.png" alt="keyword-sessio-click-estimate-histogram" /></p>
-
+<p><img src="/images/histogram1.png" alt="keyword-sessio-click-estimate-histogram"></p>
 <p>Most of the session estimates were intrestingly around 1.3 times more than the clicks.  This may be because Search Console clicks act more like Google SEO users, but any other ideas please say in comments!</p>
-
 <p>From above I discarded all rows with an accuracy &gt; 10 as unreliable, although you may want to be stricter in your criteria.  All figures are to be taken with a pinch of salt with this many assumptions, but if the relative performance looked ok then I feel there is still enough to get some action from the data.</p>
-
 <h2 id="creating-the-seo-forecasts">Creating the SEO forecasts</h2>
-
 <p>We now use the data to create a click curve table, with estimates on the CTR for each position, and the confidence in those results.</p>
-
 <p>I first attempted some models on making predictions of click curves for a website, but didn&rsquo;t find any general satisifactory regressions.</p>
-
 <p>The diagram below uses a weighted <code>loess</code> within <code>ggplot2</code> which is good to show trend but not for making predictions.</p>
-
-<p><img src="/images/ctr_scatter.png" alt="ctr-scatter-plot" /></p>
-
+<p><img src="/images/ctr_scatter.png" alt="ctr-scatter-plot"></p>
 <h3 id="a-click-curve-to-use">A click curve to use</h3>
-
 <p>However, 99% of the time we will only be concerned with the top 10, so it wasn&rsquo;t too taxing to calculate the click through rates per website based on the data they had:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(dplyr)
 
-<pre><code class="language-r">library(dplyr)
+click_curve <span style="color:#f92672">&lt;-</span> tidy_data <span style="color:#f92672">%&gt;%</span> 
+  <span style="color:#a6e22e">group_by</span>(positionRound) <span style="color:#f92672">%&gt;%</span> 
+  <span style="color:#a6e22e">summarise</span>(CTRmean <span style="color:#f92672">=</span> <span style="color:#a6e22e">sum</span>(clicks) <span style="color:#f92672">/</span> <span style="color:#a6e22e">sum</span>(impressions),
+            n <span style="color:#f92672">=</span> <span style="color:#a6e22e">n</span>(),
+            click.sum <span style="color:#f92672">=</span> <span style="color:#a6e22e">sum</span>(clicks),
+            impressions.sum <span style="color:#f92672">=</span> <span style="color:#a6e22e">sum</span>(impressions),
+            sd <span style="color:#f92672">=</span> <span style="color:#a6e22e">sd</span>(ctr),
+            E <span style="color:#f92672">=</span> <span style="color:#a6e22e">poisson.test</span>(click.sum)<span style="color:#f92672">$</span>conf.int[2] <span style="color:#f92672">/</span> <span style="color:#a6e22e">poisson.test</span>(impressions.sum)<span style="color:#f92672">$</span>conf.int[1],
+            lower <span style="color:#f92672">=</span> CTRmean <span style="color:#f92672">-</span> E<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>,
+            upper <span style="color:#f92672">=</span> CTRmean <span style="color:#f92672">+</span> E<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>) <span style="color:#f92672">%&gt;%</span> <span style="color:#a6e22e">ungroup</span>()
 
-click_curve &lt;- tidy_data %&gt;% 
-  group_by(positionRound) %&gt;% 
-  summarise(CTRmean = sum(clicks) / sum(impressions),
-            n = n(),
-            click.sum = sum(clicks),
-            impressions.sum = sum(impressions),
-            sd = sd(ctr),
-            E = poisson.test(click.sum)$conf.int[2] / poisson.test(impressions.sum)$conf.int[1],
-            lower = CTRmean - E/2,
-            upper = CTRmean + E/2) %&gt;% ungroup()
-
-## add % increase to position 1
-## could also include other positions
-click_curve &lt;- click_curve %&gt;% 
-  mutate(CTR1 = CTRmean[1] / CTRmean,
-         CTR1.upper = upper[1] / upper,
-         CTR1.lower = lower[1] / lower)
+<span style="color:#75715e">## add % increase to position 1</span>
+<span style="color:#75715e">## could also include other positions</span>
+click_curve <span style="color:#f92672">&lt;-</span> click_curve <span style="color:#f92672">%&gt;%</span> 
+  <span style="color:#a6e22e">mutate</span>(CTR1 <span style="color:#f92672">=</span> CTRmean[1] <span style="color:#f92672">/</span> CTRmean,
+         CTR1.upper <span style="color:#f92672">=</span> upper[1] <span style="color:#f92672">/</span> upper,
+         CTR1.lower <span style="color:#f92672">=</span> lower[1] <span style="color:#f92672">/</span> lower)
 
 
-</code></pre>
-
-<p><img src="/images/ctr-curve.png" alt="ctr-curve-seo" /></p>
-
+</code></pre></div><p><img src="/images/ctr-curve.png" alt="ctr-curve-seo"></p>
 <p>These CTR rates are then used to predict how much more traffic/revenue etc. a keyword could get if they moved up to position 1.</p>
-
 <h3 id="how-valuable-is-a-keyword-if-position-1">How valuable is a keyword if position 1?</h3>
-
 <p>Once happy with the click curve, we now apply it to the original data, and work out estimates on SEO revenue for each keyword if they were at position 1.</p>
-
 <p>I trust results more if they have had more than 10 clicks, and the accuracy estimate figure is within 10 of 0. I would play around with this limits a little yourself to get something you can work with.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(dplyr)
+<span style="color:#75715e">## combine with data</span>
 
-<pre><code class="language-r">library(dplyr)
-## combine with data
+predict_click <span style="color:#f92672">&lt;-</span> tidy_data1 <span style="color:#f92672">%&gt;%</span> 
+  <span style="color:#a6e22e">mutate</span>(positionRound <span style="color:#f92672">=</span> <span style="color:#a6e22e">round</span>(position)) <span style="color:#f92672">%&gt;%</span>
+  <span style="color:#a6e22e">left_join</span>(click_curve, by<span style="color:#f92672">=</span><span style="color:#a6e22e">c</span>(positionRound <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;positionRound&#34;</span>)) <span style="color:#f92672">%&gt;%</span>
+  <span style="color:#a6e22e">mutate</span>(revenueEst1 <span style="color:#f92672">=</span> revenueEst <span style="color:#f92672">*</span> CTR1,
+         transEst1 <span style="color:#f92672">=</span> transactionsEst <span style="color:#f92672">*</span> CTR1,
+         clickEst1 <span style="color:#f92672">=</span> clicks <span style="color:#f92672">*</span> CTR1,
+         sessionsEst1 <span style="color:#f92672">=</span> sessionEst <span style="color:#f92672">*</span> CTR1,
+         revenueEst1.lower <span style="color:#f92672">=</span> revenueEst <span style="color:#f92672">*</span> CTR1.lower,
+         revenueEst1.upper <span style="color:#f92672">=</span> revenueEst <span style="color:#f92672">*</span> CTR1.upper,
+         revenueEst1.change <span style="color:#f92672">=</span> revenueEst1 <span style="color:#f92672">-</span> revenueEst)
 
-predict_click &lt;- tidy_data1 %&gt;% 
-  mutate(positionRound = round(position)) %&gt;%
-  left_join(click_curve, by=c(positionRound = &quot;positionRound&quot;)) %&gt;%
-  mutate(revenueEst1 = revenueEst * CTR1,
-         transEst1 = transactionsEst * CTR1,
-         clickEst1 = clicks * CTR1,
-         sessionsEst1 = sessionEst * CTR1,
-         revenueEst1.lower = revenueEst * CTR1.lower,
-         revenueEst1.upper = revenueEst * CTR1.upper,
-         revenueEst1.change = revenueEst1 - revenueEst)
-
-estimates &lt;- predict_click %&gt;% 
-  select(landingPagePath, query, clicks, impressions, 
+estimates <span style="color:#f92672">&lt;-</span> predict_click <span style="color:#f92672">%&gt;%</span> 
+  <span style="color:#a6e22e">select</span>(landingPagePath, query, clicks, impressions, 
          ctr, position, serp, revenueEst, revenueEst1, 
          revenueEst1.change, revenueEst1.lower, revenueEst1.upper, 
-         accuracyEst) %&gt;%
-  arrange(desc(revenueEst1)) %&gt;% 
-  dplyr::filter(abs(accuracyEst) &lt; 10, 
-                revenueEst1.change &gt; 0, 
-                clicks &gt; 10)
+         accuracyEst) <span style="color:#f92672">%&gt;%</span>
+  <span style="color:#a6e22e">arrange</span>(<span style="color:#a6e22e">desc</span>(revenueEst1)) <span style="color:#f92672">%&gt;%</span> 
+  dplyr<span style="color:#f92672">::</span><span style="color:#a6e22e">filter</span>(<span style="color:#a6e22e">abs</span>(accuracyEst) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">10</span>, 
+                revenueEst1.change <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>, 
+                clicks <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">10</span>)
 
-</code></pre>
-
-<p><code>estimates</code> now in this example holds 226 rows sorted in order or how much revenue they are to make if position #1 in Google. This is from an original keyword list of 21437, which is at least a way to narrow down to important keywords.</p>
-
+</code></pre></div><p><code>estimates</code> now in this example holds 226 rows sorted in order or how much revenue they are to make if position #1 in Google. This is from an original keyword list of 21437, which is at least a way to narrow down to important keywords.</p>
 <h2 id="plotting-the-data">Plotting the data</h2>
-
 <p>All that remains to to present the data: limiting the keywords to the top 30 lets you present like below.</p>
-
 <p>The bars show the range of the estimate, as you can see its quite wide but lets you be more realistic in your expectations.</p>
-
 <p>The number in the middle of the bar is the current position, with the revenue at the x axis and keyword on the y.</p>
-
-<p><img src="/images/see-potential.png" alt="seo-forecast-estimate" /></p>
-
+<p><img src="/images/see-potential.png" alt="seo-forecast-estimate"></p>
 <h3 id="ggplot2-code">ggplot2 code</h3>
-
 <p>To create the plots in this post, please see the ggplot2 code below.  Feel free to modify for your own needs:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(ggplot2)
 
-<pre><code class="language-r">library(ggplot2)
-
-## CTR per position
-ctr_plot &lt;- ggplot(tidy_data, aes(x = position, 
-                                  y = ctr
+<span style="color:#75715e">## CTR per position</span>
+ctr_plot <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">ggplot</span>(tidy_data, <span style="color:#a6e22e">aes</span>(x <span style="color:#f92672">=</span> position, 
+                                  y <span style="color:#f92672">=</span> ctr
                                   ))
-ctr_plot &lt;- ctr_plot + theme_minimal()
-ctr_plot &lt;- ctr_plot + coord_cartesian(xlim = c(1,30), 
-                                       ylim = c(0, 0.5))
-ctr_plot &lt;- ctr_plot + geom_point(aes(alpha = log(clicks),
-                                      color = serp, 
-                                      size = clicks))
-ctr_plot &lt;- ctr_plot + geom_smooth(aes(weight = clicks), 
-                                   size = 0.2)
-ctr_plot + scale_y_continuous(labels = scales::percent)
+ctr_plot <span style="color:#f92672">&lt;-</span> ctr_plot <span style="color:#f92672">+</span> <span style="color:#a6e22e">theme_minimal</span>()
+ctr_plot <span style="color:#f92672">&lt;-</span> ctr_plot <span style="color:#f92672">+</span> <span style="color:#a6e22e">coord_cartesian</span>(xlim <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">30</span>), 
+                                       ylim <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0.5</span>))
+ctr_plot <span style="color:#f92672">&lt;-</span> ctr_plot <span style="color:#f92672">+</span> <span style="color:#a6e22e">geom_point</span>(<span style="color:#a6e22e">aes</span>(alpha <span style="color:#f92672">=</span> <span style="color:#a6e22e">log</span>(clicks),
+                                      color <span style="color:#f92672">=</span> serp, 
+                                      size <span style="color:#f92672">=</span> clicks))
+ctr_plot <span style="color:#f92672">&lt;-</span> ctr_plot <span style="color:#f92672">+</span> <span style="color:#a6e22e">geom_smooth</span>(<span style="color:#a6e22e">aes</span>(weight <span style="color:#f92672">=</span> clicks), 
+                                   size <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.2</span>)
+ctr_plot <span style="color:#f92672">+</span> <span style="color:#a6e22e">scale_y_continuous</span>(labels <span style="color:#f92672">=</span> scales<span style="color:#f92672">::</span>percent)
 ctr_plot
 
-hh &lt;- ggplot(click_curve, aes(positionRound, CTRmean)) 
-hh &lt;- hh + theme_minimal()
-hh &lt;- hh + geom_line(linetype = 2) + coord_cartesian(xlim = c(1, 30), 
-                                                     ylim = c(0,0.5))
-hh &lt;- hh + geom_ribbon(aes(positionRound, ymin = lower, ymax = upper), 
-                       alpha = 0.2, 
-                       fill = &quot;orange&quot;)
-hh &lt;- hh + scale_y_continuous(labels = scales::percent)
-hh &lt;- hh + geom_point() 
-hh &lt;- hh + geom_label(aes(label = scales::percent(CTRmean)))
+hh <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">ggplot</span>(click_curve, <span style="color:#a6e22e">aes</span>(positionRound, CTRmean)) 
+hh <span style="color:#f92672">&lt;-</span> hh <span style="color:#f92672">+</span> <span style="color:#a6e22e">theme_minimal</span>()
+hh <span style="color:#f92672">&lt;-</span> hh <span style="color:#f92672">+</span> <span style="color:#a6e22e">geom_line</span>(linetype <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>) <span style="color:#f92672">+</span> <span style="color:#a6e22e">coord_cartesian</span>(xlim <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">30</span>), 
+                                                     ylim <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0.5</span>))
+hh <span style="color:#f92672">&lt;-</span> hh <span style="color:#f92672">+</span> <span style="color:#a6e22e">geom_ribbon</span>(<span style="color:#a6e22e">aes</span>(positionRound, ymin <span style="color:#f92672">=</span> lower, ymax <span style="color:#f92672">=</span> upper), 
+                       alpha <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.2</span>, 
+                       fill <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;orange&#34;</span>)
+hh <span style="color:#f92672">&lt;-</span> hh <span style="color:#f92672">+</span> <span style="color:#a6e22e">scale_y_continuous</span>(labels <span style="color:#f92672">=</span> scales<span style="color:#f92672">::</span>percent)
+hh <span style="color:#f92672">&lt;-</span> hh <span style="color:#f92672">+</span> <span style="color:#a6e22e">geom_point</span>() 
+hh <span style="color:#f92672">&lt;-</span> hh <span style="color:#f92672">+</span> <span style="color:#a6e22e">geom_label</span>(<span style="color:#a6e22e">aes</span>(label <span style="color:#f92672">=</span> scales<span style="color:#f92672">::</span><span style="color:#a6e22e">percent</span>(CTRmean)))
 hh
 
 
-est_plot &lt;- ggplot(estimates[1:30,], 
-                   aes(reorder(query, revenueEst1), 
+est_plot <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">ggplot</span>(estimates[1<span style="color:#f92672">:</span><span style="color:#ae81ff">30</span>,], 
+                   <span style="color:#a6e22e">aes</span>(<span style="color:#a6e22e">reorder</span>(query, revenueEst1), 
                        revenueEst1, 
-                       ymax = revenueEst1.upper, 
-                       ymin =  revenueEst1.lower))
-est_plot &lt;- est_plot + theme_minimal() + coord_flip()
+                       ymax <span style="color:#f92672">=</span> revenueEst1.upper, 
+                       ymin <span style="color:#f92672">=</span>  revenueEst1.lower))
+est_plot <span style="color:#f92672">&lt;-</span> est_plot <span style="color:#f92672">+</span> <span style="color:#a6e22e">theme_minimal</span>() <span style="color:#f92672">+</span> <span style="color:#a6e22e">coord_flip</span>()
 
-est_plot &lt;- est_plot + geom_crossbar(aes(fill = cut(accuracyEst, 
-                                                    3, 
-                                                    labels = c(&quot;Good&quot;,
-                                                               &quot;Ok&quot;,
-                                                               &quot;Poor&quot;))
+est_plot <span style="color:#f92672">&lt;-</span> est_plot <span style="color:#f92672">+</span> <span style="color:#a6e22e">geom_crossbar</span>(<span style="color:#a6e22e">aes</span>(fill <span style="color:#f92672">=</span> <span style="color:#a6e22e">cut</span>(accuracyEst, 
+                                                    <span style="color:#ae81ff">3</span>, 
+                                                    labels <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#34;Good&#34;</span>,
+                                                               <span style="color:#e6db74">&#34;Ok&#34;</span>,
+                                                               <span style="color:#e6db74">&#34;Poor&#34;</span>))
                                                                ), 
-                                     alpha = 0.7, 
-                                     show.legend = FALSE)
+                                     alpha <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.7</span>, 
+                                     show.legend <span style="color:#f92672">=</span> <span style="color:#66d9ef">FALSE</span>)
                                      
-est_plot &lt;- est_plot + scale_x_discrete(name = &quot;Query&quot;)
-est_plot &lt;- est_plot + scale_y_continuous(name = &quot;Estimated SEO Revenue Increase for Google #1&quot;, 
-                                          labels = scales::dollar_format(prefix = &quot;£&quot;))
-est_plot &lt;- est_plot + geom_label(aes(label = round(position)), 
-                                  hjust = &quot;center&quot;)
-est_plot &lt;- est_plot + ggtitle(&quot;SEO Potential Revenue (Current position)&quot;)
+est_plot <span style="color:#f92672">&lt;-</span> est_plot <span style="color:#f92672">+</span> <span style="color:#a6e22e">scale_x_discrete</span>(name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Query&#34;</span>)
+est_plot <span style="color:#f92672">&lt;-</span> est_plot <span style="color:#f92672">+</span> <span style="color:#a6e22e">scale_y_continuous</span>(name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Estimated SEO Revenue Increase for Google #1&#34;</span>, 
+                                          labels <span style="color:#f92672">=</span> scales<span style="color:#f92672">::</span><span style="color:#a6e22e">dollar_format</span>(prefix <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;£&#34;</span>))
+est_plot <span style="color:#f92672">&lt;-</span> est_plot <span style="color:#f92672">+</span> <span style="color:#a6e22e">geom_label</span>(<span style="color:#a6e22e">aes</span>(label <span style="color:#f92672">=</span> <span style="color:#a6e22e">round</span>(position)), 
+                                  hjust <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;center&#34;</span>)
+est_plot <span style="color:#f92672">&lt;-</span> est_plot <span style="color:#f92672">+</span> <span style="color:#a6e22e">ggtitle</span>(<span style="color:#e6db74">&#34;SEO Potential Revenue (Current position)&#34;</span>)
 est_plot
 
-</code></pre>
-
+</code></pre></div>
         </div>
         <footer class="article-footer">
     <a data-url="https://code.markedmondson.me/search-console-google-analytics-r-keyword-research/" data-id="93f9d7348db275c87b006e1e24780658" class="article-share-link">

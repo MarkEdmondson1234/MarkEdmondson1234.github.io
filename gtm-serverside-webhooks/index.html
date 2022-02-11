@@ -2,7 +2,7 @@
 <html lang="en-GB">
 <head>
     <title>Using Google Tag Manager Server Side to Trigger Webhook Events &middot; Mark Edmondson</title>
-    <meta name="generator" content="Hugo 0.55.5" />
+    <meta name="generator" content="Hugo 0.92.0" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
@@ -23,24 +23,17 @@
     <meta property="og:title" content="Using Google Tag Manager Server Side to Trigger Webhook Events" />
 <meta property="og:description" content="How to configure Google Tag Manager Server Side so it can send webhooks to services upon certain events " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://code.markedmondson.me/gtm-serverside-webhooks/" />
-<meta property="article:published_time" content="2020-09-04T12:50:50&#43;01:00"/>
-<meta property="article:modified_time" content="2020-09-04T12:50:50&#43;01:00"/>
+<meta property="og:url" content="https://code.markedmondson.me/gtm-serverside-webhooks/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2020-09-04T12:50:50+01:00" />
+<meta property="article:modified_time" content="2020-09-04T12:50:50+01:00" />
+
 
     
-    
-<meta itemprop="name" content="Using Google Tag Manager Server Side to Trigger Webhook Events">
-<meta itemprop="description" content="How to configure Google Tag Manager Server Side so it can send webhooks to services upon certain events ">
-
-
-<meta itemprop="datePublished" content="2020-09-04T12:50:50&#43;01:00" />
-<meta itemprop="dateModified" content="2020-09-04T12:50:50&#43;01:00" />
+    <meta itemprop="name" content="Using Google Tag Manager Server Side to Trigger Webhook Events">
+<meta itemprop="description" content="How to configure Google Tag Manager Server Side so it can send webhooks to services upon certain events "><meta itemprop="datePublished" content="2020-09-04T12:50:50+01:00" />
+<meta itemprop="dateModified" content="2020-09-04T12:50:50+01:00" />
 <meta itemprop="wordCount" content="1444">
-
-
-
 <meta itemprop="keywords" content="google-tag-manager,cloud-functions,pubsub," />
-
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Using Google Tag Manager Server Side to Trigger Webhook Events"/>
 <meta name="twitter:description" content="How to configure Google Tag Manager Server Side so it can send webhooks to services upon certain events "/>
@@ -330,7 +323,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p>Those Pub/Sub triggers can be used to trigger anything you like - in my example they set off a Cloud Function to send a message to Slack. An example video is shown below of it in action on this blog:</p>
 <p>
 <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-  <iframe src="//www.youtube-nocookie.com/embed/YJYFmxsd38M" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
+  <iframe src="https://www.youtube-nocookie.com/embed/YJYFmxsd38M" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
 </div>
 </p>
 <p>The above is done via GTM Server Side, Cloud Logging to a Pub/Sub topic, which triggers a Cloud Function that calls a Slack webhook.</p>

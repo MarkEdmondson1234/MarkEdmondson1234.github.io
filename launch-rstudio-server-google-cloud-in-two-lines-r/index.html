@@ -2,7 +2,7 @@
 <html lang="en-GB">
 <head>
     <title>Launch RStudio Server in the Google Cloud with two lines of R &middot; Mark Edmondson</title>
-    <meta name="generator" content="Hugo 0.55.5" />
+    <meta name="generator" content="Hugo 0.92.0" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
@@ -24,25 +24,18 @@
 <meta property="og:description" content="I&rsquo;ve written previously about how to get RStudio Server running on Google Compute Engine: the first in July 2014 gave you a snapshot to download then customise, the second in April 2016 launched via a Docker container.
 Things move on, and I now recommend using the process below that uses the RStudio template in the new on CRAN googleComputeEngineR package. Not only does it abstract away a lot of the dev-ops set up, but it also gives you more flexibility by taking advantage of Dockerfiles." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/" />
-<meta property="article:published_time" content="2016-10-20T23:03:57&#43;01:00"/>
-<meta property="article:modified_time" content="2016-10-20T23:03:57&#43;01:00"/>
+<meta property="og:url" content="https://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2016-10-20T23:03:57+01:00" />
+<meta property="article:modified_time" content="2016-10-20T23:03:57+01:00" />
+
 
     
-    
-<meta itemprop="name" content="Launch RStudio Server in the Google Cloud with two lines of R">
+    <meta itemprop="name" content="Launch RStudio Server in the Google Cloud with two lines of R">
 <meta itemprop="description" content="I&rsquo;ve written previously about how to get RStudio Server running on Google Compute Engine: the first in July 2014 gave you a snapshot to download then customise, the second in April 2016 launched via a Docker container.
-Things move on, and I now recommend using the process below that uses the RStudio template in the new on CRAN googleComputeEngineR package. Not only does it abstract away a lot of the dev-ops set up, but it also gives you more flexibility by taking advantage of Dockerfiles.">
-
-
-<meta itemprop="datePublished" content="2016-10-20T23:03:57&#43;01:00" />
-<meta itemprop="dateModified" content="2016-10-20T23:03:57&#43;01:00" />
+Things move on, and I now recommend using the process below that uses the RStudio template in the new on CRAN googleComputeEngineR package. Not only does it abstract away a lot of the dev-ops set up, but it also gives you more flexibility by taking advantage of Dockerfiles."><meta itemprop="datePublished" content="2016-10-20T23:03:57+01:00" />
+<meta itemprop="dateModified" content="2016-10-20T23:03:57+01:00" />
 <meta itemprop="wordCount" content="525">
-
-
-
 <meta itemprop="keywords" content="R,google-compute-engine," />
-
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Launch RStudio Server in the Google Cloud with two lines of R"/>
 <meta name="twitter:description" content="I&rsquo;ve written previously about how to get RStudio Server running on Google Compute Engine: the first in July 2014 gave you a snapshot to download then customise, the second in April 2016 launched via a Docker container.
@@ -317,55 +310,35 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
         <div class="article-entry" itemprop="articleBody">
-            
-
-<p>I&rsquo;ve written previously about how to get <a href="https://www.rstudio.com/products/rstudio/download-server/">RStudio Server</a> running on Google Compute Engine: the <a href="http://markedmondson.me/run-r-rstudio-and-opencpu-on-google-compute-engine-free-vm-image">first in July 2014</a> gave you a snapshot to download then customise, the second in <a href="http://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/">April 2016</a> launched via a Docker container.</p>
-
+            <p>I&rsquo;ve written previously about how to get <a href="https://www.rstudio.com/products/rstudio/download-server/">RStudio Server</a> running on Google Compute Engine: the <a href="http://markedmondson.me/run-r-rstudio-and-opencpu-on-google-compute-engine-free-vm-image">first in July 2014</a> gave you a snapshot to download then customise, the second in <a href="http://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/">April 2016</a> launched via a Docker container.</p>
 <p>Things move on, and I now recommend using the process below that uses the RStudio template in the new on CRAN <a href="https://cran.r-project.org/web/packages/googleComputeEngineR/"><code>googleComputeEngineR</code></a> package.  Not only does it abstract away a lot of the dev-ops set up, but it also gives you more flexibility by taking advantage of <code>Dockerfiles</code>.</p>
-
 <h2 id="launching-an-rstudio-server">Launching an Rstudio Server</h2>
-
 <p>This example is taken from the <a href="https://cloudyr.github.io/googleComputeEngineR/articles/example-workflows.html#custom-team-rstudio-server">example workflows</a> that are on the <a href="https://cloudyr.github.io/googleComputeEngineR"><code>googleComputeEngineR</code> website</a>, which includes other examples for Shiny, OpenCPU and R-clusters.</p>
-
 <p>You do need to do a bit of <a href="https://cloudyr.github.io/googleComputeEngineR/articles/installation-and-authentication.html">initial setup</a> to setup your Google project and download the authentication file, but after that you just need to issue these two commands:</p>
-
-<pre><code class="language-r">library(googleComputeEngineR)
-vm &lt;- gce_vm(template = &quot;rstudio&quot;,
-             name = &quot;my-rstudio&quot;,
-             username = &quot;mark&quot;, password = &quot;mark1234&quot;,
-             predefined_type = &quot;n1-highmem-2&quot;)
-</code></pre>
-
-<p>And thats it.  Wait a bit, it will output an IP address for you to log in with.</p>
-
-<p><img src="/images/rstudio-launch-example.png" alt="rstudio-googleComputeEngineR-launch" /></p>
-
-<p><img src="/images/rstudio-login.png" alt="rstudio login" /></p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(googleComputeEngineR)
+vm <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gce_vm</span>(template <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;rstudio&#34;</span>,
+             name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;my-rstudio&#34;</span>,
+             username <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;mark&#34;</span>, password <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;mark1234&#34;</span>,
+             predefined_type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;n1-highmem-2&#34;</span>)
+</code></pre></div><p>And thats it.  Wait a bit, it will output an IP address for you to log in with.</p>
+<p><img src="/images/rstudio-launch-example.png" alt="rstudio-googleComputeEngineR-launch"></p>
+<p><img src="/images/rstudio-login.png" alt="rstudio login"></p>
 <p>You can now carry on by logging in and installing packages as you would on RStudio Desktop, then use <a href="https://cloudyr.github.io/googleComputeEngineR/reference/gce_vm_stop.html"><code>gce_vm_stop(vm)</code></a> and <a href="https://cloudyr.github.io/googleComputeEngineR/reference/gce_vm_start.html"><code>gce_vm_start(vm)</code></a> to stop and start your instance, or if say you are on a Chromebook and cannot run R locally, use the Google Cloud Web UI to start and stop it.</p>
-
 <h2 id="further-customisation">Further customisation</h2>
-
 <p>You customise further by creating a custom image that launches a fresh RStudio Server instance with your own packages and files installed.  This takes advantage of some Google Cloud benefits such as the <a href="https://cloud.google.com/container-registry/">Container Registry</a> which lets you save private Docker containers.</p>
-
 <p>With that, you can save your custom RStudio server to its own custom image, that can be used to launch anew in another instance as needed:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#75715e">## push your rstudio image to container registry</span>
+<span style="color:#a6e22e">gce_push_registry</span>(vm, <span style="color:#e6db74">&#34;my-rstudio&#34;</span>, container_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;my-rstudio&#34;</span>)
 
-<pre><code class="language-r">## push your rstudio image to container registry
-gce_push_registry(vm, &quot;my-rstudio&quot;, container_name = &quot;my-rstudio&quot;)
-
-## launch another rstudio instance with your settings
-vm2 &lt;- gce_vm(template = &quot;rstudio&quot;,
-              name = &quot;my-rstudio-2&quot;,
-              username = &quot;mark&quot;, password = &quot;mark1234&quot;,
-              predefined_type = &quot;n1-highmem-2&quot;,
-              dynamic_image = gce_tag_container(&quot;my-rstudio&quot;))
-</code></pre>
-
-<p>If you want to go further still, use <a href="https://docs.docker.com/engine/reference/builder/"><code>Dockerfiles</code></a> to customise the underlying linux libraries and CRAN/github packages to install in a more replicable manner - a good way to keep track in Github exactly how your server is configured.</p>
-
+<span style="color:#75715e">## launch another rstudio instance with your settings</span>
+vm2 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gce_vm</span>(template <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;rstudio&#34;</span>,
+              name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;my-rstudio-2&#34;</span>,
+              username <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;mark&#34;</span>, password <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;mark1234&#34;</span>,
+              predefined_type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;n1-highmem-2&#34;</span>,
+              dynamic_image <span style="color:#f92672">=</span> <span style="color:#a6e22e">gce_tag_container</span>(<span style="color:#e6db74">&#34;my-rstudio&#34;</span>))
+</code></pre></div><p>If you want to go further still, use <a href="https://docs.docker.com/engine/reference/builder/"><code>Dockerfiles</code></a> to customise the underlying linux libraries and CRAN/github packages to install in a more replicable manner - a good way to keep track in Github exactly how your server is configured.</p>
 <p>A <code>Dockerfile</code> example is shown below - construct this locally:</p>
-
-<pre><code>FROM rocker/hadleyverse
+<pre tabindex="0"><code>FROM rocker/hadleyverse
 MAINTAINER Mark Edmondson (r@sunholo.com)
 
 # install cron and R package dependencies
@@ -385,25 +358,18 @@ RUN install2.r --error \
     &amp;&amp; Rscript -e &quot;devtools::install_github(c('bnosac/cronR'))&quot; \
     ## clean up
     &amp;&amp; rm -rf /tmp/downloaded_packages/ /tmp/*.rds \
-</code></pre>
-
-<p>Then build it on your VM via <a href="https://cloudyr.github.io/googleComputeEngineR/reference/docker_build.html"><code>docker_build</code></a>:</p>
-
-<pre><code class="language-r">docker_build(vm, 
-             dockerfile = &quot;file/location/dockerfile&quot;, 
-             new_image = &quot;my-custom-image&quot;)
-</code></pre>
-
-<p>You can then save this up to the Container Registry and launch as before:</p>
-
-<pre><code class="language-r">gce_push_registry(vm, &quot;my-custom-image&quot;, image_name = &quot;my-custom-image&quot;
-vm3 &lt;- gce_vm(template = &quot;rstudio&quot;,
-              name = &quot;my-rstudio-3&quot;,
-              username = &quot;mark&quot;, password = &quot;mark1234&quot;,
-              predefined_type = &quot;n1-highmem-2&quot;,
-              dynamic_image = gce_tag_container(&quot;my-custom-image&quot;))
-</code></pre>
-
+</code></pre><p>Then build it on your VM via <a href="https://cloudyr.github.io/googleComputeEngineR/reference/docker_build.html"><code>docker_build</code></a>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">docker_build</span>(vm, 
+             dockerfile <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;file/location/dockerfile&#34;</span>, 
+             new_image <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;my-custom-image&#34;</span>)
+</code></pre></div><p>You can then save this up to the Container Registry and launch as before:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">gce_push_registry</span>(vm, <span style="color:#e6db74">&#34;my-custom-image&#34;</span>, image_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;my-custom-image&#34;</span>
+vm3 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gce_vm</span>(template <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;rstudio&#34;</span>,
+              name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;my-rstudio-3&#34;</span>,
+              username <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;mark&#34;</span>, password <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;mark1234&#34;</span>,
+              predefined_type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;n1-highmem-2&#34;</span>,
+              dynamic_image <span style="color:#f92672">=</span> <span style="color:#a6e22e">gce_tag_container</span>(<span style="color:#e6db74">&#34;my-custom-image&#34;</span>))
+</code></pre></div>
         </div>
         <footer class="article-footer">
     <a data-url="https://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/" data-id="2e3f85e7dbea05d09b66ec9ffff37785" class="article-share-link">

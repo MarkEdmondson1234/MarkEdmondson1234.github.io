@@ -2,7 +2,7 @@
 <html lang="en-GB">
 <head>
     <title>gago: Blazingly fast Google Analytics API downloads with Go &middot; Mark Edmondson</title>
-    <meta name="generator" content="Hugo 0.55.5" />
+    <meta name="generator" content="Hugo 0.92.0" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
@@ -23,24 +23,17 @@
     <meta property="og:title" content="gago: Blazingly fast Google Analytics API downloads with Go" />
 <meta property="og:description" content="Announcing gago: Go library for Google Analytics API v4 that can speed up API fetches by 85%" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://code.markedmondson.me/gago/" />
-<meta property="article:published_time" content="2019-10-09T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2019-10-09T00:00:00&#43;00:00"/>
+<meta property="og:url" content="https://code.markedmondson.me/gago/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2019-10-09T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-10-09T00:00:00+00:00" />
+
 
     
-    
-<meta itemprop="name" content="gago: Blazingly fast Google Analytics API downloads with Go">
-<meta itemprop="description" content="Announcing gago: Go library for Google Analytics API v4 that can speed up API fetches by 85%">
-
-
-<meta itemprop="datePublished" content="2019-10-09T00:00:00&#43;00:00" />
-<meta itemprop="dateModified" content="2019-10-09T00:00:00&#43;00:00" />
+    <meta itemprop="name" content="gago: Blazingly fast Google Analytics API downloads with Go">
+<meta itemprop="description" content="Announcing gago: Go library for Google Analytics API v4 that can speed up API fetches by 85%"><meta itemprop="datePublished" content="2019-10-09T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2019-10-09T00:00:00+00:00" />
 <meta itemprop="wordCount" content="1273">
-
-
-
 <meta itemprop="keywords" content="google-analytics," />
-
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="gago: Blazingly fast Google Analytics API downloads with Go"/>
 <meta name="twitter:description" content="Announcing gago: Go library for Google Analytics API v4 that can speed up API fetches by 85%"/>
@@ -310,20 +303,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
         <div class="article-entry" itemprop="articleBody">
-            
-
-<p><a href="https://github.com/MarkEdmondson1234/gago">gago</a> is a new <a href="https://golang.org/">Go</a> library for working with the Google Analytics Reporting API v4.</p>
-
+            <p><a href="https://github.com/MarkEdmondson1234/gago">gago</a> is a new <a href="https://golang.org/">Go</a> library for working with the Google Analytics Reporting API v4.</p>
 <p>I used it as a way to learn Go, transferring across some of the lessons I learned from working with the Google Analytics API in <a href="https://code.markedmondson.me/googleAnalyticsR/">googleAnalyticsR</a>.  In particular how to get fast downloads and adding an anti-sample option, whilst taking advantage of Go&rsquo;s natural multi-threaded nature.</p>
-
 <p>The imagined use case is for when you need to download Google Analytics data but you don&rsquo;t want to install an interpreted language such as Python or R to do so.  Since Go compiles to binary files it should work on any system.</p>
-
-<h2 id="why-go-in-data-science-engineering">Why Go in data science/engineering?</h2>
-
+<h2 id="why-go-in-data-scienceengineering">Why Go in data science/engineering?</h2>
 <p>The first question I get from people is why bother learning Go in the first place?</p>
-
 <p>The primary reason was just to try something new, but as I worked with it I did find some advantages over my usual R, Python and SQL in my current position as a Data Engineer.  These were:</p>
-
 <ul>
 <li>Strongly typed language making code a lot more robust by default</li>
 <li>Well supported by Google Cloud Platform</li>
@@ -333,157 +318,121 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li>Portable - compiles to binary builds on Linux, Windows etc.</li>
 <li>Favoured functional programming styles over OO-orientated (e.g. R like, but with Python clean syntax)</li>
 </ul>
-
 <p>All that said I wouldn&rsquo;t use it as a replacement for R for data science workloads, but perhaps some of the systems programming that I currently use Python for such as Cloud Functions it may work for, especially if response and speed is required.  Perhaps also if there are bottlenecks in Python/R code then making a more efficient loop in Go may be an option, although the best way to do that in R at the moment is to use C++ and the Rcpp library.</p>
-
 <p>The first application is creating a command line tool that can work on a server to download data, which can then be passed to another language for analysis or distributed to other users who need a quick way to download data but who don&rsquo;t have an R/Python environment.</p>
-
 <h2 id="gago-and-gagocli">gago and gagocli</h2>
-
 <p>The first step was to import the official <a href="https://godoc.org/google.golang.org/api/analyticsreporting/v4">Google Analytics v4 library for Go</a>, which is created using the discovery API.</p>
-
 <p>As anyone who has worked with the v4 API can tell you, it is not trivial to turn the base functions into a working download of your data.  It requires some knowledge about what Google Analytics data model is, and then you have to negotiate a complicated nested JSON structure and paging.  <code>gago</code> is intended to take out some of that workload for Go developers, requiring you only need to supply a <a href="https://gobyexample.com/structs">Go struct</a> with the data you wish to get.</p>
-
 <p>Here is an example on how to fetch all rows of data with the unsampled flag set that breaks up your API calls into batches under the sampling limits:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
 
-<pre><code class="language-go">package main
-
-import (
-	&quot;github.com/MarkEdmondson1234/gago/gago&quot;
-	&quot;os&quot;
+<span style="color:#f92672">import</span> (
+	<span style="color:#e6db74">&#34;github.com/MarkEdmondson1234/gago/gago&#34;</span>
+	<span style="color:#e6db74">&#34;os&#34;</span>
 )
 
-// get auth file and authenticate
-authFile := os.Getenv(&quot;GAGO_AUTH&quot;)
-analyticsreportingService, _ := gago.Authenticate(authFile)
+<span style="color:#75715e">// get auth file and authenticate
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">authFile</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Getenv</span>(<span style="color:#e6db74">&#34;GAGO_AUTH&#34;</span>)
+<span style="color:#a6e22e">analyticsreportingService</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">gago</span>.<span style="color:#a6e22e">Authenticate</span>(<span style="color:#a6e22e">authFile</span>)
 
-// make report request struct
-var req = gago.GoogleAnalyticsRequest{
-		Service:    analyticsreportingService,
-		ViewID:     &quot;106249469&quot;,
-		Start:      &quot;2016-07-01&quot;,
-		End:        &quot;2019-08-01&quot;,
-		Dimensions: &quot;ga:date,ga:sourceMedium,ga:landingPagePath,ga:source,ga:hour,ga:minute,ga:eventCategory&quot;,
-		Metrics:    &quot;ga:sessions,ga:users&quot;,
-		MaxRows:    -1,
-		AntiSample: true}
+<span style="color:#75715e">// make report request struct
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">req</span> = <span style="color:#a6e22e">gago</span>.<span style="color:#a6e22e">GoogleAnalyticsRequest</span>{
+		<span style="color:#a6e22e">Service</span>:    <span style="color:#a6e22e">analyticsreportingService</span>,
+		<span style="color:#a6e22e">ViewID</span>:     <span style="color:#e6db74">&#34;106249469&#34;</span>,
+		<span style="color:#a6e22e">Start</span>:      <span style="color:#e6db74">&#34;2016-07-01&#34;</span>,
+		<span style="color:#a6e22e">End</span>:        <span style="color:#e6db74">&#34;2019-08-01&#34;</span>,
+		<span style="color:#a6e22e">Dimensions</span>: <span style="color:#e6db74">&#34;ga:date,ga:sourceMedium,ga:landingPagePath,ga:source,ga:hour,ga:minute,ga:eventCategory&#34;</span>,
+		<span style="color:#a6e22e">Metrics</span>:    <span style="color:#e6db74">&#34;ga:sessions,ga:users&#34;</span>,
+		<span style="color:#a6e22e">MaxRows</span>:    <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>,
+		<span style="color:#a6e22e">AntiSample</span>: <span style="color:#66d9ef">true</span>}
 
-// API calls
-report := gago.GoogleAnalytics(req)
+<span style="color:#75715e">// API calls
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">report</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">gago</span>.<span style="color:#a6e22e">GoogleAnalytics</span>(<span style="color:#a6e22e">req</span>)
 
-// write data out as a CSV to console
-gago.WriteCSV(report, os.Stdout)
-</code></pre>
-
-<p><code>gago</code> is then intended for use by Go developers looking to integrate Google Analytics data into their own applications, whilst <code>gagocli</code> is a command line interface for all users to work with <code>gago</code> and the Google Analytics API.</p>
-
+<span style="color:#75715e">// write data out as a CSV to console
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">gago</span>.<span style="color:#a6e22e">WriteCSV</span>(<span style="color:#a6e22e">report</span>, <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stdout</span>)
+</code></pre></div><p><code>gago</code> is then intended for use by Go developers looking to integrate Google Analytics data into their own applications, whilst <code>gagocli</code> is a command line interface for all users to work with <code>gago</code> and the Google Analytics API.</p>
 <p>An example of using <code>gagocli</code> lets you send in your request for data in a config file or direct within the command line via flags:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># in your terminal</span>
+gagocli reports -c config.yml -view <span style="color:#ae81ff">1234</span> -max <span style="color:#ae81ff">10</span>
+</code></pre></div><p>&hellip;where the <code>config.yaml</code> could look like:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">gago</span>:
+  <span style="color:#f92672">view</span>: <span style="color:#ae81ff">1234567</span>
+  <span style="color:#f92672">metrics</span>: <span style="color:#ae81ff">ga:sessions,ga:users</span>
+  <span style="color:#f92672">dimensions</span>: <span style="color:#ae81ff">ga:date,ga:sourceMedium,ga:landingPagePath</span>
+  <span style="color:#f92672">start</span>: <span style="color:#e6db74">2019-01-01</span>
+  <span style="color:#f92672">end</span>: <span style="color:#e6db74">2019-03-01</span>
+  <span style="color:#f92672">maxRows</span>: <span style="color:#ae81ff">1000</span>
+  <span style="color:#f92672">antisample</span>: <span style="color:#66d9ef">true</span>
 
-<pre><code class="language-bash"># in your terminal
-gagocli reports -c config.yml -view 1234 -max 10
-</code></pre>
-
-<p>&hellip;where the <code>config.yaml</code> could look like:</p>
-
-<pre><code class="language-yaml">gago:
-  view: 1234567
-  metrics: ga:sessions,ga:users
-  dimensions: ga:date,ga:sourceMedium,ga:landingPagePath
-  start: 2019-01-01
-  end: 2019-03-01
-  maxRows: 1000
-  antisample: true
-
-</code></pre>
-
-<p>See the documentation on how to get <a href="https://github.com/MarkEdmondson1234/gago/tree/master/gagocli">set up with gagocli</a> to see more examples.</p>
-
+</code></pre></div><p>See the documentation on how to get <a href="https://github.com/MarkEdmondson1234/gago/tree/master/gagocli">set up with gagocli</a> to see more examples.</p>
 <h2 id="blazingly-fast-performance">&lsquo;Blazingly fast&rsquo; performance</h2>
-
 <p>Everything is &lsquo;blazingly fast&rsquo; these days, so I took the opportunity too.</p>
-
 <p>The API fetches for big reports using <code>gago</code> will I think be the fastest way available to download Google Analytics data at the moment.</p>
-
 <p>This is due to <code>gago</code> using optimisations that take advantage of some of the Google Analytics Reporting API v4 as well as Go&rsquo;s multi-threading.</p>
-
 <p>To start with, the v4 feature of batching is used, meaning five API requests can be made at once. On top of this, you can fetch multiple batched requests at once, with a limit of ten per web property - Go make it easy to set off ten requests at once and monitor and patch them together again.  This means 10 API requests * 5 batched = 50 API pages can be requested at once.</p>
-
 <p>This is a bit hacky since its not using the intended paging functionality of the API, which traditionally lets you request one page at a time, the response of which includes a link/paging number to where the next API call should start from.</p>
-
 <p>However, it seems to work.  The requests are instead constructed ahead of time, and all sent at once using Go&rsquo;s nice interface for asynchronous parallel fetches, the <a href="https://gobyexample.com/goroutines">goroutine</a>.</p>
-
 <h3 id="benchmarks">Benchmarks</h3>
-
 <p>To demonstrate, I ran the same API call across several methods using <code>googleAnalyticsR</code> as a faciltator.</p>
-
 <p>I compared:</p>
-
 <ul>
 <li>Traditional API fetching using the paging in each responses, available by setting <code>slow_fetch=TRUE</code> in the <code>google_analytics()</code> function</li>
 <li>Batched v4 API requests that are the default for <code>google_analytics()</code></li>
 <li>A call out using system calls to the <code>gagocli</code> library</li>
 </ul>
-
 <p>The API call to fetch was from a medium sized ecommerce site fetching 503,210 rows of session data containing each campaign, landing page and hour of the day of nearly two years.</p>
-
 <p>The R code to create the benchmarks is below:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(googleAnalyticsR)
+<span style="color:#a6e22e">library</span>(microbenchmark)
 
-<pre><code class="language-r">library(googleAnalyticsR)
-library(microbenchmark)
+<span style="color:#75715e"># auth via a service account connected to GA </span>
+googleAuthR<span style="color:#f92672">::</span><span style="color:#a6e22e">gar_auth_service</span>(<span style="color:#a6e22e">Sys.getenv</span>(<span style="color:#e6db74">&#34;GAGO_AUTH&#34;</span>))
 
-# auth via a service account connected to GA 
-googleAuthR::gar_auth_service(Sys.getenv(&quot;GAGO_AUTH&quot;))
+<span style="color:#75715e"># use your own viewId</span>
+test_id <span style="color:#f92672">&lt;-</span> <span style="color:#ae81ff">12345678</span>	
 
-# use your own viewId
-test_id &lt;- 12345678	
-
-slow_api &lt;- function(){
-  google_analytics(test_id, 
-                   date_range = c(&quot;2018-01-01&quot;,&quot;2019-10-01&quot;),
-                   metrics = &quot;sessions&quot;, 
-                   dimensions = c(&quot;date&quot;,&quot;hour&quot;,&quot;campaign&quot;,&quot;landingPagePath&quot;),
-                   slow_fetch = TRUE,
-                   max = -1)
+slow_api <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function</span>(){
+  <span style="color:#a6e22e">google_analytics</span>(test_id, 
+                   date_range <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#34;2018-01-01&#34;</span>,<span style="color:#e6db74">&#34;2019-10-01&#34;</span>),
+                   metrics <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;sessions&#34;</span>, 
+                   dimensions <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#34;date&#34;</span>,<span style="color:#e6db74">&#34;hour&#34;</span>,<span style="color:#e6db74">&#34;campaign&#34;</span>,<span style="color:#e6db74">&#34;landingPagePath&#34;</span>),
+                   slow_fetch <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>,
+                   max <span style="color:#f92672">=</span> <span style="color:#ae81ff">-1</span>)
 } 
 
-quicker_r &lt;- function(){
-  google_analytics(test_id, 
-                   date_range = c(&quot;2018-01-01&quot;,&quot;2019-10-01&quot;),
-                   metrics = &quot;sessions&quot;, 
-                   dimensions = c(&quot;date&quot;,&quot;hour&quot;,&quot;campaign&quot;,&quot;landingPagePath&quot;),
-                   slow_fetch = FALSE, #the default
-                   max = -1)
+quicker_r <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function</span>(){
+  <span style="color:#a6e22e">google_analytics</span>(test_id, 
+                   date_range <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#34;2018-01-01&#34;</span>,<span style="color:#e6db74">&#34;2019-10-01&#34;</span>),
+                   metrics <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;sessions&#34;</span>, 
+                   dimensions <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#34;date&#34;</span>,<span style="color:#e6db74">&#34;hour&#34;</span>,<span style="color:#e6db74">&#34;campaign&#34;</span>,<span style="color:#e6db74">&#34;landingPagePath&#34;</span>),
+                   slow_fetch <span style="color:#f92672">=</span> <span style="color:#66d9ef">FALSE</span>, <span style="color:#75715e">#the default</span>
+                   max <span style="color:#f92672">=</span> <span style="color:#ae81ff">-1</span>)
 }
 
-# a call out  of R to the terminal to an installed gagocli binary
-gago_call &lt;- function(){
-  system(&quot;./bin/gagocli reports -dims 'ga:date,ga:hour,ga:campaign,ga:landingPagePath' \
-  -end 2019-10-01 -max -1 -mets 'ga:sessions' -start 2018-01-01 -view 106249469 \
-  -o gago.csv&quot;)
-  # read the CSV created into R as well to make it a fairer comparison
-  read.csv(&quot;gago.csv&quot;, stringsAsFactors = FALSE)
+<span style="color:#75715e"># a call out  of R to the terminal to an installed gagocli binary</span>
+gago_call <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function</span>(){
+  <span style="color:#a6e22e">system</span>(<span style="color:#e6db74">&#34;</span><span style="color:#960050;background-color:#1e0010">./bin/gagocli reports -dims &#39;ga:date,ga:hour,ga:campaign,ga:landingPagePath&#39; \</span>
+  <span style="color:#f92672">-</span>end <span style="color:#ae81ff">2019-10-01</span> <span style="color:#f92672">-</span>max <span style="color:#ae81ff">-1</span> <span style="color:#f92672">-</span>mets <span style="color:#e6db74">&#39;ga:sessions&#39;</span> <span style="color:#f92672">-</span>start <span style="color:#ae81ff">2018-01-01</span> <span style="color:#f92672">-</span>view <span style="color:#ae81ff">106249469</span> \
+  <span style="color:#f92672">-</span>o gago.csv<span style="color:#e6db74">&#34;)
+</span><span style="color:#e6db74">  # read the CSV created into R as well to make it a fairer comparison
+</span><span style="color:#e6db74">  read.csv(&#34;</span>gago.csv<span style="color:#e6db74">&#34;</span><span style="color:#960050;background-color:#1e0010">, stringsAsFactors = FALSE)</span>
 }
 
-mbm &lt;- microbenchmark(
-  slow = slow_api(),
-  quick_r = quicker_r(),
-  gago_call = gago_call(),
-  times = 3
+mbm <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">microbenchmark</span>(
+  slow <span style="color:#f92672">=</span> <span style="color:#a6e22e">slow_api</span>(),
+  quick_r <span style="color:#f92672">=</span> <span style="color:#a6e22e">quicker_r</span>(),
+  gago_call <span style="color:#f92672">=</span> <span style="color:#a6e22e">gago_call</span>(),
+  times <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>
 )
-</code></pre>
-
-<p>The results were:</p>
-
+</code></pre></div><p>The results were:</p>
 <ul>
 <li>Slow traditional API paging: 921 seconds (15mins 21secs)</li>
 <li>v4 batching: 233 seconds (3mins 53secs)</li>
 <li>gago (v4 batching plus 10 API concurrency): 119 seconds (1min 59secs)</li>
 </ul>
-
 <p>e.g. about 85% saving in time from the API paging to full optimisation.  I think that does qualify for &lsquo;blazingly fast&rsquo;.  It could be improved further by tailoring page size to your query, and if anti_sample is set since the more API calls made, the greater the gains should be available.</p>
-
 <h2 id="summary">Summary</h2>
-
 <p>There are still some improvements to be made to <code>gago</code> at the time of writing such as supporting filters and segments, but as an introduction to Go it has helped me see Go&rsquo;s strengths and where it may fit in my workflow.  I look forward to working with Go again on a project, as overall it was nice to work with, using Visual Studio Code to help me along.  I feel it has improved my horizons and I can already see how it has influenced how I code in other languages.</p>
 
         </div>

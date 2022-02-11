@@ -2,7 +2,7 @@
 <html lang="en-GB">
 <head>
     <title>Run RStudio Server on a Chromebook as a Cloud Native &middot; Mark Edmondson</title>
-    <meta name="generator" content="Hugo 0.55.5" />
+    <meta name="generator" content="Hugo 0.92.0" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
@@ -24,25 +24,18 @@
 <meta property="og:description" content="I recently got an Asus Chromebook Flip with which I&rsquo;m very happy, but it did make me realise that if a Chromebook was to replace my normal desktop as my primary workstation, my RStudio Server setup would need to be more cloud native than was available up until now.
 TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically backs up data and configuration settings to Google Cloud Storage is on the googleComputeEngineR website here." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://code.markedmondson.me/rstudio-server-chromebook/" />
-<meta property="article:published_time" content="2017-09-05T13:55:57&#43;01:00"/>
-<meta property="article:modified_time" content="2017-09-05T13:55:57&#43;01:00"/>
+<meta property="og:url" content="https://code.markedmondson.me/rstudio-server-chromebook/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2017-09-05T13:55:57+01:00" />
+<meta property="article:modified_time" content="2017-09-05T13:55:57+01:00" />
+
 
     
-    
-<meta itemprop="name" content="Run RStudio Server on a Chromebook as a Cloud Native">
+    <meta itemprop="name" content="Run RStudio Server on a Chromebook as a Cloud Native">
 <meta itemprop="description" content="I recently got an Asus Chromebook Flip with which I&rsquo;m very happy, but it did make me realise that if a Chromebook was to replace my normal desktop as my primary workstation, my RStudio Server setup would need to be more cloud native than was available up until now.
-TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically backs up data and configuration settings to Google Cloud Storage is on the googleComputeEngineR website here.">
-
-
-<meta itemprop="datePublished" content="2017-09-05T13:55:57&#43;01:00" />
-<meta itemprop="dateModified" content="2017-09-05T13:55:57&#43;01:00" />
+TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically backs up data and configuration settings to Google Cloud Storage is on the googleComputeEngineR website here."><meta itemprop="datePublished" content="2017-09-05T13:55:57+01:00" />
+<meta itemprop="dateModified" content="2017-09-05T13:55:57+01:00" />
 <meta itemprop="wordCount" content="1534">
-
-
-
 <meta itemprop="keywords" content="google-cloud-storage,google-compute-engine,R,rstudio-server,docker,google-app-engine," />
-
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Run RStudio Server on a Chromebook as a Cloud Native"/>
 <meta name="twitter:description" content="I recently got an Asus Chromebook Flip with which I&rsquo;m very happy, but it did make me realise that if a Chromebook was to replace my normal desktop as my primary workstation, my RStudio Server setup would need to be more cloud native than was available up until now.
@@ -333,102 +326,60 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
         <div class="article-entry" itemprop="articleBody">
-            
-
-<p>I recently got an <a href="https://www.asus.com/us/Laptops/ASUS-Chromebook-Flip-C302CA/">Asus Chromebook Flip</a> with which I&rsquo;m very happy, but it did make me realise that if a Chromebook was to replace my normal desktop as my primary workstation, my RStudio Server setup would need to be more cloud native than was available up until now.</p>
-
+            <p>I recently got an <a href="https://www.asus.com/us/Laptops/ASUS-Chromebook-Flip-C302CA/">Asus Chromebook Flip</a> with which I&rsquo;m very happy, but it did make me realise that if a Chromebook was to replace my normal desktop as my primary workstation, my RStudio Server setup would need to be more cloud native than was available up until now.</p>
 <p><em>TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically backs up data and configuration settings to Google Cloud Storage is on the <a href="https://cloudyr.github.io/googleComputeEngineR/articles/persistent-rstudio.html">googleComputeEngineR website here</a>.</em></p>
-
 <h2 id="broken-promises-of-the-cloud">Broken promises of the cloud?</h2>
-
 <p>Whilst there are lots of other solutions around for hosting RStudio Server in the cloud, <a href="http://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/">including some of my own</a>, I don&rsquo;t believe they are a serious replacement for a desktop station running RStudio.</p>
-
 <p>To date I&rsquo;ve treated RStudio Server as a temporary UI whilst setting up scheduled scripts and so forth, and for running workshops for students with pre-installed packages.  Yes, the convenience of running RStudio in a browser and being able to launch different configurations is great, but it wasn&rsquo;t a total desktop replacement for the following reasons:</p>
-
 <ul>
 <li><em>More expensive</em> - running RStudio Server permanently in the cloud can be done for as little as 5 dollars a month, but for that you get a machine about as powerful as a Raspberry Pi.  For a proper workstation with decent RAM etc, you are looking at more like 30 dollars a month, which if you&rsquo;re running for 2 years is around $700 that you could have spent on a laptop that can do more things.</li>
 <li><em>More risky</em> - keeping the only copy of your data on a cloud server is not a good idea, as I learnt to my cost when a VM&rsquo;s hard disk filled up. Unable to log in, a convoluted panic to increase the disk size occurred.  A physical laptop is a lot easier to troubleshoot if something goes awry.</li>
 <li><em>Not flexible enough</em> - if you run out of RAM or want things to compute quicker, you are going to need to transfer your data and boot up another VM with stronger specs.</li>
 </ul>
-
 <p>But isn&rsquo;t the allure of cheaper, safer, more flexible computing the reason we are using the cloud in the first place?</p>
-
 <h2 id="going-cloud-native">Going Cloud Native</h2>
-
 <p>I believe the reason for the dichotomy between expectation and reality is due to not being &ldquo;Cloud Native&rdquo; enough, something I realised whilst attending this year&rsquo;s <a href="https://cloudnext.withgoogle.com/">Google NEXT event</a>.  There they described three phases of business cloud evolution:</p>
-
 <ol>
 <li>Lift and Shift - moving your existing infrastructure into equivalent cloud versions</li>
 <li>Separation of compute and data - abstracting out the computing away from the data the computing is running on.  Essentially letting the cloud take on the roles of your hard disk vs your CPU.</li>
 <li>Platform-as-a-service (PaaS) - abstracting away the servers the computing and data are running on, so as to run on purely managed services such as BigQuery, Kubernetes and AppEngine</li>
 </ol>
-
 <p>From the above, existing RStudio Server solutions are in the Lift and Shift vein, whilst what we may imagine to be The Cloud are in the more evolved options.</p>
-
 <h2 id="docker-ftw">Docker FTW</h2>
-
 <p>To truly take advantage of the cloud, I believe this means you must become familiar with containers, specifically <a href="https://www.docker.com/">Docker</a>.  Containers are a rapidly evolving standard that makes cloud evolution possible by allowing breakout of computation, and is being embraced by all cloud providers.</p>
-
 <p>Using Docker with R has other benefits.  Reproducibility of R code is enhanced when you can pin the exact environment to run code within, and addresses criticisms of R that it is not production ready: normally R&rsquo;s open source and rapidly evolving nature means R code you wrote two years ago may not work with the most modern R package versions.</p>
-
 <p>I am in a lucky position to work on this as I have developed a niche creating Google API libraries in R.  Starting with my needs from digital marketing to wrap the Search Console and Google Analytics APIs, I then used that experience to move into the more general Cloud APIs such as Cloud Storage and Compute Engine, and now get support through my Google Developer Expert status network to experiment with the Google Cloud platform.</p>
-
 <h2 id="a-persistent-rstudio-server">A Persistent RStudio Server</h2>
-
 <p>Its with two of my R libraries, <a href="http://code.markedmondson.me/googleCloudStorageR/">googleCloudStorageR</a> and <a href="https://cloudyr.github.io/googleComputeEngineR/">googleComputeEngineR</a>, that I&rsquo;ve put together something much closer to the cheap, resilient, and flexible version of the cloud I want to be using when running RStudio in the cloud.</p>
-
 <p>The role of a harddrive is delegated to Google Cloud Storage, whilst RStudio is served from within Docker containers.  With some new functions that are in the <code>.Rprofile</code> of a custom RStudio Docker image, Google Cloud Storage is called to download on startup, or upload on exit, all the files to a specific bucket.  These files can include SSH and GitHub settings, or a project folder.  Backups are activated by putting a <code>_gcssave.yaml</code> file in a folder, or via the VM&rsquo;s metadata.</p>
-
 <p>What this all means is:</p>
-
 <ul>
 <li>RStudio Server runs within its own Docker container, and can be relaunched with custom package setups</li>
-<li>Data is persistent between Docker containers and cloud compute instances.<br /></li>
+<li>Data is persistent between Docker containers and cloud compute instances.</li>
 <li>I can turn off the RStudio Server to avoid charges, then turn it on again and start from where I left off without reconfiguring git etc.</li>
 <li>I can work locally in one RStudio project, then switch to the cloud to work on the same project.</li>
 <li>SSH keys and GitHub configurations are set up only once and then automatically available across Docker containers, cloud computers and local RStudio projects.</li>
 </ul>
-
 <p>I have a bookmark to the Google Cloud console to startup/shutdown the instance:</p>
-
-<p><img src="../images/startup-rstudio.png" alt="" /></p>
-
+<p><img src="../images/startup-rstudio.png" alt=""></p>
 <p>Once launched, I log in and configurations are auto loaded by the <code>_gcssave.yaml</code> configuration:</p>
-
-<p><img src="../images/startup-rstudio-persistent.png" alt="" /></p>
-
+<p><img src="../images/startup-rstudio-persistent.png" alt=""></p>
 <p>As this includes the home directory, so long as I login with the same username, and point to the same bucket, any RStudio launched (within a Docker/locally, whereever) don&rsquo;t need to reconfigure Git - downloading a GitHub repo is as simple as copying the SSH GitHub URL&hellip;</p>
-
-<p><img src="../images/ssh-clone-github.png" alt="" /></p>
-
+<p><img src="../images/ssh-clone-github.png" alt=""></p>
 <p>&hellip;and starting a new RStudio project:</p>
-
-<p><img src="../images/rstudio-github.png" alt="" /></p>
-
+<p><img src="../images/rstudio-github.png" alt=""></p>
 <p>This saves me significant cost by letting me stop/start servers as and when I need them via the GCP Web UI. My data is safer than keeping it on my local harddrive, and switching to a bigger VM takes seconds since all data and code upload/download automatically.</p>
-
 <p>The details for the configuration setup is <a href="https://cloudyr.github.io/googleComputeEngineR/articles/persistent-rstudio.html">here on the googleComputeEngineR website</a>, for which you&rsquo;ll need the latest development versions of <code>googleComputeEngineR</code> and <code>googleCloudStorageR</code>.</p>
-
 <h2 id="rstudio-as-a-service">RStudio-as-a-service?</h2>
-
 <p>Whats next?  Could this evolve further into a RStudio-as-a-service offering?  To qualify, we would need to not worry about starting or stopping servers at all, and scale under any load.</p>
-
 <p>Well, prompted by this blog post I had a good look.  It IS possible to deploy RStudio on App Engine and I got excited, but unfortunately the minimum number of permanent instances on a flexible App Engine app is 1, so all told for a solo analyst it is a more expensive solution than running a VM that you stop and start yourself.  However, if you had enough demand to pay for 1 VM 24 hours a day (~$30 a month),  it does start to make sense to scale on App Engine.  A setup that does that is on this GitHub repo <a href="https://github.com/MarkEdmondson1234/appengine-rstudio">running RStudio on App Engine</a>.</p>
-
-<p><img src="../images/appengine-rstudio.png" alt="" /></p>
-
+<p><img src="../images/appengine-rstudio.png" alt=""></p>
 <p>Using R on App Engine is possible due to App Engine&rsquo;s new beta support for <a href="https://cloud.google.com/appengine/docs/flexible/custom-runtimes/">flexible custom runtime containers</a>.  Any language deployed through a Docker container will work, something I recently worked through in a proof of concept to deploy a <a href="https://github.com/MarkEdmondson1234/serverless-R-API-appengine">serverless R API using Plumber</a>.  Shiny may be another beneficiary of App Engine, although at time of writing App Engine doesn&rsquo;t support the necessary websockets.</p>
-
 <p>I suspect using <a href="https://kubernetes.io/">Kubernetes</a>, a container orchestrator upon Google Container Engine the above could be achieved, but I haven&rsquo;t quite grok&rsquo;d that yet so perhaps I&rsquo;ll update this in the future.</p>
-
 <p>You can still benefit from PaaS within R if you are using services such as BigQuery.  There, analysis of large datasets is performed without you knowing how many shards of instances are being used to do so, and you can access the results within R via bigrquery/bigQueryR.  I did a presentation of <a href="https://docs.google.com/presentation/d/1510xJzDuWgbLgoNY3Fs5-CGtMCJEYs5msaxIpINt03g/edit?usp=sharing">BigQuery&rsquo;s usefulness for analytics here</a> for MeasureCamp Copenhagen.</p>
-
 <h2 id="summary">Summary</h2>
-
 <p>Of course, all this still doesn&rsquo;t work if you do not have an internet connection. :)  But I&rsquo;m now much more comfortable using my Chromebook to start and maintain R projects, and could imagine it being my main work station.</p>
-
 <p>Typical workflows include:</p>
-
 <ul>
 <li>Work on local RStudio</li>
 <li>create project _gcssave.yaml</li>
@@ -442,9 +393,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li>switch to local RStudio</li>
 <li>etc. etc.</li>
 </ul>
-
 <p>&hellip;and:</p>
-
 <ul>
 <li>Save project to (private) GitHub</li>
 <li>Move to Chromebook</li>
@@ -455,9 +404,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li>Do code, commit, push, pull</li>
 <li>etc. etc.</li>
 </ul>
-
 <p>None of this would be possible without the skills of the <a href="https://www.rstudio.com/">RStudio</a> team, <a href="https://cloud.google.com/">Google Cloud</a> and <a href="https://hub.docker.com/u/rocker/">Rocker</a>, so a massive thanks to them.</p>
-
 <p>I&rsquo;d imagine if you want to do this with another cloud provider they should have very similar services that you can build upon, let me know in the comments.</p>
 
         </div>

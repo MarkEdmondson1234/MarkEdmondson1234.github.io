@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>google-language on Mark Edmondson</title>
@@ -6,11 +6,7 @@
     <description>Recent content in google-language on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
-    <lastBuildDate>Wed, 15 Aug 2018 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://code.markedmondson.me/tags/google-language/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Wed, 15 Aug 2018 00:00:00 +0000</lastBuildDate><atom:link href="https://code.markedmondson.me/tags/google-language/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Talking Google Analytics dashboards via R, Shiny and Text-to-Speech APIs</title>
       <link>https://code.markedmondson.me/talking-google-analytics-dashboards/</link>

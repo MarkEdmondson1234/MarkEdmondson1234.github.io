@@ -2,7 +2,7 @@
 <html lang="en-GB">
 <head>
     <title>Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions &middot; Mark Edmondson</title>
-    <meta name="generator" content="Hugo 0.55.5" />
+    <meta name="generator" content="Hugo 0.92.0" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
@@ -23,24 +23,17 @@
     <meta property="og:title" content="Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions" />
 <meta property="og:description" content="A bootstrap example on how to create a paid data science app (DSaaS)" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://code.markedmondson.me/datascience-aas/" />
-<meta property="article:published_time" content="2020-06-28T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2020-06-28T00:00:00&#43;00:00"/>
+<meta property="og:url" content="https://code.markedmondson.me/datascience-aas/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2020-06-28T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-06-28T00:00:00+00:00" />
+
 
     
-    
-<meta itemprop="name" content="Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions">
-<meta itemprop="description" content="A bootstrap example on how to create a paid data science app (DSaaS)">
-
-
-<meta itemprop="datePublished" content="2020-06-28T00:00:00&#43;00:00" />
-<meta itemprop="dateModified" content="2020-06-28T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="2242">
-
-
-
+    <meta itemprop="name" content="Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions">
+<meta itemprop="description" content="A bootstrap example on how to create a paid data science app (DSaaS)"><meta itemprop="datePublished" content="2020-06-28T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2020-06-28T00:00:00+00:00" />
+<meta itemprop="wordCount" content="2241">
 <meta itemprop="keywords" content="R,firebase,google-auth,cloud-functions,python," />
-
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions"/>
 <meta name="twitter:description" content="A bootstrap example on how to create a paid data science app (DSaaS)"/>
@@ -284,7 +277,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2020-06-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-06-28</time>
             &middot;
-            2242
+            2241
             words
             &middot;
             11
@@ -326,307 +319,226 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
         <div class="article-entry" itemprop="articleBody">
-            
-
-<p>This post has been delayed due to the events of 2020 including a global pandemic and social justice demonstrations, if you are touched by those I wish you all the best.  For my family and I we have been very lucky and spent most of the last months tending our garden in the Copenhagen suburbs, but others have been a lot more directly affected.</p>
-
+            <p>This post has been delayed due to the events of 2020 including a global pandemic and social justice demonstrations, if you are touched by those I wish you all the best.  For my family and I we have been very lucky and spent most of the last months tending our garden in the Copenhagen suburbs, but others have been a lot more directly affected.</p>
 <p>One consequence of the pandemic may be that from now on more interaction will be online, which presents both opportunities and challenges.  I think it&rsquo;s important that any opportunities are democratised as much as possible, so I hope this post will help those with data science skills have an easier route to generate an income from those skills if they choose to.</p>
-
 <p>The demo tech stack chosen is one to keep online payments as simple yet as secure as possible, with low running costs taken care of via serverless infrastructure.</p>
-
 <p>The <a href="https://github.com/MarkEdmondson1234/Shiny-R-SaaS">demo app code is on GitHub available here</a> and a working demo with that code is running on <a href="https://mark.shinyapps.io/r-saas/">shinyapps.io here.</a></p>
-
 <h2 id="money-and-open-source-software">Money and open source software</h2>
-
 <p>The interaction between open-source and how it&rsquo;s paid for is interesting economics.  There are several open-source projects that are highly valuable and essential for modern living, yet created by people in their free time with no expectation of payment.  Indeed, from my own experience, the motivations to create these open source projects are more about craftsmanship, education and pride than any promise of monetary reward.</p>
-
 <p>Yet if those projects are to go beyond hobby projects, at some point the open source contributor needs to be paid, and this seems to happen in a few ways:</p>
-
 <ol>
 <li>The employer of the contributor pays enough that they can work in their free time
-
 <ul>
 <li>This risks burnout of the contributor</li>
-</ul></li>
+</ul>
+</li>
 <li>The employer agrees to subsidise the open source project directly
-
 <ul>
 <li>The employer may then want rights over the open source project, potentially compromising it</li>
-</ul></li>
+</ul>
+</li>
 <li>The open source project serves as a CV for demonstrating the contributors skill
-
 <ul>
 <li>The project may then be abandoned once the contributer is busy with paid projects</li>
-</ul></li>
+</ul>
+</li>
 <li>The open source project generates income from direct sponsorship of its users
-
 <ul>
 <li>With <a href="https://github.com/sponsors">GitHub Sponsors</a> this is now easier than ever, and may be the future of open source, although favours public facing projects over critical infrastructure</li>
-</ul></li>
+</ul>
+</li>
 <li>The open source project offers paid options on top of the free to use version, which supports the open-source work
-
 <ul>
 <li>This is the RStudio (PBC) model, with paid enterprise options supporting huge open source efforts</li>
-</ul></li>
+</ul>
+</li>
 </ol>
-
 <p>If we&rsquo;re lucky the contributor finds how to make one of the above work.  For example Hadley Wickham and Wes McKinney were employed by firms who wanted to support the open source work they were doing directly.  But what about those projects that rely on free time or user contributions?  Unfortunately, the most likely possibility is that they have to stop supporting the project - we can at best hope the person got a good job via the CV recognition route.</p>
-
 <p>My ambition is that the demo payment template described in this post will help people into easier direct sponsorship or dedicated apps before they are abandoned.</p>
-
 <h2 id="github-sponsors">GitHub Sponsors</h2>
-
 <p>GitHub Sponsors has also been a huge step in this area and there was <a href="https://calebporzio.com/i-just-hit-dollar-100000yr-on-github-sponsors-heres-how-i-did-it">a recent report of a contributor with a $100k salary</a> which is fantastic.</p>
-
 <p>I am humbled by the people who have also <a href="https://github.com/sponsors/MarkEdmondson1234">sponsored my efforts</a>.</p>
-
-<p><img src="/images/github-sponsors.png" alt="" /></p>
-
+<p><img src="/images/github-sponsors.png" alt=""></p>
 <p>Thank you!</p>
-
 <p>Any feedback is always a great motivation for me to carry on with my work (I used to fret I got no-one creating GitHub issues) and it never is taken for granted.  To have some who will actually take the time to send some money with that feedback is amazing and was another motivation to give back with this project.  It greatly reduces burnout to know that the work has some value to others.</p>
-
 <h2 id="r-as-a-production-language">R as a production language</h2>
-
 <p>Another motivation for this template is to help sustain R programmers in particular.  Although the demo payment flow will work with any service (the Paddle javascript embeds in any HTML) I focused on making a front end for R using Shiny as there is a thirving ecosystem of <a href="https://shiny.rstudio.com/gallery/">fantastic Shiny apps</a> that are currently offered for free, and I think it&rsquo;ll be cool if there are more that also generate income for their creators.</p>
-
-<p><img src="/images/shiny-showcase.png" alt="" /></p>
-
+<p><img src="/images/shiny-showcase.png" alt=""></p>
 <p>A myth that R can&rsquo;t be used in production is possibly perpetrated as it has arisen via academia and so commercial applications haven&rsquo;t been a priority.  Nothing cements R as a production language more than if people are making a living from it. I certainly do in my day-to-day work at <a href="https://iihnordic.com/">IIH Nordic</a>, but anything to help others have the same is probably worth while.</p>
-
 <h2 id="the-demo-dsaas-data-science-as-a-service">The demo DSaaS (Data Science as a Service)</h2>
-
 <p>The <a href="https://github.com/MarkEdmondson1234/Shiny-R-SaaS">demo app code is on GitHub available here</a> and a working demo with that code is running on <a href="https://mark.shinyapps.io/r-saas/">shinyapps.io here.</a></p>
-
-<p><img src="/images/subscriber-content.png" alt="" /></p>
-
+<p><img src="/images/subscriber-content.png" alt=""></p>
 <p>It features:</p>
-
 <ul>
 <li>Firebase to handle authentication and store subscription user data</li>
 <li>Paddle to handle payments, taxes and fulfillment</li>
 <li>Cloud Functions to sync changes between Paddle and Firebase</li>
 <li>Shiny frontend with demo content for &lsquo;free&rsquo;, &lsquo;logged in but not subscribed&rsquo; and &lsquo;subscriber&rsquo; content</li>
 </ul>
-
 <p>The detailed setup steps needed are in the <a href="https://github.com/MarkEdmondson1234/Shiny-R-SaaS">GitHub readme</a>, for this blogpost I&rsquo;ll take about what choices were made and why.</p>
-
 <h2 id="overall-flow">Overall flow</h2>
-
 <p>I used <a href="https://rich-iannone.github.io/DiagrammeR/"><code>library(DiagrammeR)</code></a> to plan out what flows were needed (click image to make bigger):</p>
-
-<p><img src="/images/paddle_flow.png" alt="" /></p>
-
+<p><img src="/images/paddle_flow.png" alt=""></p>
 <p>It does take some planning!</p>
-
 <p>The key areas are how a user logs on and the app knows they are a paid subscriber, and what happens offline if say the credit card is declined - the app needs to know this state has been updated the next time a user logs on.</p>
-
 <h3 id="firebase">Firebase</h3>
-
 <p>Firebase is a development platform for building mobile and web apps that is a layer on top of the Google Cloud Platform.</p>
-
 <p>Firebase has many tools to help make application development easier, but only two were needed for this project: Firebase AuthUI and Firestore, a noSQL database.</p>
-
-<p><img src="/images/firebase-login.png" alt="" /></p>
-
+<p><img src="/images/firebase-login.png" alt=""></p>
 <p>Firebase AuthUI has been implemented for Shiny apps via JohnCoene&rsquo;s <a href="https://github.com/JohnCoene/firebase">firebase package</a>.</p>
-
 <blockquote>
 <p>This has a nice open source story of taking inspiration from each other, first started by <a href="https://github.com/shinyonfire/sof-auth-example">Andy Merlino showing a POC of Firebase</a> on Shiny, myself putting in the Firebase Auth UI module which helped simplify the code and finished and polished by John to make a simple and powerful Shiny package to implement Firebase authentication.</p>
 </blockquote>
-
 <p>Its easy and secure to setup, and since the authentication uses a centralised database running on Firebase it works across apps/website so a user who logs in with Shiny can also be recognised elsewhere, which you can use to make a suite of services, support or apps.</p>
-
 <p>In a similar manner, Firestore is a noSQL database that is used to carry the subscription data, linked to the Firebase userId.</p>
-
-<p><img src="/images/firebase-database.png" alt="" /></p>
-
+<p><img src="/images/firebase-database.png" alt=""></p>
 <p>Being noSQL it is quick for reads and also lets you keep historic events such as when a user subscribed, cancelled or updated. Since its on the Google Cloud Platform I could use <a href="https://code.markedmondson.me/googleAuthR/"><code>googleAuthR</code></a> to authenticate and generated the R function to read it:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(googleAuthR)
 
-<pre><code class="language-r">library(googleAuthR)
+<span style="color:#a6e22e">gar_auth_service</span>(<span style="color:#e6db74">&#34;firebase-reader-auth-key.json&#34;</span>,
+                 scope <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://www.googleapis.com/auth/datastore&#34;</span>)
 
-gar_auth_service(&quot;firebase-reader-auth-key.json&quot;,
-                 scope = &quot;https://www.googleapis.com/auth/datastore&quot;)
+<span style="color:#75715e">#&#39; Gets a Firebase data entry.  Will return NULL if it can not</span>
+fb_document_get <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function</span>(document_path,
+                            database_id <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;(default)&#34;</span>,
+                            project_id <span style="color:#f92672">=</span> <span style="color:#a6e22e">Sys.getenv</span>(<span style="color:#e6db74">&#34;FIREBASE_PROJECT&#34;</span>)){
 
-#' Gets a Firebase data entry.  Will return NULL if it can not
-fb_document_get &lt;- function(document_path,
-                            database_id = &quot;(default)&quot;,
-                            project_id = Sys.getenv(&quot;FIREBASE_PROJECT&quot;)){
-
-  the_url &lt;- sprintf(&quot;https://firestore.googleapis.com/v1/projects/%s/databases/%s/documents/%s&quot;,
+  the_url <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">sprintf</span>(<span style="color:#e6db74">&#34;https://firestore.googleapis.com/v1/projects/%s/databases/%s/documents/%s&#34;</span>,
                      project_id, database_id, document_path)
 
-  f &lt;- gar_api_generator(the_url,
-                         &quot;GET&quot;,
-                         data_parse_function = function(x) x)
+  f <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gar_api_generator</span>(the_url,
+                         <span style="color:#e6db74">&#34;GET&#34;</span>,
+                         data_parse_function <span style="color:#f92672">=</span> <span style="color:#a6e22e">function</span>(x) x)
 
-  f()
+  <span style="color:#a6e22e">f</span>()
 }
-</code></pre>
-
-<h3 id="paddle">Paddle</h3>
-
+</code></pre></div><h3 id="paddle">Paddle</h3>
 <p>For a long time I was thinking of using Stripe for this template, but whilst Stripe has a great API and I&rsquo;d <a href="https://github.com/MarkEdmondson1234/stripeR">worked with it before</a>, there was still some work to do to make reliable payment apps such as handling when a user&rsquo;s card gets declined (how would your app know to deny paid content?) and international taxes etc.</p>
-
 <p>The pitch of <a href="https://paddle.com/">paddle.com</a> was that it took care of all that for you, so you are closer to a working app.  They do charge more per transaction than Stripe, so if you are looking for the cheapest then you may want to stick with Stripe and implement the &ldquo;Stripe stack&rdquo;, but I figured it was worth it for keeping the implementation simple.</p>
-
 <p>Paddle has a simple JavaScript button to implement the payment popups -</p>
-
-<pre><code class="language-js">&lt;script src=&quot;https://cdn.paddle.com/paddle/paddle.js&quot;&gt;&lt;/script&gt;
-&lt;script type=&quot;text/javascript&quot;&gt;
-	Paddle.Setup({ vendor: 1234567 });
-&lt;/script&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;https://cdn.paddle.com/paddle/paddle.js&#34;</span><span style="color:#f92672">&gt;&lt;</span><span style="color:#960050;background-color:#1e0010">/script&gt;</span>
+<span style="color:#f92672">&lt;</span><span style="color:#a6e22e">script</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;text/javascript&#34;</span><span style="color:#f92672">&gt;</span>
+	<span style="color:#a6e22e">Paddle</span>.<span style="color:#a6e22e">Setup</span>({ <span style="color:#a6e22e">vendor</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1234567</span> });
+<span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/script&gt;</span>
 
 ...
-// a buy button
-&lt;a href=&quot;#!&quot; class=&quot;paddle_button&quot; data-product=&quot;12345&quot;&gt;Buy Now!&lt;/a&gt;
-</code></pre>
-
-<p><img src="/images/paddle-paymentstep-2.png" alt="" /></p>
-
+<span style="color:#75715e">// a buy button
+</span><span style="color:#75715e"></span><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;#!&#34;</span> <span style="color:#66d9ef">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;paddle_button&#34;</span> <span style="color:#a6e22e">data</span><span style="color:#f92672">-</span><span style="color:#a6e22e">product</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;12345&#34;</span><span style="color:#f92672">&gt;</span><span style="color:#a6e22e">Buy</span> <span style="color:#a6e22e">Now</span><span style="color:#f92672">!&lt;</span><span style="color:#960050;background-color:#1e0010">/a&gt;</span>
+</code></pre></div><p><img src="/images/paddle-paymentstep-2.png" alt=""></p>
 <p>Paddle then uses webhooks to communicate with your server (in this case, Firestore) - so the next ingredient was how to create a webhook for communication between Paddle and Firestore.  You can then test this from the Paddle UI:</p>
-
-<p><img src="/images/paddle-webhook-test.png" alt="" /></p>
-
+<p><img src="/images/paddle-webhook-test.png" alt=""></p>
 <h3 id="google-cloud-functions">Google Cloud Functions</h3>
-
 <p>For simple &ldquo;glue&rdquo; data flows my go-to is Google Cloud Functions, as you only need write the code and deploy without needing to worry about servers or scale.  Firebase has its own Cloud Function UI as well but that only supports node.js, so I opted to use the GCP console Cloud Functions in Python3.7 (Its the same service and infrastructure as Firebase.)</p>
-
 <p>Paddle had lots of Python examples already on the website on how to verify and deal with the data in their webhook payload so a lot of it was just copy-paste from there into the Cloud Function UI.  There is some more setup info in the <a href="https://github.com/MarkEdmondson1234/Shiny-R-SaaS/tree/master/payment_app">Cloud Function readme</a> - the only extra bit I needed to add was how to take the webhook payload and write it to Firestore - this was all handled by this snippet of code:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> logging
+<span style="color:#f92672">from</span> google.cloud <span style="color:#f92672">import</span> firestore
 
-<pre><code class="language-python">import logging
-from google.cloud import firestore
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">update_firebase</span>(data, collection, doc_id):
+    logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">&#39;fb update - collection </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> doc_id </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(collection, doc_id))
 
-def update_firebase(data, collection, doc_id):
-    logging.info('fb update - collection {} doc_id {}'.format(collection, doc_id))
+    db <span style="color:#f92672">=</span> firestore<span style="color:#f92672">.</span>Client()
+    doc_ref <span style="color:#f92672">=</span> db<span style="color:#f92672">.</span>collection(collection)<span style="color:#f92672">.</span>document(doc_id)
+    doc_ref<span style="color:#f92672">.</span>set(data)
 
-    db = firestore.Client()
-    doc_ref = db.collection(collection).document(doc_id)
-    doc_ref.set(data)
-
-    # add the event
-    event_ref = db.collection(collection).document(doc_id).collection('event').document(data['alert_id'])
-    event_ref.set(data)   
-</code></pre>
-
-<p>The <code>event</code> collection is per userId, and gives the complete history of their transactions.</p>
-
+    <span style="color:#75715e"># add the event</span>
+    event_ref <span style="color:#f92672">=</span> db<span style="color:#f92672">.</span>collection(collection)<span style="color:#f92672">.</span>document(doc_id)<span style="color:#f92672">.</span>collection(<span style="color:#e6db74">&#39;event&#39;</span>)<span style="color:#f92672">.</span>document(data[<span style="color:#e6db74">&#39;alert_id&#39;</span>])
+    event_ref<span style="color:#f92672">.</span>set(data)   
+</code></pre></div><p>The <code>event</code> collection is per userId, and gives the complete history of their transactions.</p>
 <p>If implementing your own, make sure to use the verification code that checks the webhook is from a trusted source. Paddle supplies public/private keys and <a href="https://developer.paddle.com/webhook-reference/verifying-webhooks">code to check them</a>, which is important for payment applications - you can see the <a href="https://github.com/MarkEdmondson1234/Shiny-R-SaaS/blob/master/payment_app/fb_functions/main.py">full function here</a>.</p>
-
 <p>As it works off webhooks this means that even when a user is not on the app important updates will still be enacted (such as monthly credit card payments or declines) and it moves a lot of work off your app for verifying/authorizing users.</p>
-
 <p>Once the cloud function is deployed then your app needs to only query if a subscription exists for the FirebaseId a user has just logged in with, and check that that subscription is still live.</p>
-
 <h3 id="shiny-app">Shiny app</h3>
-
 <p>Finally the actual demo app is via Shiny, which is much like any other Shiny app but with three additions:</p>
-
 <ul>
 <li>A login screen presenting Firebase Auth</li>
 <li>A check that a user is logged in before showing free content</li>
 <li>A check that a user is a subscriber before showing paid content</li>
 </ul>
-
 <p>The first two are provided by John&rsquo;s firebase library - see <a href="https://firebase.john-coene.com/articles/ui.html">the website on setting it up</a> :</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(shiny)
+<span style="color:#a6e22e">library</span>(firebase)
 
-<pre><code class="language-r">library(shiny)
-library(firebase)
-
-ui &lt;- fluidPage(
-  useFirebase(), # import dependencies
-  useFirebaseUI(),
-  reqSignin(h4(&quot;VIP plot below&quot;)), # hide from UI
-  plotOutput(&quot;plot&quot;)
+ui <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fluidPage</span>(
+  <span style="color:#a6e22e">useFirebase</span>(), <span style="color:#75715e"># import dependencies</span>
+  <span style="color:#a6e22e">useFirebaseUI</span>(),
+  <span style="color:#a6e22e">reqSignin</span>(<span style="color:#a6e22e">h4</span>(<span style="color:#e6db74">&#34;VIP plot below&#34;</span>)), <span style="color:#75715e"># hide from UI</span>
+  <span style="color:#a6e22e">plotOutput</span>(<span style="color:#e6db74">&#34;plot&#34;</span>)
 )
 
-server &lt;- function(input, output){
-  f &lt;- FirebaseUI$
-    new()$ # instantiate
-    set_providers( # define providers
-      email = TRUE, 
-      google = TRUE
-    )$
-    launch() # launch
+server <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function</span>(input, output){
+  f <span style="color:#f92672">&lt;-</span> FirebaseUI<span style="color:#f92672">$</span>
+    <span style="color:#a6e22e">new</span>()<span style="color:#f92672">$</span> <span style="color:#75715e"># instantiate</span>
+    <span style="color:#a6e22e">set_providers</span>( <span style="color:#75715e"># define providers</span>
+      email <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>, 
+      google <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>
+    )<span style="color:#f92672">$</span>
+    <span style="color:#a6e22e">launch</span>() <span style="color:#75715e"># launch</span>
 
-  output$plot &lt;- renderPlot({
-    f$req_sign_in() # require sign in
-    plot(cars)
+  output<span style="color:#f92672">$</span>plot <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">renderPlot</span>({
+    f<span style="color:#f92672">$</span><span style="color:#a6e22e">req_sign_in</span>() <span style="color:#75715e"># require sign in</span>
+    <span style="color:#a6e22e">plot</span>(cars)
   })
 }
 
-shinyApp(ui, server)
-</code></pre>
-
-<p>The check that a user is a subscriber involves taking the FirebaseId and seeing if it has a live entry in the subscriptions Firestore.</p>
-
+<span style="color:#a6e22e">shinyApp</span>(ui, server)
+</code></pre></div><p>The check that a user is a subscriber involves taking the FirebaseId and seeing if it has a live entry in the subscriptions Firestore.</p>
 <p>Another useful feature of Paddle is in its response it gives you cancel and update links unique to that user, so you can use those entries to create a UI for a subscriber that permits them to control their subscription:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">  <span style="color:#75715e"># NULL if no subscription</span>
+  subscriber <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">reactive</span>({
+    <span style="color:#a6e22e">req</span>(<span style="color:#a6e22e">firebase_user</span>())
 
-<pre><code class="language-r">  # NULL if no subscription
-  subscriber &lt;- reactive({
-    req(firebase_user())
+    <span style="color:#75715e"># fb_document_get() is defined in global.R </span>
+    o <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fb_document_get</span>(<span style="color:#a6e22e">paste0</span>(<span style="color:#e6db74">&#34;subscriptions/&#34;</span>, <span style="color:#a6e22e">firebase_user</span>()<span style="color:#f92672">$</span>uid))
 
-    # fb_document_get() is defined in global.R 
-    o &lt;- fb_document_get(paste0(&quot;subscriptions/&quot;, firebase_user()$uid))
-
-    if(!is.null(o) &amp;&amp; o$fields$status$stringValue == &quot;deleted&quot;){
-      # has subscription entry but it is cancelled
-      return(NULL)
+    <span style="color:#a6e22e">if</span>(<span style="color:#f92672">!</span><span style="color:#a6e22e">is.null</span>(o) <span style="color:#f92672">&amp;&amp;</span> o<span style="color:#f92672">$</span>fields<span style="color:#f92672">$</span>status<span style="color:#f92672">$</span>stringValue <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;deleted&#34;</span>){
+      <span style="color:#75715e"># has subscription entry but it is cancelled</span>
+      <span style="color:#a6e22e">return</span>(<span style="color:#66d9ef">NULL</span>)
     }
 
     o
 
   })
 
-  subscriber_details &lt;- reactive({
-    req(subscriber())
-    ss &lt;- subscriber()
+  subscriber_details <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">reactive</span>({
+    <span style="color:#a6e22e">req</span>(<span style="color:#a6e22e">subscriber</span>())
+    ss <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">subscriber</span>()
 
-    tagList(
-      div(class=&quot;card&quot;,
-        h3(&quot;Subscription details&quot;),
-        p(&quot;Status:&quot;, ss$fields$status$stringValue),
-        p(class=&quot;email&quot;, ss$fields$email$stringValue),
-        p(&quot;Last update: &quot;, ss$fields$event_time$stringValue),
-        p(&quot;Next bill date:&quot;, ss$fields$next_bill_date$stringValue),
-        p(a(href=ss$fields$update_url$stringValue,
-          &quot;Update your subscription&quot;,
-                             icon = icon(&quot;credit-card&quot;),
-                             class = &quot;btn-info&quot;)),
-        &quot; &quot;,
-        p(a(href=ss$fields$cancel_url$stringValue,
-          &quot;Cancel your subscription&quot;,
-                      icon = icon(&quot;window-close&quot;),
-                      class = &quot;btn-danger&quot;))
+    <span style="color:#a6e22e">tagList</span>(
+      <span style="color:#a6e22e">div</span>(class<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;card&#34;</span>,
+        <span style="color:#a6e22e">h3</span>(<span style="color:#e6db74">&#34;Subscription details&#34;</span>),
+        <span style="color:#a6e22e">p</span>(<span style="color:#e6db74">&#34;Status:&#34;</span>, ss<span style="color:#f92672">$</span>fields<span style="color:#f92672">$</span>status<span style="color:#f92672">$</span>stringValue),
+        <span style="color:#a6e22e">p</span>(class<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;email&#34;</span>, ss<span style="color:#f92672">$</span>fields<span style="color:#f92672">$</span>email<span style="color:#f92672">$</span>stringValue),
+        <span style="color:#a6e22e">p</span>(<span style="color:#e6db74">&#34;Last update: &#34;</span>, ss<span style="color:#f92672">$</span>fields<span style="color:#f92672">$</span>event_time<span style="color:#f92672">$</span>stringValue),
+        <span style="color:#a6e22e">p</span>(<span style="color:#e6db74">&#34;Next bill date:&#34;</span>, ss<span style="color:#f92672">$</span>fields<span style="color:#f92672">$</span>next_bill_date<span style="color:#f92672">$</span>stringValue),
+        <span style="color:#a6e22e">p</span>(<span style="color:#a6e22e">a</span>(href<span style="color:#f92672">=</span>ss<span style="color:#f92672">$</span>fields<span style="color:#f92672">$</span>update_url<span style="color:#f92672">$</span>stringValue,
+          <span style="color:#e6db74">&#34;Update your subscription&#34;</span>,
+                             icon <span style="color:#f92672">=</span> <span style="color:#a6e22e">icon</span>(<span style="color:#e6db74">&#34;credit-card&#34;</span>),
+                             class <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;btn-info&#34;</span>)),
+        <span style="color:#e6db74">&#34; &#34;</span>,
+        <span style="color:#a6e22e">p</span>(<span style="color:#a6e22e">a</span>(href<span style="color:#f92672">=</span>ss<span style="color:#f92672">$</span>fields<span style="color:#f92672">$</span>cancel_url<span style="color:#f92672">$</span>stringValue,
+          <span style="color:#e6db74">&#34;Cancel your subscription&#34;</span>,
+                      icon <span style="color:#f92672">=</span> <span style="color:#a6e22e">icon</span>(<span style="color:#e6db74">&#34;window-close&#34;</span>),
+                      class <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;btn-danger&#34;</span>))
         )
       )
 
   })
   
-  # only displays for subscribers
-  output$paid_content &lt;- renderPlot({
-    req(subscriber())
+  <span style="color:#75715e"># only displays for subscribers</span>
+  output<span style="color:#f92672">$</span>paid_content <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">renderPlot</span>({
+    <span style="color:#a6e22e">req</span>(<span style="color:#a6e22e">subscriber</span>())
 
-    plot(iris)
+    <span style="color:#a6e22e">plot</span>(iris)
 
   })
-</code></pre>
-
-<p>Put together this is a view for a non-subscriber vs a subscriber:</p>
-
-<p><img src="/images/non-subscriber-content.png" alt="" /></p>
-
-<p><img src="/images/subscriber-content.png" alt="" /></p>
-
+</code></pre></div><p>Put together this is a view for a non-subscriber vs a subscriber:</p>
+<p><img src="/images/non-subscriber-content.png" alt=""></p>
+<p><img src="/images/subscriber-content.png" alt=""></p>
 <p>Its not pretty yet but thats for you to do :)</p>
-
 <h2 id="summary">Summary</h2>
-
 <p>I hope the above enables wonderful in-depth DSaaS that sustain both the contributors and the data science ecosystem in general.  Getting past all the boilerplate has certainly stopped me from creating apps in the past (I have a few failed projects in the closet), so I hope now this template exists it will be easier to launch.</p>
-
 <p>All we need are some good ideas on what people would be happy to pay for, and that is a whole other blog post I guess of which I have not yet much experience.</p>
-
 <p>You can substitute Shiny for a Python Flask app, HTML page or even an Excel sheet you send people.  Its really just a matter of what you think would be suitable.  There is also the matter of marketing, adding value with your app, customer service etc. that are all still to be tackled, but at least you can start moving down that track rather than the boring financial bits ;)</p>
-
 <p>If you do make anything derived from it, please do let me know as I&rsquo;d love to hear what you are doing, and if you can see ways to improve the template feel free to raise an issue on the <a href="https://github.com/MarkEdmondson1234/Shiny-R-SaaS/issues">project&rsquo;s GitHub issues</a>.</p>
 
         </div>

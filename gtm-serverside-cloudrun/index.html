@@ -2,7 +2,7 @@
 <html lang="en-GB">
 <head>
     <title>Google Tag Manager Server Side on Cloud Run - Pros and Cons &middot; Mark Edmondson</title>
-    <meta name="generator" content="Hugo 0.55.5" />
+    <meta name="generator" content="Hugo 0.92.0" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
@@ -23,24 +23,17 @@
     <meta property="og:title" content="Google Tag Manager Server Side on Cloud Run - Pros and Cons" />
 <meta property="og:description" content="Is Cloud Run viable for running Google Tag Manager server-side?" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://code.markedmondson.me/gtm-serverside-cloudrun/" />
-<meta property="article:published_time" content="2020-08-21T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2020-08-21T00:00:00&#43;00:00"/>
+<meta property="og:url" content="https://code.markedmondson.me/gtm-serverside-cloudrun/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2020-08-21T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-08-21T00:00:00+00:00" />
+
 
     
-    
-<meta itemprop="name" content="Google Tag Manager Server Side on Cloud Run - Pros and Cons">
-<meta itemprop="description" content="Is Cloud Run viable for running Google Tag Manager server-side?">
-
-
-<meta itemprop="datePublished" content="2020-08-21T00:00:00&#43;00:00" />
-<meta itemprop="dateModified" content="2020-08-21T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="1710">
-
-
-
+    <meta itemprop="name" content="Google Tag Manager Server Side on Cloud Run - Pros and Cons">
+<meta itemprop="description" content="Is Cloud Run viable for running Google Tag Manager server-side?"><meta itemprop="datePublished" content="2020-08-21T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2020-08-21T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1709">
 <meta itemprop="keywords" content="google-tag-manager,docker,cloud-run," />
-
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Google Tag Manager Server Side on Cloud Run - Pros and Cons"/>
 <meta name="twitter:description" content="Is Cloud Run viable for running Google Tag Manager server-side?"/>
@@ -284,7 +277,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2020-08-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-21</time>
             &middot;
-            1710
+            1709
             words
             &middot;
             9
@@ -318,96 +311,65 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
         <div class="article-entry" itemprop="articleBody">
-            
-
-<p>One of the most exciting developments in 2020 for me is the launch of <a href="https://developers.google.com/tag-manager/serverside">Google Tag Manager Server Side</a>, which lies at the intersection of cloud and digital analytics that I&rsquo;ve gravitated towards in recent years.</p>
-
+            <p>One of the most exciting developments in 2020 for me is the launch of <a href="https://developers.google.com/tag-manager/serverside">Google Tag Manager Server Side</a>, which lies at the intersection of cloud and digital analytics that I&rsquo;ve gravitated towards in recent years.</p>
 <p>There are many good resources out there on GTM Serverside, <a href="https://www.simoahava.com/analytics/server-side-tagging-google-tag-manager/">Simo in particular has got me up to speed with his excellent range of posts</a>.  This post will assume you&rsquo;ve read those, and be more about the viability of deploying GTM server side within Cloud Run.</p>
-
 <p>Many thanks to Adam Halbardier @ Google in the GTM serverside google group who helped guide me through the below.</p>
-
 <h2 id="why-gtm-serverside-on-cloud-run">Why GTM Serverside on Cloud Run?</h2>
-
 <p>The current supported production deployment for GTM server side is to App Engine Flexible, which supports Docker containers.</p>
-
 <p>I have gone through my own journey up the Cloud stack with R deployments and briefly considered App Engine Flexible as an option for R APIs, but it got superseded when Cloud Run appeared.  The private beta of GTM server side used Kubernetes, which demonstrated that the platform running the container is flexible, so it encouraged trying other Docker based deployments on GCP.  This flexibility is also good to make it deployable to other clouds if you need to.</p>
-
 <p>Cloud Run deployments are not initially supported by the GTM beta so should not be considered in production, but I hope that it will be in the future.  The main advantages for me are:</p>
-
 <ul>
 <li>Scale-to-zero - App Engine Flexible does not scale to zero, so you have a minimum charge of at least 1 VM per month and as its recommended to use 3 VMs this is $120 per month.  App Engine Standard does scale-to-zero, but is recommended by Google only for debug and testing purposes.</li>
 <li>Cost - this will alter given the number of hits per month, but after some testing it seems if you are under 200 Million hits per month then Cloud Run should be cheaper compared to $120 a month for App Engine Flexible.</li>
 <li>Performance - I&rsquo;m only running this on my blog at the moment so it may differ for lots of traffic and heavy tag use, but running similar GTM containers on App Engine and Cloud Run look to be at least comparable and in my tests Cloud Run is 50% quicker in responses - below <code>gtm2.markedmmondson.me</code> requests are to Cloud Run (91ms), <code>gtm.markedmondson.me</code> are to App Engine Standard (250ms)</li>
-<li>Global latency - If you deploy via App Engine that is deployed to only one GCP region (Europe, US etc), but you may be getting traffic from the other side of the world.  Those users will see more latency (up to around 500ms in observed EU deployments from Japan, for example).  With Cloud Run you can deploy multiple instances around the world then use Global Load Balancer to route the traffic to the nearest region, so improving global latency.<br /></li>
+<li>Global latency - If you deploy via App Engine that is deployed to only one GCP region (Europe, US etc), but you may be getting traffic from the other side of the world.  Those users will see more latency (up to around 500ms in observed EU deployments from Japan, for example).  With Cloud Run you can deploy multiple instances around the world then use Global Load Balancer to route the traffic to the nearest region, so improving global latency.</li>
 </ul>
-
-<p><img src="/images/gtm-requests.png" alt="" /></p>
-
+<p><img src="/images/gtm-requests.png" alt=""></p>
 <p>This needs to be taken with a pinch of salt until run on larger websites.  At the GCP end, for me the App Engine had latencies around 77.25 ms compared to 24ms for Cloud Run, with the rest of the time seen on the website waterfall charts taken up by networking speed I guess.</p>
-
 <ul>
 <li>Ease of deployment - App Engine flexible although supported by a Google shell script is more complicated if you want to customise it - read through what the <a href="https://googletagmanager.com/static/serverjs/setup.sh">shell script does</a> (right click and &ldquo;Save Link As&rdquo; to text for examination) as an example. In my experience if you don&rsquo;t need to work-around Cloud Run limitations then deploying and updating is simpler in Cloud Run.</li>
 </ul>
-
 <h2 id="why-not-gtm-serverside-on-cloud-run">Why not GTM Serverside on Cloud Run?</h2>
-
-<p><s>Currently its a bit awkward to have the debug container displayed in the GTM interface - this is because debug requests go to <code>/gtm/*</code> on a debug specified container, and Cloud Run does not support routing requests to folders.</p>
-
-<p>There are work-arounds, but that makes it deployment more convoluted, but hopefully GTM serverside container will be easier to support different platforms, to make it not only more compatible with Cloud Run but other cloud services such as AWS and Azure container services.</s></p>
-
+<p><!-- raw HTML omitted -->Currently its a bit awkward to have the debug container displayed in the GTM interface - this is because debug requests go to <code>/gtm/*</code> on a debug specified container, and Cloud Run does not support routing requests to folders.</p>
+<p>There are work-arounds, but that makes it deployment more convoluted, but hopefully GTM serverside container will be easier to support different platforms, to make it not only more compatible with Cloud Run but other cloud services such as AWS and Azure container services.<!-- raw HTML omitted --></p>
 <p><em>Edit: May 2021 - Now the debug server can be supported on Cloud Run!  The deployment section below is updated to show how this is done.</em></p>
-
 <p>The costs for high volume websites as well may be more for Cloud Run once the bill goes over $120.  The best I can figure out from my limited running so far it works out around 1USD for 10000 requests so it may only make sense for websites under 1million hits per month.  But this is work in progress, will update here once I know more.</p>
-
 <h2 id="how-to-deploy-gtm-serverside-to-cloud-run">How to deploy GTM Serverside to Cloud Run</h2>
-
 <p>This is all information you can see in the Google&rsquo;s <a href="https://developers.google.com/tag-manager/serverside/manual-setup-guide">GTM Manual Setup Guide docs</a>.</p>
-
 <p>When considering the Cloud Run configuration, you can refer to the deployment script given in the documentation for upgrading to a App Engine flexible service.  The most critical information you need is the docker image it deploys, which at time of writing is <code>gcr.io/cloud-tagging-10302018/gtm-cloud-image:stable</code></p>
-
 <p>This container runs the node.js as developed by the GTM team.  As Adam writes, you can examine the application in the Docker container like so to see how you can configure it:</p>
-
-<pre><code class="language-sh">$ docker pull gcr.io/cloud-tagging-10302018/gtm-cloud-image:stable
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ docker pull gcr.io/cloud-tagging-10302018/gtm-cloud-image:stable
 $ docker images
-$ docker run &lt;image id&gt; /bin/bash -c &quot;node server_bin.js --help&quot;
+$ docker run &lt;image id&gt; /bin/bash -c <span style="color:#e6db74">&#34;node server_bin.js --help&#34;</span>
 
-Usage: node server_bin.js [options]
+Usage: node server_bin.js <span style="color:#f92672">[</span>options<span style="color:#f92672">]</span>
 
 For options that can be set via either command-line flag or an environment variable, the command-line flag value takes precedence.
 
 Options:
 
-  --container_config: Base64-encoded container parameters in the URL query string format. This flag is required to be set. May also be set by CONTAINER_CONFIG environment variable. (default: undefined)
+  --container_config: Base64-encoded container parameters in the URL query string format. This flag is required to be set. May also be set by CONTAINER_CONFIG environment variable. <span style="color:#f92672">(</span>default: undefined<span style="color:#f92672">)</span>
 
-  --[no]run_as_debug_server: Enable when the server should run as a debug server. See the documentation for additional details. May also be set by RUN_AS_DEBUG_SERVER environment variable. (default: false)
+  --<span style="color:#f92672">[</span>no<span style="color:#f92672">]</span>run_as_debug_server: Enable when the server should run as a debug server. See the documentation <span style="color:#66d9ef">for</span> additional details. May also be set by RUN_AS_DEBUG_SERVER environment variable. <span style="color:#f92672">(</span>default: false<span style="color:#f92672">)</span>
 
-  --container_refresh_seconds: Interval between container refreshes. May also be set by CONTAINER_REFRESH_SECONDS environment variable. (default: 60) (an integer)
+  --container_refresh_seconds: Interval between container refreshes. May also be set by CONTAINER_REFRESH_SECONDS environment variable. <span style="color:#f92672">(</span>default: 60<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>an integer<span style="color:#f92672">)</span>
 
-  --host: Host on which to bind. Set the value to empty string to listen on the unspecified IPv6 address (::) if available, or the unspecified IPv4 address (0.0.0.0) otherwise. May also be set by HOST environment variable. (default: &quot;&quot;)
+  --host: Host on which to bind. Set the value to empty string to listen on the unspecified IPv6 address <span style="color:#f92672">(</span>::<span style="color:#f92672">)</span> <span style="color:#66d9ef">if</span> available, or the unspecified IPv4 address <span style="color:#f92672">(</span>0.0.0.0<span style="color:#f92672">)</span> otherwise. May also be set by HOST environment variable. <span style="color:#f92672">(</span>default: <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">)</span>
 
-  --port: Port to listen on. May also be set by PORT environment variable. (default: 8080)(an integer)
+  --port: Port to listen on. May also be set by PORT environment variable. <span style="color:#f92672">(</span>default: 8080<span style="color:#f92672">)(</span>an integer<span style="color:#f92672">)</span>
 
-  --debug_message_expiration_seconds: Number of seconds after which an unread debug message is deleted. This flag is applicable only when running as the debug server. May also be set by DEBUG_MESSAGE_EXPIRATION_SECONDS environment variable. (default: 600) (an integer)
+  --debug_message_expiration_seconds: Number of seconds after which an unread debug message is deleted. This flag is applicable only when running as the debug server. May also be set by DEBUG_MESSAGE_EXPIRATION_SECONDS environment variable. <span style="color:#f92672">(</span>default: 600<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>an integer<span style="color:#f92672">)</span>
 
-  --policy_script_url: HTTPS URL from which to load the policy script. May also be set by POLICY_SCRIPT_URL environment variable. (default: undefined)
+  --policy_script_url: HTTPS URL from which to load the policy script. May also be set by POLICY_SCRIPT_URL environment variable. <span style="color:#f92672">(</span>default: undefined<span style="color:#f92672">)</span>
 
-  --policy_script_refresh_seconds: Interval between policy script refreshes. May also be set by POLICY_SCRIPT_REFRESH_SECONDS environment variable. (default: 60) (an integer)
-</code></pre>
-
-<p>For our initial purposes, the most pertinent is the <code>CONTAINER_CONFIG</code> env arg, which is how the Docker image knows which GTM serverside its working for.  Its also good to see that <code>PORT</code> is configurable as well, as that is a recommended setting for Cloud Run.</p>
-
+  --policy_script_refresh_seconds: Interval between policy script refreshes. May also be set by POLICY_SCRIPT_REFRESH_SECONDS environment variable. <span style="color:#f92672">(</span>default: 60<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>an integer<span style="color:#f92672">)</span>
+</code></pre></div><p>For our initial purposes, the most pertinent is the <code>CONTAINER_CONFIG</code> env arg, which is how the Docker image knows which GTM serverside its working for.  Its also good to see that <code>PORT</code> is configurable as well, as that is a recommended setting for Cloud Run.</p>
 <p>The <code>RUN_AS_PREVIW_SERVER</code> is also available, so we will actually deploy two Cloud Run instances - one for production and one for the preview debug server.  Since it scales to 0, this should represent no extra cost.</p>
-
 <p>Once the debug server is deployed, we will then add its URL as the <code>PREVIEW_SERVER_URL</code></p>
-
 <h3 id="cloud-run-setup">Cloud Run setup</h3>
-
 <h4 id="deploy-the-debug-preview-server-first">Deploy the debug preview server first</h4>
-
 <p>We first need a URL to give to the production URL for the debug requests, so create the debug server first.</p>
-
 <p>Since its only for previews, you need minimal resources.</p>
-
 <ul>
 <li>Container image URL: <code>gcr.io/cloud-tagging-10302018/gtm-cloud-image:stable</code></li>
 <li>Container port: Leave as <code>8080</code></li>
@@ -416,26 +378,18 @@ Options:
 <li>Request timeout: Leave as <code>300</code></li>
 <li>Maximum requests per container: Not important as its just you, the default is fine.</li>
 <li>Variables (second tab):
-
 <ul>
 <li><code>RUN_AS_PREVIEW_SERVER</code> = <code>true</code></li>
-<li><code>CONTAINER_CONFIG</code> = <code>{ContainerId given to you on GTM Serverside setup}</code>
-<br /></li>
-</ul></li>
+<li><code>CONTAINER_CONFIG</code> = <code>{ContainerId given to you on GTM Serverside setup}</code></li>
 </ul>
-
+</li>
+</ul>
 <p>Deploy it and wait for it to do its initial launch.</p>
-
 <p>Note you don&rsquo;t need to map this URL to a custom domain if you don&rsquo;t want to (its not going to set cookies) but it doesn&rsquo;t matter if you do.</p>
-
 <p>Once you get a Green Tick then you need to copy the URL to point the production server at - see below:</p>
-
 <h4 id="deploy-the-production-server">Deploy the production server</h4>
-
 <p>This is the instance that will serve your main analytics requests.  The URL of the debug server is needed from above to add as the <code>PREVIEW_SERVER_URL</code> environment variable.</p>
-
 <p>For initial deployment I tried to copy the resource requirements from the <a href="https://developers.google.com/tag-manager/serverside/script-user-guide">App Engine Flexible configuration that you can read about here</a>.  From the shell script there we have enough to configure Cloud Run:</p>
-
 <ul>
 <li>Container image URL: <code>gcr.io/cloud-tagging-10302018/gtm-cloud-image:stable</code></li>
 <li>Container port: Leave as <code>8080</code></li>
@@ -444,21 +398,16 @@ Options:
 <li>Request timeout: Leave as <code>300</code></li>
 <li>Maximum requests per container: Set to max <code>80</code> which mirrors App Engine flexible 100 requests per VM.</li>
 <li>Variables (second tab):
-
 <ul>
 <li><code>CONTAINER_CONFIG</code> = <code>{ContainerId given to you on GTM Serverside setup}</code></li>
 <li><code>PREVIEW_SERVER_URL</code> = <code>{THE URL OF THE DEBUG SERVER YOU DEPLOYED ABOVE}</code></li>
-</ul></li>
 </ul>
-
+</li>
+</ul>
 <p>Once the Cloud Run is running with a green tick you should have a URL you could use, but for cookies its better for it to be running on a subdomain of your website domain.  This involves going to the <a href="https://console.cloud.google.com/run/domains">Domain Mappings in Cloud Run</a> and verifying your domain with Search Console then selecting the subdomain.  A https certificate will be created for you, and after you have changed your DNS settings via a CNAME record you can then use the new URL in your GTM serverside tags.</p>
-
-<p><img src="/images/cloudrun-domain-mapping.png" alt="" /></p>
-
+<p><img src="/images/cloudrun-domain-mapping.png" alt=""></p>
 <p>Since its running on Google Cloud Platform, you don&rsquo;t need to worry about supplying an authentication service key for say the BigQuery GTM API as you would if you were deploying on another cloud provider.</p>
-
 <h2 id="summary">Summary</h2>
-
 <p>If cheap enough I can see Cloud Run being the preferred method for small blogs like this one, and any website with less than $120 worth of App Engine traffic.  It may even be an option above that if the performance remains better.  At the very least it shows how with opening up GTM to Cloud environments how much customisation can be performed beyond just measurement so you have total control over your analytics setup.</p>
 
         </div>

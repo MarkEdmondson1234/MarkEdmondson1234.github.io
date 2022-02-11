@@ -2,7 +2,7 @@
 <html lang="en-GB">
 <head>
     <title>R on Kubernetes - serverless Shiny, R APIs and scheduled scripts &middot; Mark Edmondson</title>
-    <meta name="generator" content="Hugo 0.55.5" />
+    <meta name="generator" content="Hugo 0.92.0" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
@@ -23,24 +23,17 @@
     <meta property="og:title" content="R on Kubernetes - serverless Shiny, R APIs and scheduled scripts" />
 <meta property="og:description" content="Some examples of running R applications on Google Kubernetes Engine" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts/" />
-<meta property="article:published_time" content="2018-05-02T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2018-05-02T00:00:00&#43;00:00"/>
+<meta property="og:url" content="https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2018-05-02T00:00:00+00:00" />
+<meta property="article:modified_time" content="2018-05-02T00:00:00+00:00" />
+
 
     
-    
-<meta itemprop="name" content="R on Kubernetes - serverless Shiny, R APIs and scheduled scripts">
-<meta itemprop="description" content="Some examples of running R applications on Google Kubernetes Engine">
-
-
-<meta itemprop="datePublished" content="2018-05-02T00:00:00&#43;00:00" />
-<meta itemprop="dateModified" content="2018-05-02T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="3364">
-
-
-
+    <meta itemprop="name" content="R on Kubernetes - serverless Shiny, R APIs and scheduled scripts">
+<meta itemprop="description" content="Some examples of running R applications on Google Kubernetes Engine"><meta itemprop="datePublished" content="2018-05-02T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2018-05-02T00:00:00+00:00" />
+<meta itemprop="wordCount" content="3350">
 <meta itemprop="keywords" content="docker,R," />
-
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="R on Kubernetes - serverless Shiny, R APIs and scheduled scripts"/>
 <meta name="twitter:description" content="Some examples of running R applications on Google Kubernetes Engine"/>
@@ -284,7 +277,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2018-05-02 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-05-02</time>
             &middot;
-            3364
+            3350
             words
             &middot;
             16
@@ -318,53 +311,34 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <div class="article-entry" itemprop="articleBody">
             <h2 id="why-run-r-on-kubernetes">Why run R on Kubernetes?</h2>
-
 <p><a href="https://kubernetes.io/">Kubernetes</a> is a free and open-source utility to run jobs within a computer cluster.  It abstracts away the servers the jobs are running on so you need only worry about the code to run.  It has features such as <a href="https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/">scheduling</a>, <a href="https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler">auto-scaling</a>, and auto-healing to replace nodes if they breakdown.</p>
-
 <p>If you only need to run R on a single machine, then its probably a bit OTT to use Kubernetes, but if you are starting to work with multiple Docker containers and/or VMs it gets more and more attractive to have a way to easily orchestrate them.</p>
-
 <p>Kubernetes works via <a href="https://www.docker.com/">Docker</a> containers, so if you are already familiar with using Docker for abstracting away code environments, it should be a short step up to abstracting away the computers those Docker containers run upon.</p>
-
 <p>R is a good mix with Docker since it provides a way to have stable production environments in a landscape of shifting dependencies given R&rsquo;s fast changing open source foundation.  There is a growing ecosystem to help R users with Docker including the <a href="https://www.rocker-project.org/">Rocker Project</a>, <a href="http://o2r.info/2017/05/30/containerit-package/">containerit</a> and <a href="https://github.com/wch/harbor">harbor</a>, and Rhys Jackson has also crafted a Kubernetes client for R in <a href="https://github.com/RhysJackson/googleKubernetesR">googleKubernetesR</a>.</p>
-
 <p>If your R scripts are deployed in Docker containers, you can use them in Kubernetes.  This includes applications such as R powered APIs using OpenCPU or plumber, Shiny apps, batch R jobs that can scale horizontally over many CPUs, or scheduled analysis.</p>
-
 <p>What you gain is reliable, flexible, production ready R applications, that will scale, run on many cloud providers including Google, and once set up easy to deploy - in most cases pushing to GitHub can be the trigger to serve your new code.</p>
-
 <h3 id="alternatives">Alternatives</h3>
-
 <p>This article deploys to Google Kubernetes Engine (GKE), but there are many other methods to cover some of Kubernetes functionality, that you may prefer.</p>
-
-<p><img src="../images/gke_icon.png" alt="" /></p>
-
+<p><img src="../images/gke_icon.png" alt=""></p>
 <ul>
 <li>Kubernetes itself can run on all the cloud providers aside Google Cloud Platform, as well as your own servers.</li>
 <li><a href="https://cloud.google.com/appengine/docs/flexible/">Google App Engine Flexible</a> is a more managed platform that takes care of some details, but you lose control of others.  I wrote about this previously for running R APIs and a demo is in this <a href="https://github.com/MarkEdmondson1234/serverless-R-API-appengine">GitHub repo</a>.</li>
 <li><a href="https://docs.docker.com/compose/">Docker Compose</a> is an equivalent service that only runs on one host, <a href="https://docs.docker.com/engine/swarm/">Docker Swarm</a> runs on multiple hosts and most comparible to Kubernetes.</li>
 <li><a href="https://azure.microsoft.com/en-us/services/container-service/">Azure Container Service</a> is a more managed Kubernetes platform than GKE</li>
 </ul>
-
 <p>Regardless which one you use, the principles are similar in that they all build on Docker containers, and one of the advantages of Kubernetes is you can move to other providers a lot more easily, since Docker/Kubernetes is fast becoming the standard for cloud developments.</p>
-
 <h3 id="setup-background">Setup background</h3>
-
 <p>The below is a setup I have used for the above applications, and may be able to help if you are looking for similar functionality.</p>
-
-<p>I ran into several gotchas whilst developing it, so hopefully it will help you avoid some of those. Most vexing for me was finding a way to serve different R scripts on one kubernetes cluster on different URL paths (e.g. <code>/r-script1</code>, <code>/shinyapp2</code>, <code>/r-api-3</code>, etc) - many thanks to Rhys&rsquo; help with that.  The answer was that (at the time of writing) the default Google Kubernetes Engine doesn&rsquo;t support rewriting URLs, so instead its better to install another application on your cluster to take care of the above URL serving (termed <code>ingress fanout</code>), namely using <code>nginx ingress</code> instead of the default GKE ingress.</p>
-
+<p>I ran into several gotchas whilst developing it, so hopefully it will help you avoid some of those. Most vexing for me was finding a way to serve different R scripts on one kubernetes cluster on different URL paths (e.g. <code>/r-script1</code>, <code>/shinyapp2</code>, <code>/r-api-3</code>, etc) - many thanks to Rhys' help with that.  The answer was that (at the time of writing) the default Google Kubernetes Engine doesn&rsquo;t support rewriting URLs, so instead its better to install another application on your cluster to take care of the above URL serving (termed <code>ingress fanout</code>), namely using <code>nginx ingress</code> instead of the default GKE ingress.</p>
 <p>This article then demonstrates:</p>
-
 <ol>
 <li>Creating a Kubernetes cluster for your R applications</li>
 <li>Installing Helm (and Tiller) to aid with a nginx ingress installation</li>
 <li>Deploying R containers, with examples for Shiny, an R API and an R scheduled script</li>
 <li>Serving up those R containers on nice URLs</li>
 </ol>
-
 <h3 id="references">References</h3>
-
 <p>These were used to help develop the below:</p>
-
 <ul>
 <li><a href="https://cloud.google.com/kubernetes-engine/docs/tutorials/http-balancer">Setting up HTTP load balancing with Ingress</a> Google tutorial</li>
 <li><a href="https://cloud.google.com/community/tutorials/nginx-ingress-gke">Ingress with nginx</a> modified with <a href="https://docs.bitnami.com/kubernetes/how-to/configure-rbac-in-your-kubernetes-cluster/">this</a></li>
@@ -372,273 +346,165 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li><a href="https://kubernetes.io/docs/reference/kubectl/overview/">Kubernetes reference documentation</a></li>
 <li><a href="https://docs.bitnami.com/kubernetes/how-to/secure-kubernetes-services-with-ingress-tls-letsencrypt/">Kubernetes with nginx, TLS and LetsEncrypt</a></li>
 </ul>
-
-<h2 id="part-1-creating-an-r-cluster">Part 1 - Creating an R cluster</h2>
-
+<h2 id="part-1---creating-an-r-cluster">Part 1 - Creating an R cluster</h2>
 <p>Follow the <a href="https://cloud.google.com/kubernetes-engine/docs/how-to/creating-a-container-cluster">setup steps to authenticate with gcloud and kuberctl</a> then create your cluster via:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">gcloud container clusters create r-cluster --num-nodes<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>
+</code></pre></div><p>&hellip;or if using <code>googleKubernetesR</code> :</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(googleKubernetesR)
 
-<pre><code class="language-sh">gcloud container clusters create r-cluster --num-nodes=3
-</code></pre>
-
-<p>&hellip;or if using <code>googleKubernetesR</code> :</p>
-
-<pre><code class="language-r">library(googleKubernetesR)
-
-## create a 3 node cluster called r-cluster with defaults
-createCluster(projectId = gcp_get_project(), zone = &quot;europe-west3-b&quot;)
-</code></pre>
-
-<p>You&rsquo;ll need to wait a bit as it provisions all the VMs.</p>
-
+<span style="color:#75715e">## create a 3 node cluster called r-cluster with defaults</span>
+<span style="color:#a6e22e">createCluster</span>(projectId <span style="color:#f92672">=</span> <span style="color:#a6e22e">gcp_get_project</span>(), zone <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;europe-west3-b&#34;</span>)
+</code></pre></div><p>You&rsquo;ll need to wait a bit as it provisions all the VMs.</p>
 <p>Most of the below will use the terminal/shell for working rather than R, but in the future a lot of this may be possible via <code>googleKubernetesR</code> within an R session.</p>
-
 <p>Set up your shell to get the credentials for Kuberctl:</p>
-
-<pre><code class="language-sh">gcloud container clusters get-credentials r-cluster
-</code></pre>
-
-<p>And we are all set to start setting up this cluster for R jobs!</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">gcloud container clusters get-credentials r-cluster
+</code></pre></div><p>And we are all set to start setting up this cluster for R jobs!</p>
 <p>Here is a screenshot from the web UI of what it should look like:</p>
-
-<p><img src="../images/r-cluster.png" alt="" /></p>
-
-<h2 id="part-2-install-the-nginx-ingress-controller">Part 2 - Install the nginx ingress controller</h2>
-
+<p><img src="../images/r-cluster.png" alt=""></p>
+<h2 id="part-2---install-the-nginx-ingress-controller">Part 2 - Install the nginx ingress controller</h2>
 <p>The first recommended setup is to enable an ingress controller.</p>
-
-<p><img src="../images/ingress_controller.png" alt="" /></p>
-
+<p><img src="../images/ingress_controller.png" alt=""></p>
 <p><em>Image from <a href="https://www.nginx.com/products/nginx/kubernetes-ingress-controller/">nginx</a></em></p>
-
 <p>This is a pod that directs internet traffic to the right R container we set up later.</p>
-
 <p>We install the ingress controller via <a href="https://helm.sh/">Helm</a> and its counterpart Tiller on the cluster.</p>
-
 <p>Helm is a package manager for Kubernetes.</p>
-
 <blockquote>
 <p>You can skip installing Helm/Tiller/ingress controller if you don&rsquo;t need to have R apps on a URL, for instance if its just scheduled cron jobs you want on your cluster, but it is recommended if you want to serve up APIs and Shiny.</p>
 </blockquote>
-
 <p>The below is mostly copied straight from <a href="https://docs.bitnami.com/kubernetes/how-to/configure-rbac-in-your-kubernetes-cluster/">Bitnami</a>&rsquo;s article.</p>
-
 <h3 id="install-helm">Install Helm</h3>
-
 <p><em>The below assumes RBAC rules are enabled, which is true from Kubernetes version 1.8 onwards.</em></p>
-
-<pre><code class="language-sh">curl -o get_helm.sh https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">curl -o get_helm.sh https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get
 chmod +x get_helm.sh
 ./get_helm.sh
-</code></pre>
-
-<h3 id="install-tiller-on-cluster">Install Tiller on cluster</h3>
-
+</code></pre></div><h3 id="install-tiller-on-cluster">Install Tiller on cluster</h3>
 <h4 id="step-1-create-the-tiller-service-account">Step 1: Create the Tiller service account</h4>
-
 <p>Create a tiller-serviceaccount.yaml file using kubectl:</p>
-
-<pre><code class="language-sh">kubectl create serviceaccount tiller --namespace kube-system
-</code></pre>
-
-<h4 id="step-2-bind-the-tiller-service-account-to-the-cluster-admin-role">Step 2: Bind the Tiller service account to the cluster-admin role</h4>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">kubectl create serviceaccount tiller --namespace kube-system
+</code></pre></div><h4 id="step-2-bind-the-tiller-service-account-to-the-cluster-admin-role">Step 2: Bind the Tiller service account to the cluster-admin role</h4>
 <p>Create a <code>tiller-clusterrolebinding.yaml</code> file with the following contents:</p>
-
-<pre><code class="language-yaml">      kind: ClusterRoleBinding
-      apiVersion: rbac.authorization.k8s.io/v1beta1
-      metadata:
-        name: tiller-clusterrolebinding
-      subjects:
-      - kind: ServiceAccount
-        name: tiller
-        namespace: kube-system
-      roleRef:
-        kind: ClusterRole
-        name: cluster-admin
-        apiGroup: &quot;&quot;
-</code></pre>
-
-<p>Deploy the ClusterRoleBinding:</p>
-
-<pre><code class="language-sh">kubectl create -f tiller-clusterrolebinding.yaml
-</code></pre>
-
-<h4 id="step-3-update-the-existing-tiller-deployment">Step 3: Update the existing Tiller deployment</h4>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">      <span style="color:#f92672">kind</span>: <span style="color:#ae81ff">ClusterRoleBinding</span>
+      <span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">rbac.authorization.k8s.io/v1beta1</span>
+      <span style="color:#f92672">metadata</span>:
+        <span style="color:#f92672">name</span>: <span style="color:#ae81ff">tiller-clusterrolebinding</span>
+      <span style="color:#f92672">subjects</span>:
+      - <span style="color:#f92672">kind</span>: <span style="color:#ae81ff">ServiceAccount</span>
+        <span style="color:#f92672">name</span>: <span style="color:#ae81ff">tiller</span>
+        <span style="color:#f92672">namespace</span>: <span style="color:#ae81ff">kube-system</span>
+      <span style="color:#f92672">roleRef</span>:
+        <span style="color:#f92672">kind</span>: <span style="color:#ae81ff">ClusterRole</span>
+        <span style="color:#f92672">name</span>: <span style="color:#ae81ff">cluster-admin</span>
+        <span style="color:#f92672">apiGroup</span>: <span style="color:#e6db74">&#34;&#34;</span>
+</code></pre></div><p>Deploy the ClusterRoleBinding:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">kubectl create -f tiller-clusterrolebinding.yaml
+</code></pre></div><h4 id="step-3-update-the-existing-tiller-deployment">Step 3: Update the existing Tiller deployment</h4>
 <p>Update the existing tiller-deploy deployment with the Service Account you created earlier:</p>
-
-<pre><code class="language-sh">helm init --service-account tiller --upgrade
-</code></pre>
-
-<p>Wait a few seconds for the Tiller server to be redeployed.</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">helm init --service-account tiller --upgrade
+</code></pre></div><p>Wait a few seconds for the Tiller server to be redeployed.</p>
 <h4 id="step-4-test-the-new-helm">Step 4: Test the new Helm</h4>
-
 <p>All being well, you should be able to execute this command without errors:</p>
-
-<pre><code class="language-sh">helm ls
-</code></pre>
-
-<p>And that&rsquo;s it! You have configured Helm in your Kubernetes cluster.</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">helm ls
+</code></pre></div><p>And that&rsquo;s it! You have configured Helm in your Kubernetes cluster.</p>
 <h4 id="step-5-deploy-ngnix-ingress-controller">Step 5: Deploy ngnix Ingress Controller</h4>
-
 <p>Now you can deploy the <a href="https://kubernetes.github.io/ingress-nginx/">nginx ingress controller</a> using Helm to take care of details:</p>
-
-<pre><code class="language-sh">helm install --name nginx-ingress stable/nginx-ingress --set rbac.create=true
-</code></pre>
-
-<p>You should see your IP when you issue:</p>
-
-<pre><code class="language-sh">kubectl get service nginx-ingress-controller
-#&gt; NAME                       CLUSTER-IP    EXTERNAL-IP   PORT(S)                      AGE
-#&gt; nginx-ingress-controller   10.7.253.89   &lt;pending&gt;     80:32713/TCP,443:31061/TCP   23s
-</code></pre>
-
-<h2 id="part-3-deploying-r-workloads">Part 3 - Deploying R Workloads!</h2>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">helm install --name nginx-ingress stable/nginx-ingress --set rbac.create<span style="color:#f92672">=</span>true
+</code></pre></div><p>You should see your IP when you issue:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">kubectl get service nginx-ingress-controller
+<span style="color:#75715e">#&gt; NAME                       CLUSTER-IP    EXTERNAL-IP   PORT(S)                      AGE</span>
+<span style="color:#75715e">#&gt; nginx-ingress-controller   10.7.253.89   &lt;pending&gt;     80:32713/TCP,443:31061/TCP   23s</span>
+</code></pre></div><h2 id="part-3---deploying-r-workloads">Part 3 - Deploying R Workloads!</h2>
 <p>Now the cluster is all setup for you to deploy your R containers.  You can install other containers in any other language too, such as normal HTML webapps or utilties.</p>
-
 <p>We deploy them using the command <code>kubectl run</code>, and go through some examples below.</p>
-
 <h3 id="a-shiny-apps">A: Shiny apps</h3>
-
 <p>Below we deploy two Shiny apps, in this case the <a href="https://github.com/cloudyr/googleComputeEngineR/tree/master/inst/dockerfiles/shiny-googleAuthRdemo"><code>googleAuthR</code> demo app</a> that is configured to run on port 3838, in a <code>/shiny/</code> folder, and a <a href="https://github.com/flaviobarros/shiny-wordcloud">wordcloud Shiny app by Flavio Barros</a> that has had its Dockerfile configured to run on port 80 in the root folder, to demonstrate how to handle different Docker deployments.</p>
-
-<pre><code class="language-sh">kubectl run shiny1 --image gcr.io/gcer-public/shiny-googleauthrdemo:latest --port 3838
-kubectl run shiny2 --image=flaviobarros/shiny-wordcloud --port=80
-</code></pre>
-
-<h4 id="expose-containers-as-node-ports">Expose containers as node ports</h4>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">kubectl run shiny1 --image gcr.io/gcer-public/shiny-googleauthrdemo:latest --port <span style="color:#ae81ff">3838</span>
+kubectl run shiny2 --image<span style="color:#f92672">=</span>flaviobarros/shiny-wordcloud --port<span style="color:#f92672">=</span><span style="color:#ae81ff">80</span>
+</code></pre></div><h4 id="expose-containers-as-node-ports">Expose containers as node ports</h4>
 <p>At the moment we are only selecting which services the cluster will run - we won&rsquo;t be able to see them yet until we expose the apps and configure the ingress rules</p>
-
 <p>These will be pointed to via the nginx ingress controller.</p>
-
 <p>We first open up their ports as nodeports, so the ingress can see them:</p>
-
-<pre><code class="language-sh">kubectl expose deployment shiny1 --target-port=3838  --type=NodePort
-kubectl expose deployment shiny2 --target-port=80  --type=NodePort
-</code></pre>
-
-<h4 id="create-ingress-with-ngninx">Create Ingress with ngninx</h4>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">kubectl expose deployment shiny1 --target-port<span style="color:#f92672">=</span><span style="color:#ae81ff">3838</span>  --type<span style="color:#f92672">=</span>NodePort
+kubectl expose deployment shiny2 --target-port<span style="color:#f92672">=</span><span style="color:#ae81ff">80</span>  --type<span style="color:#f92672">=</span>NodePort
+</code></pre></div><h4 id="create-ingress-with-ngninx">Create Ingress with ngninx</h4>
 <p>This lets you be able to call the different services from one ip address.</p>
-
 <p>Save this as <code>r-ingress-nginx.yaml</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">extensions/v1beta1</span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Ingress</span>
+<span style="color:#f92672">metadata</span>:
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">r-ingress-nginx</span>
+  <span style="color:#f92672">annotations</span>:
+    <span style="color:#f92672">kubernetes.io/ingress.class</span>: <span style="color:#ae81ff">nginx</span>
+    <span style="color:#f92672">nginx.ingress.kubernetes.io/rewrite-target</span>: <span style="color:#ae81ff">/ </span>
+    <span style="color:#f92672">nginx.ingress.kubernetes.io/ssl-redirect</span>: <span style="color:#e6db74">&#34;false&#34;</span>
+<span style="color:#f92672">spec</span>:
+  <span style="color:#f92672">rules</span>:
+  - <span style="color:#f92672">http</span>:
+      <span style="color:#f92672">paths</span>:
+      - <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/wordcloud/</span>
+      <span style="color:#75715e"># app deployed to /wordcloud/</span>
+        <span style="color:#f92672">backend</span>:
+          <span style="color:#f92672">serviceName</span>: <span style="color:#ae81ff">shiny2</span>
+          <span style="color:#f92672">servicePort</span>: <span style="color:#ae81ff">80</span>
+      - <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/gar/</span>
+      <span style="color:#75715e"># app deployed to /gar/shiny/</span>
+        <span style="color:#f92672">backend</span>:
+          <span style="color:#f92672">serviceName</span>: <span style="color:#ae81ff">shiny1</span>
+          <span style="color:#f92672">servicePort</span>: <span style="color:#ae81ff">3838</span>
 
-<pre><code class="language-yaml">apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: r-ingress-nginx
-  annotations:
-    kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/rewrite-target: / 
-    nginx.ingress.kubernetes.io/ssl-redirect: &quot;false&quot;
-spec:
-  rules:
-  - http:
-      paths:
-      - path: /wordcloud/
-      # app deployed to /wordcloud/
-        backend:
-          serviceName: shiny2
-          servicePort: 80
-      - path: /gar/
-      # app deployed to /gar/shiny/
-        backend:
-          serviceName: shiny1
-          servicePort: 3838
-
-</code></pre>
-
-<p>Deploy via</p>
-
-<pre><code class="language-sh">kubectl apply -f r-ingress-nginx.yaml
-</code></pre>
-
-<p>Verify and keep refreshing until it has an ip address assigned in the <code>ADDRESS</code> field (5mins)</p>
-
-<pre><code class="language-sh">kubectl get ingress r-ingress-nginx
-</code></pre>
-
-<h4 id="see-your-deployed-containers">See your deployed containers</h4>
-
+</code></pre></div><p>Deploy via</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">kubectl apply -f r-ingress-nginx.yaml
+</code></pre></div><p>Verify and keep refreshing until it has an ip address assigned in the <code>ADDRESS</code> field (5mins)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">kubectl get ingress r-ingress-nginx
+</code></pre></div><h4 id="see-your-deployed-containers">See your deployed containers</h4>
 <p>The Nginx ingress controller takes care of any URL path not covered in the <code>r-ingress-nginx</code> ingress.  By default this should give a <code>default backend - 404</code> message.</p>
-
 <ul>
 <li><code>/gar/shiny/</code> is served by the googleAuthR demo app.  <code>/gar/</code> covers the standard Shiny welcome screen, and <code>/shiny/</code> is the folder that is configured in the Dockerfile</li>
 <li><code>/wordcloud/</code> holds the Wordcloud Shiny app. In this case, the Shiny app is configured to appear in the root directory of the <code>/wordcloud/</code> URL.</li>
 </ul>
-
 <p>Here are some screenshots:</p>
-
-<p><img src="../images/gar_app.png" alt="googleAuthR app" /></p>
-
-<p><img src="../images/wordcloud.png" alt="Wordcloud app" /></p>
-
-<p><img src="../images/default404.png" alt="Default webpage if not defined in ingress" /></p>
-
+<p><img src="../images/gar_app.png" alt="googleAuthR app"></p>
+<p><img src="../images/wordcloud.png" alt="Wordcloud app"></p>
+<p><img src="../images/default404.png" alt="Default webpage if not defined in ingress"></p>
 <p>Note it matters where you put the app in your Dockerfile.  The <code>nginx.ingress.kubernetes.io/rewrite-target: /</code> line in the ingress lets you specify a URL that is relative to your specified URLs.</p>
-
 <p>If you want to have your app served on the absolute URL specified in the Dockerfile, see below for a no-redirect version.</p>
-
 <h4 id="no-redirects">No redirects</h4>
-
 <p>Without redirects work too, but the Shiny app needs to have the correct URL path configured in its Docker that matches the URLs you are specifying in the Ingress e.g. for our examples as the googleAuthR demo is in path <code>/shiny/</code> and the Wordcloud demo in the root <code>/</code>, the Ingress rules need to match those. Beware clashes where two Shiny apps have configured to the same URL path, e.g. root <code>/</code></p>
-
 <p>Save this as <code>r-ingress-nginx-noredirect.yaml</code></p>
-
-<pre><code class="language-yaml">apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: r-ingress-nginx
-  annotations:
-    kubernetes.io/ingress.class: nginx
-    #nginx.ingress.kubernetes.io/rewrite-target: / # not used in this example
-    nginx.ingress.kubernetes.io/ssl-redirect: &quot;false&quot;
-spec:
-  rules:
-  - http:
-      paths:
-      - path: /
-        backend:
-          serviceName: shiny2
-          servicePort: 80
-      - path: /shiny/
-        backend:
-          serviceName: shiny1
-          servicePort: 3838
-</code></pre>
-
-<p>Deploy via</p>
-
-<pre><code>kubectl apply -f r-ingress-nginx-noredirect.yaml
-</code></pre>
-
-<p>Again, the Nginx ingress controller takes care of any URL path not covered in the <code>r-ingress-nginx</code> ingress.</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">extensions/v1beta1</span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Ingress</span>
+<span style="color:#f92672">metadata</span>:
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">r-ingress-nginx</span>
+  <span style="color:#f92672">annotations</span>:
+    <span style="color:#f92672">kubernetes.io/ingress.class</span>: <span style="color:#ae81ff">nginx</span>
+    <span style="color:#75715e">#nginx.ingress.kubernetes.io/rewrite-target: / # not used in this example</span>
+    <span style="color:#f92672">nginx.ingress.kubernetes.io/ssl-redirect</span>: <span style="color:#e6db74">&#34;false&#34;</span>
+<span style="color:#f92672">spec</span>:
+  <span style="color:#f92672">rules</span>:
+  - <span style="color:#f92672">http</span>:
+      <span style="color:#f92672">paths</span>:
+      - <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/</span>
+        <span style="color:#f92672">backend</span>:
+          <span style="color:#f92672">serviceName</span>: <span style="color:#ae81ff">shiny2</span>
+          <span style="color:#f92672">servicePort</span>: <span style="color:#ae81ff">80</span>
+      - <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/shiny/</span>
+        <span style="color:#f92672">backend</span>:
+          <span style="color:#f92672">serviceName</span>: <span style="color:#ae81ff">shiny1</span>
+          <span style="color:#f92672">servicePort</span>: <span style="color:#ae81ff">3838</span>
+</code></pre></div><p>Deploy via</p>
+<pre tabindex="0"><code>kubectl apply -f r-ingress-nginx-noredirect.yaml
+</code></pre><p>Again, the Nginx ingress controller takes care of any URL path not covered in the <code>r-ingress-nginx</code> ingress.</p>
 <p>However now:</p>
-
 <ul>
-<li><code>/shiny/</code> is served by the googleAuthR demo app.<br /></li>
+<li><code>/shiny/</code> is served by the googleAuthR demo app.</li>
 <li><code>/</code> holds the Wordcloud Shiny app.</li>
 </ul>
-
-<h3 id="b1-r-apis-plumber">B1: R APIs - plumber</h3>
-
+<h3 id="b1-r-apis---plumber">B1: R APIs - plumber</h3>
 <p><em>edit 8th Feb, 2019</em> - seems most people are using <a href="https://www.rplumber.io/">plumber</a> these days for R APIs, so I&rsquo;ve updated to include an example of that as well as OpenCPU</p>
-
 <p>Kubernetes is well suited to serving R APIs as they can auto-scale to demand, covering peaks and troughs in demand.</p>
-
 <p>Plumber has its own Docker container at <code>tresletech/plumber</code> so you can use that as a basis for your own deployments.</p>
-
 <p>An example below deploys the demo from plumber&rsquo;s website.</p>
-
 <p>Say you have an R script that uses plumber such as below:</p>
-
-<pre><code>#* Echo back the input
+<pre tabindex="0"><code>#* Echo back the input
 #* @param msg The message to echo
 #* @get /api/echo
 function(msg=&quot;&quot;){
@@ -660,287 +526,181 @@ function(){
 function(a, b){
   as.numeric(a) + as.numeric(b)
 }
-</code></pre>
-
-<p>You could include your own libraries etc as well, but in that case make sure to install them in the Dockerfile as well so they are available in its environment.</p>
-
+</code></pre><p>You could include your own libraries etc as well, but in that case make sure to install them in the Dockerfile as well so they are available in its environment.</p>
 <p>A Dockerfile can be very simple - it only uses the premade plumber Docker image then copies in your script (and perhaps installs any dependencies you want).  The <code>CMD</code> line specifies which R script to use in plumber.</p>
-
-<pre><code>FROM trestletech/plumber
+<pre tabindex="0"><code>FROM trestletech/plumber
 WORKDIR /payload/
 COPY [&quot;.&quot;,&quot;./&quot;]
 
 CMD [&quot;api.R&quot;]
-</code></pre>
-
-<p>The folder structure is arranged so the Dockerfile will pick up and copy in your plumber script when building:</p>
-
-<pre><code>|
+</code></pre><p>The folder structure is arranged so the Dockerfile will pick up and copy in your plumber script when building:</p>
+<pre tabindex="0"><code>|
 |- Dockerfile
 |- api.R
-</code></pre>
-
-<p>Deploy and build your Dockerfile so its available for Kubernetes.  I use GitHub and <a href="https://cloud.google.com/cloud-build/">Google Cloud Build</a> to have it in a private repo, so thats its available at <code>gcr.io/your-project/my-plumber</code>.  This means as I make changes to my plumber script and commit to GitHub, it will rebuild the image.</p>
-
+</code></pre><p>Deploy and build your Dockerfile so its available for Kubernetes.  I use GitHub and <a href="https://cloud.google.com/cloud-build/">Google Cloud Build</a> to have it in a private repo, so thats its available at <code>gcr.io/your-project/my-plumber</code>.  This means as I make changes to my plumber script and commit to GitHub, it will rebuild the image.</p>
 <p>Now we want to deploy the image to Kubernetes:</p>
-
-<pre><code class="language-sh">kubectl run my-plumber --image gcr.io/your-project/my-plumber --port 8000
-</code></pre>
-
-<p>Expose the port as before:</p>
-
-<pre><code class="language-sh">kubectl expose deployment my-plumber --target-port=8000  --type=NodePort
-</code></pre>
-
-<p>And create the ingress so it can speak with the outside world:</p>
-
-<pre><code class="language-yaml">apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: r-ingress-nginx
-  annotations:
-    kubernetes.io/ingress.class: nginx
-    #nginx.ingress.kubernetes.io/rewrite-target: /
-    nginx.ingress.kubernetes.io/ssl-redirect: &quot;false&quot;
-spec:
-  rules:
-  - http:
-      paths:
-      - path: /api/
-        backend:
-          serviceName: my-plumber
-          servicePort: 8000
-</code></pre>
-
-<blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">kubectl run my-plumber --image gcr.io/your-project/my-plumber --port <span style="color:#ae81ff">8000</span>
+</code></pre></div><p>Expose the port as before:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">kubectl expose deployment my-plumber --target-port<span style="color:#f92672">=</span><span style="color:#ae81ff">8000</span>  --type<span style="color:#f92672">=</span>NodePort
+</code></pre></div><p>And create the ingress so it can speak with the outside world:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">extensions/v1beta1</span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Ingress</span>
+<span style="color:#f92672">metadata</span>:
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">r-ingress-nginx</span>
+  <span style="color:#f92672">annotations</span>:
+    <span style="color:#f92672">kubernetes.io/ingress.class</span>: <span style="color:#ae81ff">nginx</span>
+    <span style="color:#75715e">#nginx.ingress.kubernetes.io/rewrite-target: /</span>
+    <span style="color:#f92672">nginx.ingress.kubernetes.io/ssl-redirect</span>: <span style="color:#e6db74">&#34;false&#34;</span>
+<span style="color:#f92672">spec</span>:
+  <span style="color:#f92672">rules</span>:
+  - <span style="color:#f92672">http</span>:
+      <span style="color:#f92672">paths</span>:
+      - <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/api/</span>
+        <span style="color:#f92672">backend</span>:
+          <span style="color:#f92672">serviceName</span>: <span style="color:#ae81ff">my-plumber</span>
+          <span style="color:#f92672">servicePort</span>: <span style="color:#ae81ff">8000</span>
+</code></pre></div><blockquote>
 <p>This assumes you have configured the ingress controller above</p>
 </blockquote>
-
 <p>You can then call your plumber API.  In the ingress above its configured to be within the ´/api/` folder, so all the plumber functions are relative to that.  Assuming your public ip address is 1.2.3.4, this means you can use curl to test your API:</p>
-
-<pre><code class="language-bash">curl http://1.2.3.4/api/echo?msg=&quot;its alive!&quot;
-#&gt; &quot;The message is: its alive!&quot;
-</code></pre>
-
-<h3 id="b2-r-apis-opencpu">B2: R APIs - OpenCPU</h3>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">curl http://1.2.3.4/api/echo?msg<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;its alive!&#34;</span>
+<span style="color:#75715e">#&gt; &#34;The message is: its alive!&#34;</span>
+</code></pre></div><h3 id="b2-r-apis---opencpu">B2: R APIs - OpenCPU</h3>
 <p>An alternative to plumber is using <a href="https://www.opencpu.org/">OpenCPU</a>, which uses a package structure to construct R APIs.</p>
-
 <p>A demo API is shown below, using <a href="http://code.markedmondson.me/predictClickOpenCPU/"><code>openCPU</code> for predicting website clicks</a>, but the same principle applies if using <code>plumber</code> or another framework by swapping out the Dockerfile to serve the API on a port.</p>
-
 <blockquote>
 <p>This assumes you have configured the ingress controller above</p>
 </blockquote>
-
-<pre><code class="language-sh">kubectl run opencpu-demo --image gcr.io/gcer-public/opencpu-demo:latest --port 8004
-</code></pre>
-
-<p>Expose the port as before:</p>
-
-<pre><code class="language-sh">kubectl expose deployment opencpu-demo --target-port=8004  --type=NodePort
-</code></pre>
-
-<p>Now we do another Ingress deployment for the R-API, in addition to the Shiny apps above.</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">kubectl run opencpu-demo --image gcr.io/gcer-public/opencpu-demo:latest --port <span style="color:#ae81ff">8004</span>
+</code></pre></div><p>Expose the port as before:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">kubectl expose deployment opencpu-demo --target-port<span style="color:#f92672">=</span><span style="color:#ae81ff">8004</span>  --type<span style="color:#f92672">=</span>NodePort
+</code></pre></div><p>Now we do another Ingress deployment for the R-API, in addition to the Shiny apps above.</p>
 <p>Save the below as <code>r-ingress-opencpu.yaml</code></p>
-
-<pre><code class="language-yaml">apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: r-ingress-nginx-ocpu
-  annotations:
-    kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/ssl-redirect: &quot;false&quot;
-spec:
-  rules:
-  - http:
-      paths:
-      - path: /ocpu/
-        backend:
-          serviceName: opencpu-demo
-          servicePort: 8004
-</code></pre>
-
-<p>&hellip;and deploy via:</p>
-
-<pre><code class="language-sh">kubectl apply -f r-ingress-opencpu.yaml
-</code></pre>
-
-<p>Your ip address will be as shown as your <code>ADDRESS</code> when you issue:</p>
-
-<pre><code class="language-sh">kubectl get ingress r-ingress-nginx-ocpu
-#&gt; NAME                   HOSTS     ADDRESS         PORTS     AGE
-#&gt; r-ingress-nginx-ocpu   *         35.205.249.34   80        10m
-</code></pre>
-
-<p>Note no rewriting this time as OpenCPU takes care of itself on <code>/ocpu/</code> folder.</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">extensions/v1beta1</span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Ingress</span>
+<span style="color:#f92672">metadata</span>:
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">r-ingress-nginx-ocpu</span>
+  <span style="color:#f92672">annotations</span>:
+    <span style="color:#f92672">kubernetes.io/ingress.class</span>: <span style="color:#ae81ff">nginx</span>
+    <span style="color:#f92672">nginx.ingress.kubernetes.io/ssl-redirect</span>: <span style="color:#e6db74">&#34;false&#34;</span>
+<span style="color:#f92672">spec</span>:
+  <span style="color:#f92672">rules</span>:
+  - <span style="color:#f92672">http</span>:
+      <span style="color:#f92672">paths</span>:
+      - <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/ocpu/</span>
+        <span style="color:#f92672">backend</span>:
+          <span style="color:#f92672">serviceName</span>: <span style="color:#ae81ff">opencpu-demo</span>
+          <span style="color:#f92672">servicePort</span>: <span style="color:#ae81ff">8004</span>
+</code></pre></div><p>&hellip;and deploy via:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">kubectl apply -f r-ingress-opencpu.yaml
+</code></pre></div><p>Your ip address will be as shown as your <code>ADDRESS</code> when you issue:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">kubectl get ingress r-ingress-nginx-ocpu
+<span style="color:#75715e">#&gt; NAME                   HOSTS     ADDRESS         PORTS     AGE</span>
+<span style="color:#75715e">#&gt; r-ingress-nginx-ocpu   *         35.205.249.34   80        10m</span>
+</code></pre></div><p>Note no rewriting this time as OpenCPU takes care of itself on <code>/ocpu/</code> folder.</p>
 <h3 id="use-your-opencpu-installation">Use your OpenCPU installation</h3>
-
 <p>Assuming your IP is <code>1.2.3.4</code>; we can see the OpenCPU is installed via <code>1.2.3.4/ocpu/info</code> and the test page at <code>1.2.3.4/ocpu/test/</code></p>
-
 <p>For our example, the custom package uploaded is available at <code>1.2.3.4/ocpu/library/predictClickOpenCPU</code></p>
-
-<p><img src="../images/open-cpu-running.png" alt="" /></p>
-
+<p><img src="../images/open-cpu-running.png" alt=""></p>
 <p>We use the API for this package by creating a POST hit to API endpoint</p>
-
 <p><code>1.2.3.4/ocpu/library/predictClickOpenCPU/R/predictMarkov/json</code></p>
-
 <p>&hellip;with the parameter <code>pageview_names=[&quot;/example/96&quot;,&quot;/example/213&quot;,&quot;/example/107&quot;]</code></p>
-
 <p>Constructing the above in the terminal with <code>curl</code>, we test the API is functioning:</p>
-
-<pre><code class="language-sh">curl --data 'pageview_names=[&quot;/example/96&quot;,&quot;/example/213&quot;,&quot;/example/107&quot;]' http://35.233.42.6/ocpu/library/predictClickOpenCPU/R/predictMarkov/json
-#&gt; {
-#  &quot;page&quot;: [&quot;/example/251&quot;],
-#  &quot;probability&quot;: [0.5657]
-#&gt; }
-</code></pre>
-
-<p>Web API endpoints can also be used as webhooks, for instance to react and do something when something is pushed to GitHub for continuous integration purposes.</p>
-
-<h3 id="c-scheduled-r-tasks-via-cronjobs">C: Scheduled R - Tasks via cronJobs</h3>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">curl --data <span style="color:#e6db74">&#39;pageview_names=[&#34;/example/96&#34;,&#34;/example/213&#34;,&#34;/example/107&#34;]&#39;</span> http://35.233.42.6/ocpu/library/predictClickOpenCPU/R/predictMarkov/json
+<span style="color:#75715e">#&gt; {</span>
+<span style="color:#75715e">#  &#34;page&#34;: [&#34;/example/251&#34;],</span>
+<span style="color:#75715e">#  &#34;probability&#34;: [0.5657]</span>
+<span style="color:#75715e">#&gt; }</span>
+</code></pre></div><p>Web API endpoints can also be used as webhooks, for instance to react and do something when something is pushed to GitHub for continuous integration purposes.</p>
+<h3 id="c-scheduled-r---tasks-via-cronjobs">C: Scheduled R - Tasks via cronJobs</h3>
 <p>Kuberenetes has a special option for deploying scheduled tasks, called cronJobs.</p>
-
 <p>When configuring your Dockerfile, you can choose so it runs entirely self-contained, perhaps calling an API and writing the result to a database.  For each new job you can make a new Dockerfile and build them on something like build triggers.</p>
-
 <p>In that case the Dockerfile should run with all configuration files included in the Docker build.  One advantage of running on GKE is that the job can be authenticated with the same project via <a href="http://code.markedmondson.me/googleAuthR/reference/gar_gce_auth.html"><code>googleAuthR::gar_gce_auth()</code></a> so will have access to Google Cloud Storage, BigQuery etc.</p>
-
 <p>An alternative is to configure the Dockerfile to rely on a config file, and have that config file mounted as a volume in the pod - that isn&rsquo;t covered here yet.</p>
-
 <h4 id="creating-an-executable-r-dockerfile">Creating an executable R Dockerfile</h4>
-
 <p>This is an example Dockerfile that installs dependencies and R packages, loads a local configuration file then runs a custom function when it is called upon by the cronJob:</p>
-
-<pre><code class="language-docker">FROM rocker/verse
-MAINTAINER Mark Edmondson (r@sunholo.com)
-
-# install R package dependencies
-RUN apt-get update &amp;&amp; apt-get install -y \
-    gcc gsl-bin libblas-dev \
-    ## etc....
-    ## clean up
-    &amp;&amp; apt-get clean \ 
-    &amp;&amp; rm -rf /var/lib/apt/lists/ \ 
-    &amp;&amp; rm -rf /tmp/downloaded_packages/ /tmp/*.rds
-
-# any necessary environment arguments
-ENV SECRET_ARG hellomum
-
-# Install packages from CRAN and GitHub
-RUN install2.r --error \ 
-    -r 'http://cran.rstudio.com' \
-    googleAuthR googleAnalyticsR bigQueryR \
-    &amp;&amp; Rscript -e &quot;devtools::install_github('MarkEdmondson1234/youtubeAnalyticsR')&quot; \
-    &amp;&amp; Rscript -e &quot;devtools::install_github('yourprivate/customPackage')&quot; \
-    ## clean up
-    &amp;&amp; rm -rf /tmp/downloaded_packages/ /tmp/*.rds
-
-# my_config.yaml is in same folder as Dockerfile
-COPY my_config.yaml my_config.yaml
-
-## this runs when this Docker container is called
-CMD [&quot;Rscript&quot;, &quot;-e&quot;, &quot;customPackage::do_something('my_config.yaml')&quot;]
-</code></pre>
-
-<h4 id="running-cronjobs">Running cronJobs</h4>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-docker" data-lang="docker"><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> rocker/verse</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">MAINTAINER</span><span style="color:#e6db74"> Mark Edmondson (r@sunholo.com)</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># install R package dependencies</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> apt-get update <span style="color:#f92672">&amp;&amp;</span> apt-get install -y <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    gcc gsl-bin libblas-dev <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    <span style="color:#75715e">## etc....</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#75715e">## clean up</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#f92672">&amp;&amp;</span> apt-get clean <span style="color:#ae81ff">\ </span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#f92672">&amp;&amp;</span> rm -rf /var/lib/apt/lists/ <span style="color:#ae81ff">\ </span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#f92672">&amp;&amp;</span> rm -rf /tmp/downloaded_packages/ /tmp/*.rds<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># any necessary environment arguments</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ENV</span> SECRET_ARG hellomum<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># Install packages from CRAN and GitHub</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> install2.r --error <span style="color:#ae81ff">\ </span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    -r <span style="color:#e6db74">&#39;http://cran.rstudio.com&#39;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    googleAuthR googleAnalyticsR bigQueryR <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    <span style="color:#f92672">&amp;&amp;</span> Rscript -e <span style="color:#e6db74">&#34;devtools::install_github(&#39;MarkEdmondson1234/youtubeAnalyticsR&#39;)&#34;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    <span style="color:#f92672">&amp;&amp;</span> Rscript -e <span style="color:#e6db74">&#34;devtools::install_github(&#39;yourprivate/customPackage&#39;)&#34;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    <span style="color:#75715e">## clean up</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#f92672">&amp;&amp;</span> rm -rf /tmp/downloaded_packages/ /tmp/*.rds<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># my_config.yaml is in same folder as Dockerfile</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> my_config.yaml my_config.yaml<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">## this runs when this Docker container is called</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">CMD</span> [<span style="color:#e6db74">&#34;Rscript&#34;</span>, <span style="color:#e6db74">&#34;-e&#34;</span>, <span style="color:#e6db74">&#34;customPackage::do_something(&#39;my_config.yaml&#39;)&#34;</span>]<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><h4 id="running-cronjobs">Running cronJobs</h4>
 <p>For <a href="https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/">cronJobs</a>, specify the <code>schedule</code> argument, and we change the restart policy to only do so on failure.</p>
-
-<pre><code class="language-sh">kubectl run scheduled-r --schedule=&quot;23 4 * * *&quot; --restart=OnFailure --image=gcr.io/xxxxxx/private_docker_image:latest
-</code></pre>
-
-<p>That is getting a bit complicated for the terminal , so I prefer to deploy via the file method:</p>
-
-<pre><code class="language-yaml">apiVersion: batch/v1beta1
-kind: CronJob
-metadata:
-  name: scheduledr
-spec:
-  schedule: &quot;23 4 * * *&quot;
-  jobTemplate:
-    spec:
-      template:
-        spec:
-          containers:
-          - name: my_image
-            image: gcr.io/xxxxxx/private_docker_image:latest
-          restartPolicy: OnFailure
-</code></pre>
-
-<p>Save the file as say <code>cron-r.yaml</code> and deploy via:</p>
-
-<pre><code class="language-sh">kubectl create -f ./cron-r.yaml
-</code></pre>
-
-<p>You should then see the job has been created via</p>
-
-<pre><code>kubectl get cronjob scheduledr
-</code></pre>
-
-<p>And in the Web UI under <a href="https://console.cloud.google.com/kubernetes/workload?project=iih-tools-analytics&amp;authuser=0&amp;workload_list_tablesize=50">Workloads</a></p>
-
-<p><img src="../images/cronJob.png" alt="" /></p>
-
-<h2 id="part-4-going-further">Part 4 - Going further</h2>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">kubectl run scheduled-r --schedule<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;23 4 * * *&#34;</span> --restart<span style="color:#f92672">=</span>OnFailure --image<span style="color:#f92672">=</span>gcr.io/xxxxxx/private_docker_image:latest
+</code></pre></div><p>That is getting a bit complicated for the terminal , so I prefer to deploy via the file method:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">batch/v1beta1</span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">CronJob</span>
+<span style="color:#f92672">metadata</span>:
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">scheduledr</span>
+<span style="color:#f92672">spec</span>:
+  <span style="color:#f92672">schedule</span>: <span style="color:#e6db74">&#34;23 4 * * *&#34;</span>
+  <span style="color:#f92672">jobTemplate</span>:
+    <span style="color:#f92672">spec</span>:
+      <span style="color:#f92672">template</span>:
+        <span style="color:#f92672">spec</span>:
+          <span style="color:#f92672">containers</span>:
+          - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">my_image</span>
+            <span style="color:#f92672">image</span>: <span style="color:#ae81ff">gcr.io/xxxxxx/private_docker_image:latest</span>
+          <span style="color:#f92672">restartPolicy</span>: <span style="color:#ae81ff">OnFailure</span>
+</code></pre></div><p>Save the file as say <code>cron-r.yaml</code> and deploy via:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">kubectl create -f ./cron-r.yaml
+</code></pre></div><p>You should then see the job has been created via</p>
+<pre tabindex="0"><code>kubectl get cronjob scheduledr
+</code></pre><p>And in the Web UI under <a href="https://console.cloud.google.com/kubernetes/workload?project=iih-tools-analytics&amp;authuser=0&amp;workload_list_tablesize=50">Workloads</a></p>
+<p><img src="../images/cronJob.png" alt=""></p>
+<h2 id="part-4---going-further">Part 4 - Going further</h2>
 <p>This article turned into a lot more words than I intended, so I&rsquo;ll stop now, but see below on some more things I could have written about:</p>
-
 <h3 id="updating-your-cluster">Updating your cluster</h3>
-
 <p>Its a bit of configuration to get there, but once deployed since the services are running off Docker, and those in turn are built using build triggers that are from GitHub pushes, it means that changes to scripts can all be controlled via GitHub pushes and branches, which you are probably using anyway for version control.</p>
-
 <p>When you change a configuration file and want to deploy, use <code>kubectl apply</code> instead of <code>kubectl create</code> to change the settings.</p>
-
 <p>Its best practice to specify a dev and production branch to your GitHub Docker images, so you can safely test containers before you break your production.</p>
-
-<h3 id="secrets-and-https-ssl-configuration">Secrets and https / SSL configuration</h3>
-
+<h3 id="secrets-and-https--ssl-configuration">Secrets and https / SSL configuration</h3>
 <p>Kubernetes supports more robust methods to guard your secrets that including them in the Dockerfiles - see <a href="https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets-as-environment-variables">here</a> for proper treatment.</p>
-
 <p>Related to that is serving over https.  In this case I found Bitnami the easiest method to follow, using Helm again to <a href="https://docs.bitnami.com/kubernetes/how-to/secure-kubernetes-services-with-ingress-tls-letsencrypt/">configure TLS with LetsEncrypt and Kube-lego</a>.</p>
-
 <h3 id="auto-scaling">Auto scaling</h3>
-
 <p>Launching the cluster with these flags enables auto-scaling</p>
-
-<pre><code class="language-sh">gcloud container clusters create r-cluster --num-nodes=0 --enable-autoscaling --min-nodes=0 --max-nodes=3
-</code></pre>
-
-<p>On Google Kubernetes Engine this scales down to 0, which should be cheaper than running a few CPUs running <sup>24</sup>&frasl;<sub>7</sub>, and you can configure when new nodes are launched such as when it hits 80% CPU.</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">gcloud container clusters create r-cluster --num-nodes<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> --enable-autoscaling --min-nodes<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> --max-nodes<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>
+</code></pre></div><p>On Google Kubernetes Engine this scales down to 0, which should be cheaper than running a few CPUs running 24/7, and you can configure when new nodes are launched such as when it hits 80% CPU.</p>
 <h3 id="parallel-tasks">Parallel tasks</h3>
-
 <p>For big parallel processing tasks, Kubernetes is an option that can launch as many CPUs you need.</p>
-
 <p>However, you will need to configure your workload so that each service works on a different part of the data, so some form of central ledger is needed that keeps track of which rows on the database or files have been treated, and to remove them from the input files once completed.</p>
-
 <p>A strategy to handle this is to use message brokers that specify which work needs to be done. An example of using a <a href="https://kubernetes.io/docs/tasks/job/coarse-parallel-processing-work-queue/">message broker is here</a>.</p>
-
 <h3 id="and-finally">And finally&hellip;</h3>
-
 <p>After all that, do remember to tear down your cluster and/or load balancers when finished with, as you are charged by minute of uptime per node.  Most tutorials include this at the end - you can either delete in the web UI but to be complete here:</p>
-
 <ol>
 <li>Delete the Ingress: This deallocates the ephemeral external IP address and the load balancing resources associated to your application:</li>
 </ol>
-
-<pre><code class="language-sh">kubectl delete ingress your-ingress
-</code></pre>
-
-<ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">kubectl delete ingress your-ingress
+</code></pre></div><ol start="2">
 <li>Delete the cluster: This deletes the compute nodes of your container cluster and other resources such as the Deployments in the cluster:</li>
 </ol>
-
-<pre><code class="language-sh">gcloud container clusters delete r-cluster
-</code></pre>
-
-<h2 id="summary">Summary</h2>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">gcloud container clusters delete r-cluster
+</code></pre></div><h2 id="summary">Summary</h2>
 <p>When working with Kubernetes documentation you can tell that it is a fast changing developing product, which can be a bit frustrating when looking for solutions, but I anticipate the APIs to settle down in the future.</p>
-
 <p>This should hopefully serve as a good jumping off point for you to develop your own Kubernetes R cluster.  Having got Kubernetes under my belt I now feel fully tooled up for deploying R (and other applications) at scale, and in an exciting and developing framework that should stand in good sted for a few years to come.</p>
         </div>
         <footer class="article-footer">
