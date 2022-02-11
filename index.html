@@ -170,7 +170,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        32
+        31
         <span>Posts</span>
       </div>
       <div class="article-info-block">
@@ -758,142 +758,6 @@ But for googleAnalyticsR v1.0.0 there are so many cool new things that I think i
         </div>
         <footer class="article-footer">
     <a data-url="https://code.markedmondson.me/edmondlytica/" data-id="22a0b4a0a0fbb4396f44baee14374969" class="article-share-link">
-        <i class="fa fa-share"></i>
-        Share
-    </a>
-    
-
-    <script>
-    (function ($) {
-        
-        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
-            __SHARE_BUTTON_BINDED__ = true;
-        } else {
-            return;
-        }
-        $('body').on('click', function() {
-            $('.article-share-box.on').removeClass('on');
-        }).on('click', '.article-share-link', function(e) {
-            e.stopPropagation();
-
-            var $this = $(this),
-                url = $this.attr('data-url'),
-                encodedUrl = encodeURIComponent(url),
-                id = 'article-share-box-' + $this.attr('data-id'),
-                offset = $this.offset(),
-                box;
-
-            if ($('#' + id).length) {
-                box = $('#' + id);
-
-                if (box.hasClass('on')){
-                    box.removeClass('on');
-                    return;
-                }
-            } else {
-                var html = [
-                    '<div id="' + id + '" class="article-share-box">',
-                        '<input class="article-share-input" value="' + url + '">',
-                        '<div class="article-share-links">',
-                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
-                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
-                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
-                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
-                        '</div>',
-                    '</div>'
-                ].join('');
-
-              box = $(html);
-
-              $('body').append(box);
-            }
-
-            $('.article-share-box.on').hide();
-
-            box.css({
-                top: offset.top + 25,
-                left: offset.left
-            }).addClass('on');
-
-        }).on('click', '.article-share-box', function (e) {
-            e.stopPropagation();
-        }).on('click', '.article-share-box-input', function () {
-            $(this).select();
-        }).on('click', '.article-share-box-link', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
-        });
-    })(jQuery);
-    </script>
-</footer>
-
-    </div>
-</article>
-
-<article class="article article-type-post" itemscope="" itemprop="blogPost">
-    <div class="article-inner">
-        
-        <a href="https://code.markedmondson.me/data-privacy-gtm/" itemprop="url">
-            <img src="https://code.markedmondson.me/banners/hawks-and-doves.jpg" class="article-banner">
-        
-        </a>
-
-        <header class="article-header">
-    <a href="https://code.markedmondson.me/data-privacy-gtm/">
-    <h1 class="article-title" itemprop="name">
-        Data Privacy Engineering with Google Tag Manager Server Side and Consent Mode
-    </h1>
-    </a>
-    <div class="article-meta">
-
-        
-        <div class="article-date">
-            <i class="fa fa-calendar"></i>
-            <time datetime="2020-11-27 09:29:50 &#43;0100 CET" itemprop="datePublished">2020-11-27</time>
-            &middot;
-            4108
-            words
-            &middot;
-            20
-            minute read
-        </div>
-        
-        
-
-        
-            
-            
-            <div class="article-category">
-                <i class="fa fa-tags"></i>
-                
-                
-                <a class="article-category-link" href="https://code.markedmondson.me/tags/google-tag-manager">google-tag-manager</a>
-                &middot;
-                
-                
-                <a class="article-category-link" href="https://code.markedmondson.me/tags/google-analytics">google-analytics</a>
-                
-                
-            </div>
-            
-        
-    </div>
-</header>
-
-        <div class="article-entry" itemprop="articleBody">
-            <p>
-                A new interest at the moment is engineering through various data privacy requirements with some of the new tools Google has available. With respect to my guiding principle of blogging about what I wish I could have read 6 months ago, I thought it worth writing about what is now possible. Data privacy engineering also requires clear thinking about the legal and technical details and so this will also help organise my communication around the subject.
-            </p>
-            <p class="article-more-link">
-                <a href="https://code.markedmondson.me/data-privacy-gtm/">
-                    Read more
-                </a>
-            </p>
-        </div>
-        <footer class="article-footer">
-    <a data-url="https://code.markedmondson.me/data-privacy-gtm/" data-id="1bda46c9126653b815237f5e7e87e731" class="article-share-link">
         <i class="fa fa-share"></i>
         Share
     </a>
@@ -3112,6 +2976,168 @@ TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically
     </div>
 </article>
 
+<article class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        <a href="https://code.markedmondson.me/r-packages/" itemprop="url">
+            <img src="https://code.markedmondson.me/banners/packages.jpeg" class="article-banner">
+        
+        </a>
+
+        <header class="article-header">
+    <a href="https://code.markedmondson.me/r-packages/">
+    <h1 class="article-title" itemprop="name">
+        My R Packages
+    </h1>
+    </a>
+    <div class="article-meta">
+
+        
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2017-01-24 21:20:50 &#43;0100 CET" itemprop="datePublished">2017-01-24</time>
+            &middot;
+            261
+            words
+            &middot;
+            2
+            minute read
+        </div>
+        
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/r">R</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/google-auth">google-auth</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/big-query">big-query</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/google-analytics">google-analytics</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/google-cloud-storage">google-cloud-storage</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/google-compute-engine">google-compute-engine</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/google-tag-manager">google-tag-manager</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/search-console">search-console</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+        <div class="article-entry" itemprop="articleBody">
+            <p>
+                A full list of R packages I have published are on my Github, but some notable ones are below.
+Some are part of the cloudyR project, which has many packages useful for using R in the cloud. I concentrate on the Google cloud below, but be sure to check out the other packages if you’re looking to work with AWS or other cloud based services.
+CRAN     Status URL Description     googleAuthR The central workhorse for authentication on Google APIs   googleAnalyticsR Works with Google Analytics Reporting V3/V4 and Management APIs   googleComputeEngineR Launch Virtual Machines within the Google Cloud, via templates or your own Docker containers.
+            </p>
+            <p class="article-more-link">
+                <a href="https://code.markedmondson.me/r-packages/">
+                    Read more
+                </a>
+            </p>
+        </div>
+        <footer class="article-footer">
+    <a data-url="https://code.markedmondson.me/r-packages/" data-id="5e53a7a6681989d05d797d473db51871" class="article-share-link">
+        <i class="fa fa-share"></i>
+        Share
+    </a>
+    
+
+    <script>
+    (function ($) {
+        
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+    </script>
+</footer>
+
+    </div>
+</article>
+
 
 <nav id="page-nav">
 
@@ -3210,17 +3236,17 @@ TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/data-privacy-gtm/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/gtm-serverside-webhooks/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/hawks-and-doves.jpg)" alt="Mark Edmondson" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/gtm-serverside-events.png)" alt="Mark Edmondson" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/data-privacy-gtm/" class="title">Data Privacy Engineering with Google Tag Manager Server Side and Consent Mode</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/gtm-serverside-webhooks/" class="title">Using Google Tag Manager Server Side to Trigger Webhook Events</a></p>
                     <p class="item-date">
-                        <time datetime="2020-11-27 09:29:50 &#43;0100 CET" itemprop="datePublished">2020-11-27</time>
+                        <time datetime="2020-09-04 12:50:50 &#43;0100 &#43;0100" itemprop="datePublished">2020-09-04</time>
                     </p>
                 </div>
             </li>
@@ -3345,7 +3371,7 @@ TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-analytics">
                     google-analytics
                 </a>
-                <span class="category-list-count">13</span>
+                <span class="category-list-count">12</span>
             </li>
             
             <li class="category-list-item">
@@ -3393,7 +3419,7 @@ TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-tag-manager">
                     google-tag-manager
                 </a>
-                <span class="category-list-count">8</span>
+                <span class="category-list-count">7</span>
             </li>
             
             <li class="category-list-item">

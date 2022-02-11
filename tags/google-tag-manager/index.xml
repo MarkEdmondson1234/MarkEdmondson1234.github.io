@@ -27,15 +27,6 @@
     </item>
     
     <item>
-      <title>Data Privacy Engineering with Google Tag Manager Server Side and Consent Mode</title>
-      <link>https://code.markedmondson.me/data-privacy-gtm/</link>
-      <pubDate>Fri, 27 Nov 2020 09:29:50 +0100</pubDate>
-      
-      <guid>https://code.markedmondson.me/data-privacy-gtm/</guid>
-      <description>A new interest at the moment is engineering through various data privacy requirements with some of the new tools Google has available. With respect to my guiding principle of blogging about what I wish I could have read 6 months ago, I thought it worth writing about what is now possible. Data privacy engineering also requires clear thinking about the legal and technical details and so this will also help organise my communication around the subject.</description>
-    </item>
-    
-    <item>
       <title>Using Google Tag Manager Server Side to Trigger Webhook Events</title>
       <link>https://code.markedmondson.me/gtm-serverside-webhooks/</link>
       <pubDate>Fri, 04 Sep 2020 12:50:50 +0100</pubDate>
