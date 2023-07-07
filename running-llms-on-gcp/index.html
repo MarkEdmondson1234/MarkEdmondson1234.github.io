@@ -36,7 +36,7 @@ As old readers may remember, I&rsquo;ve always tried to work on the meta-horizon
 A key facilitator has been Harrison Chase&rsquo;s Langchain, an active hive of open-source goodness.  It has allowed me to learn and imagine and digest this new active field of LLMops (Large Language Model Operations), that is the data engineering to make LLMs actually useful on a day to day basis.  I took it upon myself to see how I could apply my Google Cloud Platform (GCP) data engineering background to these new toys Langchain has helped provide.
 This means I now have this new brain, Edmonbrain, that I converse with daily in Google Chat, Slack and Discord.  I have fed it in interesting URLs, Git repos and Whitepapers so I can build up a unique bot of my very own.  I fed it my own book, and can ask it questions about it, for example:"><meta itemprop="datePublished" content="2023-07-07T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2023-07-07T00:00:00+00:00" />
-<meta itemprop="wordCount" content="3082">
+<meta itemprop="wordCount" content="3090">
 <meta itemprop="keywords" content="cloud-run,docker,pubsub,python,vertex," />
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Running Large Language Models on Google Cloud Platform via Cloud Run, VertexAI and PubSub - LLMOps on GCP"/>
@@ -280,7 +280,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2023-07-07 00:00:00 &#43;0000 UTC" itemprop="datePublished">2023-07-07</time>
             &middot;
-            3082
+            3090
             words
             &middot;
             15
@@ -336,18 +336,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p>My general aims for this data architecture were the following:</p>
 <ul>
 <li>As cheap as possible - scale-to-zero serverless</li>
-<li>As interoperability as possible - ability to switch out between models, databases and UIs</li>
+<li>As modular as possible - ability to switch out between models, databases and UIs</li>
 <li>Extendable - Be able to add new endpoints easily</li>
-<li>Modular - Be able to switch out different components with their own code base</li>
 <li>Private - be able to involve no 3rd parties outside of GCP, my trusted cloud provider</li>
 <li>Scalable - be able to go from zero to a billion if I pay money</li>
 <li>Easy to add your own data to - I wanted users to easily add their own sources such as URLs, GitHub repos, Google Drive folders etc.</li>
 <li>No authentication keys - use Google metadata to auth for ease of use and security</li>
 </ul>
-<p>My primary aim was to have a way for an entire company to share all their internal documents, chats, documentation and have an LLM bot that could reply to questions against those documents to anyone who asked.  A &ldquo;company wide brain&rdquo;.  My ambition is that if adopted it could enable more efficient communication between colleagues in a familiar context: the chat apps they already use to chat to colleagues.</p>
-<p>On GCP this always meant to me I would be running Cloud Run and Pub/Sub within my main orchestration.  Once Google also announced support for pgvector on AlloyDB and CloudSQL, this also meant I had more options other than the enterprise Matching Engine for a vectorstore.  But I&rsquo;m getting ahead of myself, lets show some of the main features that LLMOps as a field is creating as an emerging standard.</p>
+<p>My primary aim was to have a way for an entire company to share all their emails, internal documents, chats, documentation and have an LLM bot that could reply to questions against those documents to anyone who asked.  A &ldquo;company wide brain&rdquo;.  My ambition is that if adopted it could enable more efficient communication between colleagues in a familiar context, using the chat apps they already use to message colleagues.</p>
+<p>On GCP the above requirements always meant to me I would be running Cloud Run and Pub/Sub within my main orchestration.  Once Google also announced support for pgvector on AlloyDB and CloudSQL, this also meant I had more options other than the enterprise Matching Engine for a vectorstore to keep it all pure-GCP.  But I&rsquo;m getting ahead of myself, lets show some of the main features that LLMOps as a field is creating as an emerging standard.</p>
 <h2 id="what-is-needed-for-running-an-llm-bot">What is needed for running an LLM bot?</h2>
-<p>The first material I produced for LLM on GCP was this slide deck on <a href="https://docs.google.com/presentation/d/1SsbkTz5NJCkDVuHCqBh_CKA_0TEReNlHfMyvI2Yj8Ok/edit?usp=sharing">&ldquo;Edmonbrain - building a brain&rdquo; in June 2023</a>.  I have to say when I presented it as its probably already out of date, given the pace of updates at the moment. It includes introducing a few key components that I summarise below:</p>
+<p>The first material I produced for LLM on GCP was this slide deck on <a href="https://docs.google.com/presentation/d/1SsbkTz5NJCkDVuHCqBh_CKA_0TEReNlHfMyvI2Yj8Ok/edit?usp=sharing">&ldquo;Edmonbrain - building a brain&rdquo; in June 2023</a>.  I have to mention the date, as its probably already out of date given the pace of updates at the moment. It includes introducing a few key components that I summarise below:</p>
 <ul>
 <li>
 <p>Large Language Model (LLM) - the &ldquo;brain&rdquo; that will respond to the text you send in. This is the magic that enables everything else.  It supplies the intrinsic language understanding that was lacking in previous bots, and advanced LLMs can be like conversing to a knowledgeable individual</p>
@@ -362,16 +361,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p>Vectorstore - this is the hot new tech that enables the context above.  You have a limited window of text to add to prompts, although there is a new arms race about which model can provide the largest context window (1 billion tokens?).  Vectorstores hold the vectors of text embeddings that help similarity searches so you can select the best context to add to the prompt to help its answers.  The gif below from Matching Engine helps illustrate what they are doing: vectors are similar if encoding similar context, and so you look for points close to existing embedded vectors when you get a new prompt so that the context returned is hopefully useful. <img src="https://lh5.googleusercontent.com/UTo1ko1g4Nil8N3ex7TKPjLkaWy9n3C8jSV9fRwSUOH77WhgoSmUA5ikU5LW1seey5pZZlWREpQnGnZ4UzeiWHbLROe9cEnhfh9nvlzTro-N9evwJbmQ-anxg33rNoLms-M2q5Ucrw5_ckq6mFlmZfF2VA=s2048" alt=""></p>
 </li>
 <li>
-<p>UX - how you interact with the bot.  Although there are lots of web based chat bots out there, I avoided the rabbit hole of building a UI by enabling LLM powered bots in the chat platforms I use daily, namely Discord, Slack and Google Chat.  You get a lot of features for free such as chat history, user management and mobile/desktop apps.</p>
+<p>UX - how you interact with the bot.  Although there are lots of web based chat bots out there, I avoided the rabbit hole of building a UI by favouring building LLM powered bots in the chat platforms I use daily, namely Discord, Slack and Google Chat.  You get a lot of features for free such as chat history, user management and mobile/desktop apps.</p>
 </li>
 <li>
-<p>Orchestration - you need something that strings all the above components together.  Langchain excels here since it offers a consistent API where you can swap out say the OpenAI and VertexAI LLM models, or say a Supabase, Chroma or CloudSQL database being used for your vectorstore.</p>
+<p>Orchestration - you need something that strings all the above components together.  Langchain excels here since it offers a consistent API where you can swap out betwen say the OpenAI and VertexAI LLM models, or a different vectorstore such as Supabase, Chrome or CloudSQL.</p>
 </li>
 </ul>
-<p>The above are represented by these data architecture diagrams that I&rsquo;ve made or saved from the web.  Incidentally Langchain is also a great social media account to follow to keep up to date with all of the above.</p>
+<p>The above are represented by these data architecture diagrams that I&rsquo;ve made or saved from the web.  Incidentally Langchain is also a great social media account to follow to keep up to date with all of the above, and was how I found out about these concepts.</p>
 <p><img src="images/LLM_app_stack.jpg" alt="large language app stack">
 <em>click to get bigger</em></p>
-<p>Its from <a href="https://a16z.com/2023/06/20/emerging-architectures-for-llm-applications/">Emerging Architectures for LLM Applications</a> by a16z.com which was my first realisation this is an emerging field that I&rsquo;d like to be involved with.</p>
+<p>The digram above is from an comprehensive post called <a href="https://a16z.com/2023/06/20/emerging-architectures-for-llm-applications/">Emerging Architectures for LLM Applications</a> by a16z.com which was my first realisation this LLMOps is an emerging field that I&rsquo;d like to be involved with.</p>
 <p>Below is a diagram I made that helped me break down what I needed for my project:</p>
 <p><img src="images/my-llm-stack.png" alt="my llm stack">
 What I don&rsquo;t cover in this blog are the tools or agents at the bottom.  Thats my next step.  But this diagram was the blueprint to what I built below.</p>
