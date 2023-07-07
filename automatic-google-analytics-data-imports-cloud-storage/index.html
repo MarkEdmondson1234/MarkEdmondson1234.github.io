@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
-    <script async src="https://www.googleoptimize.com/optimize.js?id=GTM-WMXD7V"></script>
     <title>Auto Google Analytics Data Imports from Cloud Storage &middot; Mark Edmondson</title>
-    <meta name="generator" content="Hugo 0.92.0" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
     
       <meta name="description" content="Use Google Cloud Functions to auto-load your data imports into Google Analytics form Cloud Storage">
     
-    
+      <link href="Page%28/post/2018-11-29-automatic-google-analytics-data-imports-cloud-storage.md%29" rel="alternate" type="application/rss+xml" title="Mark Edmondson" />
+      <link href="Page%28/post/2018-11-29-automatic-google-analytics-data-imports-cloud-storage.md%29" rel="feed" type="application/rss+xml" title="Mark Edmondson" />
     <link rel="canonical" href="https://code.markedmondson.me/automatic-google-analytics-data-imports-cloud-storage/"/>
     <link rel="icon" href="https://code.markedmondson.me/favicon.ico">
     <link rel="apple-touch-icon" href="https://code.markedmondson.me/apple-touch-icon.png"/>
@@ -28,12 +27,10 @@
 <meta property="article:published_time" content="2018-11-29T00:00:00+00:00" />
 <meta property="article:modified_time" content="2018-11-29T00:00:00+00:00" />
 
-
-    
     <meta itemprop="name" content="Auto Google Analytics Data Imports from Cloud Storage">
 <meta itemprop="description" content="Use Google Cloud Functions to auto-load your data imports into Google Analytics form Cloud Storage"><meta itemprop="datePublished" content="2018-11-29T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2018-11-29T00:00:00+00:00" />
-<meta itemprop="wordCount" content="1844">
+<meta itemprop="wordCount" content="1854">
 <meta itemprop="keywords" content="google-cloud-storage,python,google-analytics,cloud-functions,pubsub," />
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Auto Google Analytics Data Imports from Cloud Storage"/>
@@ -82,8 +79,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           
 
           
-          <a class="main-nav-link" href="/r-packages/">My R Packages</a>
-          
 
           
           
@@ -126,8 +121,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           
           
 
-          
-          <td><a class="main-nav-link" href="/r-packages/">My R Packages</a></td>
           
 
           
@@ -173,12 +166,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        31
+        20
         <span>Posts</span>
       </div>
       <div class="article-info-block">
         
-          18
+          17
         
         <span>
             Tags
@@ -278,7 +271,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2018-11-29 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-11-29</time>
             &middot;
-            1844
+            1854
             words
             &middot;
             9
@@ -363,179 +356,178 @@ The idea is if the Cloud Function can take care of the link between Cloud Storag
 google-cloud-storage==1.13.0
 oauth2client==4.1.3
 </code></pre><p>The full script to upload to Cloud functions after you fill in your details is below.  It should be saved to a file called <code>main.py</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> logging
-<span style="color:#f92672">import</span> base64
-<span style="color:#f92672">import</span> json
-<span style="color:#f92672">import</span> os
-<span style="color:#f92672">from</span> urllib.error <span style="color:#f92672">import</span> HTTPError
-<span style="color:#f92672">from</span> apiclient.discovery <span style="color:#f92672">import</span> build
-<span style="color:#f92672">from</span> oauth2client.service_account <span style="color:#f92672">import</span> ServiceAccountCredentials
-<span style="color:#f92672">from</span> apiclient.http <span style="color:#f92672">import</span> MediaFileUpload
-<span style="color:#f92672">from</span> google.cloud <span style="color:#f92672">import</span> storage
-
-<span style="color:#75715e"># set these to your details</span>
-ACCOUNTID<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;123456&#39;</span>
-WEBPROPERTYID<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;UA-123456-2&#39;</span>
-CUSTOM_DATASOURCE_ID<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;data_source_id&#39;</span>
-FOLDER<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;source_folder_in_gcs_bucket&#39;</span>
-
-<span style="color:#75715e"># save file to /tmp only as cloud functions only supports that to write to</span>
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">download_gcs_file</span>(obj, to, bucket):
-    client <span style="color:#f92672">=</span> storage<span style="color:#f92672">.</span>Client()
-    bucket <span style="color:#f92672">=</span> client<span style="color:#f92672">.</span>get_bucket(bucket)
-    blob <span style="color:#f92672">=</span> bucket<span style="color:#f92672">.</span>blob(obj)
-
-    blob<span style="color:#f92672">.</span>download_to_filename(to)
-    logging<span style="color:#f92672">.</span>debug(<span style="color:#e6db74">&#39;downloaded file </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> to </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(obj, to))
-
-<span style="color:#75715e"># needs an auth.json file as cloud auth not working for analytics requests</span>
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_ga_service</span>(bucket):
-
-    download_gcs_file(<span style="color:#e6db74">&#39;auth.json&#39;</span>, <span style="color:#e6db74">&#39;/tmp/auth.json&#39;</span>, bucket)
-    credentials <span style="color:#f92672">=</span> ServiceAccountCredentials<span style="color:#f92672">.</span>from_json_keyfile_name(
-            <span style="color:#e6db74">&#39;/tmp/auth.json&#39;</span>,
-            scopes<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;https://www.googleapis.com/auth/analytics&#39;</span>,
-                    <span style="color:#e6db74">&#39;https://www.googleapis.com/auth/analytics.edit&#39;</span>])
-
-    <span style="color:#75715e"># Build the service object.</span>
-    <span style="color:#66d9ef">return</span> build(<span style="color:#e6db74">&#39;analytics&#39;</span>, <span style="color:#e6db74">&#39;v3&#39;</span>, credentials<span style="color:#f92672">=</span>credentials, cache_discovery<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">upload_ga</span>(obj_name, bucket):
-
-    filename <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;/tmp/</span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>basename(obj_name))
-
-    download_gcs_file(obj_name, filename, bucket)
-
-    analytics <span style="color:#f92672">=</span> get_ga_service(bucket)
-
-    <span style="color:#66d9ef">try</span>:
-      media <span style="color:#f92672">=</span> MediaFileUpload(filename,
-                              mimetype<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;application/octet-stream&#39;</span>,
-                              resumable<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
-
-      daily_upload <span style="color:#f92672">=</span> analytics<span style="color:#f92672">.</span>management()<span style="color:#f92672">.</span>uploads()<span style="color:#f92672">.</span>uploadData(
-          accountId<span style="color:#f92672">=</span>ACCOUNTID,
-          webPropertyId<span style="color:#f92672">=</span>WEBPROPERTYID,
-          customDataSourceId<span style="color:#f92672">=</span>CUSTOM_DATASOURCE_ID,
-          media_body<span style="color:#f92672">=</span>media)<span style="color:#f92672">.</span>execute()
-
-      logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">&#39;Uploaded file: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(json<span style="color:#f92672">.</span>dumps(daily_upload)))
-
-    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">TypeError</span> <span style="color:#66d9ef">as</span> error:
-      <span style="color:#75715e"># Handle errors in constructing a query.</span>
-      logging<span style="color:#f92672">.</span>error(<span style="color:#e6db74">&#39;There was an error in constructing your query : </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(error))
-
-    <span style="color:#66d9ef">except</span> HTTPError <span style="color:#66d9ef">as</span> error:
-      <span style="color:#75715e"># Handle API errors.</span>
-      logging<span style="color:#f92672">.</span>error(<span style="color:#e6db74">&#39;There was an API error : </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> : </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(error<span style="color:#f92672">.</span>resp<span style="color:#f92672">.</span>status, error<span style="color:#f92672">.</span>resp<span style="color:#f92672">.</span>reason))
-
-    <span style="color:#66d9ef">return</span>
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">gcs_to_ga</span>(data, context):
-    <span style="color:#e6db74">&#34;&#34;&#34;Background Cloud Function to be triggered by Pub/Sub subscription.
-</span><span style="color:#e6db74">       This functions copies the triggering BQ table and copies it to an aggregate dataset.
-</span><span style="color:#e6db74">    Args:
-</span><span style="color:#e6db74">        data (dict): The Cloud Functions event payload.
-</span><span style="color:#e6db74">        context (google.cloud.functions.Context): Metadata of triggering event.
-</span><span style="color:#e6db74">    Returns:
-</span><span style="color:#e6db74">        None; the output is written to Stackdriver Logging
-</span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
-    logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">&#39;Bucket: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> File: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> Created: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> Updated: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(data[<span style="color:#e6db74">&#39;bucket&#39;</span>],
-                                                                      data[<span style="color:#e6db74">&#39;name&#39;</span>],
-                                                                      data[<span style="color:#e6db74">&#39;timeCreated&#39;</span>],
-                                                                      data[<span style="color:#e6db74">&#39;updated&#39;</span>]))
-    folder <span style="color:#f92672">=</span> FOLDER
-    object_name <span style="color:#f92672">=</span> data[<span style="color:#e6db74">&#39;name&#39;</span>]
-    bucket <span style="color:#f92672">=</span> data[<span style="color:#e6db74">&#39;bucket&#39;</span>]
-    <span style="color:#66d9ef">if</span> object_name<span style="color:#f92672">.</span>startswith(folder):
-      logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">&#39;File matches folder </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(folder))
-
-      upload_ga(object_name, bucket)
-      
-    <span style="color:#66d9ef">return</span>
-</code></pre></div><p>A walk-through of the functions is below:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> logging
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> base64
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> json
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> os
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> urllib.error <span style="color:#f92672">import</span> HTTPError
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> apiclient.discovery <span style="color:#f92672">import</span> build
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> oauth2client.service_account <span style="color:#f92672">import</span> ServiceAccountCredentials
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> apiclient.http <span style="color:#f92672">import</span> MediaFileUpload
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> google.cloud <span style="color:#f92672">import</span> storage
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># set these to your details</span>
+</span></span><span style="display:flex;"><span>ACCOUNTID<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;123456&#39;</span>
+</span></span><span style="display:flex;"><span>WEBPROPERTYID<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;UA-123456-2&#39;</span>
+</span></span><span style="display:flex;"><span>CUSTOM_DATASOURCE_ID<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;data_source_id&#39;</span>
+</span></span><span style="display:flex;"><span>FOLDER<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;source_folder_in_gcs_bucket&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># save file to /tmp only as cloud functions only supports that to write to</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">download_gcs_file</span>(obj, to, bucket):
+</span></span><span style="display:flex;"><span>    client <span style="color:#f92672">=</span> storage<span style="color:#f92672">.</span>Client()
+</span></span><span style="display:flex;"><span>    bucket <span style="color:#f92672">=</span> client<span style="color:#f92672">.</span>get_bucket(bucket)
+</span></span><span style="display:flex;"><span>    blob <span style="color:#f92672">=</span> bucket<span style="color:#f92672">.</span>blob(obj)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    blob<span style="color:#f92672">.</span>download_to_filename(to)
+</span></span><span style="display:flex;"><span>    logging<span style="color:#f92672">.</span>debug(<span style="color:#e6db74">&#39;downloaded file </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> to </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(obj, to))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># needs an auth.json file as cloud auth not working for analytics requests</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_ga_service</span>(bucket):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    download_gcs_file(<span style="color:#e6db74">&#39;auth.json&#39;</span>, <span style="color:#e6db74">&#39;/tmp/auth.json&#39;</span>, bucket)
+</span></span><span style="display:flex;"><span>    credentials <span style="color:#f92672">=</span> ServiceAccountCredentials<span style="color:#f92672">.</span>from_json_keyfile_name(
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;/tmp/auth.json&#39;</span>,
+</span></span><span style="display:flex;"><span>            scopes<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;https://www.googleapis.com/auth/analytics&#39;</span>,
+</span></span><span style="display:flex;"><span>                    <span style="color:#e6db74">&#39;https://www.googleapis.com/auth/analytics.edit&#39;</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Build the service object.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> build(<span style="color:#e6db74">&#39;analytics&#39;</span>, <span style="color:#e6db74">&#39;v3&#39;</span>, credentials<span style="color:#f92672">=</span>credentials, cache_discovery<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">upload_ga</span>(obj_name, bucket):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    filename <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;/tmp/</span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>basename(obj_name))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    download_gcs_file(obj_name, filename, bucket)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    analytics <span style="color:#f92672">=</span> get_ga_service(bucket)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>      media <span style="color:#f92672">=</span> MediaFileUpload(filename,
+</span></span><span style="display:flex;"><span>                              mimetype<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;application/octet-stream&#39;</span>,
+</span></span><span style="display:flex;"><span>                              resumable<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      daily_upload <span style="color:#f92672">=</span> analytics<span style="color:#f92672">.</span>management()<span style="color:#f92672">.</span>uploads()<span style="color:#f92672">.</span>uploadData(
+</span></span><span style="display:flex;"><span>          accountId<span style="color:#f92672">=</span>ACCOUNTID,
+</span></span><span style="display:flex;"><span>          webPropertyId<span style="color:#f92672">=</span>WEBPROPERTYID,
+</span></span><span style="display:flex;"><span>          customDataSourceId<span style="color:#f92672">=</span>CUSTOM_DATASOURCE_ID,
+</span></span><span style="display:flex;"><span>          media_body<span style="color:#f92672">=</span>media)<span style="color:#f92672">.</span>execute()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">&#39;Uploaded file: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(json<span style="color:#f92672">.</span>dumps(daily_upload)))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">TypeError</span> <span style="color:#66d9ef">as</span> error:
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Handle errors in constructing a query.</span>
+</span></span><span style="display:flex;"><span>      logging<span style="color:#f92672">.</span>error(<span style="color:#e6db74">&#39;There was an error in constructing your query : </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(error))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span> HTTPError <span style="color:#66d9ef">as</span> error:
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Handle API errors.</span>
+</span></span><span style="display:flex;"><span>      logging<span style="color:#f92672">.</span>error(<span style="color:#e6db74">&#39;There was an API error : </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> : </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(error<span style="color:#f92672">.</span>resp<span style="color:#f92672">.</span>status, error<span style="color:#f92672">.</span>resp<span style="color:#f92672">.</span>reason))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">gcs_to_ga</span>(data, context):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;Background Cloud Function to be triggered by Pub/Sub subscription.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       This functions copies the triggering BQ table and copies it to an aggregate dataset.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    Args:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        data (dict): The Cloud Functions event payload.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        context (google.cloud.functions.Context): Metadata of triggering event.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    Returns:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        None; the output is written to Stackdriver Logging
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">&#39;Bucket: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> File: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> Created: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> Updated: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(data[<span style="color:#e6db74">&#39;bucket&#39;</span>],
+</span></span><span style="display:flex;"><span>                                                                      data[<span style="color:#e6db74">&#39;name&#39;</span>],
+</span></span><span style="display:flex;"><span>                                                                      data[<span style="color:#e6db74">&#39;timeCreated&#39;</span>],
+</span></span><span style="display:flex;"><span>                                                                      data[<span style="color:#e6db74">&#39;updated&#39;</span>]))
+</span></span><span style="display:flex;"><span>    folder <span style="color:#f92672">=</span> FOLDER
+</span></span><span style="display:flex;"><span>    object_name <span style="color:#f92672">=</span> data[<span style="color:#e6db74">&#39;name&#39;</span>]
+</span></span><span style="display:flex;"><span>    bucket <span style="color:#f92672">=</span> data[<span style="color:#e6db74">&#39;bucket&#39;</span>]
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> object_name<span style="color:#f92672">.</span>startswith(folder):
+</span></span><span style="display:flex;"><span>      logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">&#39;File matches folder </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(folder))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      upload_ga(object_name, bucket)
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span>
+</span></span></code></pre></div><p>A walk-through of the functions is below:</p>
 <h3 id="handling-pubsub-functions">Handling pub/sub functions</h3>
 <p>This function is the main entry point of the code.  When a new file arrives on Google Cloud Storage, it creates a Pub/Sub trigger with the meta data of the file and sends it to the trigger we will create when we deploy.</p>
 <p>The <code>FOLDER</code> variable is so you can limit the function triggering to just a specific folder on the Google Cloud Bucket.  This is convenient so you can make sure only upload files trigger the function, and not say the authentcation files.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">gcs_to_ga</span>(data, context):
-    <span style="color:#e6db74">&#34;&#34;&#34;Background Cloud Function to be triggered by Pub/Sub subscription.
-</span><span style="color:#e6db74">       This functions copies the triggering BQ table and copies it to an aggregate dataset.
-</span><span style="color:#e6db74">    Args:
-</span><span style="color:#e6db74">        data (dict): The Cloud Functions event payload.
-</span><span style="color:#e6db74">        context (google.cloud.functions.Context): Metadata of triggering event.
-</span><span style="color:#e6db74">    Returns:
-</span><span style="color:#e6db74">        None; the output is written to Stackdriver Logging
-</span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
-    logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">&#39;Bucket: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> File: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> Created: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> Updated: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(data[<span style="color:#e6db74">&#39;bucket&#39;</span>],
-                                                                      data[<span style="color:#e6db74">&#39;name&#39;</span>],
-                                                                      data[<span style="color:#e6db74">&#39;timeCreated&#39;</span>],
-                                                                      data[<span style="color:#e6db74">&#39;updated&#39;</span>]))
-    folder <span style="color:#f92672">=</span> FOLDER
-    object_name <span style="color:#f92672">=</span> data[<span style="color:#e6db74">&#39;name&#39;</span>]
-    bucket <span style="color:#f92672">=</span> data[<span style="color:#e6db74">&#39;bucket&#39;</span>]
-    <span style="color:#66d9ef">if</span> object_name<span style="color:#f92672">.</span>startswith(folder):
-      logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">&#39;File matches folder </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(folder))
-
-      upload_ga(object_name, bucket)
-      
-    <span style="color:#66d9ef">return</span>
-</code></pre></div><h3 id="downloading-files-from-google-cloud-storage">Downloading files from Google Cloud Storage</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">gcs_to_ga</span>(data, context):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;Background Cloud Function to be triggered by Pub/Sub subscription.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       This functions copies the triggering BQ table and copies it to an aggregate dataset.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    Args:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        data (dict): The Cloud Functions event payload.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        context (google.cloud.functions.Context): Metadata of triggering event.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    Returns:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        None; the output is written to Stackdriver Logging
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">&#39;Bucket: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> File: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> Created: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> Updated: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(data[<span style="color:#e6db74">&#39;bucket&#39;</span>],
+</span></span><span style="display:flex;"><span>                                                                      data[<span style="color:#e6db74">&#39;name&#39;</span>],
+</span></span><span style="display:flex;"><span>                                                                      data[<span style="color:#e6db74">&#39;timeCreated&#39;</span>],
+</span></span><span style="display:flex;"><span>                                                                      data[<span style="color:#e6db74">&#39;updated&#39;</span>]))
+</span></span><span style="display:flex;"><span>    folder <span style="color:#f92672">=</span> FOLDER
+</span></span><span style="display:flex;"><span>    object_name <span style="color:#f92672">=</span> data[<span style="color:#e6db74">&#39;name&#39;</span>]
+</span></span><span style="display:flex;"><span>    bucket <span style="color:#f92672">=</span> data[<span style="color:#e6db74">&#39;bucket&#39;</span>]
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> object_name<span style="color:#f92672">.</span>startswith(folder):
+</span></span><span style="display:flex;"><span>      logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">&#39;File matches folder </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(folder))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      upload_ga(object_name, bucket)
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span>
+</span></span></code></pre></div><h3 id="downloading-files-from-google-cloud-storage">Downloading files from Google Cloud Storage</h3>
 <p>This code reuses the authentication of the function and downloads the file to it.  It can only download to the <code>/tmp</code> folder of the Cloud Function.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">download_gcs_file</span>(obj, to, bucket):
-    client <span style="color:#f92672">=</span> storage<span style="color:#f92672">.</span>Client()
-    bucket <span style="color:#f92672">=</span> client<span style="color:#f92672">.</span>get_bucket(bucket)
-    blob <span style="color:#f92672">=</span> bucket<span style="color:#f92672">.</span>blob(obj)
-
-    blob<span style="color:#f92672">.</span>download_to_filename(to)
-    logging<span style="color:#f92672">.</span>debug(<span style="color:#e6db74">&#39;downloaded file </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> to </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(obj, to))
-</code></pre></div><h3 id="creating-the-google-analytics-object">Creating the Google Analytics object</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">download_gcs_file</span>(obj, to, bucket):
+</span></span><span style="display:flex;"><span>    client <span style="color:#f92672">=</span> storage<span style="color:#f92672">.</span>Client()
+</span></span><span style="display:flex;"><span>    bucket <span style="color:#f92672">=</span> client<span style="color:#f92672">.</span>get_bucket(bucket)
+</span></span><span style="display:flex;"><span>    blob <span style="color:#f92672">=</span> bucket<span style="color:#f92672">.</span>blob(obj)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    blob<span style="color:#f92672">.</span>download_to_filename(to)
+</span></span><span style="display:flex;"><span>    logging<span style="color:#f92672">.</span>debug(<span style="color:#e6db74">&#39;downloaded file </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> to </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(obj, to))
+</span></span></code></pre></div><h3 id="creating-the-google-analytics-object">Creating the Google Analytics object</h3>
 <p>This downloads the <code>auth.json</code> file from Cloud Storage, and uses it to create an authenticated session with Google Analytics:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># needs an auth.json file as cloud auth not working for analytics requests</span>
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_ga_service</span>(bucket):
-
-    download_gcs_file(<span style="color:#e6db74">&#39;auth.json&#39;</span>, <span style="color:#e6db74">&#39;/tmp/auth.json&#39;</span>, bucket)
-    credentials <span style="color:#f92672">=</span> ServiceAccountCredentials<span style="color:#f92672">.</span>from_json_keyfile_name(
-            <span style="color:#e6db74">&#39;/tmp/auth.json&#39;</span>,
-            scopes<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;https://www.googleapis.com/auth/analytics&#39;</span>,
-                    <span style="color:#e6db74">&#39;https://www.googleapis.com/auth/analytics.edit&#39;</span>])
-
-    <span style="color:#75715e"># Build the service object.</span>
-    <span style="color:#66d9ef">return</span> build(<span style="color:#e6db74">&#39;analytics&#39;</span>, <span style="color:#e6db74">&#39;v3&#39;</span>, credentials<span style="color:#f92672">=</span>credentials, cache_discovery<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
-</code></pre></div><h3 id="download-from-cloud-storage-and-upload-to-ga">Download from Cloud Storage and upload to GA</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># needs an auth.json file as cloud auth not working for analytics requests</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_ga_service</span>(bucket):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    download_gcs_file(<span style="color:#e6db74">&#39;auth.json&#39;</span>, <span style="color:#e6db74">&#39;/tmp/auth.json&#39;</span>, bucket)
+</span></span><span style="display:flex;"><span>    credentials <span style="color:#f92672">=</span> ServiceAccountCredentials<span style="color:#f92672">.</span>from_json_keyfile_name(
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;/tmp/auth.json&#39;</span>,
+</span></span><span style="display:flex;"><span>            scopes<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;https://www.googleapis.com/auth/analytics&#39;</span>,
+</span></span><span style="display:flex;"><span>                    <span style="color:#e6db74">&#39;https://www.googleapis.com/auth/analytics.edit&#39;</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Build the service object.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> build(<span style="color:#e6db74">&#39;analytics&#39;</span>, <span style="color:#e6db74">&#39;v3&#39;</span>, credentials<span style="color:#f92672">=</span>credentials, cache_discovery<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span></code></pre></div><h3 id="download-from-cloud-storage-and-upload-to-ga">Download from Cloud Storage and upload to GA</h3>
 <p>This does the work of downloading the file and uploading again to GA.  It uses the variables defined at the start of the script to determine where to upload it, but you could modify this to use a configuration file or loop over several uploads.</p>
 <p>Code is adapted from <a href="https://developers.google.com/analytics/devguides/config/mgmt/v3/mgmtReference/management/uploads/uploadData">here</a></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">upload_ga</span>(obj_name, bucket):
-
-    filename <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;/tmp/</span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>basename(obj_name))
-
-    download_gcs_file(obj_name, filename, bucket)
-
-    analytics <span style="color:#f92672">=</span> get_ga_service(bucket)
-
-    <span style="color:#66d9ef">try</span>:
-      media <span style="color:#f92672">=</span> MediaFileUpload(filename,
-                              mimetype<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;application/octet-stream&#39;</span>,
-                              resumable<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
-
-      daily_upload <span style="color:#f92672">=</span> analytics<span style="color:#f92672">.</span>management()<span style="color:#f92672">.</span>uploads()<span style="color:#f92672">.</span>uploadData(
-          accountId<span style="color:#f92672">=</span>ACCOUNTID,
-          webPropertyId<span style="color:#f92672">=</span>WEBPROPERTYID,
-          customDataSourceId<span style="color:#f92672">=</span>CUSTOM_DATASOURCE_ID,
-          media_body<span style="color:#f92672">=</span>media)<span style="color:#f92672">.</span>execute()
-
-      logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">&#39;Uploaded file: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(json<span style="color:#f92672">.</span>dumps(daily_upload)))
-
-    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">TypeError</span> <span style="color:#66d9ef">as</span> error:
-      <span style="color:#75715e"># Handle errors in constructing a query.</span>
-      logging<span style="color:#f92672">.</span>error(<span style="color:#e6db74">&#39;There was an error in constructing your query : </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(error))
-
-    <span style="color:#66d9ef">except</span> HTTPError <span style="color:#66d9ef">as</span> error:
-      <span style="color:#75715e"># Handle API errors.</span>
-      logging<span style="color:#f92672">.</span>error(<span style="color:#e6db74">&#39;There was an API error : </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> : </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(error<span style="color:#f92672">.</span>resp<span style="color:#f92672">.</span>status, error<span style="color:#f92672">.</span>resp<span style="color:#f92672">.</span>reason))
-
-    <span style="color:#66d9ef">return</span>
-
-</code></pre></div><h2 id="deployment">Deployment</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">upload_ga</span>(obj_name, bucket):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    filename <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;/tmp/</span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>basename(obj_name))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    download_gcs_file(obj_name, filename, bucket)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    analytics <span style="color:#f92672">=</span> get_ga_service(bucket)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>      media <span style="color:#f92672">=</span> MediaFileUpload(filename,
+</span></span><span style="display:flex;"><span>                              mimetype<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;application/octet-stream&#39;</span>,
+</span></span><span style="display:flex;"><span>                              resumable<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      daily_upload <span style="color:#f92672">=</span> analytics<span style="color:#f92672">.</span>management()<span style="color:#f92672">.</span>uploads()<span style="color:#f92672">.</span>uploadData(
+</span></span><span style="display:flex;"><span>          accountId<span style="color:#f92672">=</span>ACCOUNTID,
+</span></span><span style="display:flex;"><span>          webPropertyId<span style="color:#f92672">=</span>WEBPROPERTYID,
+</span></span><span style="display:flex;"><span>          customDataSourceId<span style="color:#f92672">=</span>CUSTOM_DATASOURCE_ID,
+</span></span><span style="display:flex;"><span>          media_body<span style="color:#f92672">=</span>media)<span style="color:#f92672">.</span>execute()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">&#39;Uploaded file: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(json<span style="color:#f92672">.</span>dumps(daily_upload)))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">TypeError</span> <span style="color:#66d9ef">as</span> error:
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Handle errors in constructing a query.</span>
+</span></span><span style="display:flex;"><span>      logging<span style="color:#f92672">.</span>error(<span style="color:#e6db74">&#39;There was an error in constructing your query : </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(error))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span> HTTPError <span style="color:#66d9ef">as</span> error:
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Handle API errors.</span>
+</span></span><span style="display:flex;"><span>      logging<span style="color:#f92672">.</span>error(<span style="color:#e6db74">&#39;There was an API error : </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> : </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(error<span style="color:#f92672">.</span>resp<span style="color:#f92672">.</span>status, error<span style="color:#f92672">.</span>resp<span style="color:#f92672">.</span>reason))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span>
+</span></span></code></pre></div><h2 id="deployment">Deployment</h2>
 <p>The full code above needs to be saved to a file called <code>main.py</code> and then put into the same folder as <code>requirements.txt</code>:</p>
 <pre tabindex="0"><code>-|
  |- main.py
@@ -544,19 +536,18 @@ FOLDER<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sourc
 <p>After you have it installed, browse to the folder holding your code in your console, and then issue the <code>gcloud</code> commands to deploy the files.  It takes around 2 mins.</p>
 <p>You need to specify the function that will trigger.  In our case this is the function that receives the data, <code>def gcs_to_ga(data, context)</code>.  We also need to specify its a Python file, and what the trigger will be.</p>
 <p>If the file to upload is big, then you may also need a bigger Cloud function instance than the default 256MB.  The max file size that can be uploaded to Google Analytics is 1GB, so the largest 2048MB cloud function should cover that - the <code>gcloud</code> below shows how to specify that size of function:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">gcloud functions deploy gcs_to_ga --runtime python37 <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>                                  --trigger-resource your-bucket <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>                                  --trigger-event google.storage.object.finalize <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>                                  --region europe-west1 <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>                                  --memory<span style="color:#f92672">=</span>2048MB
-</code></pre></div><h2 id="summary">Summary</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>gcloud functions deploy gcs_to_ga --runtime python37 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>                                  --trigger-resource your-bucket <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>                                  --trigger-event google.storage.object.finalize <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>                                  --region europe-west1 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>                                  --memory<span style="color:#f92672">=</span>2048MB
+</span></span></code></pre></div><h2 id="summary">Summary</h2>
 <p>Upon successful deployment, you should be able to monitor the function in the <a href="https://console.cloud.google.com/logs/viewer">logs</a>.  Each time you upload a file to your bucket into the right folder, it will start a job to upload that file to Google Analytics.</p>
 <p>It can take a couple of hours for the data to appear within Google Analytics reports.</p>
 <p>This is a nice example of some functional &ldquo;glue&rdquo; that uncouples how to upload to GA from the file creation itself.  For example, it could be BigQuery exports that are creating the file, but that can switch to Airflow if the data transformations to create the files get more complicated or need special considerations.  The code is only intended as a starting point for you to customise and adapt to your needs.</p>
 
         </div>
         <footer class="article-footer">
-    <a data-url="https://code.markedmondson.me/automatic-google-analytics-data-imports-cloud-storage/" data-id="8d9d3ea9c4e9bc9478be4d9e22db2adb" class="article-share-link">
         <i class="fa fa-share"></i>
         Share
     </a>
@@ -633,11 +624,11 @@ FOLDER<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sourc
     
 <nav id="article-nav">
     
-    <a href="https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">
           Older
       </strong>
-      <div class="article-nav-title">Turning GA360 BigQuery exports into partitioned tables using Cloud Functions</div>
+      <div class="article-nav-title">R on Kubernetes - serverless Shiny, R APIs and scheduled scripts</div>
     </a>
     
 
@@ -702,68 +693,68 @@ FOLDER<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sourc
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/writing-a-book/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/gtm-serverside-cloudrun/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/proto-book.png)" alt="Auto Google Analytics Data Imports from Cloud Storage" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/princess-gtm.png)" alt="Auto Google Analytics Data Imports from Cloud Storage" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/writing-a-book/" class="title">Why and How I&#39;m writing a GA4 book called &#39;Learning Google Analytics&#39; for O&#39;Reilly</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/gtm-serverside-cloudrun/" class="title">Google Tag Manager Server Side on Cloud Run - Pros and Cons</a></p>
                     <p class="item-date">
-                        <time datetime="2021-10-23 11:04:50 &#43;0100 &#43;0100" itemprop="datePublished">2021-10-23</time>
+                        <time datetime="2020-08-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-21</time>
                     </p>
                 </div>
             </li>
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/googleanalyticsr-100-release/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/shiny-cloudrun/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/GA4-090.png)" alt="Auto Google Analytics Data Imports from Cloud Storage" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/shiny-clouds.jpg)" alt="Auto Google Analytics Data Imports from Cloud Storage" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/googleanalyticsr-100-release/" class="title">googleAnalyticsR v1.0.0 - GA4 API, Automatic Shiny Dashboarding, Improved UI</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/shiny-cloudrun/" class="title">Shiny on Google Cloud Run - Scale-to-Zero R Web Apps</a></p>
                     <p class="item-date">
-                        <time datetime="2021-04-17 09:29:50 &#43;0100 &#43;0100" itemprop="datePublished">2021-04-17</time>
+                        <time datetime="2020-08-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-01</time>
                     </p>
                 </div>
             </li>
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/edmondlytica/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/datascience-aas/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/edmonlytica-shiny1.png)" alt="Auto Google Analytics Data Imports from Cloud Storage" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/piketty-capital.png)" alt="Auto Google Analytics Data Imports from Cloud Storage" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/edmondlytica/" class="title">Creating your own cookieless analytics tool with GTM Server Side, Cloud Run, BigQuery and Shiny</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/datascience-aas/" class="title">Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions</a></p>
                     <p class="item-date">
-                        <time datetime="2021-03-21 09:29:50 &#43;0100 CET" itemprop="datePublished">2021-03-21</time>
+                        <time datetime="2020-06-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-06-28</time>
                     </p>
                 </div>
             </li>
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/gtm-serverside-webhooks/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/googleCloudRunner-intro/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/gtm-serverside-events.png)" alt="Auto Google Analytics Data Imports from Cloud Storage" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/gcp-pyramid.png)" alt="Auto Google Analytics Data Imports from Cloud Storage" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/gtm-serverside-webhooks/" class="title">Using Google Tag Manager Server Side to Trigger Webhook Events</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/googleCloudRunner-intro/" class="title">Introducing googleCloudRunner - serverless R on Google Cloud Platform</a></p>
                     <p class="item-date">
-                        <time datetime="2020-09-04 12:50:50 &#43;0100 &#43;0100" itemprop="datePublished">2020-09-04</time>
+                        <time datetime="2020-01-18 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-01-18</time>
                     </p>
                 </div>
             </li>
@@ -832,7 +823,7 @@ FOLDER<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sourc
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/r">
                     R
                 </a>
-                <span class="category-list-count">22</span>
+                <span class="category-list-count">14</span>
             </li>
             
             <li class="category-list-item">
@@ -840,7 +831,7 @@ FOLDER<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sourc
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/big-query">
                     big-query
                 </a>
-                <span class="category-list-count">7</span>
+                <span class="category-list-count">4</span>
             </li>
             
             <li class="category-list-item">
@@ -848,7 +839,7 @@ FOLDER<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sourc
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/blogging">
                     blogging
                 </a>
-                <span class="category-list-count">3</span>
+                <span class="category-list-count">1</span>
             </li>
             
             <li class="category-list-item">
@@ -856,7 +847,7 @@ FOLDER<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sourc
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-functions">
                     cloud-functions
                 </a>
-                <span class="category-list-count">5</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -864,7 +855,7 @@ FOLDER<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sourc
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-run">
                     cloud-run
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -872,7 +863,7 @@ FOLDER<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sourc
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/docker">
                     docker
                 </a>
-                <span class="category-list-count">9</span>
+                <span class="category-list-count">8</span>
             </li>
             
             <li class="category-list-item">
@@ -888,7 +879,7 @@ FOLDER<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sourc
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-analytics">
                     google-analytics
                 </a>
-                <span class="category-list-count">12</span>
+                <span class="category-list-count">6</span>
             </li>
             
             <li class="category-list-item">
@@ -896,7 +887,7 @@ FOLDER<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sourc
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-app-engine">
                     google-app-engine
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -904,7 +895,7 @@ FOLDER<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sourc
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-auth">
                     google-auth
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">2</span>
             </li>
             
             <li class="category-list-item">
@@ -912,7 +903,7 @@ FOLDER<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sourc
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-cloud-storage">
                     google-cloud-storage
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -920,15 +911,7 @@ FOLDER<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sourc
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-compute-engine">
                     google-compute-engine
                 </a>
-                <span class="category-list-count">7</span>
-            </li>
-            
-            <li class="category-list-item">
-                
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-language">
-                    google-language
-                </a>
-                <span class="category-list-count">2</span>
+                <span class="category-list-count">5</span>
             </li>
             
             <li class="category-list-item">
@@ -936,7 +919,7 @@ FOLDER<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sourc
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-tag-manager">
                     google-tag-manager
                 </a>
-                <span class="category-list-count">7</span>
+                <span class="category-list-count">4</span>
             </li>
             
             <li class="category-list-item">
@@ -944,7 +927,7 @@ FOLDER<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sourc
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/pubsub">
                     pubsub
                 </a>
-                <span class="category-list-count">3</span>
+                <span class="category-list-count">2</span>
             </li>
             
             <li class="category-list-item">
@@ -952,7 +935,7 @@ FOLDER<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sourc
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/python">
                     python
                 </a>
-                <span class="category-list-count">6</span>
+                <span class="category-list-count">5</span>
             </li>
             
             <li class="category-list-item">
@@ -960,7 +943,7 @@ FOLDER<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sourc
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/rstudio-server">
                     rstudio-server
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -968,7 +951,7 @@ FOLDER<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sourc
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/search-console">
                     search-console
                 </a>
-                <span class="category-list-count">3</span>
+                <span class="category-list-count">1</span>
             </li>
             
         </ul>
@@ -991,7 +974,7 @@ FOLDER<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sourc
 <footer id="footer">
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2022
+      &copy; 2023
       Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
     </div>
   </div>

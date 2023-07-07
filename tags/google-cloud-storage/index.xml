@@ -29,17 +29,6 @@ TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically
     </item>
     
     <item>
-      <title>My R Packages</title>
-      <link>https://code.markedmondson.me/r-packages/</link>
-      <pubDate>Tue, 24 Jan 2017 21:20:50 +0100</pubDate>
-      
-      <guid>https://code.markedmondson.me/r-packages/</guid>
-      <description>A full list of R packages I have published are on my Github, but some notable ones are below.
-Some are part of the cloudyR project, which has many packages useful for using R in the cloud. I concentrate on the Google cloud below, but be sure to check out the other packages if you’re looking to work with AWS or other cloud based services.
-CRAN     Status URL Description     googleAuthR The central workhorse for authentication on Google APIs   googleAnalyticsR Works with Google Analytics Reporting V3/V4 and Management APIs   googleComputeEngineR Launch Virtual Machines within the Google Cloud, via templates or your own Docker containers.</description>
-    </item>
-    
-    <item>
       <title>A digital analytics workflow through the Google Cloud using R</title>
       <link>https://code.markedmondson.me/digital-analytics-workflow-through-google-cloud/</link>
       <pubDate>Mon, 10 Oct 2016 23:03:57 +0100</pubDate>

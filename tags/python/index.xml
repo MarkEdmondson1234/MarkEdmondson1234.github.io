@@ -39,17 +39,6 @@ Extended data imports Google Analytics offers various versions of uploads.</desc
     </item>
     
     <item>
-      <title>Turning GA360 BigQuery exports into partitioned tables using Cloud Functions</title>
-      <link>https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/</link>
-      <pubDate>Tue, 09 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/</guid>
-      <description>Its been a while since my last blog, although I had a good excuse as I’ve moved house into the Copenhagen suburbs, Brønshøj. But in the meantime, I have had the chance to find my new favourite tool for data engineering - Google Cloud Functions in Python.
-This post will look at how to use them to work with the GA360 BigQuery export tables.
-The code is available in this GitHub repo for useful cloud functions with Google Analytics</description>
-    </item>
-    
-    <item>
       <title>Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two</title>
       <link>https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/</link>
       <pubDate>Sun, 22 Jan 2017 14:20:57 +0100</pubDate>

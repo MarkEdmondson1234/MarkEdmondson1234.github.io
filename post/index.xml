@@ -18,45 +18,6 @@
     </item>
     
     <item>
-      <title>Why and How I&#39;m writing a GA4 book called &#39;Learning Google Analytics&#39; for O&#39;Reilly</title>
-      <link>https://code.markedmondson.me/writing-a-book/</link>
-      <pubDate>Sat, 23 Oct 2021 11:04:50 +0100</pubDate>
-      
-      <guid>https://code.markedmondson.me/writing-a-book/</guid>
-      <description>If you’ve been within two meters of me recently you may have heard I’m writing a book on Google Analytics 4 and I’m very excited about it. In this blog post I want to write about how it came about, and to give some love to the blog to show its not being neglected for its younger cousin, The Book.
-I want to cover how the book deal came about in case you are thinking about writing one too, the process of writing itself and how my attitude to writing has changed as a result.</description>
-    </item>
-    
-    <item>
-      <title>googleAnalyticsR v1.0.0 - GA4 API, Automatic Shiny Dashboarding, Improved UI</title>
-      <link>https://code.markedmondson.me/googleanalyticsr-100-release/</link>
-      <pubDate>Sat, 17 Apr 2021 09:29:50 +0100</pubDate>
-      
-      <guid>https://code.markedmondson.me/googleanalyticsr-100-release/</guid>
-      <description>The original intention for this blog was to announce updates to my R packages, but I tend to rely more on Twitter and other social media for that these days. A lot of documentation is also written for the package websites so I feel little need to put it on this blog as well.
-But for googleAnalyticsR v1.0.0 there are so many cool new things that I think it deserves a bit more limelight.</description>
-    </item>
-    
-    <item>
-      <title>Creating your own cookieless analytics tool with GTM Server Side, Cloud Run, BigQuery and Shiny</title>
-      <link>https://code.markedmondson.me/edmondlytica/</link>
-      <pubDate>Sun, 21 Mar 2021 09:29:50 +0100</pubDate>
-      
-      <guid>https://code.markedmondson.me/edmondlytica/</guid>
-      <description>This is an example of how GTM server side can be used to create your own digital analytics tool. It is a proof of concept of what you can do given the power of GTM server side and its BigQuery integration. I customise the stream by adding cookieless tracking, displaying the data in Shiny and running it all on Cloud Run to keep costs down but performance good.</description>
-    </item>
-    
-    <item>
-      <title>Using Google Tag Manager Server Side to Trigger Webhook Events</title>
-      <link>https://code.markedmondson.me/gtm-serverside-webhooks/</link>
-      <pubDate>Fri, 04 Sep 2020 12:50:50 +0100</pubDate>
-      
-      <guid>https://code.markedmondson.me/gtm-serverside-webhooks/</guid>
-      <description>When GTM Server Side was announced the use cases for it were not so compelling for me at first.
-Sure, extra security and potential speed ups were nice to have, but it wasn’t really necessary for a lot of websites, given the cost. However, now we have had a chance to play with it and can see its integration with the rest of the Google Cloud Platform, new use cases are coming up which are very compelling, especially if the GTM Server Side costs can be driven down via Cloud Run deployments - see last post.</description>
-    </item>
-    
-    <item>
       <title>Google Tag Manager Server Side on Cloud Run - Pros and Cons</title>
       <link>https://code.markedmondson.me/gtm-serverside-cloudrun/</link>
       <pubDate>Fri, 21 Aug 2020 00:00:00 +0000</pubDate>
@@ -129,31 +90,6 @@ Extended data imports Google Analytics offers various versions of uploads.</desc
     </item>
     
     <item>
-      <title>Turning GA360 BigQuery exports into partitioned tables using Cloud Functions</title>
-      <link>https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/</link>
-      <pubDate>Tue, 09 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/</guid>
-      <description>Its been a while since my last blog, although I had a good excuse as I’ve moved house into the Copenhagen suburbs, Brønshøj. But in the meantime, I have had the chance to find my new favourite tool for data engineering - Google Cloud Functions in Python.
-This post will look at how to use them to work with the GA360 BigQuery export tables.
-The code is available in this GitHub repo for useful cloud functions with Google Analytics</description>
-    </item>
-    
-    <item>
-      <title>Talking Google Analytics dashboards via R, Shiny and Text-to-Speech APIs</title>
-      <link>https://code.markedmondson.me/talking-google-analytics-dashboards/</link>
-      <pubDate>Wed, 15 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://code.markedmondson.me/talking-google-analytics-dashboards/</guid>
-      <description>
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
-
-
-&lt;p&gt;What really makes Google Analytics stand apart from other analytics solutions for me is its integration with the Google Cloud, such as BigQuery and its machine learning APIs. An example of this integration is given in this workshop video that details how to use the &lt;a href=&#34;https://developers.google.com/analytics/devguides/reporting/core/v4/&#34;&gt;Google Analytics&lt;/a&gt; and &lt;a href=&#34;https://cloud.google.com/text-to-speech/&#34;&gt;Text-to-speech&lt;/a&gt; APIs to create a dashboard that talks through your statistics.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
       <title>R on Kubernetes - serverless Shiny, R APIs and scheduled scripts</title>
       <link>https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts/</link>
       <pubDate>Wed, 02 May 2018 00:00:00 +0000</pubDate>
@@ -166,27 +102,6 @@ The code is available in this GitHub repo for useful cloud functions with Google
     </item>
     
     <item>
-      <title>Embedding Google Data Studio into RMarkdown</title>
-      <link>https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown/</link>
-      <pubDate>Thu, 15 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://code.markedmondson.me/embedding-google-data-studio-into-rmarkdown/</guid>
-      <description>Adding Google Data Studio Dashboards to RMarkdown This week I learnt you can take Google Data Studio reports and, via their embed feature, paste them straight into an RMarkdown HTML document.
-This is cool as you can then combine the strengths of both for client reports or similar.
-Data Studio is a free online solution, that I have found to be very quick to get something decent looking. It also has excellent connectors to data sources that can be difficult to get access to otherwise, such as DoubleClick.</description>
-    </item>
-    
-    <item>
-      <title>Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API</title>
-      <link>https://code.markedmondson.me/searchconsoler-vs-googlelanguager/</link>
-      <pubDate>Thu, 11 Jan 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://code.markedmondson.me/searchconsoler-vs-googlelanguager/</guid>
-      <description>With the launch of the Google Natural Language API (NLP API), and the emphasis of machine learning that is said to account for up to 30% of the SEO algorithmn for Google search, a natural question is whether you can use Google’s own macine learning APIs to help optimise your website for search.
-Whilst I don’t believe they will offer exactly the same results, I can see useful applications that include:</description>
-    </item>
-    
-    <item>
       <title>Run RStudio Server on a Chromebook as a Cloud Native</title>
       <link>https://code.markedmondson.me/rstudio-server-chromebook/</link>
       <pubDate>Tue, 05 Sep 2017 13:55:57 +0100</pubDate>
@@ -194,42 +109,6 @@ Whilst I don’t believe they will offer exactly the same results, I can see use
       <guid>https://code.markedmondson.me/rstudio-server-chromebook/</guid>
       <description>I recently got an Asus Chromebook Flip with which I&amp;rsquo;m very happy, but it did make me realise that if a Chromebook was to replace my normal desktop as my primary workstation, my RStudio Server setup would need to be more cloud native than was available up until now.
 TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically backs up data and configuration settings to Google Cloud Storage is on the googleComputeEngineR website here.</description>
-    </item>
-    
-    <item>
-      <title>Five Ways to Schedule R scripts on Google Cloud Platform</title>
-      <link>https://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/</link>
-      <pubDate>Sun, 09 Jul 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/</guid>
-      <description>
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
-
-
-&lt;p&gt;A common question I come across is how to automate scheduling of R scripts downloading data. This post goes through some options that I have played around with, which I’ve mostly used for downloading API data such as Google Analytics using the Google Cloud platform, but the same principles could apply for AWS or Azure.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>My R Packages</title>
-      <link>https://code.markedmondson.me/r-packages/</link>
-      <pubDate>Tue, 24 Jan 2017 21:20:50 +0100</pubDate>
-      
-      <guid>https://code.markedmondson.me/r-packages/</guid>
-      <description>A full list of R packages I have published are on my Github, but some notable ones are below.
-Some are part of the cloudyR project, which has many packages useful for using R in the cloud. I concentrate on the Google cloud below, but be sure to check out the other packages if you’re looking to work with AWS or other cloud based services.
-CRAN     Status URL Description     googleAuthR The central workhorse for authentication on Google APIs   googleAnalyticsR Works with Google Analytics Reporting V3/V4 and Management APIs   googleComputeEngineR Launch Virtual Machines within the Google Cloud, via templates or your own Docker containers.</description>
-    </item>
-    
-    <item>
-      <title>New Blog Down</title>
-      <link>https://code.markedmondson.me/new-blog-down/</link>
-      <pubDate>Mon, 23 Jan 2017 22:45:03 +0100</pubDate>
-      
-      <guid>https://code.markedmondson.me/new-blog-down/</guid>
-      <description>A new year, a new blogging platform!
-This time I’m moving from Jekyll to RStudio’s new blogdown format.
-This keeps the advantages of Jekyll (a static, high performance website; markdown for editing; free hosting on Github) but with the extra bonus of being able to render in RMarkdown plus adding some nice looking capabilities from the Hugo project.</description>
     </item>
     
     <item>
@@ -309,7 +188,7 @@ Search Console is used to provide the keywords in these days post (not provided)
       <guid>https://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/</guid>
       <description>edit 20th November, 2016 - now everything in this post is abstracted away and available in the googleComputeEngineR package - I would say its a lot easier to use that. Here is a post on getting started with it. http://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/
 This blog will give you steps that allows you to run on Google Compute Engine a server that has these features:
- RStudio Server instance with multiple login. Apache to host a welcome webpage.</description>
+RStudio Server instance with multiple login. Apache to host a welcome webpage.</description>
     </item>
     
     <item>
@@ -320,7 +199,7 @@ This blog will give you steps that allows you to run on Google Compute Engine a 
       <guid>https://code.markedmondson.me/googleAuthR-0.2.0/</guid>
       <description>googleAuthR is now on CRAN version 0.2.0.
 This release is the result of using the library myself to create three working Google API libraries, and tweaking the googleAuthR code to better support the process. As a result all of these libraries are now able to be authorised with one Google OAuth2 login flow:
- googleAnalyticsR searchConsoleR bigQueryR  Batching This means the libraries above and any other created with googleAuthR can take advatage of batching: this uses a Google API feature that means you can send multiple API calls at once.</description>
+googleAnalyticsR searchConsoleR bigQueryR Batching This means the libraries above and any other created with googleAuthR can take advatage of batching: this uses a Google API feature that means you can send multiple API calls at once.</description>
     </item>
     
     <item>

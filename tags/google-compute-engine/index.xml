@@ -28,31 +28,6 @@ TL;DR - A how-to on making RStudio Server run on a Chromebook that automatically
     </item>
     
     <item>
-      <title>Five Ways to Schedule R scripts on Google Cloud Platform</title>
-      <link>https://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/</link>
-      <pubDate>Sun, 09 Jul 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/</guid>
-      <description>
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
-
-
-&lt;p&gt;A common question I come across is how to automate scheduling of R scripts downloading data. This post goes through some options that I have played around with, which I’ve mostly used for downloading API data such as Google Analytics using the Google Cloud platform, but the same principles could apply for AWS or Azure.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>My R Packages</title>
-      <link>https://code.markedmondson.me/r-packages/</link>
-      <pubDate>Tue, 24 Jan 2017 21:20:50 +0100</pubDate>
-      
-      <guid>https://code.markedmondson.me/r-packages/</guid>
-      <description>A full list of R packages I have published are on my Github, but some notable ones are below.
-Some are part of the cloudyR project, which has many packages useful for using R in the cloud. I concentrate on the Google cloud below, but be sure to check out the other packages if you’re looking to work with AWS or other cloud based services.
-CRAN     Status URL Description     googleAuthR The central workhorse for authentication on Google APIs   googleAnalyticsR Works with Google Analytics Reporting V3/V4 and Management APIs   googleComputeEngineR Launch Virtual Machines within the Google Cloud, via templates or your own Docker containers.</description>
-    </item>
-    
-    <item>
       <title>Launch RStudio Server in the Google Cloud with two lines of R</title>
       <link>https://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/</link>
       <pubDate>Thu, 20 Oct 2016 23:03:57 +0100</pubDate>
@@ -79,7 +54,7 @@ Things move on, and I now recommend using the process below that uses the RStudi
       <guid>https://code.markedmondson.me/setting-up-scheduled-R-scripts-for-an-analytics-team/</guid>
       <description>edit 20th November, 2016 - now everything in this post is abstracted away and available in the googleComputeEngineR package - I would say its a lot easier to use that. Here is a post on getting started with it. http://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/
 This blog will give you steps that allows you to run on Google Compute Engine a server that has these features:
- RStudio Server instance with multiple login. Apache to host a welcome webpage.</description>
+RStudio Server instance with multiple login. Apache to host a welcome webpage.</description>
     </item>
     
   </channel>

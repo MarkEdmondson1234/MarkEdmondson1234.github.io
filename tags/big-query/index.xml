@@ -18,37 +18,6 @@
     </item>
     
     <item>
-      <title>Creating your own cookieless analytics tool with GTM Server Side, Cloud Run, BigQuery and Shiny</title>
-      <link>https://code.markedmondson.me/edmondlytica/</link>
-      <pubDate>Sun, 21 Mar 2021 09:29:50 +0100</pubDate>
-      
-      <guid>https://code.markedmondson.me/edmondlytica/</guid>
-      <description>This is an example of how GTM server side can be used to create your own digital analytics tool. It is a proof of concept of what you can do given the power of GTM server side and its BigQuery integration. I customise the stream by adding cookieless tracking, displaying the data in Shiny and running it all on Cloud Run to keep costs down but performance good.</description>
-    </item>
-    
-    <item>
-      <title>Turning GA360 BigQuery exports into partitioned tables using Cloud Functions</title>
-      <link>https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/</link>
-      <pubDate>Tue, 09 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/</guid>
-      <description>Its been a while since my last blog, although I had a good excuse as I’ve moved house into the Copenhagen suburbs, Brønshøj. But in the meantime, I have had the chance to find my new favourite tool for data engineering - Google Cloud Functions in Python.
-This post will look at how to use them to work with the GA360 BigQuery export tables.
-The code is available in this GitHub repo for useful cloud functions with Google Analytics</description>
-    </item>
-    
-    <item>
-      <title>My R Packages</title>
-      <link>https://code.markedmondson.me/r-packages/</link>
-      <pubDate>Tue, 24 Jan 2017 21:20:50 +0100</pubDate>
-      
-      <guid>https://code.markedmondson.me/r-packages/</guid>
-      <description>A full list of R packages I have published are on my Github, but some notable ones are below.
-Some are part of the cloudyR project, which has many packages useful for using R in the cloud. I concentrate on the Google cloud below, but be sure to check out the other packages if you’re looking to work with AWS or other cloud based services.
-CRAN     Status URL Description     googleAuthR The central workhorse for authentication on Google APIs   googleAnalyticsR Works with Google Analytics Reporting V3/V4 and Management APIs   googleComputeEngineR Launch Virtual Machines within the Google Cloud, via templates or your own Docker containers.</description>
-    </item>
-    
-    <item>
       <title>Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two</title>
       <link>https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/</link>
       <pubDate>Sun, 22 Jan 2017 14:20:57 +0100</pubDate>

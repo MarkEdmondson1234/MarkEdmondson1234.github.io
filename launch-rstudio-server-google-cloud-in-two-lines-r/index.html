@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
-    <script async src="https://www.googleoptimize.com/optimize.js?id=GTM-WMXD7V"></script>
     <title>Launch RStudio Server in the Google Cloud with two lines of R &middot; Mark Edmondson</title>
-    <meta name="generator" content="Hugo 0.92.0" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
     
       <meta name="description" content="The code bit of the blog">
     
-    
+      <link href="Page%28/post/2016-10-20-launch-rstudio-server-google-cloud-in-two-lines-r.md%29" rel="alternate" type="application/rss+xml" title="Mark Edmondson" />
+      <link href="Page%28/post/2016-10-20-launch-rstudio-server-google-cloud-in-two-lines-r.md%29" rel="feed" type="application/rss+xml" title="Mark Edmondson" />
     <link rel="canonical" href="https://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/"/>
     <link rel="icon" href="https://code.markedmondson.me/favicon.ico">
     <link rel="apple-touch-icon" href="https://code.markedmondson.me/apple-touch-icon.png"/>
@@ -29,8 +28,6 @@ Things move on, and I now recommend using the process below that uses the RStudi
 <meta property="article:published_time" content="2016-10-20T23:03:57+01:00" />
 <meta property="article:modified_time" content="2016-10-20T23:03:57+01:00" />
 
-
-    
     <meta itemprop="name" content="Launch RStudio Server in the Google Cloud with two lines of R">
 <meta itemprop="description" content="I&rsquo;ve written previously about how to get RStudio Server running on Google Compute Engine: the first in July 2014 gave you a snapshot to download then customise, the second in April 2016 launched via a Docker container.
 Things move on, and I now recommend using the process below that uses the RStudio template in the new on CRAN googleComputeEngineR package. Not only does it abstract away a lot of the dev-ops set up, but it also gives you more flexibility by taking advantage of Dockerfiles."><meta itemprop="datePublished" content="2016-10-20T23:03:57+01:00" />
@@ -85,8 +82,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           
 
           
-          <a class="main-nav-link" href="/r-packages/">My R Packages</a>
-          
 
           
           
@@ -129,8 +124,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           
           
 
-          
-          <td><a class="main-nav-link" href="/r-packages/">My R Packages</a></td>
           
 
           
@@ -176,12 +169,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        31
+        20
         <span>Posts</span>
       </div>
       <div class="article-info-block">
         
-          18
+          17
         
         <span>
             Tags
@@ -316,28 +309,28 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <h2 id="launching-an-rstudio-server">Launching an Rstudio Server</h2>
 <p>This example is taken from the <a href="https://cloudyr.github.io/googleComputeEngineR/articles/example-workflows.html#custom-team-rstudio-server">example workflows</a> that are on the <a href="https://cloudyr.github.io/googleComputeEngineR"><code>googleComputeEngineR</code> website</a>, which includes other examples for Shiny, OpenCPU and R-clusters.</p>
 <p>You do need to do a bit of <a href="https://cloudyr.github.io/googleComputeEngineR/articles/installation-and-authentication.html">initial setup</a> to setup your Google project and download the authentication file, but after that you just need to issue these two commands:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(googleComputeEngineR)
-vm <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gce_vm</span>(template <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;rstudio&#34;</span>,
-             name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;my-rstudio&#34;</span>,
-             username <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;mark&#34;</span>, password <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;mark1234&#34;</span>,
-             predefined_type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;n1-highmem-2&#34;</span>)
-</code></pre></div><p>And thats it.  Wait a bit, it will output an IP address for you to log in with.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(googleComputeEngineR)
+</span></span><span style="display:flex;"><span>vm <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gce_vm</span>(template <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;rstudio&#34;</span>,
+</span></span><span style="display:flex;"><span>             name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;my-rstudio&#34;</span>,
+</span></span><span style="display:flex;"><span>             username <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;mark&#34;</span>, password <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;mark1234&#34;</span>,
+</span></span><span style="display:flex;"><span>             predefined_type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;n1-highmem-2&#34;</span>)
+</span></span></code></pre></div><p>And thats it.  Wait a bit, it will output an IP address for you to log in with.</p>
 <p><img src="/images/rstudio-launch-example.png" alt="rstudio-googleComputeEngineR-launch"></p>
 <p><img src="/images/rstudio-login.png" alt="rstudio login"></p>
 <p>You can now carry on by logging in and installing packages as you would on RStudio Desktop, then use <a href="https://cloudyr.github.io/googleComputeEngineR/reference/gce_vm_stop.html"><code>gce_vm_stop(vm)</code></a> and <a href="https://cloudyr.github.io/googleComputeEngineR/reference/gce_vm_start.html"><code>gce_vm_start(vm)</code></a> to stop and start your instance, or if say you are on a Chromebook and cannot run R locally, use the Google Cloud Web UI to start and stop it.</p>
 <h2 id="further-customisation">Further customisation</h2>
 <p>You customise further by creating a custom image that launches a fresh RStudio Server instance with your own packages and files installed.  This takes advantage of some Google Cloud benefits such as the <a href="https://cloud.google.com/container-registry/">Container Registry</a> which lets you save private Docker containers.</p>
 <p>With that, you can save your custom RStudio server to its own custom image, that can be used to launch anew in another instance as needed:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#75715e">## push your rstudio image to container registry</span>
-<span style="color:#a6e22e">gce_push_registry</span>(vm, <span style="color:#e6db74">&#34;my-rstudio&#34;</span>, container_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;my-rstudio&#34;</span>)
-
-<span style="color:#75715e">## launch another rstudio instance with your settings</span>
-vm2 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gce_vm</span>(template <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;rstudio&#34;</span>,
-              name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;my-rstudio-2&#34;</span>,
-              username <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;mark&#34;</span>, password <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;mark1234&#34;</span>,
-              predefined_type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;n1-highmem-2&#34;</span>,
-              dynamic_image <span style="color:#f92672">=</span> <span style="color:#a6e22e">gce_tag_container</span>(<span style="color:#e6db74">&#34;my-rstudio&#34;</span>))
-</code></pre></div><p>If you want to go further still, use <a href="https://docs.docker.com/engine/reference/builder/"><code>Dockerfiles</code></a> to customise the underlying linux libraries and CRAN/github packages to install in a more replicable manner - a good way to keep track in Github exactly how your server is configured.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#75715e">## push your rstudio image to container registry</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">gce_push_registry</span>(vm, <span style="color:#e6db74">&#34;my-rstudio&#34;</span>, container_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;my-rstudio&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## launch another rstudio instance with your settings</span>
+</span></span><span style="display:flex;"><span>vm2 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gce_vm</span>(template <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;rstudio&#34;</span>,
+</span></span><span style="display:flex;"><span>              name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;my-rstudio-2&#34;</span>,
+</span></span><span style="display:flex;"><span>              username <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;mark&#34;</span>, password <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;mark1234&#34;</span>,
+</span></span><span style="display:flex;"><span>              predefined_type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;n1-highmem-2&#34;</span>,
+</span></span><span style="display:flex;"><span>              dynamic_image <span style="color:#f92672">=</span> <span style="color:#a6e22e">gce_tag_container</span>(<span style="color:#e6db74">&#34;my-rstudio&#34;</span>))
+</span></span></code></pre></div><p>If you want to go further still, use <a href="https://docs.docker.com/engine/reference/builder/"><code>Dockerfiles</code></a> to customise the underlying linux libraries and CRAN/github packages to install in a more replicable manner - a good way to keep track in Github exactly how your server is configured.</p>
 <p>A <code>Dockerfile</code> example is shown below - construct this locally:</p>
 <pre tabindex="0"><code>FROM rocker/hadleyverse
 MAINTAINER Mark Edmondson (r@sunholo.com)
@@ -353,27 +346,26 @@ RUN apt-get update &amp;&amp; apt-get install -y \
     
 ## Install packages from CRAN
 RUN install2.r --error \ 
-    -r 'http://cran.rstudio.com' \
+    -r &#39;http://cran.rstudio.com&#39; \
     googleAuthR shinyFiles googleCloudStorage bigQueryR gmailR googleAnalyticsR \
     ## install Github packages
-    &amp;&amp; Rscript -e &quot;devtools::install_github(c('bnosac/cronR'))&quot; \
+    &amp;&amp; Rscript -e &#34;devtools::install_github(c(&#39;bnosac/cronR&#39;))&#34; \
     ## clean up
     &amp;&amp; rm -rf /tmp/downloaded_packages/ /tmp/*.rds \
 </code></pre><p>Then build it on your VM via <a href="https://cloudyr.github.io/googleComputeEngineR/reference/docker_build.html"><code>docker_build</code></a>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">docker_build</span>(vm, 
-             dockerfile <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;file/location/dockerfile&#34;</span>, 
-             new_image <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;my-custom-image&#34;</span>)
-</code></pre></div><p>You can then save this up to the Container Registry and launch as before:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">gce_push_registry</span>(vm, <span style="color:#e6db74">&#34;my-custom-image&#34;</span>, image_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;my-custom-image&#34;</span>
-vm3 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gce_vm</span>(template <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;rstudio&#34;</span>,
-              name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;my-rstudio-3&#34;</span>,
-              username <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;mark&#34;</span>, password <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;mark1234&#34;</span>,
-              predefined_type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;n1-highmem-2&#34;</span>,
-              dynamic_image <span style="color:#f92672">=</span> <span style="color:#a6e22e">gce_tag_container</span>(<span style="color:#e6db74">&#34;my-custom-image&#34;</span>))
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">docker_build</span>(vm, 
+</span></span><span style="display:flex;"><span>             dockerfile <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;file/location/dockerfile&#34;</span>, 
+</span></span><span style="display:flex;"><span>             new_image <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;my-custom-image&#34;</span>)
+</span></span></code></pre></div><p>You can then save this up to the Container Registry and launch as before:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">gce_push_registry</span>(vm, <span style="color:#e6db74">&#34;my-custom-image&#34;</span>, image_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;my-custom-image&#34;</span>
+</span></span><span style="display:flex;"><span>vm3 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gce_vm</span>(template <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;rstudio&#34;</span>,
+</span></span><span style="display:flex;"><span>              name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;my-rstudio-3&#34;</span>,
+</span></span><span style="display:flex;"><span>              username <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;mark&#34;</span>, password <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;mark1234&#34;</span>,
+</span></span><span style="display:flex;"><span>              predefined_type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;n1-highmem-2&#34;</span>,
+</span></span><span style="display:flex;"><span>              dynamic_image <span style="color:#f92672">=</span> <span style="color:#a6e22e">gce_tag_container</span>(<span style="color:#e6db74">&#34;my-custom-image&#34;</span>))
+</span></span></code></pre></div>
         </div>
         <footer class="article-footer">
-    <a data-url="https://code.markedmondson.me/launch-rstudio-server-google-cloud-in-two-lines-r/" data-id="2e3f85e7dbea05d09b66ec9ffff37785" class="article-share-link">
         <i class="fa fa-share"></i>
         Share
     </a>
@@ -519,68 +511,68 @@ vm3 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gce_vm<
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/writing-a-book/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/gtm-serverside-cloudrun/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/proto-book.png)" alt="Launch RStudio Server in the Google Cloud with two lines of R" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/princess-gtm.png)" alt="Launch RStudio Server in the Google Cloud with two lines of R" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/writing-a-book/" class="title">Why and How I&#39;m writing a GA4 book called &#39;Learning Google Analytics&#39; for O&#39;Reilly</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/gtm-serverside-cloudrun/" class="title">Google Tag Manager Server Side on Cloud Run - Pros and Cons</a></p>
                     <p class="item-date">
-                        <time datetime="2021-10-23 11:04:50 &#43;0100 &#43;0100" itemprop="datePublished">2021-10-23</time>
+                        <time datetime="2020-08-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-21</time>
                     </p>
                 </div>
             </li>
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/googleanalyticsr-100-release/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/shiny-cloudrun/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/GA4-090.png)" alt="Launch RStudio Server in the Google Cloud with two lines of R" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/shiny-clouds.jpg)" alt="Launch RStudio Server in the Google Cloud with two lines of R" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/googleanalyticsr-100-release/" class="title">googleAnalyticsR v1.0.0 - GA4 API, Automatic Shiny Dashboarding, Improved UI</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/shiny-cloudrun/" class="title">Shiny on Google Cloud Run - Scale-to-Zero R Web Apps</a></p>
                     <p class="item-date">
-                        <time datetime="2021-04-17 09:29:50 &#43;0100 &#43;0100" itemprop="datePublished">2021-04-17</time>
+                        <time datetime="2020-08-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-01</time>
                     </p>
                 </div>
             </li>
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/edmondlytica/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/datascience-aas/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/edmonlytica-shiny1.png)" alt="Launch RStudio Server in the Google Cloud with two lines of R" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/piketty-capital.png)" alt="Launch RStudio Server in the Google Cloud with two lines of R" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/edmondlytica/" class="title">Creating your own cookieless analytics tool with GTM Server Side, Cloud Run, BigQuery and Shiny</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/datascience-aas/" class="title">Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions</a></p>
                     <p class="item-date">
-                        <time datetime="2021-03-21 09:29:50 &#43;0100 CET" itemprop="datePublished">2021-03-21</time>
+                        <time datetime="2020-06-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-06-28</time>
                     </p>
                 </div>
             </li>
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/gtm-serverside-webhooks/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/googleCloudRunner-intro/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/gtm-serverside-events.png)" alt="Launch RStudio Server in the Google Cloud with two lines of R" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/gcp-pyramid.png)" alt="Launch RStudio Server in the Google Cloud with two lines of R" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/gtm-serverside-webhooks/" class="title">Using Google Tag Manager Server Side to Trigger Webhook Events</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/googleCloudRunner-intro/" class="title">Introducing googleCloudRunner - serverless R on Google Cloud Platform</a></p>
                     <p class="item-date">
-                        <time datetime="2020-09-04 12:50:50 &#43;0100 &#43;0100" itemprop="datePublished">2020-09-04</time>
+                        <time datetime="2020-01-18 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-01-18</time>
                     </p>
                 </div>
             </li>
@@ -649,7 +641,7 @@ vm3 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gce_vm<
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/r">
                     R
                 </a>
-                <span class="category-list-count">22</span>
+                <span class="category-list-count">14</span>
             </li>
             
             <li class="category-list-item">
@@ -657,7 +649,7 @@ vm3 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gce_vm<
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/big-query">
                     big-query
                 </a>
-                <span class="category-list-count">7</span>
+                <span class="category-list-count">4</span>
             </li>
             
             <li class="category-list-item">
@@ -665,7 +657,7 @@ vm3 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gce_vm<
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/blogging">
                     blogging
                 </a>
-                <span class="category-list-count">3</span>
+                <span class="category-list-count">1</span>
             </li>
             
             <li class="category-list-item">
@@ -673,7 +665,7 @@ vm3 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gce_vm<
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-functions">
                     cloud-functions
                 </a>
-                <span class="category-list-count">5</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -681,7 +673,7 @@ vm3 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gce_vm<
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-run">
                     cloud-run
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -689,7 +681,7 @@ vm3 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gce_vm<
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/docker">
                     docker
                 </a>
-                <span class="category-list-count">9</span>
+                <span class="category-list-count">8</span>
             </li>
             
             <li class="category-list-item">
@@ -705,7 +697,7 @@ vm3 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gce_vm<
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-analytics">
                     google-analytics
                 </a>
-                <span class="category-list-count">12</span>
+                <span class="category-list-count">6</span>
             </li>
             
             <li class="category-list-item">
@@ -713,7 +705,7 @@ vm3 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gce_vm<
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-app-engine">
                     google-app-engine
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -721,7 +713,7 @@ vm3 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gce_vm<
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-auth">
                     google-auth
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">2</span>
             </li>
             
             <li class="category-list-item">
@@ -729,7 +721,7 @@ vm3 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gce_vm<
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-cloud-storage">
                     google-cloud-storage
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -737,15 +729,7 @@ vm3 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gce_vm<
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-compute-engine">
                     google-compute-engine
                 </a>
-                <span class="category-list-count">7</span>
-            </li>
-            
-            <li class="category-list-item">
-                
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-language">
-                    google-language
-                </a>
-                <span class="category-list-count">2</span>
+                <span class="category-list-count">5</span>
             </li>
             
             <li class="category-list-item">
@@ -753,7 +737,7 @@ vm3 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gce_vm<
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-tag-manager">
                     google-tag-manager
                 </a>
-                <span class="category-list-count">7</span>
+                <span class="category-list-count">4</span>
             </li>
             
             <li class="category-list-item">
@@ -761,7 +745,7 @@ vm3 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gce_vm<
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/pubsub">
                     pubsub
                 </a>
-                <span class="category-list-count">3</span>
+                <span class="category-list-count">2</span>
             </li>
             
             <li class="category-list-item">
@@ -769,7 +753,7 @@ vm3 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gce_vm<
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/python">
                     python
                 </a>
-                <span class="category-list-count">6</span>
+                <span class="category-list-count">5</span>
             </li>
             
             <li class="category-list-item">
@@ -777,7 +761,7 @@ vm3 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gce_vm<
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/rstudio-server">
                     rstudio-server
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -785,7 +769,7 @@ vm3 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gce_vm<
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/search-console">
                     search-console
                 </a>
-                <span class="category-list-count">3</span>
+                <span class="category-list-count">1</span>
             </li>
             
         </ul>
@@ -808,7 +792,7 @@ vm3 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gce_vm<
 <footer id="footer">
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2022
+      &copy; 2023
       Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
     </div>
   </div>

@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
-    <script async src="https://www.googleoptimize.com/optimize.js?id=GTM-WMXD7V"></script>
     <title>Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit &middot; Mark Edmondson</title>
-    <meta name="generator" content="Hugo 0.92.0" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
     
       <meta name="description" content="The code bit of the blog">
     
-    
+      <link href="Page%28/post/2021-11-19-sending-ga4-events-pubsub/index.md%29" rel="alternate" type="application/rss+xml" title="Mark Edmondson" />
+      <link href="Page%28/post/2021-11-19-sending-ga4-events-pubsub/index.md%29" rel="feed" type="application/rss+xml" title="Mark Edmondson" />
     <link rel="canonical" href="https://code.markedmondson.me/sending-ga4-events-pubsub/"/>
     <link rel="icon" href="https://code.markedmondson.me/favicon.ico">
     <link rel="apple-touch-icon" href="https://code.markedmondson.me/apple-touch-icon.png"/>
@@ -29,8 +28,6 @@ With Google Tag Manager Server-side (GTM-SS), the scope on what you can do with 
 <meta property="article:published_time" content="2022-01-04T00:00:00+00:00" />
 <meta property="article:modified_time" content="2022-01-04T00:00:00+00:00" />
 
-
-    
     <meta itemprop="name" content="Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit">
 <meta itemprop="description" content="Image from https://solarsystem.nasa.gov/resources/758/brief-outburst/?category=solar-system_sun
 With Google Tag Manager Server-side (GTM-SS), the scope on what you can do with your GA4 events is much enhanced, since using GTM-SS you have the ability to interact easily with other GCP services, in particular easier Google authentication.  This integration can allow you to enrich your data streams or send your GA4 data to different locations other than the Google Marketing Platform.  The first example of this has been using the BigQuery API in your GTM-SS templates to export your event data, but what if you need your event data on a more real-time basis?  For that, there is Google Pub/Sub."><meta itemprop="datePublished" content="2022-01-04T00:00:00+00:00" />
@@ -85,8 +82,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           
 
           
-          <a class="main-nav-link" href="/r-packages/">My R Packages</a>
-          
 
           
           
@@ -129,8 +124,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           
           
 
-          
-          <td><a class="main-nav-link" href="/r-packages/">My R Packages</a></td>
           
 
           
@@ -176,12 +169,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        31
+        20
         <span>Posts</span>
       </div>
       <div class="article-info-block">
         
-          18
+          17
         
         <span>
             Tags
@@ -361,25 +354,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p><img src="images/gtm-form-1.png" alt="">
 <em>This section tackles moving data from the dataLayer to GTM-SS</em></p>
 <p>A new form has appeared on my blog that allows you to get the GA4 browsing history of your cookie_id sent to your email.  This form takes the email you put in it and pushes it to the <code>dataLayer()</code> in an event called <code>ga4_email</code>, and should be similar to other website form tracking.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">script</span>&gt;
-  <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">submitDL</span>(<span style="color:#a6e22e">value</span>){
-    <span style="color:#a6e22e">dataLayer</span>.<span style="color:#a6e22e">push</span>({<span style="color:#e6db74">&#39;event&#39;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#39;ga4_email&#39;</span>,<span style="color:#e6db74">&#39;ga4_email&#39;</span><span style="color:#f92672">:</span><span style="color:#a6e22e">value</span>});
-    document.<span style="color:#a6e22e">getElementById</span>(<span style="color:#e6db74">&#39;email&#39;</span>).<span style="color:#a6e22e">value</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Submitted! See inbox&#39;</span>
-    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">button</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">getElementById</span>(<span style="color:#e6db74">&#39;email_button&#39;</span>);
-    <span style="color:#a6e22e">button</span>.<span style="color:#a6e22e">disabled</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
-  }
-    
-&lt;/<span style="color:#f92672">script</span>&gt;
-&lt;<span style="color:#f92672">div</span>&gt;
-    &lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;email&#34;</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;email&#34;</span>  <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;email&#34;</span>
-      <span style="color:#a6e22e">required</span> 
-      <span style="color:#a6e22e">minlength</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;8&#34;</span>
-      <span style="color:#a6e22e">placeholder</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;you@email.com&#34;</span>&gt;
-    &lt;<span style="color:#f92672">button</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;email_button&#39;</span>
-      <span style="color:#a6e22e">onclick</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;javascript:submitDL(document.getElementById(&#39;email&#39;).value);&#34;</span>
-     &gt;Send&lt;/<span style="color:#f92672">button</span>&gt;
-&lt;/<span style="color:#f92672">div</span>&gt;
-</code></pre></div><p><em>Code example 1: HTML to set up a simple form that will send the contents to the GTM dataLayer</em></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">script</span>&gt;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">submitDL</span>(<span style="color:#a6e22e">value</span>){
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">dataLayer</span>.<span style="color:#a6e22e">push</span>({<span style="color:#e6db74">&#39;event&#39;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#39;ga4_email&#39;</span>,<span style="color:#e6db74">&#39;ga4_email&#39;</span><span style="color:#f92672">:</span><span style="color:#a6e22e">value</span>});
+</span></span><span style="display:flex;"><span>    document.<span style="color:#a6e22e">getElementById</span>(<span style="color:#e6db74">&#39;email&#39;</span>).<span style="color:#a6e22e">value</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Submitted! See inbox&#39;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">button</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">getElementById</span>(<span style="color:#e6db74">&#39;email_button&#39;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">button</span>.<span style="color:#a6e22e">disabled</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">script</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">div</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;email&#34;</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;email&#34;</span>  <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;email&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">required</span> 
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">minlength</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;8&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">placeholder</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;you@email.com&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">button</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;email_button&#39;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">onclick</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;javascript:submitDL(document.getElementById(&#39;email&#39;).value);&#34;</span>
+</span></span><span style="display:flex;"><span>     &gt;Send&lt;/<span style="color:#f92672">button</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">div</span>&gt;
+</span></span></code></pre></div><p><em>Code example 1: HTML to set up a simple form that will send the contents to the GTM dataLayer</em></p>
 <p>This makes the form to the right → or at the bottom of the page on mobile ↓.</p>
 <p><img src="images/blog-email-submit.png" alt="">
 <em>rendered HTML form in the blog&rsquo;s right sidebar</em></p>
@@ -399,33 +392,33 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <em>This section sends the data hitting GTM-SS to a Cloud Function</em></p>
 <p>Once the event hits GTM-SS, we want to turn that event data into a PubSub topic.  I&rsquo;ll do this with the GTM-SS tag template below, which assumes you have deployed a HTTP Cloud Function we will cover in the next section.</p>
 <p>When creating tags in GTM Server-Side you need to make them via the template feature with a sandboxed version of JavaScript.  A possible implementation is shown below:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">getAllEventData</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;getAllEventData&#39;</span>);
-<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">log</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;logToConsole&#34;</span>);
-<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">JSON</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;JSON&#34;</span>);
-<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">sendHttpRequest</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;sendHttpRequest&#39;</span>);
-
-<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">data</span>);
-
-<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">postBody</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">JSON</span>.<span style="color:#a6e22e">stringify</span>(<span style="color:#a6e22e">getAllEventData</span>());
-
-<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;postBody parsed to:&#39;</span>, <span style="color:#a6e22e">postBody</span>);
-
-<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">url</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">data</span>.<span style="color:#a6e22e">endpoint</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">data</span>.<span style="color:#a6e22e">topic_path</span>;
-
-<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;Sending event data to:&#39;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">url</span>);
-
-<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">options</span> <span style="color:#f92672">=</span> {<span style="color:#a6e22e">method</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;POST&#39;</span>, 
-                 <span style="color:#a6e22e">headers</span><span style="color:#f92672">:</span> {<span style="color:#e6db74">&#39;Content-Type&#39;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#39;application/json&#39;</span>}};
-
-<span style="color:#75715e">// Sends a POST request
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">sendHttpRequest</span>(<span style="color:#a6e22e">url</span>, (<span style="color:#a6e22e">statusCode</span>) =&gt; {
-  <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">statusCode</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">200</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">statusCode</span> <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">300</span>) {
-    <span style="color:#a6e22e">data</span>.<span style="color:#a6e22e">gtmOnSuccess</span>();
-  } <span style="color:#66d9ef">else</span> {
-    <span style="color:#a6e22e">data</span>.<span style="color:#a6e22e">gtmOnFailure</span>();
-  }
-}, <span style="color:#a6e22e">options</span>, <span style="color:#a6e22e">postBody</span>);
-</code></pre></div><p><em>Code example 2: GTM Server Side template code for a tag to send all GTM-SS event data to your HTTP endpoint</em></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">getAllEventData</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;getAllEventData&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">log</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;logToConsole&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">JSON</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;JSON&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">sendHttpRequest</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;sendHttpRequest&#39;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">data</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">postBody</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">JSON</span>.<span style="color:#a6e22e">stringify</span>(<span style="color:#a6e22e">getAllEventData</span>());
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;postBody parsed to:&#39;</span>, <span style="color:#a6e22e">postBody</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">url</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">data</span>.<span style="color:#a6e22e">endpoint</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">data</span>.<span style="color:#a6e22e">topic_path</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;Sending event data to:&#39;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">url</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">options</span> <span style="color:#f92672">=</span> {<span style="color:#a6e22e">method</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;POST&#39;</span>, 
+</span></span><span style="display:flex;"><span>                 <span style="color:#a6e22e">headers</span><span style="color:#f92672">:</span> {<span style="color:#e6db74">&#39;Content-Type&#39;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#39;application/json&#39;</span>}};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Sends a POST request
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">sendHttpRequest</span>(<span style="color:#a6e22e">url</span>, (<span style="color:#a6e22e">statusCode</span>) =&gt; {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">statusCode</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">200</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">statusCode</span> <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">300</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">data</span>.<span style="color:#a6e22e">gtmOnSuccess</span>();
+</span></span><span style="display:flex;"><span>  } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">data</span>.<span style="color:#a6e22e">gtmOnFailure</span>();
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}, <span style="color:#a6e22e">options</span>, <span style="color:#a6e22e">postBody</span>);
+</span></span></code></pre></div><p><em>Code example 2: GTM Server Side template code for a tag to send all GTM-SS event data to your HTTP endpoint</em></p>
 <p>The GTM tag calls for two data fields to be added:</p>
 <ul>
 <li>
@@ -451,57 +444,58 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <em>This section turns the HTTP Cloud Function request into a PubSub topic</em></p>
 <p>Next the data will move to the Cloud Function that will turn the HTTP data sent from GTM-SS (or any other source if you want) and turn it into a PubSub topic.  This function has been created to be as generic as possible so will pass on data you push into it and create PubSub topics as necessary.</p>
 <p>The Cloud Function is written in Python 3.9, and will take any HTTP POST request and turn its body data into a PubSub topic the same name as its endpoint path (e.g. POST to <code>/hello-mum</code> with a HTTP body of <code>{&quot;mydata&quot;:{&quot;key1&quot;:&quot;value1&quot;}}</code> will turn it into a Pub/Sub topic of the same with the data as the event message for consumption by downstream subscriptions - the code to achieve this is as shown below:</p>
-<pre tabindex="0"><code class="language-{python}" data-lang="{python}">import os, json
-from google.cloud import pubsub_v1 # google-cloud-pubsub==2.8.0
-
-def http_to_pubsub(request):
-    request_json = request.get_json()
-
-    print('Request json: {}'.format(request_json))
-
-    if request_json:
-        res = trigger(json.dumps(request_json).encode('utf-8'), request.path)
-        return res
-    else:
-        return 'No data found', 204
-
-
-def trigger(data, topic_name):
-  publisher = pubsub_v1.PublisherClient()
-
-  topic_name = 'projects/{project_id}/topics{topic}'.format(
-    project_id=os.getenv('GCP_PROJECT'),
-    topic=topic_name,
-  )
-
-  print ('Publishing message to topic {}'.format(topic_name))
-  
-  # create topic if necessary
-  try:
-    future = publisher.publish(topic_name, data)
-    future_return = future.result()
-    print('Published message {}'.format(future_return))
-
-    return future_return
-
-  except Exception as e:
-    print('Topic {} does not exist? Attempting to create it'.format(topic_name))
-    print('Error: {}'.format(e))
-
-    publisher.create_topic(name=topic_name)
-    print ('Topic created ' + topic_name)
-
-    return 'Topic Created', 201
-</code></pre><p><em>Code example 3: This Cloud Function will take a HTTP hit and turn the event data into a Pub/Sub topic of the same name as the endpoint path (e.g. POST to <code>/hello-mum</code> with a HTTP body of <code>{&quot;mydata&quot;:{&quot;key1&quot;:&quot;value1&quot;}}</code> creates a PubSub topic called <code>hello-mum</code> if required)</em></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> os<span style="color:#f92672">,</span> json
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># google-cloud-pubsub==2.8.0</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> google.cloud <span style="color:#f92672">import</span> pubsub_v1 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">http_to_pubsub</span>(request):
+</span></span><span style="display:flex;"><span>    request_json <span style="color:#f92672">=</span> request<span style="color:#f92672">.</span>get_json()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;Request json: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(request_json))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> request_json:
+</span></span><span style="display:flex;"><span>        res <span style="color:#f92672">=</span> trigger(json<span style="color:#f92672">.</span>dumps(request_json)<span style="color:#f92672">.</span>encode(<span style="color:#e6db74">&#39;utf-8&#39;</span>), request<span style="color:#f92672">.</span>path)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> res
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;No data found&#39;</span>, <span style="color:#ae81ff">204</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">trigger</span>(data, topic_name):
+</span></span><span style="display:flex;"><span>  publisher <span style="color:#f92672">=</span> pubsub_v1<span style="color:#f92672">.</span>PublisherClient()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  topic_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;projects/</span><span style="color:#e6db74">{project_id}</span><span style="color:#e6db74">/topics</span><span style="color:#e6db74">{topic}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(
+</span></span><span style="display:flex;"><span>    project_id<span style="color:#f92672">=</span>os<span style="color:#f92672">.</span>getenv(<span style="color:#e6db74">&#39;GCP_PROJECT&#39;</span>),
+</span></span><span style="display:flex;"><span>    topic<span style="color:#f92672">=</span>topic_name,
+</span></span><span style="display:flex;"><span>  )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  print (<span style="color:#e6db74">&#39;Publishing message to topic </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(topic_name))
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># create topic if necessary</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>    future <span style="color:#f92672">=</span> publisher<span style="color:#f92672">.</span>publish(topic_name, data)
+</span></span><span style="display:flex;"><span>    future_return <span style="color:#f92672">=</span> future<span style="color:#f92672">.</span>result()
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;Published message </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(future_return))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> future_return
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;Topic </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> does not exist? Attempting to create it&#39;</span><span style="color:#f92672">.</span>format(topic_name))
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;Error: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(e))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    publisher<span style="color:#f92672">.</span>create_topic(name<span style="color:#f92672">=</span>topic_name)
+</span></span><span style="display:flex;"><span>    print (<span style="color:#e6db74">&#39;Topic created &#39;</span> <span style="color:#f92672">+</span> topic_name)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;Topic Created&#39;</span>, <span style="color:#ae81ff">201</span>
+</span></span></code></pre></div><p><em>Code example 3: This Cloud Function will take a HTTP hit and turn the event data into a Pub/Sub topic of the same name as the endpoint path (e.g. POST to <code>/hello-mum</code> with a HTTP body of <code>{&quot;mydata&quot;:{&quot;key1&quot;:&quot;value1&quot;}}</code> creates a PubSub topic called <code>hello-mum</code> if required)</em></p>
 <p>Remember the <code>requirements.txt</code> file in the same folder with <code>google-cloud-pubsub==2.8.0</code> to pin the version of the PubSub library, and use the entry point as the function <code>http_to_pubsub()</code>.</p>
 <p>You could paste this code in the WebUI for Cloud Functions, or the code can be deployed via <code>gcloud</code> as shown below, which once complete will give you a URL that you can use to POST your data to from any system.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">gcloud functions deploy http-to-pubsub <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>        --entry-point<span style="color:#f92672">=</span>http_to_pubsub <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>        --runtime<span style="color:#f92672">=</span>python37 <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>        --region<span style="color:#f92672">=</span>europe-west3 <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>        --trigger-http <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>        --allow-unauthenticated
-</code></pre></div><p><em>Deploying the Python Cloud Function.  This will create a HTTP URL for you to use in other applications such as GTM-SS</em></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>gcloud functions deploy http-to-pubsub <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>        --entry-point<span style="color:#f92672">=</span>http_to_pubsub <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>        --runtime<span style="color:#f92672">=</span>python37 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>        --region<span style="color:#f92672">=</span>europe-west3 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>        --trigger-http <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>        --allow-unauthenticated
+</span></span></code></pre></div><p><em>Deploying the Python Cloud Function.  This will create a HTTP URL for you to use in other applications such as GTM-SS</em></p>
 <p>I can be more relaxed about authentication since this will only be exposed server-side, although you could put more restrictions on it if you have a need such as an API key.</p>
 <p>Once deployed you should have a URL you can put into the GTM-SS PubSub tag from the earlier section, of the form <code>https://region-project.cloudfunctions.net/http-to-pusub</code>.</p>
 <p>Take that URL and plop it into the configuration of the PubSub GTM-SS tag, publish the tag and then make a few test form submissions. You should pretty quickly (within 60 seconds) see the hits in the PubSub queue and invoking your Cloud Function:</p>
@@ -517,40 +511,40 @@ def trigger(data, topic_name):
 <p>Now you have the event coming in to Pub/Sub, you can take that event and pass it to other systems.  For this example, we will use it to trigger Cloud Build using a feature I just added to <code>googleCloudRunner</code>, where you can pass parameters from a PubSub message into a Cloud Build to parametrise its action (some documentation on <a href="https://code.markedmondson.me/googleCloudRunner/articles/cloudbuild.html#pub-sub-triggered-cloud-builds">Pub/Sub triggered cloud builds here</a>).</p>
 <p>It is a bit slower than other choices though, since it needs to download and run the docker containers involved.  For more responsiveness you may want to look at DataFlow or Cloud Run/Functions.</p>
 <p>The form of the PubSub message coming in is something like the below example which is an event from myself checking it in the GTM preview:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{<span style="color:#f92672">&#34;x-ga-protocol_version&#34;</span>: <span style="color:#e6db74">&#34;2&#34;</span>, 
-<span style="color:#f92672">&#34;x-ga-measurement_id&#34;</span>: <span style="color:#e6db74">&#34;G-43MDXK6CLZ&#34;</span>, 
-<span style="color:#f92672">&#34;x-ga-gtm_version&#34;</span>: <span style="color:#e6db74">&#34;2rec10&#34;</span>, 
-<span style="color:#f92672">&#34;x-ga-page_id&#34;</span>: <span style="color:#ae81ff">761826058</span>, 
-<span style="color:#f92672">&#34;screen_resolution&#34;</span>: <span style="color:#e6db74">&#34;2560x1440&#34;</span>, 
-<span style="color:#f92672">&#34;x-ga-system_properties&#34;</span>: {<span style="color:#f92672">&#34;dbg&#34;</span>: <span style="color:#e6db74">&#34;1&#34;</span>}, 
-<span style="color:#f92672">&#34;language&#34;</span>: <span style="color:#e6db74">&#34;en-gb&#34;</span>, 
-<span style="color:#f92672">&#34;client_id&#34;</span>: <span style="color:#e6db74">&#34;1768696203.151234345&#34;</span>, 
-<span style="color:#f92672">&#34;x-ga-request_count&#34;</span>: <span style="color:#ae81ff">5</span>, 
-<span style="color:#f92672">&#34;page_location&#34;</span>: <span style="color:#e6db74">&#34;https://code.markedmondson.me/?gtm_debug=1638524719562&#34;</span>, 
-<span style="color:#f92672">&#34;page_referrer&#34;</span>: <span style="color:#e6db74">&#34;https://tagassistant.google.com/&#34;</span>, 
-<span style="color:#f92672">&#34;page_title&#34;</span>: <span style="color:#e6db74">&#34;Mark Edmondson&#34;</span>, 
-<span style="color:#f92672">&#34;ga_session_id&#34;</span>: <span style="color:#e6db74">&#34;1638520154&#34;</span>, 
-<span style="color:#f92672">&#34;ga_session_number&#34;</span>: <span style="color:#ae81ff">345</span>, 
-<span style="color:#f92672">&#34;x-ga-mp2-seg&#34;</span>: <span style="color:#e6db74">&#34;1&#34;</span>, 
-<span style="color:#f92672">&#34;event_name&#34;</span>: <span style="color:#e6db74">&#34;ga4_email&#34;</span>, 
-<span style="color:#f92672">&#34;engagement_time_msec&#34;</span>: <span style="color:#ae81ff">1</span>, 
-<span style="color:#f92672">&#34;debug_mode&#34;</span>: <span style="color:#e6db74">&#34;true&#34;</span>, 
-<span style="color:#f92672">&#34;custom_session_id&#34;</span>: <span style="color:#e6db74">&#34;1638520154.&#34;</span>, 
-<span style="color:#f92672">&#34;ga4_email&#34;</span>: <span style="color:#e6db74">&#34;an_email@gmail.com&#34;</span>, 
-<span style="color:#f92672">&#34;ip_override&#34;</span>: <span style="color:#e6db74">&#34;123.456.789.876&#34;</span>, 
-<span style="color:#f92672">&#34;user_agent&#34;</span>: <span style="color:#e6db74">&#34;Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:94.0) Gecko/20100101 Firefox/94.0&#34;</span>, 
-<span style="color:#f92672">&#34;x-ga-gcs-origin&#34;</span>: <span style="color:#e6db74">&#34;not-specified&#34;</span>, 
-<span style="color:#f92672">&#34;user_id&#34;</span>: <span style="color:#e6db74">&#34;xloAW6qkF2NSc0xqQ45otXXXXXXpYGY=&#34;</span>} 
-</code></pre></div><p><em>Sample JSON from a PubSub event populated by the GA4 tag</em></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{<span style="color:#f92672">&#34;x-ga-protocol_version&#34;</span>: <span style="color:#e6db74">&#34;2&#34;</span>, 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&#34;x-ga-measurement_id&#34;</span>: <span style="color:#e6db74">&#34;G-43MDXK6CLZ&#34;</span>, 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&#34;x-ga-gtm_version&#34;</span>: <span style="color:#e6db74">&#34;2rec10&#34;</span>, 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&#34;x-ga-page_id&#34;</span>: <span style="color:#ae81ff">761826058</span>, 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&#34;screen_resolution&#34;</span>: <span style="color:#e6db74">&#34;2560x1440&#34;</span>, 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&#34;x-ga-system_properties&#34;</span>: {<span style="color:#f92672">&#34;dbg&#34;</span>: <span style="color:#e6db74">&#34;1&#34;</span>}, 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&#34;language&#34;</span>: <span style="color:#e6db74">&#34;en-gb&#34;</span>, 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&#34;client_id&#34;</span>: <span style="color:#e6db74">&#34;1768696203.151234345&#34;</span>, 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&#34;x-ga-request_count&#34;</span>: <span style="color:#ae81ff">5</span>, 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&#34;page_location&#34;</span>: <span style="color:#e6db74">&#34;https://code.markedmondson.me/?gtm_debug=1638524719562&#34;</span>, 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&#34;page_referrer&#34;</span>: <span style="color:#e6db74">&#34;https://tagassistant.google.com/&#34;</span>, 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&#34;page_title&#34;</span>: <span style="color:#e6db74">&#34;Mark Edmondson&#34;</span>, 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&#34;ga_session_id&#34;</span>: <span style="color:#e6db74">&#34;1638520154&#34;</span>, 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&#34;ga_session_number&#34;</span>: <span style="color:#ae81ff">345</span>, 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&#34;x-ga-mp2-seg&#34;</span>: <span style="color:#e6db74">&#34;1&#34;</span>, 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&#34;event_name&#34;</span>: <span style="color:#e6db74">&#34;ga4_email&#34;</span>, 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&#34;engagement_time_msec&#34;</span>: <span style="color:#ae81ff">1</span>, 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&#34;debug_mode&#34;</span>: <span style="color:#e6db74">&#34;true&#34;</span>, 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&#34;custom_session_id&#34;</span>: <span style="color:#e6db74">&#34;1638520154.&#34;</span>, 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&#34;ga4_email&#34;</span>: <span style="color:#e6db74">&#34;an_email@gmail.com&#34;</span>, 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&#34;ip_override&#34;</span>: <span style="color:#e6db74">&#34;123.456.789.876&#34;</span>, 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&#34;user_agent&#34;</span>: <span style="color:#e6db74">&#34;Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:94.0) Gecko/20100101 Firefox/94.0&#34;</span>, 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&#34;x-ga-gcs-origin&#34;</span>: <span style="color:#e6db74">&#34;not-specified&#34;</span>, 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&#34;user_id&#34;</span>: <span style="color:#e6db74">&#34;xloAW6qkF2NSc0xqQ45otXXXXXXpYGY=&#34;</span>} 
+</span></span></code></pre></div><p><em>Sample JSON from a PubSub event populated by the GA4 tag</em></p>
 <p>For the script I only need the <code>ga4_email</code> email address and the <code>client_id</code> which is the ID in the cookie.  Following the documentation for <a href="https://cloud.google.com/build/docs/configuring-builds/use-bash-and-bindings-in-substitutions">Cloud Build payload bindings</a> these can be used within a PubSub triggered Cloud Build via:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">steps</span>:
-- <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#39;rocker/r-base&#39;</span>
-  <span style="color:#f92672">id</span>: <span style="color:#ae81ff">Echo PubSub vars</span>
-  <span style="color:#f92672">args</span>: [<span style="color:#e6db74">&#34;Rscript&#34;</span>, <span style="color:#e6db74">&#34;-e&#34;</span>, <span style="color:#e6db74">&#34;paste(&#39;From PubSub message:&#39;, &#39;${_EMAIL}&#39;, &#39;${_CLIENT_ID}&#39;)&#34;</span>]
-<span style="color:#f92672">substitutions</span>:
-  <span style="color:#f92672">_EMAIL</span>: <span style="color:#e6db74">&#39;$(body.message.data.ga4_email)&#39;</span>
-  <span style="color:#f92672">_CLIENT_ID</span>: <span style="color:#e6db74">&#39;$(body.message.data.client_id)&#39;</span>
-</code></pre></div><p><em>Example cloudbuild.yml for Cloud Build to pick up values from the PubSub message that triggers the build</em></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">steps</span>:
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#39;rocker/r-base&#39;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">id</span>: <span style="color:#ae81ff">Echo PubSub vars</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">args</span>: [<span style="color:#e6db74">&#34;Rscript&#34;</span>, <span style="color:#e6db74">&#34;-e&#34;</span>, <span style="color:#e6db74">&#34;paste(&#39;From PubSub message:&#39;, &#39;${_EMAIL}&#39;, &#39;${_CLIENT_ID}&#39;)&#34;</span>]
+</span></span><span style="display:flex;"><span><span style="color:#f92672">substitutions</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">_EMAIL</span>: <span style="color:#e6db74">&#39;$(body.message.data.ga4_email)&#39;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">_CLIENT_ID</span>: <span style="color:#e6db74">&#39;$(body.message.data.client_id)&#39;</span>
+</span></span></code></pre></div><p><em>Example cloudbuild.yml for Cloud Build to pick up values from the PubSub message that triggers the build</em></p>
 <p>I used an R step just to demo it can be any language you use within it.</p>
 <p>I&rsquo;ll just deploy that first quickly in the console to see if its coming in ok - setting up a new Cloud Build invoked by the <code>gtm-ss-form_submit</code> PubSub topic and using the in-line editor to put in the YAML:</p>
 <p><img src="images/cloud-build-pubsub-trigger-test.png" alt="">
@@ -560,96 +554,96 @@ def trigger(data, topic_name):
 <em>Inspecting the Cloud Build logs to see if the build trigger worked</em></p>
 <p>Now I only need an script to take my variables and do &ldquo;stuff&rdquo;, and since we&rsquo;re on Cloud build it can be any language since its Docker container led in each step.</p>
 <p>The SQL for the report I want is generated by this:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">SELECT</span>
-    timestamp_micros(event_timestamp) <span style="color:#66d9ef">as</span> event_timestamp,
-    user_pseudo_id ,
-    event_name,
-    TIMESTAMP_MICROS(user_first_touch_timestamp) <span style="color:#66d9ef">as</span> first_touch,
-    (<span style="color:#66d9ef">SELECT</span> value.string_value <span style="color:#66d9ef">FROM</span> <span style="color:#66d9ef">UNNEST</span>(event_params) <span style="color:#66d9ef">WHERE</span> <span style="color:#66d9ef">key</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;page_location&#39;</span>) <span style="color:#66d9ef">as</span> page_location,
-    (<span style="color:#66d9ef">SELECT</span> value.string_value <span style="color:#66d9ef">FROM</span> <span style="color:#66d9ef">UNNEST</span>(event_params) <span style="color:#66d9ef">WHERE</span> <span style="color:#66d9ef">key</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;page_referrer&#39;</span>) <span style="color:#66d9ef">as</span> page_referrer
-<span style="color:#66d9ef">FROM</span>
-    <span style="color:#f92672">`</span>my<span style="color:#f92672">-</span>project.analytics_206671234.events_<span style="color:#f92672">*`</span>
-<span style="color:#66d9ef">WHERE</span>
-    _table_suffix <span style="color:#66d9ef">between</span> format_date(<span style="color:#e6db74">&#39;%Y%m%d&#39;</span>,date_sub(<span style="color:#66d9ef">current_date</span>(), interval <span style="color:#ae81ff">90</span> <span style="color:#66d9ef">day</span>)) 
-       <span style="color:#66d9ef">and</span> format_date(<span style="color:#e6db74">&#39;%Y%m%d&#39;</span>,date_sub(<span style="color:#66d9ef">current_date</span>(), interval <span style="color:#ae81ff">0</span> <span style="color:#66d9ef">day</span>))
-    <span style="color:#66d9ef">and</span> event_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;page_view&#39;</span> 
-    <span style="color:#66d9ef">and</span> user_pseudo_id <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;${_CLIENT_ID}&#39;</span>
-</code></pre></div><p><em>SQL to return the page_view events for a specific client_id from a BigQuery GA4 export</em></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span>
+</span></span><span style="display:flex;"><span>    timestamp_micros(event_timestamp) <span style="color:#66d9ef">as</span> event_timestamp,
+</span></span><span style="display:flex;"><span>    user_pseudo_id ,
+</span></span><span style="display:flex;"><span>    event_name,
+</span></span><span style="display:flex;"><span>    TIMESTAMP_MICROS(user_first_touch_timestamp) <span style="color:#66d9ef">as</span> first_touch,
+</span></span><span style="display:flex;"><span>    (<span style="color:#66d9ef">SELECT</span> value.string_value <span style="color:#66d9ef">FROM</span> <span style="color:#66d9ef">UNNEST</span>(event_params) <span style="color:#66d9ef">WHERE</span> <span style="color:#66d9ef">key</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;page_location&#39;</span>) <span style="color:#66d9ef">as</span> page_location,
+</span></span><span style="display:flex;"><span>    (<span style="color:#66d9ef">SELECT</span> value.string_value <span style="color:#66d9ef">FROM</span> <span style="color:#66d9ef">UNNEST</span>(event_params) <span style="color:#66d9ef">WHERE</span> <span style="color:#66d9ef">key</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;page_referrer&#39;</span>) <span style="color:#66d9ef">as</span> page_referrer
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">FROM</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">`</span>my<span style="color:#f92672">-</span>project.analytics_206671234.events_<span style="color:#f92672">*`</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">WHERE</span>
+</span></span><span style="display:flex;"><span>    _table_suffix <span style="color:#66d9ef">between</span> format_date(<span style="color:#e6db74">&#39;%Y%m%d&#39;</span>,date_sub(<span style="color:#66d9ef">current_date</span>(), interval <span style="color:#ae81ff">90</span> <span style="color:#66d9ef">day</span>)) 
+</span></span><span style="display:flex;"><span>       <span style="color:#66d9ef">and</span> format_date(<span style="color:#e6db74">&#39;%Y%m%d&#39;</span>,date_sub(<span style="color:#66d9ef">current_date</span>(), interval <span style="color:#ae81ff">0</span> <span style="color:#66d9ef">day</span>))
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">and</span> event_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;page_view&#39;</span> 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">and</span> user_pseudo_id <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;${_CLIENT_ID}&#39;</span>
+</span></span></code></pre></div><p><em>SQL to return the page_view events for a specific client_id from a BigQuery GA4 export</em></p>
 <p>I have a <code>gcr.io/gcer-public/googleauthr-verse</code> docker container that contains all of my R packages, including <code>bigQueryR</code> that can query the GA4 dataset, and I&rsquo;ve added <a href="https://pkgs.rstudio.com/blastula"><code>blastula</code> a package for sending nice emails</a> using <a href="https://code.markedmondson.me/googleCloudRunner/reference/cr_deploy_docker_trigger.html"><code>googleAuthR::cr_deploy_docker_trigger()</code></a> to create it, giving me a <code>gcr.io/gcer-public/googleauthr-blast</code> docker image I can use as the R environment for my build steps.  I have to say <a href="https://code.markedmondson.me/googleCloudRunner/"><code>googleCloudRunner</code></a> has saved me personally a lot of time automating set-ups like this, and is my favourite tool.</p>
 <h4 id="calling-bigquery">Calling BigQuery</h4>
 <p>Now I have my Docker environment set-up, I need the script to call BigQuery and send the email.  <a href="https://code.markedmondson.me/bigQueryR/">bigQueryR</a> can take advantage of itself running on Cloud Build to auto-authenticate itself so long as you add the Cloud Build email as a BigQuery Admin in the IAM.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(bigQueryR)
-googleAuthR<span style="color:#f92672">::</span><span style="color:#a6e22e">gar_gce_auth</span>()
-
-<span style="color:#75715e"># the GA4 dataset</span>
-<span style="color:#a6e22e">bqr_global_dataset</span>(<span style="color:#e6db74">&#34;analytics_206670707&#34;</span>)
-
-query_client_id <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function</span>(client_id, sql_file){
-
-  <span style="color:#75715e"># read in SQL file and interpolate client_id</span>
-  sql <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">readChar</span>(sql_file, <span style="color:#a6e22e">file.size</span>(sql_file))
-  sql_client_id <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">sprintf</span>(sql, client_id)
-  
-  results <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">bqr_query</span>(
-    query <span style="color:#f92672">=</span> sql_client_id,
-    useLegacySql<span style="color:#f92672">=</span><span style="color:#66d9ef">FALSE</span>
-  )
-  
-  <span style="color:#a6e22e">if</span>(<span style="color:#a6e22e">nrow</span>(results) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>){
-    <span style="color:#a6e22e">message</span>(<span style="color:#e6db74">&#34;Writing &#34;</span>, <span style="color:#a6e22e">nrow</span>(results), <span style="color:#e6db74">&#34; rows to bigquery_results.csv&#34;</span>)
-    <span style="color:#a6e22e">write.csv</span>(results, file <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;bigquery_results.csv&#34;</span>, row.names <span style="color:#f92672">=</span> <span style="color:#66d9ef">FALSE</span>)
-  } else {
-    <span style="color:#a6e22e">message</span>(<span style="color:#e6db74">&#34;No data found for &#34;</span>, client_id)
-  }
-  
-  <span style="color:#66d9ef">TRUE</span>
-
-}
-</code></pre></div><p><em>R code running in a Cloud Build step to query BigQuery for the client_id data and save to a CSV</em></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(bigQueryR)
+</span></span><span style="display:flex;"><span>googleAuthR<span style="color:#f92672">::</span><span style="color:#a6e22e">gar_gce_auth</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># the GA4 dataset</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">bqr_global_dataset</span>(<span style="color:#e6db74">&#34;analytics_206670707&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>query_client_id <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function</span>(client_id, sql_file){
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># read in SQL file and interpolate client_id</span>
+</span></span><span style="display:flex;"><span>  sql <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">readChar</span>(sql_file, <span style="color:#a6e22e">file.size</span>(sql_file))
+</span></span><span style="display:flex;"><span>  sql_client_id <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">sprintf</span>(sql, client_id)
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  results <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">bqr_query</span>(
+</span></span><span style="display:flex;"><span>    query <span style="color:#f92672">=</span> sql_client_id,
+</span></span><span style="display:flex;"><span>    useLegacySql<span style="color:#f92672">=</span><span style="color:#66d9ef">FALSE</span>
+</span></span><span style="display:flex;"><span>  )
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">if</span>(<span style="color:#a6e22e">nrow</span>(results) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>){
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">message</span>(<span style="color:#e6db74">&#34;Writing &#34;</span>, <span style="color:#a6e22e">nrow</span>(results), <span style="color:#e6db74">&#34; rows to bigquery_results.csv&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">write.csv</span>(results, file <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;bigquery_results.csv&#34;</span>, row.names <span style="color:#f92672">=</span> <span style="color:#66d9ef">FALSE</span>)
+</span></span><span style="display:flex;"><span>  } else {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">message</span>(<span style="color:#e6db74">&#34;No data found for &#34;</span>, client_id)
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">TRUE</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><em>R code running in a Cloud Build step to query BigQuery for the client_id data and save to a CSV</em></p>
 <p>You could replace this with <code>gcloud</code> or Python or any code you like to query BigQuery, I just have this all handy from other work so its a quick start up time to reuse it.</p>
 <h4 id="sending-the-email">Sending the email</h4>
 <p>The <a href="https://github.com/rstudio/blastula">R library blastula</a> has the ability to make markdown emails which render to <a href="https://solutions.rstudio.com/r/blastula/">beautiful HTML emails</a>, so I use that to generate the email itself.  This email doesn&rsquo;t showcase its capabilities but when I expand on this privately it will be the framework to use.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(blastula)
-creds <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">creds_file</span>(<span style="color:#e6db74">&#34;/workspace/blastula_gmail_creds&#34;</span>)
-email <span style="color:#f92672">%&gt;%</span>
-  <span style="color:#a6e22e">smtp_send</span>(
-    to <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;jane_doe@example.com&#34;</span>,
-    from <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;joe_public@example.net&#34;</span>,
-    subject <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Testing the `smtp_send()` function&#34;</span>,
-    credentials <span style="color:#f92672">=</span> creds
-  )
-</code></pre></div><h4 id="build-yaml-to-coordinate-the-steps">Build yaml to coordinate the steps</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(blastula)
+</span></span><span style="display:flex;"><span>creds <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">creds_file</span>(<span style="color:#e6db74">&#34;/workspace/blastula_gmail_creds&#34;</span>)
+</span></span><span style="display:flex;"><span>email <span style="color:#f92672">%&gt;%</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">smtp_send</span>(
+</span></span><span style="display:flex;"><span>    to <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;jane_doe@example.com&#34;</span>,
+</span></span><span style="display:flex;"><span>    from <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;joe_public@example.net&#34;</span>,
+</span></span><span style="display:flex;"><span>    subject <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Testing the `smtp_send()` function&#34;</span>,
+</span></span><span style="display:flex;"><span>    credentials <span style="color:#f92672">=</span> creds
+</span></span><span style="display:flex;"><span>  )
+</span></span></code></pre></div><h4 id="build-yaml-to-coordinate-the-steps">Build yaml to coordinate the steps</h4>
 <p>I then used <code>googleCloudRunner</code> to generate the YAML below for my Cloud Build, that uses the Docker containers and scripts within to</p>
 <ul>
 <li>Download my secret email credentials</li>
 <li>Query BigQuery for the data for the client_id</li>
 <li>Send an email with the BigQuery data to the user&rsquo;s email</li>
 </ul>
-<pre tabindex="0"><code class="language-{yaml}" data-lang="{yaml}">steps:
-  - name: gcr.io/cloud-builders/gcloud
-    args:
-      - '-c'
-      - &gt;-
-        gcloud secrets versions access latest --secret=blastula_gmail_creds  &gt;
-        /workspace/blastula_gmail_creds
-    entrypoint: bash
-  - name: gcr.io/gcer-public/googleauthr-blast
-    env:
-      - BQ_DEFAULT_PROJECT_ID=$PROJECT_ID
-      - 'CLIENT_ID=${_CLIENT_ID}'
-    args:
-      - Rscript
-      - /workspace/bigquery-clientid.R
-  - name: gcr.io/gcer-public/googleauthr-blast
-    env:
-      - 'EMAIL=${_EMAIL}'
-    args:
-      - Rscript
-      - /workspace/send_email.R
-substitutions:
-  _CLIENT_ID: $(body.message.data.client_id)
-  _EMAIL: $(body.message.data.ga4_email)
-</code></pre><p>After deployment, now when I submit the form on the website I see:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">steps</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">gcr.io/cloud-builders/gcloud</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">args</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#39;-c&#39;</span>
+</span></span><span style="display:flex;"><span>      - &gt;-<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        gcloud secrets versions access latest --secret=blastula_gmail_creds  &gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        /workspace/blastula_gmail_creds</span>        
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">entrypoint</span>: <span style="color:#ae81ff">bash</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">gcr.io/gcer-public/googleauthr-blast</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">env</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">BQ_DEFAULT_PROJECT_ID=$PROJECT_ID</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#39;CLIENT_ID=${_CLIENT_ID}&#39;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">args</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">Rscript</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">/workspace/bigquery-clientid.R</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">gcr.io/gcer-public/googleauthr-blast</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">env</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#39;EMAIL=${_EMAIL}&#39;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">args</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">Rscript</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">/workspace/send_email.R</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">substitutions</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">_CLIENT_ID</span>: <span style="color:#ae81ff">$(body.message.data.client_id)</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">_EMAIL</span>: <span style="color:#ae81ff">$(body.message.data.ga4_email)</span>
+</span></span></code></pre></div><p>After deployment, now when I submit the form on the website I see:</p>
 <ol>
 <li>A dataLayer push</li>
 <li>The GA4 tag firing sending data to GTM-SS</li>
@@ -664,7 +658,6 @@ substitutions:
 <p>This may have been a wild tour through a GA4 data pipeline, but I hope if not followed in full at least components of it may spark your interest for your own use cases.  The advantages of involving PubSub in your workflows is having this loosely coupled message queue that micro-services that can all react to - for instance I could quite easily swap or add DataFlow as my activation channel, and quickly add new GA4 events to the stream since the GTM tag, Cloud Function etc. are all set up already.  With the tools in the tool box such as the Cloud Function and the GTM-SS tag template I am ready to respond to many other use cases that come up and I anticipate 2022 will make use of these heavily.</p>
         </div>
         <footer class="article-footer">
-    <a data-url="https://code.markedmondson.me/sending-ga4-events-pubsub/" data-id="44bbf3eb49f73a64efc3e3207a5504c0" class="article-share-link">
         <i class="fa fa-share"></i>
         Share
     </a>
@@ -741,11 +734,11 @@ substitutions:
     
 <nav id="article-nav">
     
-    <a href="https://code.markedmondson.me/writing-a-book/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="https://code.markedmondson.me/gtm-serverside-cloudrun/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">
           Older
       </strong>
-      <div class="article-nav-title">Why and How I&#39;m writing a GA4 book called &#39;Learning Google Analytics&#39; for O&#39;Reilly</div>
+      <div class="article-nav-title">Google Tag Manager Server Side on Cloud Run - Pros and Cons</div>
     </a>
     
 
@@ -803,68 +796,68 @@ substitutions:
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/writing-a-book/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/gtm-serverside-cloudrun/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/proto-book.png)" alt="Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/princess-gtm.png)" alt="Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/writing-a-book/" class="title">Why and How I&#39;m writing a GA4 book called &#39;Learning Google Analytics&#39; for O&#39;Reilly</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/gtm-serverside-cloudrun/" class="title">Google Tag Manager Server Side on Cloud Run - Pros and Cons</a></p>
                     <p class="item-date">
-                        <time datetime="2021-10-23 11:04:50 &#43;0100 &#43;0100" itemprop="datePublished">2021-10-23</time>
+                        <time datetime="2020-08-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-21</time>
                     </p>
                 </div>
             </li>
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/googleanalyticsr-100-release/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/shiny-cloudrun/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/GA4-090.png)" alt="Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/shiny-clouds.jpg)" alt="Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/googleanalyticsr-100-release/" class="title">googleAnalyticsR v1.0.0 - GA4 API, Automatic Shiny Dashboarding, Improved UI</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/shiny-cloudrun/" class="title">Shiny on Google Cloud Run - Scale-to-Zero R Web Apps</a></p>
                     <p class="item-date">
-                        <time datetime="2021-04-17 09:29:50 &#43;0100 &#43;0100" itemprop="datePublished">2021-04-17</time>
+                        <time datetime="2020-08-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-01</time>
                     </p>
                 </div>
             </li>
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/edmondlytica/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/datascience-aas/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/edmonlytica-shiny1.png)" alt="Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/piketty-capital.png)" alt="Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/edmondlytica/" class="title">Creating your own cookieless analytics tool with GTM Server Side, Cloud Run, BigQuery and Shiny</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/datascience-aas/" class="title">Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions</a></p>
                     <p class="item-date">
-                        <time datetime="2021-03-21 09:29:50 &#43;0100 CET" itemprop="datePublished">2021-03-21</time>
+                        <time datetime="2020-06-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-06-28</time>
                     </p>
                 </div>
             </li>
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/gtm-serverside-webhooks/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/googleCloudRunner-intro/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/gtm-serverside-events.png)" alt="Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/gcp-pyramid.png)" alt="Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/gtm-serverside-webhooks/" class="title">Using Google Tag Manager Server Side to Trigger Webhook Events</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/googleCloudRunner-intro/" class="title">Introducing googleCloudRunner - serverless R on Google Cloud Platform</a></p>
                     <p class="item-date">
-                        <time datetime="2020-09-04 12:50:50 &#43;0100 &#43;0100" itemprop="datePublished">2020-09-04</time>
+                        <time datetime="2020-01-18 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-01-18</time>
                     </p>
                 </div>
             </li>
@@ -933,7 +926,7 @@ substitutions:
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/r">
                     R
                 </a>
-                <span class="category-list-count">22</span>
+                <span class="category-list-count">14</span>
             </li>
             
             <li class="category-list-item">
@@ -941,7 +934,7 @@ substitutions:
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/big-query">
                     big-query
                 </a>
-                <span class="category-list-count">7</span>
+                <span class="category-list-count">4</span>
             </li>
             
             <li class="category-list-item">
@@ -949,7 +942,7 @@ substitutions:
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/blogging">
                     blogging
                 </a>
-                <span class="category-list-count">3</span>
+                <span class="category-list-count">1</span>
             </li>
             
             <li class="category-list-item">
@@ -957,7 +950,7 @@ substitutions:
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-functions">
                     cloud-functions
                 </a>
-                <span class="category-list-count">5</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -965,7 +958,7 @@ substitutions:
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-run">
                     cloud-run
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -973,7 +966,7 @@ substitutions:
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/docker">
                     docker
                 </a>
-                <span class="category-list-count">9</span>
+                <span class="category-list-count">8</span>
             </li>
             
             <li class="category-list-item">
@@ -989,7 +982,7 @@ substitutions:
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-analytics">
                     google-analytics
                 </a>
-                <span class="category-list-count">12</span>
+                <span class="category-list-count">6</span>
             </li>
             
             <li class="category-list-item">
@@ -997,7 +990,7 @@ substitutions:
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-app-engine">
                     google-app-engine
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -1005,7 +998,7 @@ substitutions:
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-auth">
                     google-auth
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">2</span>
             </li>
             
             <li class="category-list-item">
@@ -1013,7 +1006,7 @@ substitutions:
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-cloud-storage">
                     google-cloud-storage
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -1021,15 +1014,7 @@ substitutions:
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-compute-engine">
                     google-compute-engine
                 </a>
-                <span class="category-list-count">7</span>
-            </li>
-            
-            <li class="category-list-item">
-                
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-language">
-                    google-language
-                </a>
-                <span class="category-list-count">2</span>
+                <span class="category-list-count">5</span>
             </li>
             
             <li class="category-list-item">
@@ -1037,7 +1022,7 @@ substitutions:
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-tag-manager">
                     google-tag-manager
                 </a>
-                <span class="category-list-count">7</span>
+                <span class="category-list-count">4</span>
             </li>
             
             <li class="category-list-item">
@@ -1045,7 +1030,7 @@ substitutions:
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/pubsub">
                     pubsub
                 </a>
-                <span class="category-list-count">3</span>
+                <span class="category-list-count">2</span>
             </li>
             
             <li class="category-list-item">
@@ -1053,7 +1038,7 @@ substitutions:
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/python">
                     python
                 </a>
-                <span class="category-list-count">6</span>
+                <span class="category-list-count">5</span>
             </li>
             
             <li class="category-list-item">
@@ -1061,7 +1046,7 @@ substitutions:
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/rstudio-server">
                     rstudio-server
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -1069,7 +1054,7 @@ substitutions:
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/search-console">
                     search-console
                 </a>
-                <span class="category-list-count">3</span>
+                <span class="category-list-count">1</span>
             </li>
             
         </ul>
@@ -1092,7 +1077,7 @@ substitutions:
 <footer id="footer">
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2022
+      &copy; 2023
       Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
     </div>
   </div>

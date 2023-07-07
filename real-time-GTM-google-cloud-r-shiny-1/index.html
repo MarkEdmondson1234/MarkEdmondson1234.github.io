@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
-    <script async src="https://www.googleoptimize.com/optimize.js?id=GTM-WMXD7V"></script>
     <title>Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one &middot; Mark Edmondson</title>
-    <meta name="generator" content="Hugo 0.92.0" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
     
       <meta name="description" content="The code bit of the blog">
     
-    
+      <link href="Page%28/post/2017-01-12-real-time-GTM-google-cloud-r-shiny-1.md%29" rel="alternate" type="application/rss+xml" title="Mark Edmondson" />
+      <link href="Page%28/post/2017-01-12-real-time-GTM-google-cloud-r-shiny-1.md%29" rel="feed" type="application/rss+xml" title="Mark Edmondson" />
     <link rel="canonical" href="https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/"/>
     <link rel="icon" href="https://code.markedmondson.me/favicon.ico">
     <link rel="apple-touch-icon" href="https://code.markedmondson.me/apple-touch-icon.png"/>
@@ -28,8 +27,6 @@
 <meta property="article:published_time" content="2017-01-12T23:03:57+01:00" />
 <meta property="article:modified_time" content="2017-01-12T23:03:57+01:00" />
 
-
-    
     <meta itemprop="name" content="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one">
 <meta itemprop="description" content="In part one of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&rsquo;s data streaming capability. In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in Shiny and the JavaScript visualisation library Highcharts."><meta itemprop="datePublished" content="2017-01-12T23:03:57+01:00" />
 <meta itemprop="dateModified" content="2017-01-12T23:03:57+01:00" />
@@ -82,8 +79,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           
 
           
-          <a class="main-nav-link" href="/r-packages/">My R Packages</a>
-          
 
           
           
@@ -126,8 +121,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           
           
 
-          
-          <td><a class="main-nav-link" href="/r-packages/">My R Packages</a></td>
           
 
           
@@ -173,12 +166,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        31
+        20
         <span>Posts</span>
       </div>
       <div class="article-info-block">
         
-          18
+          17
         
         <span>
             Tags
@@ -352,98 +345,97 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <h3 id="adding-data-to-bigquery">Adding data to BigQuery</h3>
 <p>You can read more about <a href="https://cloud.google.com/bigquery/streaming-data-into-bigquery">streaming data into BigQuery here</a>.</p>
 <p>The first function is modified from the <a href="https://github.com/GoogleCloudPlatform/python-docs-samples/blob/master/bigquery/cloud-client/stream_data.py">python BigQuery examples</a> and takes care of authentication, loading the JSON sent to the app into a Python list and sending to BigQuery:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">stream_data</span>(dataset_name, table_name, json_data, time_stamp <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()):
-    bigquery_client <span style="color:#f92672">=</span> bigquery<span style="color:#f92672">.</span>Client()
-    dataset <span style="color:#f92672">=</span> bigquery_client<span style="color:#f92672">.</span>dataset(dataset_name)
-    table <span style="color:#f92672">=</span> dataset<span style="color:#f92672">.</span>table(table_name)
-    data <span style="color:#f92672">=</span> json_data
-
-    data[<span style="color:#e6db74">&#39;ts&#39;</span>] <span style="color:#f92672">=</span> time_stamp
-
-    <span style="color:#75715e"># Reload the table to get the schema.</span>
-    table<span style="color:#f92672">.</span>reload()
-
-    <span style="color:#75715e">## get the names of schema</span>
-    schema <span style="color:#f92672">=</span> table<span style="color:#f92672">.</span>schema
-    schema_names <span style="color:#f92672">=</span> [o<span style="color:#f92672">.</span>name <span style="color:#66d9ef">for</span> o <span style="color:#f92672">in</span> schema]
-
-    logging<span style="color:#f92672">.</span>debug(<span style="color:#e6db74">&#39;BQ Schema: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(schema_names))
-
-    <span style="color:#75715e"># from schema names get list of tuples of the values</span>
-    rows <span style="color:#f92672">=</span> [(data[x] <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> schema_names)]
-
-    <span style="color:#75715e"># Send data to bigquery, returning any errors</span>
-    errors <span style="color:#f92672">=</span> table<span style="color:#f92672">.</span>insert_data(rows, row_ids <span style="color:#f92672">=</span> str(uuid<span style="color:#f92672">.</span>uuid4()))
-
-    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> errors:
-    	logging<span style="color:#f92672">.</span>debug(<span style="color:#e6db74">&#39;Loaded 1 row into </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">:</span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(dataset_name, table_name))
-    <span style="color:#66d9ef">else</span>:
-        logging<span style="color:#f92672">.</span>error(errors)
-</code></pre></div><p>The next class reads the data from a GET or POST request to the URL we specify later, and puts the job into a task queue, along with the timestamp.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MainHandler</span>(webapp2<span style="color:#f92672">.</span>RequestHandler):
-
-	<span style="color:#75715e">## for debugging</span>
-	<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get</span>(self):
-		<span style="color:#75715e">## allows CORS</span>
-		self<span style="color:#f92672">.</span>response<span style="color:#f92672">.</span>headers<span style="color:#f92672">.</span>add_header(<span style="color:#e6db74">&#34;Access-Control-Allow-Origin&#34;</span>, <span style="color:#e6db74">&#34;*&#34;</span>)
-
-		<span style="color:#75715e">## get example.com?bq=blah</span>
-		b <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>request<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;bq&#34;</span>)
-
-		<span style="color:#75715e">## send to async task URL</span>
-		task <span style="color:#f92672">=</span> taskqueue<span style="color:#f92672">.</span>add(url<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;/bq-task&#39;</span>, params<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#39;bq&#39;</span>: b, <span style="color:#e6db74">&#39;ts&#39;</span>: str(time<span style="color:#f92672">.</span>time())})
-
-	<span style="color:#75715e"># use in prod</span>
-	<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">post</span>(self):
-		<span style="color:#75715e">## allows CORS</span>
-		self<span style="color:#f92672">.</span>response<span style="color:#f92672">.</span>headers<span style="color:#f92672">.</span>add_header(<span style="color:#e6db74">&#34;Access-Control-Allow-Origin&#34;</span>, <span style="color:#e6db74">&#34;*&#34;</span>)
-
-		<span style="color:#75715e">## get example.com?bq=blah</span>
-		b <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>request<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;bq&#34;</span>)
-
-		<span style="color:#75715e">## send to task URL</span>
-		task <span style="color:#f92672">=</span> taskqueue<span style="color:#f92672">.</span>add(url<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;/bq-task&#39;</span>, params<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#39;bq&#39;</span>: b, <span style="color:#e6db74">&#39;ts&#39;</span>: str(time<span style="color:#f92672">.</span>time())})
-</code></pre></div><p>The task queue then reads the JSON data and calls the function to send data into BigQuery.  App Engine task queues will rerun if any connection problems and act as a buffer, so you can configure them to suit the needs and volumes of your app.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BqHandler</span>(webapp2<span style="color:#f92672">.</span>RequestHandler):
-	<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">post</span>(self):
-
-		<span style="color:#75715e">## get example.com/bq-task?bq=blah</span>
-		b <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>request<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;bq&#34;</span>)
-		ts <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>request<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;ts&#34;</span>)
-
-		b <span style="color:#f92672">=</span> json<span style="color:#f92672">.</span>loads(b)
-
-		logging<span style="color:#f92672">.</span>debug(<span style="color:#e6db74">&#39;json load: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(b))
-
-		<span style="color:#66d9ef">if</span> len(b) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>:
-			datasetId <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#39;DATASET_ID&#39;</span>]
-			tableId   <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#39;TABLE_ID&#39;</span>]
-
-			today <span style="color:#f92672">=</span> date<span style="color:#f92672">.</span>today()<span style="color:#f92672">.</span>strftime(<span style="color:#e6db74">&#34;%Y%m</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span>)
-
-			tableId <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">$</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">%</span>(tableId, today)
-
-			stream_data(datasetId, tableId, b, ts)
-
-</code></pre></div><h3 id="full-app-engine-script">Full App Engine Script</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">stream_data</span>(dataset_name, table_name, json_data, time_stamp <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()):
+</span></span><span style="display:flex;"><span>    bigquery_client <span style="color:#f92672">=</span> bigquery<span style="color:#f92672">.</span>Client()
+</span></span><span style="display:flex;"><span>    dataset <span style="color:#f92672">=</span> bigquery_client<span style="color:#f92672">.</span>dataset(dataset_name)
+</span></span><span style="display:flex;"><span>    table <span style="color:#f92672">=</span> dataset<span style="color:#f92672">.</span>table(table_name)
+</span></span><span style="display:flex;"><span>    data <span style="color:#f92672">=</span> json_data
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    data[<span style="color:#e6db74">&#39;ts&#39;</span>] <span style="color:#f92672">=</span> time_stamp
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Reload the table to get the schema.</span>
+</span></span><span style="display:flex;"><span>    table<span style="color:#f92672">.</span>reload()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">## get the names of schema</span>
+</span></span><span style="display:flex;"><span>    schema <span style="color:#f92672">=</span> table<span style="color:#f92672">.</span>schema
+</span></span><span style="display:flex;"><span>    schema_names <span style="color:#f92672">=</span> [o<span style="color:#f92672">.</span>name <span style="color:#66d9ef">for</span> o <span style="color:#f92672">in</span> schema]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    logging<span style="color:#f92672">.</span>debug(<span style="color:#e6db74">&#39;BQ Schema: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(schema_names))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># from schema names get list of tuples of the values</span>
+</span></span><span style="display:flex;"><span>    rows <span style="color:#f92672">=</span> [(data[x] <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> schema_names)]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Send data to bigquery, returning any errors</span>
+</span></span><span style="display:flex;"><span>    errors <span style="color:#f92672">=</span> table<span style="color:#f92672">.</span>insert_data(rows, row_ids <span style="color:#f92672">=</span> str(uuid<span style="color:#f92672">.</span>uuid4()))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> errors:
+</span></span><span style="display:flex;"><span>    	logging<span style="color:#f92672">.</span>debug(<span style="color:#e6db74">&#39;Loaded 1 row into </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">:</span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(dataset_name, table_name))
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>        logging<span style="color:#f92672">.</span>error(errors)
+</span></span></code></pre></div><p>The next class reads the data from a GET or POST request to the URL we specify later, and puts the job into a task queue, along with the timestamp.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MainHandler</span>(webapp2<span style="color:#f92672">.</span>RequestHandler):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">## for debugging</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get</span>(self):
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">## allows CORS</span>
+</span></span><span style="display:flex;"><span>		self<span style="color:#f92672">.</span>response<span style="color:#f92672">.</span>headers<span style="color:#f92672">.</span>add_header(<span style="color:#e6db74">&#34;Access-Control-Allow-Origin&#34;</span>, <span style="color:#e6db74">&#34;*&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">## get example.com?bq=blah</span>
+</span></span><span style="display:flex;"><span>		b <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>request<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;bq&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">## send to async task URL</span>
+</span></span><span style="display:flex;"><span>		task <span style="color:#f92672">=</span> taskqueue<span style="color:#f92672">.</span>add(url<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;/bq-task&#39;</span>, params<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#39;bq&#39;</span>: b, <span style="color:#e6db74">&#39;ts&#39;</span>: str(time<span style="color:#f92672">.</span>time())})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e"># use in prod</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">post</span>(self):
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">## allows CORS</span>
+</span></span><span style="display:flex;"><span>		self<span style="color:#f92672">.</span>response<span style="color:#f92672">.</span>headers<span style="color:#f92672">.</span>add_header(<span style="color:#e6db74">&#34;Access-Control-Allow-Origin&#34;</span>, <span style="color:#e6db74">&#34;*&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">## get example.com?bq=blah</span>
+</span></span><span style="display:flex;"><span>		b <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>request<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;bq&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">## send to task URL</span>
+</span></span><span style="display:flex;"><span>		task <span style="color:#f92672">=</span> taskqueue<span style="color:#f92672">.</span>add(url<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;/bq-task&#39;</span>, params<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#39;bq&#39;</span>: b, <span style="color:#e6db74">&#39;ts&#39;</span>: str(time<span style="color:#f92672">.</span>time())})
+</span></span></code></pre></div><p>The task queue then reads the JSON data and calls the function to send data into BigQuery.  App Engine task queues will rerun if any connection problems and act as a buffer, so you can configure them to suit the needs and volumes of your app.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BqHandler</span>(webapp2<span style="color:#f92672">.</span>RequestHandler):
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">post</span>(self):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">## get example.com/bq-task?bq=blah</span>
+</span></span><span style="display:flex;"><span>		b <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>request<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;bq&#34;</span>)
+</span></span><span style="display:flex;"><span>		ts <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>request<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;ts&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		b <span style="color:#f92672">=</span> json<span style="color:#f92672">.</span>loads(b)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		logging<span style="color:#f92672">.</span>debug(<span style="color:#e6db74">&#39;json load: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(b))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> len(b) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>:
+</span></span><span style="display:flex;"><span>			datasetId <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#39;DATASET_ID&#39;</span>]
+</span></span><span style="display:flex;"><span>			tableId   <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#39;TABLE_ID&#39;</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>			today <span style="color:#f92672">=</span> date<span style="color:#f92672">.</span>today()<span style="color:#f92672">.</span>strftime(<span style="color:#e6db74">&#34;%Y%m</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>			tableId <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">$</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">%</span>(tableId, today)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>			stream_data(datasetId, tableId, b, ts)
+</span></span></code></pre></div><h3 id="full-app-engine-script">Full App Engine Script</h3>
 <p>The full script uploaded is available in the Github repository here: <a href="https://github.com/MarkEdmondson1234/ga-bq-stream/blob/master/main.py">main.py</a> which also includes the read functions used in the next blogpost.</p>
 <p>With this script you then need some configuration files for the app and upload it to your Google Project.  A guide on how to deploy this is and more is available from the <a href="https://github.com/MarkEdmondson1234/ga-bq-stream/blob/master/README.md">Github repository README</a>, but once done the app will be available at <code>https://YOUR-PROJECT-ID.appspot.com</code> and you will call the <code>/bq-streamer</code> and <code>/bq-get</code> URLs to send and get data.</p>
 <h2 id="google-tag-manager">Google Tag Manager</h2>
 <p>With the app ready, we now move to sending it data via Google Tag Manager.  This is relatively simple, since we just need to decide which data to add to the endpoint URL:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">script</span><span style="color:#f92672">&gt;</span>
-
-  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">bqArray</span> <span style="color:#f92672">=</span> {};
-        
-  <span style="color:#75715e">// put the variables you want realtime here      
-</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">bqArray</span>[<span style="color:#e6db74">&#34;fieldname&#34;</span>] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;{{dataLayer}}&#34;</span>;
-  <span style="color:#a6e22e">bqArray</span>[<span style="color:#e6db74">&#34;fieldname2&#34;</span>] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;{{dataLayer2}}&#34;</span>;
-  	
-  <span style="color:#a6e22e">jQuery</span>.<span style="color:#a6e22e">post</span>(<span style="color:#e6db74">&#34;https://YOUR-PROJECT-ID.appspot.com/bq-streamer&#34;</span>, {<span style="color:#e6db74">&#34;bq&#34;</span><span style="color:#f92672">:</span><span style="color:#a6e22e">JSON</span>.<span style="color:#a6e22e">stringify</span>(<span style="color:#a6e22e">bqArray</span>)});
-
-<span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/script&gt;</span>
-</code></pre></div><p>The script assumes you have jQuery defined on your website, if you haven&rsquo;t you will need to load it either on the page or hack it a bit by loading above the script via:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js&#34;</span><span style="color:#f92672">&gt;&lt;</span><span style="color:#960050;background-color:#1e0010">/script&gt;</span>
-</code></pre></div><p>For my blog example, here is a screenshot from GTM all configured:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">script</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">bqArray</span> <span style="color:#f92672">=</span> {};
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// put the variables you want realtime here      
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">bqArray</span>[<span style="color:#e6db74">&#34;fieldname&#34;</span>] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;{{dataLayer}}&#34;</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">bqArray</span>[<span style="color:#e6db74">&#34;fieldname2&#34;</span>] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;{{dataLayer2}}&#34;</span>;
+</span></span><span style="display:flex;"><span>  	
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">jQuery</span>.<span style="color:#a6e22e">post</span>(<span style="color:#e6db74">&#34;https://YOUR-PROJECT-ID.appspot.com/bq-streamer&#34;</span>, {<span style="color:#e6db74">&#34;bq&#34;</span><span style="color:#f92672">:</span><span style="color:#a6e22e">JSON</span>.<span style="color:#a6e22e">stringify</span>(<span style="color:#a6e22e">bqArray</span>)});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/script&gt;</span>
+</span></span></code></pre></div><p>The script assumes you have jQuery defined on your website, if you haven&rsquo;t you will need to load it either on the page or hack it a bit by loading above the script via:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js&#34;</span><span style="color:#f92672">&gt;&lt;</span><span style="color:#960050;background-color:#1e0010">/script&gt;</span>
+</span></span></code></pre></div><p>For my blog example, here is a screenshot from GTM all configured:</p>
 <p><img src="../images/GTMconfig.png" alt="gtm"></p>
 <p>The app engine supports GET or POST hits, GET is useful for testing in the browser yourself but its better to POST in production as it supports more data.</p>
 <p>Add this as a custom HTML tag and deploy on a trigger that occurs after the data you want to collect is there.  Thats pretty much it.</p>
@@ -455,7 +447,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         </div>
         <footer class="article-footer">
-    <a data-url="https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-1/" data-id="b16f09ce10d075f772e1a8299cac80b3" class="article-share-link">
         <i class="fa fa-share"></i>
         Share
     </a>
@@ -601,68 +592,68 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/writing-a-book/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/gtm-serverside-cloudrun/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/proto-book.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/princess-gtm.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/writing-a-book/" class="title">Why and How I&#39;m writing a GA4 book called &#39;Learning Google Analytics&#39; for O&#39;Reilly</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/gtm-serverside-cloudrun/" class="title">Google Tag Manager Server Side on Cloud Run - Pros and Cons</a></p>
                     <p class="item-date">
-                        <time datetime="2021-10-23 11:04:50 &#43;0100 &#43;0100" itemprop="datePublished">2021-10-23</time>
+                        <time datetime="2020-08-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-21</time>
                     </p>
                 </div>
             </li>
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/googleanalyticsr-100-release/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/shiny-cloudrun/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/GA4-090.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/shiny-clouds.jpg)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/googleanalyticsr-100-release/" class="title">googleAnalyticsR v1.0.0 - GA4 API, Automatic Shiny Dashboarding, Improved UI</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/shiny-cloudrun/" class="title">Shiny on Google Cloud Run - Scale-to-Zero R Web Apps</a></p>
                     <p class="item-date">
-                        <time datetime="2021-04-17 09:29:50 &#43;0100 &#43;0100" itemprop="datePublished">2021-04-17</time>
+                        <time datetime="2020-08-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-01</time>
                     </p>
                 </div>
             </li>
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/edmondlytica/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/datascience-aas/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/edmonlytica-shiny1.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/piketty-capital.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/edmondlytica/" class="title">Creating your own cookieless analytics tool with GTM Server Side, Cloud Run, BigQuery and Shiny</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/datascience-aas/" class="title">Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions</a></p>
                     <p class="item-date">
-                        <time datetime="2021-03-21 09:29:50 &#43;0100 CET" itemprop="datePublished">2021-03-21</time>
+                        <time datetime="2020-06-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-06-28</time>
                     </p>
                 </div>
             </li>
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/gtm-serverside-webhooks/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/googleCloudRunner-intro/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/gtm-serverside-events.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/gcp-pyramid.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part one" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/gtm-serverside-webhooks/" class="title">Using Google Tag Manager Server Side to Trigger Webhook Events</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/googleCloudRunner-intro/" class="title">Introducing googleCloudRunner - serverless R on Google Cloud Platform</a></p>
                     <p class="item-date">
-                        <time datetime="2020-09-04 12:50:50 &#43;0100 &#43;0100" itemprop="datePublished">2020-09-04</time>
+                        <time datetime="2020-01-18 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-01-18</time>
                     </p>
                 </div>
             </li>
@@ -731,7 +722,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/r">
                     R
                 </a>
-                <span class="category-list-count">22</span>
+                <span class="category-list-count">14</span>
             </li>
             
             <li class="category-list-item">
@@ -739,7 +730,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/big-query">
                     big-query
                 </a>
-                <span class="category-list-count">7</span>
+                <span class="category-list-count">4</span>
             </li>
             
             <li class="category-list-item">
@@ -747,7 +738,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/blogging">
                     blogging
                 </a>
-                <span class="category-list-count">3</span>
+                <span class="category-list-count">1</span>
             </li>
             
             <li class="category-list-item">
@@ -755,7 +746,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-functions">
                     cloud-functions
                 </a>
-                <span class="category-list-count">5</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -763,7 +754,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-run">
                     cloud-run
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -771,7 +762,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/docker">
                     docker
                 </a>
-                <span class="category-list-count">9</span>
+                <span class="category-list-count">8</span>
             </li>
             
             <li class="category-list-item">
@@ -787,7 +778,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-analytics">
                     google-analytics
                 </a>
-                <span class="category-list-count">12</span>
+                <span class="category-list-count">6</span>
             </li>
             
             <li class="category-list-item">
@@ -795,7 +786,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-app-engine">
                     google-app-engine
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -803,7 +794,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-auth">
                     google-auth
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">2</span>
             </li>
             
             <li class="category-list-item">
@@ -811,7 +802,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-cloud-storage">
                     google-cloud-storage
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -819,15 +810,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-compute-engine">
                     google-compute-engine
                 </a>
-                <span class="category-list-count">7</span>
-            </li>
-            
-            <li class="category-list-item">
-                
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-language">
-                    google-language
-                </a>
-                <span class="category-list-count">2</span>
+                <span class="category-list-count">5</span>
             </li>
             
             <li class="category-list-item">
@@ -835,7 +818,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-tag-manager">
                     google-tag-manager
                 </a>
-                <span class="category-list-count">7</span>
+                <span class="category-list-count">4</span>
             </li>
             
             <li class="category-list-item">
@@ -843,7 +826,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/pubsub">
                     pubsub
                 </a>
-                <span class="category-list-count">3</span>
+                <span class="category-list-count">2</span>
             </li>
             
             <li class="category-list-item">
@@ -851,7 +834,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/python">
                     python
                 </a>
-                <span class="category-list-count">6</span>
+                <span class="category-list-count">5</span>
             </li>
             
             <li class="category-list-item">
@@ -859,7 +842,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/rstudio-server">
                     rstudio-server
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -867,7 +850,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/search-console">
                     search-console
                 </a>
-                <span class="category-list-count">3</span>
+                <span class="category-list-count">1</span>
             </li>
             
         </ul>
@@ -890,7 +873,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <footer id="footer">
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2022
+      &copy; 2023
       Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
     </div>
   </div>

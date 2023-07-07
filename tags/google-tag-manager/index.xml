@@ -18,25 +18,6 @@
     </item>
     
     <item>
-      <title>Creating your own cookieless analytics tool with GTM Server Side, Cloud Run, BigQuery and Shiny</title>
-      <link>https://code.markedmondson.me/edmondlytica/</link>
-      <pubDate>Sun, 21 Mar 2021 09:29:50 +0100</pubDate>
-      
-      <guid>https://code.markedmondson.me/edmondlytica/</guid>
-      <description>This is an example of how GTM server side can be used to create your own digital analytics tool. It is a proof of concept of what you can do given the power of GTM server side and its BigQuery integration. I customise the stream by adding cookieless tracking, displaying the data in Shiny and running it all on Cloud Run to keep costs down but performance good.</description>
-    </item>
-    
-    <item>
-      <title>Using Google Tag Manager Server Side to Trigger Webhook Events</title>
-      <link>https://code.markedmondson.me/gtm-serverside-webhooks/</link>
-      <pubDate>Fri, 04 Sep 2020 12:50:50 +0100</pubDate>
-      
-      <guid>https://code.markedmondson.me/gtm-serverside-webhooks/</guid>
-      <description>When GTM Server Side was announced the use cases for it were not so compelling for me at first.
-Sure, extra security and potential speed ups were nice to have, but it wasn’t really necessary for a lot of websites, given the cost. However, now we have had a chance to play with it and can see its integration with the rest of the Google Cloud Platform, new use cases are coming up which are very compelling, especially if the GTM Server Side costs can be driven down via Cloud Run deployments - see last post.</description>
-    </item>
-    
-    <item>
       <title>Google Tag Manager Server Side on Cloud Run - Pros and Cons</title>
       <link>https://code.markedmondson.me/gtm-serverside-cloudrun/</link>
       <pubDate>Fri, 21 Aug 2020 00:00:00 +0000</pubDate>
@@ -44,17 +25,6 @@ Sure, extra security and potential speed ups were nice to have, but it wasn’t 
       <guid>https://code.markedmondson.me/gtm-serverside-cloudrun/</guid>
       <description>One of the most exciting developments in 2020 for me is the launch of Google Tag Manager Server Side, which lies at the intersection of cloud and digital analytics that I&amp;rsquo;ve gravitated towards in recent years.
 There are many good resources out there on GTM Serverside, Simo in particular has got me up to speed with his excellent range of posts. This post will assume you&amp;rsquo;ve read those, and be more about the viability of deploying GTM server side within Cloud Run.</description>
-    </item>
-    
-    <item>
-      <title>My R Packages</title>
-      <link>https://code.markedmondson.me/r-packages/</link>
-      <pubDate>Tue, 24 Jan 2017 21:20:50 +0100</pubDate>
-      
-      <guid>https://code.markedmondson.me/r-packages/</guid>
-      <description>A full list of R packages I have published are on my Github, but some notable ones are below.
-Some are part of the cloudyR project, which has many packages useful for using R in the cloud. I concentrate on the Google cloud below, but be sure to check out the other packages if you’re looking to work with AWS or other cloud based services.
-CRAN     Status URL Description     googleAuthR The central workhorse for authentication on Google APIs   googleAnalyticsR Works with Google Analytics Reporting V3/V4 and Management APIs   googleComputeEngineR Launch Virtual Machines within the Google Cloud, via templates or your own Docker containers.</description>
     </item>
     
     <item>

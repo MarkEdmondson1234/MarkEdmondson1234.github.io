@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
-    <script async src="https://www.googleoptimize.com/optimize.js?id=GTM-WMXD7V"></script>
     <title>Shiny on Google Cloud Run - Scale-to-Zero R Web Apps &middot; Mark Edmondson</title>
-    <meta name="generator" content="Hugo 0.92.0" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
     
       <meta name="description" content="How to create scale-to-zero Shiny apps on Google Cloud Run: pitfalls, how and why">
     
-    
+      <link href="Page%28/post/2020-01-08-shiny-cloudrun.md%29" rel="alternate" type="application/rss+xml" title="Mark Edmondson" />
+      <link href="Page%28/post/2020-01-08-shiny-cloudrun.md%29" rel="feed" type="application/rss+xml" title="Mark Edmondson" />
     <link rel="canonical" href="https://code.markedmondson.me/shiny-cloudrun/"/>
     <link rel="icon" href="https://code.markedmondson.me/favicon.ico">
     <link rel="apple-touch-icon" href="https://code.markedmondson.me/apple-touch-icon.png"/>
@@ -28,8 +27,6 @@
 <meta property="article:published_time" content="2020-08-01T00:00:00+00:00" />
 <meta property="article:modified_time" content="2020-08-01T00:00:00+00:00" />
 
-
-    
     <meta itemprop="name" content="Shiny on Google Cloud Run - Scale-to-Zero R Web Apps">
 <meta itemprop="description" content="How to create scale-to-zero Shiny apps on Google Cloud Run: pitfalls, how and why"><meta itemprop="datePublished" content="2020-08-01T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2020-08-01T00:00:00+00:00" />
@@ -82,8 +79,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           
 
           
-          <a class="main-nav-link" href="/r-packages/">My R Packages</a>
-          
 
           
           
@@ -126,8 +121,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           
           
 
-          
-          <td><a class="main-nav-link" href="/r-packages/">My R Packages</a></td>
           
 
           
@@ -173,12 +166,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        31
+        20
         <span>Posts</span>
       </div>
       <div class="article-info-block">
         
-          18
+          17
         
         <span>
             Tags
@@ -348,15 +341,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <h3 id="hello-world">Hello World</h3>
 <p>The first example uses <a href="https://github.com/randy3k/shiny-cloudrun-demo"><code>randy3k</code>&rsquo;s example</a>.  You will need to clone the repo so that you have a local version of the Dockerfile and <code>app.R</code> containing the Shiny app.</p>
 <p>Once you have the repo in say folder <code>shiny-app/</code> then you can build its Dockerfile and then deploy the app with one function:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#75715e"># set up via googleCloudRunner::cr_setup() first if you haven&#39;t done so</span>
-<span style="color:#a6e22e">library</span>(googleCloudRunner)
-
-<span style="color:#75715e"># deploy the app version from this folder</span>
-<span style="color:#a6e22e">cr_deploy_run</span>(<span style="color:#e6db74">&#34;shiny-app/&#34;</span>,
-              remote <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;shiny-cloudrun&#34;</span>,
-              max_instances <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>, <span style="color:#75715e"># required for shiny</span>
-              concurrency <span style="color:#f92672">=</span> <span style="color:#ae81ff">80</span>)
-</code></pre></div><h3 id="authenticated-shiny-app">Authenticated Shiny App</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#75715e"># set up via googleCloudRunner::cr_setup() first if you haven&#39;t done so</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(googleCloudRunner)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># deploy the app version from this folder</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">cr_deploy_run</span>(<span style="color:#e6db74">&#34;shiny-app/&#34;</span>,
+</span></span><span style="display:flex;"><span>              remote <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;shiny-cloudrun&#34;</span>,
+</span></span><span style="display:flex;"><span>              max_instances <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>, <span style="color:#75715e"># required for shiny</span>
+</span></span><span style="display:flex;"><span>              concurrency <span style="color:#f92672">=</span> <span style="color:#ae81ff">80</span>)
+</span></span></code></pre></div><h3 id="authenticated-shiny-app">Authenticated Shiny App</h3>
 <p>This is the example deployed to <code>https://shiny-cloudrun-sc-ewjogewawq-ew.a.run.app/</code></p>
 <p>This demonstrates deploying an app with a Google login, in this case for Search Console.</p>
 <p>The difference here is to also add a <code>client.json</code> file to help with the authentication app, and setting up the Cloud Run domain as a verified OAuth2 source.  This is the example in the <a href="https://code.markedmondson.me/googleCloudRunner/articles/cloudrun.html#shiny-app-on-cloud-run-with-googleauthr-authentication-1">googleCloudRunner Cloud Run documentation</a></p>
@@ -367,40 +360,40 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 |- client.json
 |- shiny-customized.config
 </code></pre><h4 id="appr">app.R</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(shiny)
-<span style="color:#a6e22e">library</span>(searchConsoleR)
-<span style="color:#a6e22e">library</span>(googleAuthR)
-
-<span style="color:#a6e22e">gar_set_client</span>(web_json <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;client.json&#34;</span>,
-               scopes <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://www.googleapis.com/auth/webmasters&#34;</span>)
-
-ui <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fluidPage</span>(
-  <span style="color:#a6e22e">googleAuth_jsUI</span>(<span style="color:#e6db74">&#39;auth&#39;</span>, login_text <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Login to Google&#39;</span>),
-  <span style="color:#a6e22e">tableOutput</span>(<span style="color:#e6db74">&#34;sc_accounts&#34;</span>)
-)
-
-server <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function</span>(input, output, session) {
-  auth <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">callModule</span>(googleAuth_js, <span style="color:#e6db74">&#34;auth&#34;</span>)
-
-  sc_accounts <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">reactive</span>({
-    <span style="color:#a6e22e">req</span>(<span style="color:#a6e22e">auth</span>())
-
-    <span style="color:#a6e22e">with_shiny</span>(
-      list_websites,
-      shiny_access_token <span style="color:#f92672">=</span> <span style="color:#a6e22e">auth</span>()
-    )
-
-  })
-
-  output<span style="color:#f92672">$</span>sc_accounts <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">renderTable</span>({
-    <span style="color:#a6e22e">sc_accounts</span>()
-  })
-
-
-}
-
-<span style="color:#a6e22e">shinyApp</span>(ui <span style="color:#f92672">=</span> ui, server <span style="color:#f92672">=</span> server)
-</code></pre></div><h4 id="dockerfile">Dockerfile</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(shiny)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(searchConsoleR)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(googleAuthR)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">gar_set_client</span>(web_json <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;client.json&#34;</span>,
+</span></span><span style="display:flex;"><span>               scopes <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://www.googleapis.com/auth/webmasters&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ui <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fluidPage</span>(
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">googleAuth_jsUI</span>(<span style="color:#e6db74">&#39;auth&#39;</span>, login_text <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Login to Google&#39;</span>),
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">tableOutput</span>(<span style="color:#e6db74">&#34;sc_accounts&#34;</span>)
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>server <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function</span>(input, output, session) {
+</span></span><span style="display:flex;"><span>  auth <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">callModule</span>(googleAuth_js, <span style="color:#e6db74">&#34;auth&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  sc_accounts <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">reactive</span>({
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">req</span>(<span style="color:#a6e22e">auth</span>())
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">with_shiny</span>(
+</span></span><span style="display:flex;"><span>      list_websites,
+</span></span><span style="display:flex;"><span>      shiny_access_token <span style="color:#f92672">=</span> <span style="color:#a6e22e">auth</span>()
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  })
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  output<span style="color:#f92672">$</span>sc_accounts <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">renderTable</span>({
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">sc_accounts</span>()
+</span></span><span style="display:flex;"><span>  })
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">shinyApp</span>(ui <span style="color:#f92672">=</span> ui, server <span style="color:#f92672">=</span> server)
+</span></span></code></pre></div><h4 id="dockerfile">Dockerfile</h4>
 <pre tabindex="0"><code>FROM rocker/shiny
 
 # install R package dependencies
@@ -413,7 +406,7 @@ RUN apt-get update &amp;&amp; apt-get install -y \
 
 ## Install packages from CRAN
 RUN install2.r --error \
-    -r 'http://cran.rstudio.com' \
+    -r &#39;http://cran.rstudio.com&#39; \
     googleAuthR searchConsoleR
 
 COPY shiny-customized.config /etc/shiny-server/shiny-server.conf
@@ -426,11 +419,11 @@ USER shiny
 
 # avoid s6 initialization
 # see https://github.com/rocker-org/shiny/issues/79
-CMD [&quot;/usr/bin/shiny-server&quot;]
+CMD [&#34;/usr/bin/shiny-server&#34;]
 </code></pre><h4 id="clientid-and-gcp-setup">client.id and GCP setup</h4>
 <p>The client.json was a web client json from my project:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{<span style="color:#f92672">&#34;web&#34;</span>:{<span style="color:#f92672">&#34;client_id&#34;</span>:<span style="color:#e6db74">&#34;10XXX&#34;</span>,<span style="color:#f92672">&#34;project_id&#34;</span>:<span style="color:#e6db74">&#34;XXXX&#34;</span>,<span style="color:#f92672">&#34;auth_uri&#34;</span>:<span style="color:#e6db74">&#34;https://accounts.google.com/o/oauth2/auth&#34;</span>,<span style="color:#f92672">&#34;token_uri&#34;</span>:<span style="color:#e6db74">&#34;https://accounts.google.com/o/oauth2/token&#34;</span>,<span style="color:#f92672">&#34;auth_provider_x509_cert_url&#34;</span>:<span style="color:#e6db74">&#34;https://www.googleapis.com/oauth2/v1/certs&#34;</span>,<span style="color:#f92672">&#34;client_secret&#34;</span>:<span style="color:#e6db74">&#34;XXXXX&#34;</span>,<span style="color:#f92672">&#34;redirect_uris&#34;</span>:[<span style="color:#e6db74">&#34;http://localhost&#34;</span>],<span style="color:#f92672">&#34;javascript_origins&#34;</span>:[<span style="color:#e6db74">&#34;https://www.example.com&#34;</span>,<span style="color:#e6db74">&#34;http://localhost:1221&#34;</span>]}}
-</code></pre></div><p>You need to add the domain of where the Cloud Run is running in the JavaScript origins within the GCP console, that you get after deploying the app. (GCP console &gt; APIs &amp; Services &gt; Credentials &gt; Click on the Web Client ID you are using &gt; Add URL to Authorised JavaScript origins).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{<span style="color:#f92672">&#34;web&#34;</span>:{<span style="color:#f92672">&#34;client_id&#34;</span>:<span style="color:#e6db74">&#34;10XXX&#34;</span>,<span style="color:#f92672">&#34;project_id&#34;</span>:<span style="color:#e6db74">&#34;XXXX&#34;</span>,<span style="color:#f92672">&#34;auth_uri&#34;</span>:<span style="color:#e6db74">&#34;https://accounts.google.com/o/oauth2/auth&#34;</span>,<span style="color:#f92672">&#34;token_uri&#34;</span>:<span style="color:#e6db74">&#34;https://accounts.google.com/o/oauth2/token&#34;</span>,<span style="color:#f92672">&#34;auth_provider_x509_cert_url&#34;</span>:<span style="color:#e6db74">&#34;https://www.googleapis.com/oauth2/v1/certs&#34;</span>,<span style="color:#f92672">&#34;client_secret&#34;</span>:<span style="color:#e6db74">&#34;XXXXX&#34;</span>,<span style="color:#f92672">&#34;redirect_uris&#34;</span>:[<span style="color:#e6db74">&#34;http://localhost&#34;</span>],<span style="color:#f92672">&#34;javascript_origins&#34;</span>:[<span style="color:#e6db74">&#34;https://www.example.com&#34;</span>,<span style="color:#e6db74">&#34;http://localhost:1221&#34;</span>]}}
+</span></span></code></pre></div><p>You need to add the domain of where the Cloud Run is running in the JavaScript origins within the GCP console, that you get after deploying the app. (GCP console &gt; APIs &amp; Services &gt; Credentials &gt; Click on the Web Client ID you are using &gt; Add URL to Authorised JavaScript origins).</p>
 <p><img src="/images/javascript-origins.png" alt=""></p>
 <p>In the example case this is <code>https://shiny-cloudrun-sc-ewjogewawq-ew.a.run.app/</code></p>
 <p><em>It did take a while for this to propagate, so if your login doesn&rsquo;t work after this step try again in a few hours</em></p>
@@ -453,12 +446,12 @@ server {
 }
 </code></pre><h4 id="deploying">Deploying</h4>
 <p>You can then deploy similar to the example above, which will build the Dockerfile and then deploy it to Cloud Run.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#75715e"># deploy the app version from this folder</span>
-<span style="color:#a6e22e">cr_deploy_run</span>(<span style="color:#e6db74">&#34;shiny_cloudrun/app/&#34;</span>,
-              remote <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;shiny-cloudrun-sc&#34;</span>,
-              max_instances <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>, <span style="color:#75715e"># required for shiny</span>
-              concurrency <span style="color:#f92672">=</span> <span style="color:#ae81ff">80</span>)
-</code></pre></div><h2 id="summary">Summary</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#75715e"># deploy the app version from this folder</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">cr_deploy_run</span>(<span style="color:#e6db74">&#34;shiny_cloudrun/app/&#34;</span>,
+</span></span><span style="display:flex;"><span>              remote <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;shiny-cloudrun-sc&#34;</span>,
+</span></span><span style="display:flex;"><span>              max_instances <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>, <span style="color:#75715e"># required for shiny</span>
+</span></span><span style="display:flex;"><span>              concurrency <span style="color:#f92672">=</span> <span style="color:#ae81ff">80</span>)
+</span></span></code></pre></div><h2 id="summary">Summary</h2>
 <p>Deploying Shiny to Cloud Run opens up a lot more experimentation with Shiny apps for me since they can be deployed for zero cost, and also gets around the authentication OAuth2 issues I was having on <code>shinyapps.io</code> since the authorization rules tightened.</p>
 <p>If a Shiny app gets too popular for Cloud Run, then it may need migrating to another service but thats a nice problem to have and since its in a Docker container already thats a smooth switch (and there is another <a href="https://code.markedmondson.me/googleCloudRunner/articles/usecases.html#deploy-a-shiny-app-to-google-kubernetes-engine-1">googleCloudRunner example for deploying Shiny to Kuberentes</a>)</p>
 <p>Coupled with the workflow to <a href="https://code.markedmondson.me/datascience-aas/">make paid Shiny apps</a> it paves the path to narrow focus but useful paid data science apps.</p>
@@ -468,7 +461,6 @@ server {
 
         </div>
         <footer class="article-footer">
-    <a data-url="https://code.markedmondson.me/shiny-cloudrun/" data-id="487f6c86234d6d90b48b9cace989e42e" class="article-share-link">
         <i class="fa fa-share"></i>
         Share
     </a>
@@ -614,68 +606,68 @@ server {
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/writing-a-book/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/gtm-serverside-cloudrun/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/proto-book.png)" alt="Shiny on Google Cloud Run - Scale-to-Zero R Web Apps" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/princess-gtm.png)" alt="Shiny on Google Cloud Run - Scale-to-Zero R Web Apps" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/writing-a-book/" class="title">Why and How I&#39;m writing a GA4 book called &#39;Learning Google Analytics&#39; for O&#39;Reilly</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/gtm-serverside-cloudrun/" class="title">Google Tag Manager Server Side on Cloud Run - Pros and Cons</a></p>
                     <p class="item-date">
-                        <time datetime="2021-10-23 11:04:50 &#43;0100 &#43;0100" itemprop="datePublished">2021-10-23</time>
+                        <time datetime="2020-08-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-21</time>
                     </p>
                 </div>
             </li>
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/googleanalyticsr-100-release/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/shiny-cloudrun/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/GA4-090.png)" alt="Shiny on Google Cloud Run - Scale-to-Zero R Web Apps" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/shiny-clouds.jpg)" alt="Shiny on Google Cloud Run - Scale-to-Zero R Web Apps" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/googleanalyticsr-100-release/" class="title">googleAnalyticsR v1.0.0 - GA4 API, Automatic Shiny Dashboarding, Improved UI</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/shiny-cloudrun/" class="title">Shiny on Google Cloud Run - Scale-to-Zero R Web Apps</a></p>
                     <p class="item-date">
-                        <time datetime="2021-04-17 09:29:50 &#43;0100 &#43;0100" itemprop="datePublished">2021-04-17</time>
+                        <time datetime="2020-08-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-01</time>
                     </p>
                 </div>
             </li>
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/edmondlytica/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/datascience-aas/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/edmonlytica-shiny1.png)" alt="Shiny on Google Cloud Run - Scale-to-Zero R Web Apps" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/piketty-capital.png)" alt="Shiny on Google Cloud Run - Scale-to-Zero R Web Apps" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/edmondlytica/" class="title">Creating your own cookieless analytics tool with GTM Server Side, Cloud Run, BigQuery and Shiny</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/datascience-aas/" class="title">Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions</a></p>
                     <p class="item-date">
-                        <time datetime="2021-03-21 09:29:50 &#43;0100 CET" itemprop="datePublished">2021-03-21</time>
+                        <time datetime="2020-06-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-06-28</time>
                     </p>
                 </div>
             </li>
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/gtm-serverside-webhooks/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/googleCloudRunner-intro/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/gtm-serverside-events.png)" alt="Shiny on Google Cloud Run - Scale-to-Zero R Web Apps" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/gcp-pyramid.png)" alt="Shiny on Google Cloud Run - Scale-to-Zero R Web Apps" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/gtm-serverside-webhooks/" class="title">Using Google Tag Manager Server Side to Trigger Webhook Events</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/googleCloudRunner-intro/" class="title">Introducing googleCloudRunner - serverless R on Google Cloud Platform</a></p>
                     <p class="item-date">
-                        <time datetime="2020-09-04 12:50:50 &#43;0100 &#43;0100" itemprop="datePublished">2020-09-04</time>
+                        <time datetime="2020-01-18 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-01-18</time>
                     </p>
                 </div>
             </li>
@@ -744,7 +736,7 @@ server {
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/r">
                     R
                 </a>
-                <span class="category-list-count">22</span>
+                <span class="category-list-count">14</span>
             </li>
             
             <li class="category-list-item">
@@ -752,7 +744,7 @@ server {
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/big-query">
                     big-query
                 </a>
-                <span class="category-list-count">7</span>
+                <span class="category-list-count">4</span>
             </li>
             
             <li class="category-list-item">
@@ -760,7 +752,7 @@ server {
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/blogging">
                     blogging
                 </a>
-                <span class="category-list-count">3</span>
+                <span class="category-list-count">1</span>
             </li>
             
             <li class="category-list-item">
@@ -768,7 +760,7 @@ server {
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-functions">
                     cloud-functions
                 </a>
-                <span class="category-list-count">5</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -776,7 +768,7 @@ server {
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-run">
                     cloud-run
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -784,7 +776,7 @@ server {
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/docker">
                     docker
                 </a>
-                <span class="category-list-count">9</span>
+                <span class="category-list-count">8</span>
             </li>
             
             <li class="category-list-item">
@@ -800,7 +792,7 @@ server {
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-analytics">
                     google-analytics
                 </a>
-                <span class="category-list-count">12</span>
+                <span class="category-list-count">6</span>
             </li>
             
             <li class="category-list-item">
@@ -808,7 +800,7 @@ server {
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-app-engine">
                     google-app-engine
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -816,7 +808,7 @@ server {
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-auth">
                     google-auth
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">2</span>
             </li>
             
             <li class="category-list-item">
@@ -824,7 +816,7 @@ server {
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-cloud-storage">
                     google-cloud-storage
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -832,15 +824,7 @@ server {
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-compute-engine">
                     google-compute-engine
                 </a>
-                <span class="category-list-count">7</span>
-            </li>
-            
-            <li class="category-list-item">
-                
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-language">
-                    google-language
-                </a>
-                <span class="category-list-count">2</span>
+                <span class="category-list-count">5</span>
             </li>
             
             <li class="category-list-item">
@@ -848,7 +832,7 @@ server {
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-tag-manager">
                     google-tag-manager
                 </a>
-                <span class="category-list-count">7</span>
+                <span class="category-list-count">4</span>
             </li>
             
             <li class="category-list-item">
@@ -856,7 +840,7 @@ server {
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/pubsub">
                     pubsub
                 </a>
-                <span class="category-list-count">3</span>
+                <span class="category-list-count">2</span>
             </li>
             
             <li class="category-list-item">
@@ -864,7 +848,7 @@ server {
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/python">
                     python
                 </a>
-                <span class="category-list-count">6</span>
+                <span class="category-list-count">5</span>
             </li>
             
             <li class="category-list-item">
@@ -872,7 +856,7 @@ server {
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/rstudio-server">
                     rstudio-server
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -880,7 +864,7 @@ server {
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/search-console">
                     search-console
                 </a>
-                <span class="category-list-count">3</span>
+                <span class="category-list-count">1</span>
             </li>
             
         </ul>
@@ -903,7 +887,7 @@ server {
 <footer id="footer">
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2022
+      &copy; 2023
       Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
     </div>
   </div>

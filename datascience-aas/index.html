@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
-    <script async src="https://www.googleoptimize.com/optimize.js?id=GTM-WMXD7V"></script>
     <title>Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions &middot; Mark Edmondson</title>
-    <meta name="generator" content="Hugo 0.92.0" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
     
       <meta name="description" content="A bootstrap example on how to create a paid data science app (DSaaS)">
     
-    
+      <link href="Page%28/post/2020-06-28-data-science-as-a-service.md%29" rel="alternate" type="application/rss+xml" title="Mark Edmondson" />
+      <link href="Page%28/post/2020-06-28-data-science-as-a-service.md%29" rel="feed" type="application/rss+xml" title="Mark Edmondson" />
     <link rel="canonical" href="https://code.markedmondson.me/datascience-aas/"/>
     <link rel="icon" href="https://code.markedmondson.me/favicon.ico">
     <link rel="apple-touch-icon" href="https://code.markedmondson.me/apple-touch-icon.png"/>
@@ -28,12 +27,10 @@
 <meta property="article:published_time" content="2020-06-28T00:00:00+00:00" />
 <meta property="article:modified_time" content="2020-06-28T00:00:00+00:00" />
 
-
-    
     <meta itemprop="name" content="Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions">
 <meta itemprop="description" content="A bootstrap example on how to create a paid data science app (DSaaS)"><meta itemprop="datePublished" content="2020-06-28T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2020-06-28T00:00:00+00:00" />
-<meta itemprop="wordCount" content="2241">
+<meta itemprop="wordCount" content="2242">
 <meta itemprop="keywords" content="R,firebase,google-auth,cloud-functions,python," />
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions"/>
@@ -82,8 +79,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           
 
           
-          <a class="main-nav-link" href="/r-packages/">My R Packages</a>
-          
 
           
           
@@ -126,8 +121,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           
           
 
-          
-          <td><a class="main-nav-link" href="/r-packages/">My R Packages</a></td>
           
 
           
@@ -173,12 +166,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        31
+        20
         <span>Posts</span>
       </div>
       <div class="article-info-block">
         
-          18
+          17
         
         <span>
             Tags
@@ -278,7 +271,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2020-06-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-06-28</time>
             &middot;
-            2241
+            2242
             words
             &middot;
             11
@@ -374,7 +367,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li>Firebase to handle authentication and store subscription user data</li>
 <li>Paddle to handle payments, taxes and fulfillment</li>
 <li>Cloud Functions to sync changes between Paddle and Firebase</li>
-<li>Shiny frontend with demo content for &lsquo;free&rsquo;, &lsquo;logged in but not subscribed&rsquo; and &lsquo;subscriber&rsquo; content</li>
+<li>Shiny frontend with demo content for &lsquo;free&rsquo;, &rsquo;logged in but not subscribed&rsquo; and &lsquo;subscriber&rsquo; content</li>
 </ul>
 <p>The detailed setup steps needed are in the <a href="https://github.com/MarkEdmondson1234/Shiny-R-SaaS">GitHub readme</a>, for this blogpost I&rsquo;ll take about what choices were made and why.</p>
 <h2 id="overall-flow">Overall flow</h2>
@@ -394,57 +387,57 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p>In a similar manner, Firestore is a noSQL database that is used to carry the subscription data, linked to the Firebase userId.</p>
 <p><img src="/images/firebase-database.png" alt=""></p>
 <p>Being noSQL it is quick for reads and also lets you keep historic events such as when a user subscribed, cancelled or updated. Since its on the Google Cloud Platform I could use <a href="https://code.markedmondson.me/googleAuthR/"><code>googleAuthR</code></a> to authenticate and generated the R function to read it:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(googleAuthR)
-
-<span style="color:#a6e22e">gar_auth_service</span>(<span style="color:#e6db74">&#34;firebase-reader-auth-key.json&#34;</span>,
-                 scope <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://www.googleapis.com/auth/datastore&#34;</span>)
-
-<span style="color:#75715e">#&#39; Gets a Firebase data entry.  Will return NULL if it can not</span>
-fb_document_get <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function</span>(document_path,
-                            database_id <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;(default)&#34;</span>,
-                            project_id <span style="color:#f92672">=</span> <span style="color:#a6e22e">Sys.getenv</span>(<span style="color:#e6db74">&#34;FIREBASE_PROJECT&#34;</span>)){
-
-  the_url <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">sprintf</span>(<span style="color:#e6db74">&#34;https://firestore.googleapis.com/v1/projects/%s/databases/%s/documents/%s&#34;</span>,
-                     project_id, database_id, document_path)
-
-  f <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gar_api_generator</span>(the_url,
-                         <span style="color:#e6db74">&#34;GET&#34;</span>,
-                         data_parse_function <span style="color:#f92672">=</span> <span style="color:#a6e22e">function</span>(x) x)
-
-  <span style="color:#a6e22e">f</span>()
-}
-</code></pre></div><h3 id="paddle">Paddle</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(googleAuthR)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">gar_auth_service</span>(<span style="color:#e6db74">&#34;firebase-reader-auth-key.json&#34;</span>,
+</span></span><span style="display:flex;"><span>                 scope <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://www.googleapis.com/auth/datastore&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#&#39; Gets a Firebase data entry.  Will return NULL if it can not</span>
+</span></span><span style="display:flex;"><span>fb_document_get <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function</span>(document_path,
+</span></span><span style="display:flex;"><span>                            database_id <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;(default)&#34;</span>,
+</span></span><span style="display:flex;"><span>                            project_id <span style="color:#f92672">=</span> <span style="color:#a6e22e">Sys.getenv</span>(<span style="color:#e6db74">&#34;FIREBASE_PROJECT&#34;</span>)){
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  the_url <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">sprintf</span>(<span style="color:#e6db74">&#34;https://firestore.googleapis.com/v1/projects/%s/databases/%s/documents/%s&#34;</span>,
+</span></span><span style="display:flex;"><span>                     project_id, database_id, document_path)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  f <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">gar_api_generator</span>(the_url,
+</span></span><span style="display:flex;"><span>                         <span style="color:#e6db74">&#34;GET&#34;</span>,
+</span></span><span style="display:flex;"><span>                         data_parse_function <span style="color:#f92672">=</span> <span style="color:#a6e22e">function</span>(x) x)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">f</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="paddle">Paddle</h3>
 <p>For a long time I was thinking of using Stripe for this template, but whilst Stripe has a great API and I&rsquo;d <a href="https://github.com/MarkEdmondson1234/stripeR">worked with it before</a>, there was still some work to do to make reliable payment apps such as handling when a user&rsquo;s card gets declined (how would your app know to deny paid content?) and international taxes etc.</p>
 <p>The pitch of <a href="https://paddle.com/">paddle.com</a> was that it took care of all that for you, so you are closer to a working app.  They do charge more per transaction than Stripe, so if you are looking for the cheapest then you may want to stick with Stripe and implement the &ldquo;Stripe stack&rdquo;, but I figured it was worth it for keeping the implementation simple.</p>
 <p>Paddle has a simple JavaScript button to implement the payment popups -</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;https://cdn.paddle.com/paddle/paddle.js&#34;</span><span style="color:#f92672">&gt;&lt;</span><span style="color:#960050;background-color:#1e0010">/script&gt;</span>
-<span style="color:#f92672">&lt;</span><span style="color:#a6e22e">script</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;text/javascript&#34;</span><span style="color:#f92672">&gt;</span>
-	<span style="color:#a6e22e">Paddle</span>.<span style="color:#a6e22e">Setup</span>({ <span style="color:#a6e22e">vendor</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1234567</span> });
-<span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/script&gt;</span>
-
-...
-<span style="color:#75715e">// a buy button
-</span><span style="color:#75715e"></span><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;#!&#34;</span> <span style="color:#66d9ef">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;paddle_button&#34;</span> <span style="color:#a6e22e">data</span><span style="color:#f92672">-</span><span style="color:#a6e22e">product</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;12345&#34;</span><span style="color:#f92672">&gt;</span><span style="color:#a6e22e">Buy</span> <span style="color:#a6e22e">Now</span><span style="color:#f92672">!&lt;</span><span style="color:#960050;background-color:#1e0010">/a&gt;</span>
-</code></pre></div><p><img src="/images/paddle-paymentstep-2.png" alt=""></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;https://cdn.paddle.com/paddle/paddle.js&#34;</span><span style="color:#f92672">&gt;&lt;</span><span style="color:#960050;background-color:#1e0010">/script&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">script</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;text/javascript&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Paddle</span>.<span style="color:#a6e22e">Setup</span>({ <span style="color:#a6e22e">vendor</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1234567</span> });
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/script&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// a buy button
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;#!&#34;</span> <span style="color:#66d9ef">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;paddle_button&#34;</span> <span style="color:#a6e22e">data</span><span style="color:#f92672">-</span><span style="color:#a6e22e">product</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;12345&#34;</span><span style="color:#f92672">&gt;</span><span style="color:#a6e22e">Buy</span> <span style="color:#a6e22e">Now</span><span style="color:#f92672">!&lt;</span><span style="color:#960050;background-color:#1e0010">/a&gt;</span>
+</span></span></code></pre></div><p><img src="/images/paddle-paymentstep-2.png" alt=""></p>
 <p>Paddle then uses webhooks to communicate with your server (in this case, Firestore) - so the next ingredient was how to create a webhook for communication between Paddle and Firestore.  You can then test this from the Paddle UI:</p>
 <p><img src="/images/paddle-webhook-test.png" alt=""></p>
 <h3 id="google-cloud-functions">Google Cloud Functions</h3>
 <p>For simple &ldquo;glue&rdquo; data flows my go-to is Google Cloud Functions, as you only need write the code and deploy without needing to worry about servers or scale.  Firebase has its own Cloud Function UI as well but that only supports node.js, so I opted to use the GCP console Cloud Functions in Python3.7 (Its the same service and infrastructure as Firebase.)</p>
 <p>Paddle had lots of Python examples already on the website on how to verify and deal with the data in their webhook payload so a lot of it was just copy-paste from there into the Cloud Function UI.  There is some more setup info in the <a href="https://github.com/MarkEdmondson1234/Shiny-R-SaaS/tree/master/payment_app">Cloud Function readme</a> - the only extra bit I needed to add was how to take the webhook payload and write it to Firestore - this was all handled by this snippet of code:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> logging
-<span style="color:#f92672">from</span> google.cloud <span style="color:#f92672">import</span> firestore
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">update_firebase</span>(data, collection, doc_id):
-    logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">&#39;fb update - collection </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> doc_id </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(collection, doc_id))
-
-    db <span style="color:#f92672">=</span> firestore<span style="color:#f92672">.</span>Client()
-    doc_ref <span style="color:#f92672">=</span> db<span style="color:#f92672">.</span>collection(collection)<span style="color:#f92672">.</span>document(doc_id)
-    doc_ref<span style="color:#f92672">.</span>set(data)
-
-    <span style="color:#75715e"># add the event</span>
-    event_ref <span style="color:#f92672">=</span> db<span style="color:#f92672">.</span>collection(collection)<span style="color:#f92672">.</span>document(doc_id)<span style="color:#f92672">.</span>collection(<span style="color:#e6db74">&#39;event&#39;</span>)<span style="color:#f92672">.</span>document(data[<span style="color:#e6db74">&#39;alert_id&#39;</span>])
-    event_ref<span style="color:#f92672">.</span>set(data)   
-</code></pre></div><p>The <code>event</code> collection is per userId, and gives the complete history of their transactions.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> logging
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> google.cloud <span style="color:#f92672">import</span> firestore
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">update_firebase</span>(data, collection, doc_id):
+</span></span><span style="display:flex;"><span>    logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">&#39;fb update - collection </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> doc_id </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(collection, doc_id))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    db <span style="color:#f92672">=</span> firestore<span style="color:#f92672">.</span>Client()
+</span></span><span style="display:flex;"><span>    doc_ref <span style="color:#f92672">=</span> db<span style="color:#f92672">.</span>collection(collection)<span style="color:#f92672">.</span>document(doc_id)
+</span></span><span style="display:flex;"><span>    doc_ref<span style="color:#f92672">.</span>set(data)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># add the event</span>
+</span></span><span style="display:flex;"><span>    event_ref <span style="color:#f92672">=</span> db<span style="color:#f92672">.</span>collection(collection)<span style="color:#f92672">.</span>document(doc_id)<span style="color:#f92672">.</span>collection(<span style="color:#e6db74">&#39;event&#39;</span>)<span style="color:#f92672">.</span>document(data[<span style="color:#e6db74">&#39;alert_id&#39;</span>])
+</span></span><span style="display:flex;"><span>    event_ref<span style="color:#f92672">.</span>set(data)   
+</span></span></code></pre></div><p>The <code>event</code> collection is per userId, and gives the complete history of their transactions.</p>
 <p>If implementing your own, make sure to use the verification code that checks the webhook is from a trusted source. Paddle supplies public/private keys and <a href="https://developer.paddle.com/webhook-reference/verifying-webhooks">code to check them</a>, which is important for payment applications - you can see the <a href="https://github.com/MarkEdmondson1234/Shiny-R-SaaS/blob/master/payment_app/fb_functions/main.py">full function here</a>.</p>
 <p>As it works off webhooks this means that even when a user is not on the app important updates will still be enacted (such as monthly credit card payments or declines) and it moves a lot of work off your app for verifying/authorizing users.</p>
 <p>Once the cloud function is deployed then your app needs to only query if a subscription exists for the FirebaseId a user has just logged in with, and check that that subscription is still live.</p>
@@ -456,83 +449,83 @@ fb_document_get <span style="color:#f92672">&lt;-</span> <span style="color:#a6e
 <li>A check that a user is a subscriber before showing paid content</li>
 </ul>
 <p>The first two are provided by John&rsquo;s firebase library - see <a href="https://firebase.john-coene.com/articles/ui.html">the website on setting it up</a> :</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(shiny)
-<span style="color:#a6e22e">library</span>(firebase)
-
-ui <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fluidPage</span>(
-  <span style="color:#a6e22e">useFirebase</span>(), <span style="color:#75715e"># import dependencies</span>
-  <span style="color:#a6e22e">useFirebaseUI</span>(),
-  <span style="color:#a6e22e">reqSignin</span>(<span style="color:#a6e22e">h4</span>(<span style="color:#e6db74">&#34;VIP plot below&#34;</span>)), <span style="color:#75715e"># hide from UI</span>
-  <span style="color:#a6e22e">plotOutput</span>(<span style="color:#e6db74">&#34;plot&#34;</span>)
-)
-
-server <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function</span>(input, output){
-  f <span style="color:#f92672">&lt;-</span> FirebaseUI<span style="color:#f92672">$</span>
-    <span style="color:#a6e22e">new</span>()<span style="color:#f92672">$</span> <span style="color:#75715e"># instantiate</span>
-    <span style="color:#a6e22e">set_providers</span>( <span style="color:#75715e"># define providers</span>
-      email <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>, 
-      google <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>
-    )<span style="color:#f92672">$</span>
-    <span style="color:#a6e22e">launch</span>() <span style="color:#75715e"># launch</span>
-
-  output<span style="color:#f92672">$</span>plot <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">renderPlot</span>({
-    f<span style="color:#f92672">$</span><span style="color:#a6e22e">req_sign_in</span>() <span style="color:#75715e"># require sign in</span>
-    <span style="color:#a6e22e">plot</span>(cars)
-  })
-}
-
-<span style="color:#a6e22e">shinyApp</span>(ui, server)
-</code></pre></div><p>The check that a user is a subscriber involves taking the FirebaseId and seeing if it has a live entry in the subscriptions Firestore.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(shiny)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(firebase)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ui <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fluidPage</span>(
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">useFirebase</span>(), <span style="color:#75715e"># import dependencies</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">useFirebaseUI</span>(),
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">reqSignin</span>(<span style="color:#a6e22e">h4</span>(<span style="color:#e6db74">&#34;VIP plot below&#34;</span>)), <span style="color:#75715e"># hide from UI</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">plotOutput</span>(<span style="color:#e6db74">&#34;plot&#34;</span>)
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>server <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function</span>(input, output){
+</span></span><span style="display:flex;"><span>  f <span style="color:#f92672">&lt;-</span> FirebaseUI<span style="color:#f92672">$</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">new</span>()<span style="color:#f92672">$</span> <span style="color:#75715e"># instantiate</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">set_providers</span>( <span style="color:#75715e"># define providers</span>
+</span></span><span style="display:flex;"><span>      email <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>, 
+</span></span><span style="display:flex;"><span>      google <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>
+</span></span><span style="display:flex;"><span>    )<span style="color:#f92672">$</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">launch</span>() <span style="color:#75715e"># launch</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  output<span style="color:#f92672">$</span>plot <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">renderPlot</span>({
+</span></span><span style="display:flex;"><span>    f<span style="color:#f92672">$</span><span style="color:#a6e22e">req_sign_in</span>() <span style="color:#75715e"># require sign in</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">plot</span>(cars)
+</span></span><span style="display:flex;"><span>  })
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">shinyApp</span>(ui, server)
+</span></span></code></pre></div><p>The check that a user is a subscriber involves taking the FirebaseId and seeing if it has a live entry in the subscriptions Firestore.</p>
 <p>Another useful feature of Paddle is in its response it gives you cancel and update links unique to that user, so you can use those entries to create a UI for a subscriber that permits them to control their subscription:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">  <span style="color:#75715e"># NULL if no subscription</span>
-  subscriber <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">reactive</span>({
-    <span style="color:#a6e22e">req</span>(<span style="color:#a6e22e">firebase_user</span>())
-
-    <span style="color:#75715e"># fb_document_get() is defined in global.R </span>
-    o <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fb_document_get</span>(<span style="color:#a6e22e">paste0</span>(<span style="color:#e6db74">&#34;subscriptions/&#34;</span>, <span style="color:#a6e22e">firebase_user</span>()<span style="color:#f92672">$</span>uid))
-
-    <span style="color:#a6e22e">if</span>(<span style="color:#f92672">!</span><span style="color:#a6e22e">is.null</span>(o) <span style="color:#f92672">&amp;&amp;</span> o<span style="color:#f92672">$</span>fields<span style="color:#f92672">$</span>status<span style="color:#f92672">$</span>stringValue <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;deleted&#34;</span>){
-      <span style="color:#75715e"># has subscription entry but it is cancelled</span>
-      <span style="color:#a6e22e">return</span>(<span style="color:#66d9ef">NULL</span>)
-    }
-
-    o
-
-  })
-
-  subscriber_details <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">reactive</span>({
-    <span style="color:#a6e22e">req</span>(<span style="color:#a6e22e">subscriber</span>())
-    ss <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">subscriber</span>()
-
-    <span style="color:#a6e22e">tagList</span>(
-      <span style="color:#a6e22e">div</span>(class<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;card&#34;</span>,
-        <span style="color:#a6e22e">h3</span>(<span style="color:#e6db74">&#34;Subscription details&#34;</span>),
-        <span style="color:#a6e22e">p</span>(<span style="color:#e6db74">&#34;Status:&#34;</span>, ss<span style="color:#f92672">$</span>fields<span style="color:#f92672">$</span>status<span style="color:#f92672">$</span>stringValue),
-        <span style="color:#a6e22e">p</span>(class<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;email&#34;</span>, ss<span style="color:#f92672">$</span>fields<span style="color:#f92672">$</span>email<span style="color:#f92672">$</span>stringValue),
-        <span style="color:#a6e22e">p</span>(<span style="color:#e6db74">&#34;Last update: &#34;</span>, ss<span style="color:#f92672">$</span>fields<span style="color:#f92672">$</span>event_time<span style="color:#f92672">$</span>stringValue),
-        <span style="color:#a6e22e">p</span>(<span style="color:#e6db74">&#34;Next bill date:&#34;</span>, ss<span style="color:#f92672">$</span>fields<span style="color:#f92672">$</span>next_bill_date<span style="color:#f92672">$</span>stringValue),
-        <span style="color:#a6e22e">p</span>(<span style="color:#a6e22e">a</span>(href<span style="color:#f92672">=</span>ss<span style="color:#f92672">$</span>fields<span style="color:#f92672">$</span>update_url<span style="color:#f92672">$</span>stringValue,
-          <span style="color:#e6db74">&#34;Update your subscription&#34;</span>,
-                             icon <span style="color:#f92672">=</span> <span style="color:#a6e22e">icon</span>(<span style="color:#e6db74">&#34;credit-card&#34;</span>),
-                             class <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;btn-info&#34;</span>)),
-        <span style="color:#e6db74">&#34; &#34;</span>,
-        <span style="color:#a6e22e">p</span>(<span style="color:#a6e22e">a</span>(href<span style="color:#f92672">=</span>ss<span style="color:#f92672">$</span>fields<span style="color:#f92672">$</span>cancel_url<span style="color:#f92672">$</span>stringValue,
-          <span style="color:#e6db74">&#34;Cancel your subscription&#34;</span>,
-                      icon <span style="color:#f92672">=</span> <span style="color:#a6e22e">icon</span>(<span style="color:#e6db74">&#34;window-close&#34;</span>),
-                      class <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;btn-danger&#34;</span>))
-        )
-      )
-
-  })
-  
-  <span style="color:#75715e"># only displays for subscribers</span>
-  output<span style="color:#f92672">$</span>paid_content <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">renderPlot</span>({
-    <span style="color:#a6e22e">req</span>(<span style="color:#a6e22e">subscriber</span>())
-
-    <span style="color:#a6e22e">plot</span>(iris)
-
-  })
-</code></pre></div><p>Put together this is a view for a non-subscriber vs a subscriber:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>  <span style="color:#75715e"># NULL if no subscription</span>
+</span></span><span style="display:flex;"><span>  subscriber <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">reactive</span>({
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">req</span>(<span style="color:#a6e22e">firebase_user</span>())
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># fb_document_get() is defined in global.R </span>
+</span></span><span style="display:flex;"><span>    o <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fb_document_get</span>(<span style="color:#a6e22e">paste0</span>(<span style="color:#e6db74">&#34;subscriptions/&#34;</span>, <span style="color:#a6e22e">firebase_user</span>()<span style="color:#f92672">$</span>uid))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">if</span>(<span style="color:#f92672">!</span><span style="color:#a6e22e">is.null</span>(o) <span style="color:#f92672">&amp;&amp;</span> o<span style="color:#f92672">$</span>fields<span style="color:#f92672">$</span>status<span style="color:#f92672">$</span>stringValue <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;deleted&#34;</span>){
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># has subscription entry but it is cancelled</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">return</span>(<span style="color:#66d9ef">NULL</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    o
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  })
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  subscriber_details <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">reactive</span>({
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">req</span>(<span style="color:#a6e22e">subscriber</span>())
+</span></span><span style="display:flex;"><span>    ss <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">subscriber</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">tagList</span>(
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">div</span>(class<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;card&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">h3</span>(<span style="color:#e6db74">&#34;Subscription details&#34;</span>),
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">p</span>(<span style="color:#e6db74">&#34;Status:&#34;</span>, ss<span style="color:#f92672">$</span>fields<span style="color:#f92672">$</span>status<span style="color:#f92672">$</span>stringValue),
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">p</span>(class<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;email&#34;</span>, ss<span style="color:#f92672">$</span>fields<span style="color:#f92672">$</span>email<span style="color:#f92672">$</span>stringValue),
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">p</span>(<span style="color:#e6db74">&#34;Last update: &#34;</span>, ss<span style="color:#f92672">$</span>fields<span style="color:#f92672">$</span>event_time<span style="color:#f92672">$</span>stringValue),
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">p</span>(<span style="color:#e6db74">&#34;Next bill date:&#34;</span>, ss<span style="color:#f92672">$</span>fields<span style="color:#f92672">$</span>next_bill_date<span style="color:#f92672">$</span>stringValue),
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">p</span>(<span style="color:#a6e22e">a</span>(href<span style="color:#f92672">=</span>ss<span style="color:#f92672">$</span>fields<span style="color:#f92672">$</span>update_url<span style="color:#f92672">$</span>stringValue,
+</span></span><span style="display:flex;"><span>          <span style="color:#e6db74">&#34;Update your subscription&#34;</span>,
+</span></span><span style="display:flex;"><span>                             icon <span style="color:#f92672">=</span> <span style="color:#a6e22e">icon</span>(<span style="color:#e6db74">&#34;credit-card&#34;</span>),
+</span></span><span style="display:flex;"><span>                             class <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;btn-info&#34;</span>)),
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34; &#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">p</span>(<span style="color:#a6e22e">a</span>(href<span style="color:#f92672">=</span>ss<span style="color:#f92672">$</span>fields<span style="color:#f92672">$</span>cancel_url<span style="color:#f92672">$</span>stringValue,
+</span></span><span style="display:flex;"><span>          <span style="color:#e6db74">&#34;Cancel your subscription&#34;</span>,
+</span></span><span style="display:flex;"><span>                      icon <span style="color:#f92672">=</span> <span style="color:#a6e22e">icon</span>(<span style="color:#e6db74">&#34;window-close&#34;</span>),
+</span></span><span style="display:flex;"><span>                      class <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;btn-danger&#34;</span>))
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>      )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  })
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># only displays for subscribers</span>
+</span></span><span style="display:flex;"><span>  output<span style="color:#f92672">$</span>paid_content <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">renderPlot</span>({
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">req</span>(<span style="color:#a6e22e">subscriber</span>())
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">plot</span>(iris)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  })
+</span></span></code></pre></div><p>Put together this is a view for a non-subscriber vs a subscriber:</p>
 <p><img src="/images/non-subscriber-content.png" alt=""></p>
 <p><img src="/images/subscriber-content.png" alt=""></p>
 <p>Its not pretty yet but thats for you to do :)</p>
@@ -544,7 +537,6 @@ server <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">func
 
         </div>
         <footer class="article-footer">
-    <a data-url="https://code.markedmondson.me/datascience-aas/" data-id="890680f11932cab34db4956a2a2d88ab" class="article-share-link">
         <i class="fa fa-share"></i>
         Share
     </a>
@@ -690,68 +682,68 @@ server <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">func
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/writing-a-book/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/gtm-serverside-cloudrun/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/proto-book.png)" alt="Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/princess-gtm.png)" alt="Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/writing-a-book/" class="title">Why and How I&#39;m writing a GA4 book called &#39;Learning Google Analytics&#39; for O&#39;Reilly</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/gtm-serverside-cloudrun/" class="title">Google Tag Manager Server Side on Cloud Run - Pros and Cons</a></p>
                     <p class="item-date">
-                        <time datetime="2021-10-23 11:04:50 &#43;0100 &#43;0100" itemprop="datePublished">2021-10-23</time>
+                        <time datetime="2020-08-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-21</time>
                     </p>
                 </div>
             </li>
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/googleanalyticsr-100-release/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/shiny-cloudrun/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/GA4-090.png)" alt="Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/shiny-clouds.jpg)" alt="Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/googleanalyticsr-100-release/" class="title">googleAnalyticsR v1.0.0 - GA4 API, Automatic Shiny Dashboarding, Improved UI</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/shiny-cloudrun/" class="title">Shiny on Google Cloud Run - Scale-to-Zero R Web Apps</a></p>
                     <p class="item-date">
-                        <time datetime="2021-04-17 09:29:50 &#43;0100 &#43;0100" itemprop="datePublished">2021-04-17</time>
+                        <time datetime="2020-08-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-01</time>
                     </p>
                 </div>
             </li>
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/edmondlytica/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/datascience-aas/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/edmonlytica-shiny1.png)" alt="Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/piketty-capital.png)" alt="Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/edmondlytica/" class="title">Creating your own cookieless analytics tool with GTM Server Side, Cloud Run, BigQuery and Shiny</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/datascience-aas/" class="title">Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions</a></p>
                     <p class="item-date">
-                        <time datetime="2021-03-21 09:29:50 &#43;0100 CET" itemprop="datePublished">2021-03-21</time>
+                        <time datetime="2020-06-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-06-28</time>
                     </p>
                 </div>
             </li>
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/gtm-serverside-webhooks/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/googleCloudRunner-intro/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/gtm-serverside-events.png)" alt="Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/gcp-pyramid.png)" alt="Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/gtm-serverside-webhooks/" class="title">Using Google Tag Manager Server Side to Trigger Webhook Events</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/googleCloudRunner-intro/" class="title">Introducing googleCloudRunner - serverless R on Google Cloud Platform</a></p>
                     <p class="item-date">
-                        <time datetime="2020-09-04 12:50:50 &#43;0100 &#43;0100" itemprop="datePublished">2020-09-04</time>
+                        <time datetime="2020-01-18 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-01-18</time>
                     </p>
                 </div>
             </li>
@@ -820,7 +812,7 @@ server <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">func
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/r">
                     R
                 </a>
-                <span class="category-list-count">22</span>
+                <span class="category-list-count">14</span>
             </li>
             
             <li class="category-list-item">
@@ -828,7 +820,7 @@ server <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">func
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/big-query">
                     big-query
                 </a>
-                <span class="category-list-count">7</span>
+                <span class="category-list-count">4</span>
             </li>
             
             <li class="category-list-item">
@@ -836,7 +828,7 @@ server <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">func
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/blogging">
                     blogging
                 </a>
-                <span class="category-list-count">3</span>
+                <span class="category-list-count">1</span>
             </li>
             
             <li class="category-list-item">
@@ -844,7 +836,7 @@ server <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">func
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-functions">
                     cloud-functions
                 </a>
-                <span class="category-list-count">5</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -852,7 +844,7 @@ server <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">func
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-run">
                     cloud-run
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -860,7 +852,7 @@ server <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">func
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/docker">
                     docker
                 </a>
-                <span class="category-list-count">9</span>
+                <span class="category-list-count">8</span>
             </li>
             
             <li class="category-list-item">
@@ -876,7 +868,7 @@ server <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">func
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-analytics">
                     google-analytics
                 </a>
-                <span class="category-list-count">12</span>
+                <span class="category-list-count">6</span>
             </li>
             
             <li class="category-list-item">
@@ -884,7 +876,7 @@ server <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">func
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-app-engine">
                     google-app-engine
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -892,7 +884,7 @@ server <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">func
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-auth">
                     google-auth
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">2</span>
             </li>
             
             <li class="category-list-item">
@@ -900,7 +892,7 @@ server <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">func
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-cloud-storage">
                     google-cloud-storage
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -908,15 +900,7 @@ server <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">func
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-compute-engine">
                     google-compute-engine
                 </a>
-                <span class="category-list-count">7</span>
-            </li>
-            
-            <li class="category-list-item">
-                
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-language">
-                    google-language
-                </a>
-                <span class="category-list-count">2</span>
+                <span class="category-list-count">5</span>
             </li>
             
             <li class="category-list-item">
@@ -924,7 +908,7 @@ server <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">func
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-tag-manager">
                     google-tag-manager
                 </a>
-                <span class="category-list-count">7</span>
+                <span class="category-list-count">4</span>
             </li>
             
             <li class="category-list-item">
@@ -932,7 +916,7 @@ server <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">func
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/pubsub">
                     pubsub
                 </a>
-                <span class="category-list-count">3</span>
+                <span class="category-list-count">2</span>
             </li>
             
             <li class="category-list-item">
@@ -940,7 +924,7 @@ server <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">func
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/python">
                     python
                 </a>
-                <span class="category-list-count">6</span>
+                <span class="category-list-count">5</span>
             </li>
             
             <li class="category-list-item">
@@ -948,7 +932,7 @@ server <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">func
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/rstudio-server">
                     rstudio-server
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -956,7 +940,7 @@ server <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">func
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/search-console">
                     search-console
                 </a>
-                <span class="category-list-count">3</span>
+                <span class="category-list-count">1</span>
             </li>
             
         </ul>
@@ -979,7 +963,7 @@ server <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">func
 <footer id="footer">
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2022
+      &copy; 2023
       Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
     </div>
   </div>

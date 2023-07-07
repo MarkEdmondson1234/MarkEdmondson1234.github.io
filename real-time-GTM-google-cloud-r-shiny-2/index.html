@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
-    <script async src="https://www.googleoptimize.com/optimize.js?id=GTM-WMXD7V"></script>
     <title>Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two &middot; Mark Edmondson</title>
-    <meta name="generator" content="Hugo 0.92.0" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Mark Edmondson">
     
       <meta name="description" content="The code bit of the blog">
     
-    
+      <link href="Page%28/post/2017-01-12-real-time-GTM-google-cloud-r-shiny-2.md%29" rel="alternate" type="application/rss+xml" title="Mark Edmondson" />
+      <link href="Page%28/post/2017-01-12-real-time-GTM-google-cloud-r-shiny-2.md%29" rel="feed" type="application/rss+xml" title="Mark Edmondson" />
     <link rel="canonical" href="https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/"/>
     <link rel="icon" href="https://code.markedmondson.me/favicon.ico">
     <link rel="apple-touch-icon" href="https://code.markedmondson.me/apple-touch-icon.png"/>
@@ -28,12 +27,10 @@
 <meta property="article:published_time" content="2017-01-22T14:20:57+01:00" />
 <meta property="article:modified_time" content="2017-01-22T14:20:57+01:00" />
 
-
-    
     <meta itemprop="name" content="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two">
 <meta itemprop="description" content="In part two of this two part series we walk through the steps to stream data from a Google Tag Manager (GTM) implementation into a Google App Engine (GAE) web app, which then adds data to a BigQuery table via BigQuery&rsquo;s data streaming capability. In part two, we go into how to query that table in realtime from R, make a forecast using R, then visualise it in Shiny and the JavaScript visualisation library Highcharts."><meta itemprop="datePublished" content="2017-01-22T14:20:57+01:00" />
 <meta itemprop="dateModified" content="2017-01-22T14:20:57+01:00" />
-<meta itemprop="wordCount" content="2131">
+<meta itemprop="wordCount" content="2132">
 <meta itemprop="keywords" content="python,google-app-engine,google-tag-manager,big-query,R," />
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two"/>
@@ -82,8 +79,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           
 
           
-          <a class="main-nav-link" href="/r-packages/">My R Packages</a>
-          
 
           
           
@@ -126,8 +121,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           
           
 
-          
-          <td><a class="main-nav-link" href="/r-packages/">My R Packages</a></td>
           
 
           
@@ -173,12 +166,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        31
+        20
         <span>Posts</span>
       </div>
       <div class="article-info-block">
         
-          18
+          17
         
         <span>
             Tags
@@ -278,7 +271,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2017-01-22 14:20:57 &#43;0100 CET" itemprop="datePublished">2017-01-22</time>
             &middot;
-            2131
+            2132
             words
             &middot;
             11
@@ -355,57 +348,56 @@ env_variables:
   SECRET_SALT: change_this_to_something_unique
 #[END env]
 </code></pre><p>The first function below then queries the BigQuery table we defined in the environmental variables, and turns it into JSON.  By default it will get the last row, or you can pass in the <code>limit</code> argument to get more rows, or your own <code>q</code> argument with custom SQL to query the table directly:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># queries and turns into JSON</span>
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_data</span>(q, limit <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>):
-	datasetId <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#39;DATASET_ID&#39;</span>]
-	tableId   <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#39;TABLE_ID&#39;</span>]
-
-	<span style="color:#66d9ef">if</span> len(q) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>:
-		query <span style="color:#f92672">=</span> q <span style="color:#f92672">%</span> (datasetId, tableId)
-	<span style="color:#66d9ef">else</span>:
-		query <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;SELECT * FROM </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">.</span><span style="color:#e6db74">%s</span><span style="color:#e6db74"> ORDER BY ts DESC LIMIT </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> (datasetId, tableId, limit)
-
-	bqdata <span style="color:#f92672">=</span> sync_query(query)
-
-	<span style="color:#66d9ef">return</span> json<span style="color:#f92672">.</span>dumps(bqdata)
-	
-</code></pre></div><p>This next class is called when the &ldquo;get data&rdquo; URL is requested.  A lot of headers are set to ensure no browser caching is done which we don&rsquo;t want since this is a realtime feed.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># queries and turns into JSON</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_data</span>(q, limit <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>):
+</span></span><span style="display:flex;"><span>	datasetId <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#39;DATASET_ID&#39;</span>]
+</span></span><span style="display:flex;"><span>	tableId   <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#39;TABLE_ID&#39;</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> len(q) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>:
+</span></span><span style="display:flex;"><span>		query <span style="color:#f92672">=</span> q <span style="color:#f92672">%</span> (datasetId, tableId)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>		query <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;SELECT * FROM </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">.</span><span style="color:#e6db74">%s</span><span style="color:#e6db74"> ORDER BY ts DESC LIMIT </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> (datasetId, tableId, limit)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	bqdata <span style="color:#f92672">=</span> sync_query(query)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> json<span style="color:#f92672">.</span>dumps(bqdata)
+</span></span><span style="display:flex;"><span>	
+</span></span></code></pre></div><p>This next class is called when the &ldquo;get data&rdquo; URL is requested.  A lot of headers are set to ensure no browser caching is done which we don&rsquo;t want since this is a realtime feed.</p>
 <p>For security, we also test via a <code>hash</code> parameter to make sure its an authorised request, and decide how much data to return via the <code>limit</code> parameter.</p>
 <p>Finally we call the function above and write that out to the URL response.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">QueryTable</span>(webapp2<span style="color:#f92672">.</span>RequestHandler):
-
-	<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get</span>(self):
-
-    <span style="color:#75715e"># no caching</span>
-		self<span style="color:#f92672">.</span>response<span style="color:#f92672">.</span>headers<span style="color:#f92672">.</span>add_header(<span style="color:#e6db74">&#34;Access-Control-Allow-Origin&#34;</span>, <span style="color:#e6db74">&#34;*&#34;</span>)
-		self<span style="color:#f92672">.</span>response<span style="color:#f92672">.</span>headers<span style="color:#f92672">.</span>add_header(<span style="color:#e6db74">&#34;Pragma&#34;</span>, <span style="color:#e6db74">&#34;no-cache&#34;</span>)
-		self<span style="color:#f92672">.</span>response<span style="color:#f92672">.</span>headers<span style="color:#f92672">.</span>add_header(<span style="color:#e6db74">&#34;Cache-Control&#34;</span>, <span style="color:#e6db74">&#34;no-cache, no-store, must-revalidate, pre-check=0, post-check=0&#34;</span>)
-		self<span style="color:#f92672">.</span>response<span style="color:#f92672">.</span>headers<span style="color:#f92672">.</span>add_header(<span style="color:#e6db74">&#34;Expires&#34;</span>, <span style="color:#e6db74">&#34;Thu, 01 Dec 1994 16:00:00&#34;</span>)
-		self<span style="color:#f92672">.</span>response<span style="color:#f92672">.</span>headers<span style="color:#f92672">.</span>add_header(<span style="color:#e6db74">&#34;Content-Type&#34;</span>, <span style="color:#e6db74">&#34;application/json&#34;</span>)
-
-		q      <span style="color:#f92672">=</span> cgi<span style="color:#f92672">.</span>escape(self<span style="color:#f92672">.</span>request<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;q&#34;</span>))
-		myhash <span style="color:#f92672">=</span> cgi<span style="color:#f92672">.</span>escape(self<span style="color:#f92672">.</span>request<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;hash&#34;</span>))
-		limit  <span style="color:#f92672">=</span> cgi<span style="color:#f92672">.</span>escape(self<span style="color:#f92672">.</span>request<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;limit&#34;</span>))
-
-		salt <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#39;SECRET_SALT&#39;</span>]
-		test <span style="color:#f92672">=</span> hashlib<span style="color:#f92672">.</span>sha224(q<span style="color:#f92672">+</span>salt)<span style="color:#f92672">.</span>hexdigest()
-
-		<span style="color:#66d9ef">if</span>(test <span style="color:#f92672">!=</span> myhash):
-			logging<span style="color:#f92672">.</span>debug(<span style="color:#e6db74">&#39;Expected hash: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(test))
-			logging<span style="color:#f92672">.</span>error(<span style="color:#e6db74">&#34;Incorrect hash&#34;</span>)
-			<span style="color:#66d9ef">return</span>
-
-		<span style="color:#66d9ef">if</span> len(limit) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
-			limit <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
-
-		self<span style="color:#f92672">.</span>response<span style="color:#f92672">.</span>out<span style="color:#f92672">.</span>write(get_data(q, limit))
-</code></pre></div><p>To find the hash, you can run this line and copy the result:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">
-q <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># change to the query you use directly if you donøt use the default</span>
-salt <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#39;SECRET_SALT&#39;</span>] <span style="color:#75715e"># the secret passphrase</span>
-test <span style="color:#f92672">=</span> hashlib<span style="color:#f92672">.</span>sha224(q<span style="color:#f92672">+</span>salt)<span style="color:#f92672">.</span>hexdigest()
-
-</code></pre></div><p>&hellip;or easier is to just run one call, then check the logs for the hash in the debug messages:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">QueryTable</span>(webapp2<span style="color:#f92672">.</span>RequestHandler):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get</span>(self):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># no caching</span>
+</span></span><span style="display:flex;"><span>		self<span style="color:#f92672">.</span>response<span style="color:#f92672">.</span>headers<span style="color:#f92672">.</span>add_header(<span style="color:#e6db74">&#34;Access-Control-Allow-Origin&#34;</span>, <span style="color:#e6db74">&#34;*&#34;</span>)
+</span></span><span style="display:flex;"><span>		self<span style="color:#f92672">.</span>response<span style="color:#f92672">.</span>headers<span style="color:#f92672">.</span>add_header(<span style="color:#e6db74">&#34;Pragma&#34;</span>, <span style="color:#e6db74">&#34;no-cache&#34;</span>)
+</span></span><span style="display:flex;"><span>		self<span style="color:#f92672">.</span>response<span style="color:#f92672">.</span>headers<span style="color:#f92672">.</span>add_header(<span style="color:#e6db74">&#34;Cache-Control&#34;</span>, <span style="color:#e6db74">&#34;no-cache, no-store, must-revalidate, pre-check=0, post-check=0&#34;</span>)
+</span></span><span style="display:flex;"><span>		self<span style="color:#f92672">.</span>response<span style="color:#f92672">.</span>headers<span style="color:#f92672">.</span>add_header(<span style="color:#e6db74">&#34;Expires&#34;</span>, <span style="color:#e6db74">&#34;Thu, 01 Dec 1994 16:00:00&#34;</span>)
+</span></span><span style="display:flex;"><span>		self<span style="color:#f92672">.</span>response<span style="color:#f92672">.</span>headers<span style="color:#f92672">.</span>add_header(<span style="color:#e6db74">&#34;Content-Type&#34;</span>, <span style="color:#e6db74">&#34;application/json&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		q      <span style="color:#f92672">=</span> cgi<span style="color:#f92672">.</span>escape(self<span style="color:#f92672">.</span>request<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;q&#34;</span>))
+</span></span><span style="display:flex;"><span>		myhash <span style="color:#f92672">=</span> cgi<span style="color:#f92672">.</span>escape(self<span style="color:#f92672">.</span>request<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;hash&#34;</span>))
+</span></span><span style="display:flex;"><span>		limit  <span style="color:#f92672">=</span> cgi<span style="color:#f92672">.</span>escape(self<span style="color:#f92672">.</span>request<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;limit&#34;</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		salt <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#39;SECRET_SALT&#39;</span>]
+</span></span><span style="display:flex;"><span>		test <span style="color:#f92672">=</span> hashlib<span style="color:#f92672">.</span>sha224(q<span style="color:#f92672">+</span>salt)<span style="color:#f92672">.</span>hexdigest()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span>(test <span style="color:#f92672">!=</span> myhash):
+</span></span><span style="display:flex;"><span>			logging<span style="color:#f92672">.</span>debug(<span style="color:#e6db74">&#39;Expected hash: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(test))
+</span></span><span style="display:flex;"><span>			logging<span style="color:#f92672">.</span>error(<span style="color:#e6db74">&#34;Incorrect hash&#34;</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> len(limit) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
+</span></span><span style="display:flex;"><span>			limit <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		self<span style="color:#f92672">.</span>response<span style="color:#f92672">.</span>out<span style="color:#f92672">.</span>write(get_data(q, limit))
+</span></span></code></pre></div><p>To find the hash, you can run this line and copy the result:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>q <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># change to the query you use directly if you donøt use the default</span>
+</span></span><span style="display:flex;"><span>salt <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#39;SECRET_SALT&#39;</span>] <span style="color:#75715e"># the secret passphrase</span>
+</span></span><span style="display:flex;"><span>test <span style="color:#f92672">=</span> hashlib<span style="color:#f92672">.</span>sha224(q<span style="color:#f92672">+</span>salt)<span style="color:#f92672">.</span>hexdigest()
+</span></span></code></pre></div><p>&hellip;or easier is to just run one call, then check the logs for the hash in the debug messages:</p>
 <p><img src="/images/secrethash.png" alt=""></p>
 <h3 id="full-app-engine-script">Full App Engine Script</h3>
 <p>The full script uploaded is available in the Github repository here:  <a href="https://github.com/MarkEdmondson1234/ga-bq-stream/blob/master/main.py">main.py</a></p>
@@ -415,22 +407,22 @@ test <span style="color:#f92672">=</span> hashlib<span style="color:#f92672">.</
 <p>I&rsquo;m using Shiny as it fits into existing work, but you may prefer to use some of the other <a href="https://cloud.google.com/bigquery/docs/reference/libraries">BigQuery SDKs out there</a>. I&rsquo;ll be using <a href="https://github.com/cloudyr/bigQueryR">Github version of bigQueryR</a> <code>&gt; 0.2.0.9000</code> as it has support for non-cached queries that are needed to see the tables update in realtime.</p>
 <p>A demo <a href="https://github.com/MarkEdmondson1234/realtimeShiny">Github repo for the Shiny app is available here</a>.</p>
 <p>In this case, the function in R that is in the Shiny <code>server.R</code> is below:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(bigQueryR)
-
-
-do_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function</span>(limit){
-
-  <span style="color:#75715e">## authenticate offline first, upload the .httr-oauth token</span>
-  <span style="color:#a6e22e">bqr_auth</span>()
-  q <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">sprintf</span>(<span style="color:#e6db74">&#34;SELECT * FROM [big-query-r:tests.realtime_markedmondsonme] ORDER BY ts DESC LIMIT %s&#34;</span>, 
-               limit)
-  
-  <span style="color:#a6e22e">bqr_query</span>(projectId <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;big-query-r&#34;</span>, 
-            datasetId <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;tests&#34;</span>, 
-            query <span style="color:#f92672">=</span> q, 
-            useQueryCache <span style="color:#f92672">=</span> <span style="color:#66d9ef">FALSE</span>)  
-}
-</code></pre></div><p>The <code>bqr_auth()</code> if first run offline to generate the authentication token, which is then uploaded with the app.  Alternatively you can use the <a href="http://code.markedmondson.me/googleAuthR/reference/gar_auth_service.html">JSON service auth</a> or if deploying on Google Compute Engine the automatic Google Cloud auth features of googleAuthR (<code>googleAuthR::gar_gce_auth()</code>)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(bigQueryR)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>do_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function</span>(limit){
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">## authenticate offline first, upload the .httr-oauth token</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">bqr_auth</span>()
+</span></span><span style="display:flex;"><span>  q <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">sprintf</span>(<span style="color:#e6db74">&#34;SELECT * FROM [big-query-r:tests.realtime_markedmondsonme] ORDER BY ts DESC LIMIT %s&#34;</span>, 
+</span></span><span style="display:flex;"><span>               limit)
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">bqr_query</span>(projectId <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;big-query-r&#34;</span>, 
+</span></span><span style="display:flex;"><span>            datasetId <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;tests&#34;</span>, 
+</span></span><span style="display:flex;"><span>            query <span style="color:#f92672">=</span> q, 
+</span></span><span style="display:flex;"><span>            useQueryCache <span style="color:#f92672">=</span> <span style="color:#66d9ef">FALSE</span>)  
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The <code>bqr_auth()</code> if first run offline to generate the authentication token, which is then uploaded with the app.  Alternatively you can use the <a href="http://code.markedmondson.me/googleAuthR/reference/gar_auth_service.html">JSON service auth</a> or if deploying on Google Compute Engine the automatic Google Cloud auth features of googleAuthR (<code>googleAuthR::gar_gce_auth()</code>)</p>
 <p>The query itself selects all the columns, and orders by the timestamp we supplied in the input post. The function has a parameter so you can select how many rows to collect, which we use later.</p>
 <p>Note the use of <code>useQueryCache = FALSE</code> to ensure you always get the freshest results.  If this wasn&rsquo;t selected queries of the same type will return the first result they queried, which is no good for these purposes.</p>
 <h2 id="reactivepoll---the-shiny-realtime-function">reactivePoll - the Shiny realtime function</h2>
@@ -438,133 +430,132 @@ do_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">funct
 <p>Now, what constitutes &ldquo;realtime&rdquo; is debatable here - for my applications I really only need an update every ~30 seconds.  Practically the Shiny output dims when updating with data, so for periods less than say 10 seconds it may not be the best approach for you - updating directly via JavaScript libraries may be better, and rely on say OpenCPU to provide the forecasting or another JS library.</p>
 <p>However, for my purposes I just need something better than the Google Analytics 4-hour lag in data (for GA360) and this suits well, particularly as you can apply a whole host of R data functions to the output.</p>
 <p><code>reactivePoll</code> needs to be supplied with two functions: one to check if the data has changed, the other to make the complete fetch once a change is detected.  For these we just check if the timestamp of the last entry has changed, and if so, then fetch the last 1000 results to make the prediction:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#75715e">## get 1000 rows of data</span>
-get_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function</span>(){
-
-  <span style="color:#a6e22e">message</span>(<span style="color:#e6db74">&#34;Getting new data...&#34;</span>)
-  check <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">do_bq</span>(<span style="color:#ae81ff">1000</span>)
-  
-  rt <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as.data.frame</span>(check, stringsAsFactors <span style="color:#f92672">=</span> <span style="color:#66d9ef">FALSE</span>)
-  <span style="color:#a6e22e">names</span>(rt) <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#34;pageURL&#34;</span>,<span style="color:#e6db74">&#34;Referrer&#34;</span>,<span style="color:#e6db74">&#34;ts&#34;</span>)
-  
-  <span style="color:#75715e">## turn string into JS timestamp</span>
-  rt<span style="color:#f92672">$</span>timestamp <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as.POSIXct</span>(<span style="color:#a6e22e">as.numeric</span>(<span style="color:#a6e22e">as.character</span>(rt<span style="color:#f92672">$</span>ts)), origin<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1970-01-01&#34;</span>)
-  
-  rt
-}
-
-<span style="color:#75715e">## get 1 row of data, output its timestamp</span>
-check_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function</span>(){
-  
-  check <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">do_bq</span>(<span style="color:#ae81ff">1</span>)
-  
-  <span style="color:#a6e22e">message</span>(<span style="color:#e6db74">&#34;Checking....check$ts: &#34;</span>, check<span style="color:#f92672">$</span>ts)
-  check<span style="color:#f92672">$</span>ts
-  
-}
-
-</code></pre></div><p>This is then called in the Shiny server function like so, in this case every 5 seconds:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">shinyServer</span>(<span style="color:#a6e22e">function</span>(input, output, session) {
-  
-  <span style="color:#75715e">## checks every 5 seconds for changes</span>
-  realtime_data <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">reactivePoll</span>(<span style="color:#ae81ff">5000</span>, 
-                                session, 
-                                checkFunc <span style="color:#f92672">=</span> check_bq, 
-                                valueFunc <span style="color:#f92672">=</span> get_bq)
-
-  <span style="color:#75715e">### ... do stuff with realtime_data() ...</span>
-
-}
-</code></pre></div><h2 id="transforming-data">Transforming data</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#75715e">## get 1000 rows of data</span>
+</span></span><span style="display:flex;"><span>get_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function</span>(){
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">message</span>(<span style="color:#e6db74">&#34;Getting new data...&#34;</span>)
+</span></span><span style="display:flex;"><span>  check <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">do_bq</span>(<span style="color:#ae81ff">1000</span>)
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  rt <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as.data.frame</span>(check, stringsAsFactors <span style="color:#f92672">=</span> <span style="color:#66d9ef">FALSE</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">names</span>(rt) <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#34;pageURL&#34;</span>,<span style="color:#e6db74">&#34;Referrer&#34;</span>,<span style="color:#e6db74">&#34;ts&#34;</span>)
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">## turn string into JS timestamp</span>
+</span></span><span style="display:flex;"><span>  rt<span style="color:#f92672">$</span>timestamp <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as.POSIXct</span>(<span style="color:#a6e22e">as.numeric</span>(<span style="color:#a6e22e">as.character</span>(rt<span style="color:#f92672">$</span>ts)), origin<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1970-01-01&#34;</span>)
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  rt
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## get 1 row of data, output its timestamp</span>
+</span></span><span style="display:flex;"><span>check_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function</span>(){
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  check <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">do_bq</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">message</span>(<span style="color:#e6db74">&#34;Checking....check$ts: &#34;</span>, check<span style="color:#f92672">$</span>ts)
+</span></span><span style="display:flex;"><span>  check<span style="color:#f92672">$</span>ts
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>This is then called in the Shiny server function like so, in this case every 5 seconds:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">shinyServer</span>(<span style="color:#a6e22e">function</span>(input, output, session) {
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">## checks every 5 seconds for changes</span>
+</span></span><span style="display:flex;"><span>  realtime_data <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">reactivePoll</span>(<span style="color:#ae81ff">5000</span>, 
+</span></span><span style="display:flex;"><span>                                session, 
+</span></span><span style="display:flex;"><span>                                checkFunc <span style="color:#f92672">=</span> check_bq, 
+</span></span><span style="display:flex;"><span>                                valueFunc <span style="color:#f92672">=</span> get_bq)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">### ... do stuff with realtime_data() ...</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="transforming-data">Transforming data</h2>
 <p>We then need to make the forecast, and put the data into the correct format it can be used in the chosen visualisation library, <a href="http://jkunst.com/highcharter/">highcharter</a>.</p>
 <p>The next function takes the output of the <code>realtime_data()</code> function, aggregates per hour (my lowly blog hasn&rsquo;t enough data to make it worth doing per minute, but YNMV), turns the aggregation into time series objects suitable for the forecast and highcharts functions, then outputs a list.</p>
 <p>In this case I have chosen a very simple forecast function using all the defaults of <code>forecast::forecast()</code> but this should be tweaked to your particular use cases, such as taking more account of seasonality and so forth.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">transform_rt <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function</span>(rt){
-  <span style="color:#75715e">## aggregate per hour</span>
-  rt_agg <span style="color:#f92672">&lt;-</span> rt <span style="color:#f92672">%&gt;%</span> 
-    <span style="color:#a6e22e">mutate</span>(hour <span style="color:#f92672">=</span> <span style="color:#a6e22e">format</span>(timestamp, format <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;%Y-%m-%d %H:00&#34;</span>)) <span style="color:#f92672">%&gt;%</span> 
-    <span style="color:#a6e22e">count</span>(hour)
-  
-  rt_agg<span style="color:#f92672">$</span>hour <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as.POSIXct</span>(rt_agg<span style="color:#f92672">$</span>hour, origin<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1970-01-01&#34;</span>)
-  
-  <span style="color:#75715e"># ## the number of hits per timestamp</span>
-  rt_xts <span style="color:#f92672">&lt;-</span> xts<span style="color:#f92672">::</span><span style="color:#a6e22e">xts</span>(rt_agg<span style="color:#f92672">$</span>n, frequency <span style="color:#f92672">=</span> <span style="color:#ae81ff">24</span>, order.by <span style="color:#f92672">=</span> rt_agg<span style="color:#f92672">$</span>hour)
-  rt_ts <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">ts</span>(rt_agg<span style="color:#f92672">$</span>n, frequency <span style="color:#f92672">=</span> <span style="color:#ae81ff">24</span>)
-  
-  <span style="color:#a6e22e">list</span>(forecast <span style="color:#f92672">=</span> forecast<span style="color:#f92672">::</span><span style="color:#a6e22e">forecast</span>(rt_ts, h <span style="color:#f92672">=</span> <span style="color:#ae81ff">12</span>),
-       xts <span style="color:#f92672">=</span> rt_xts)
-}
-</code></pre></div><p>All that remains now is to apply this transformation to new data as it appears (e.g. for each new visit, the hourly aggregate for the last hour increases, and the forecast updates)</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">  plot_data <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">reactive</span>({
-    
-    <span style="color:#a6e22e">req</span>(<span style="color:#a6e22e">realtime_data</span>())
-    rt <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">realtime_data</span>()
-    <span style="color:#a6e22e">message</span>(<span style="color:#e6db74">&#34;plot_data()&#34;</span>)
-    <span style="color:#75715e">## aggregate</span>
-    <span style="color:#a6e22e">transform_rt</span>(rt)
-    
-  })
-</code></pre></div><h2 id="output-to-highcharts">Output to Highcharts</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>transform_rt <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function</span>(rt){
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">## aggregate per hour</span>
+</span></span><span style="display:flex;"><span>  rt_agg <span style="color:#f92672">&lt;-</span> rt <span style="color:#f92672">%&gt;%</span> 
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">mutate</span>(hour <span style="color:#f92672">=</span> <span style="color:#a6e22e">format</span>(timestamp, format <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;%Y-%m-%d %H:00&#34;</span>)) <span style="color:#f92672">%&gt;%</span> 
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">count</span>(hour)
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  rt_agg<span style="color:#f92672">$</span>hour <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as.POSIXct</span>(rt_agg<span style="color:#f92672">$</span>hour, origin<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1970-01-01&#34;</span>)
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># ## the number of hits per timestamp</span>
+</span></span><span style="display:flex;"><span>  rt_xts <span style="color:#f92672">&lt;-</span> xts<span style="color:#f92672">::</span><span style="color:#a6e22e">xts</span>(rt_agg<span style="color:#f92672">$</span>n, frequency <span style="color:#f92672">=</span> <span style="color:#ae81ff">24</span>, order.by <span style="color:#f92672">=</span> rt_agg<span style="color:#f92672">$</span>hour)
+</span></span><span style="display:flex;"><span>  rt_ts <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">ts</span>(rt_agg<span style="color:#f92672">$</span>n, frequency <span style="color:#f92672">=</span> <span style="color:#ae81ff">24</span>)
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">list</span>(forecast <span style="color:#f92672">=</span> forecast<span style="color:#f92672">::</span><span style="color:#a6e22e">forecast</span>(rt_ts, h <span style="color:#f92672">=</span> <span style="color:#ae81ff">12</span>),
+</span></span><span style="display:flex;"><span>       xts <span style="color:#f92672">=</span> rt_xts)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>All that remains now is to apply this transformation to new data as it appears (e.g. for each new visit, the hourly aggregate for the last hour increases, and the forecast updates)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>  plot_data <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">reactive</span>({
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">req</span>(<span style="color:#a6e22e">realtime_data</span>())
+</span></span><span style="display:flex;"><span>    rt <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">realtime_data</span>()
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">message</span>(<span style="color:#e6db74">&#34;plot_data()&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">## aggregate</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">transform_rt</span>(rt)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>  })
+</span></span></code></pre></div><h2 id="output-to-highcharts">Output to Highcharts</h2>
 <p>The final output to Highcharts has been tweaked a bit to get the prediction intervals and so forth:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">  output<span style="color:#f92672">$</span>hc <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">renderHighchart</span>({
-    
-    <span style="color:#a6e22e">req</span>(<span style="color:#a6e22e">plot_data</span>())
-    <span style="color:#75715e">## forcast values object</span>
-    fc <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">plot_data</span>()<span style="color:#f92672">$</span>forecast
-    
-    <span style="color:#75715e">## original data</span>
-    raw_data <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">plot_data</span>()<span style="color:#f92672">$</span>xts
-    
-    <span style="color:#75715e"># plot last 48 hrs only, although forecast accounts for all data</span>
-    raw_data <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">tail</span>(raw_data, <span style="color:#ae81ff">48</span>)
-    raw_x_date <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as.numeric</span>(<span style="color:#a6e22e">index</span>(raw_data)) <span style="color:#f92672">*</span> <span style="color:#ae81ff">1000</span>
-    
-    <span style="color:#75715e">## start time in JS time</span>
-    forecast_x_start <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as.numeric</span>(<span style="color:#a6e22e">index</span>(raw_data)<span style="color:#a6e22e">[length</span>(raw_data)])<span style="color:#f92672">*</span><span style="color:#ae81ff">1000</span>
-    <span style="color:#75715e">## each hour after that in seconds, </span>
-    forecast_x_sequence <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">seq</span>(<span style="color:#ae81ff">3600000</span>, by <span style="color:#f92672">=</span> <span style="color:#ae81ff">3600000</span>, length.out <span style="color:#f92672">=</span> <span style="color:#ae81ff">12</span>)
-    <span style="color:#75715e">## everything * 1000 to get to Javascript time</span>
-    forecast_times <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as.numeric</span>(forecast_x_start <span style="color:#f92672">+</span> forecast_x_sequence)
-    
-    forecast_values <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as.numeric</span>(fc<span style="color:#f92672">$</span>mean)
-    
-    hc <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">highchart</span>() <span style="color:#f92672">%&gt;%</span>
-      <span style="color:#a6e22e">hc_chart</span>(zoomType <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;x&#34;</span>) <span style="color:#f92672">%&gt;%</span>
-      <span style="color:#a6e22e">hc_xAxis</span>(type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;datetime&#34;</span>) <span style="color:#f92672">%&gt;%</span> 
-      <span style="color:#a6e22e">hc_add_series</span>(type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;line&#34;</span>,
-                    name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;data&#34;</span>,
-                    data <span style="color:#f92672">=</span> <span style="color:#a6e22e">list_parse2</span>(<span style="color:#a6e22e">data.frame</span>(date <span style="color:#f92672">=</span> raw_x_date, 
-                                                  value <span style="color:#f92672">=</span> raw_data))) <span style="color:#f92672">%&gt;%</span>
-      <span style="color:#a6e22e">hc_add_series</span>(type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;arearange&#34;</span>, 
-                    name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;80%&#34;</span>,
-                    fillOpacity <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.3</span>,
-                    data <span style="color:#f92672">=</span> <span style="color:#a6e22e">list_parse2</span>(<span style="color:#a6e22e">data.frame</span>(date <span style="color:#f92672">=</span> forecast_times,
-                                                  upper <span style="color:#f92672">=</span> <span style="color:#a6e22e">as.numeric</span>(fc<span style="color:#f92672">$</span>upper[,<span style="color:#ae81ff">1</span>]),
-                                                  lower <span style="color:#f92672">=</span> <span style="color:#a6e22e">as.numeric</span>(fc<span style="color:#f92672">$</span>lower[,<span style="color:#ae81ff">1</span>])))) <span style="color:#f92672">%&gt;%</span>
-      <span style="color:#a6e22e">hc_add_series</span>(type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;arearange&#34;</span>, 
-                    name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;95%&#34;</span>,
-                    fillOpacity <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.3</span>,
-                    data <span style="color:#f92672">=</span> <span style="color:#a6e22e">list_parse2</span>(<span style="color:#a6e22e">data.frame</span>(date <span style="color:#f92672">=</span> forecast_times,
-                                                  upper <span style="color:#f92672">=</span> <span style="color:#a6e22e">as.numeric</span>(fc<span style="color:#f92672">$</span>upper[,<span style="color:#ae81ff">2</span>]),
-                                                  lower <span style="color:#f92672">=</span> <span style="color:#a6e22e">as.numeric</span>(fc<span style="color:#f92672">$</span>lower[,<span style="color:#ae81ff">2</span>])))) <span style="color:#f92672">%&gt;%</span> 
-      <span style="color:#a6e22e">hc_add_series</span>(type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;line&#34;</span>,
-                    name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;forecast&#34;</span>,
-                    data <span style="color:#f92672">=</span> <span style="color:#a6e22e">list_parse2</span>(<span style="color:#a6e22e">data.frame</span>(date <span style="color:#f92672">=</span> forecast_times, 
-                                                  value <span style="color:#f92672">=</span> forecast_values)))
-    
-    hc
-    
-  })
-</code></pre></div><p>This can then be displayed now in a very simple <code>ui.R</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(shiny)
-<span style="color:#a6e22e">library</span>(highcharter)
-
-<span style="color:#a6e22e">shinyUI</span>(<span style="color:#a6e22e">fluidPage</span>(
-  <span style="color:#a6e22e">titlePanel</span>(<span style="color:#e6db74">&#34;Realtime Shiny Dashboard from BigQuery&#34;</span>),
-  <span style="color:#a6e22e">highchartOutput</span>(<span style="color:#e6db74">&#34;hc&#34;</span>)
-  )
-)
-</code></pre></div><p>&hellip;to be tweaked and put into a template as needed.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>  output<span style="color:#f92672">$</span>hc <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">renderHighchart</span>({
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">req</span>(<span style="color:#a6e22e">plot_data</span>())
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">## forcast values object</span>
+</span></span><span style="display:flex;"><span>    fc <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">plot_data</span>()<span style="color:#f92672">$</span>forecast
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">## original data</span>
+</span></span><span style="display:flex;"><span>    raw_data <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">plot_data</span>()<span style="color:#f92672">$</span>xts
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># plot last 48 hrs only, although forecast accounts for all data</span>
+</span></span><span style="display:flex;"><span>    raw_data <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">tail</span>(raw_data, <span style="color:#ae81ff">48</span>)
+</span></span><span style="display:flex;"><span>    raw_x_date <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as.numeric</span>(<span style="color:#a6e22e">index</span>(raw_data)) <span style="color:#f92672">*</span> <span style="color:#ae81ff">1000</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">## start time in JS time</span>
+</span></span><span style="display:flex;"><span>    forecast_x_start <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as.numeric</span>(<span style="color:#a6e22e">index</span>(raw_data)<span style="color:#a6e22e">[length</span>(raw_data)])<span style="color:#f92672">*</span><span style="color:#ae81ff">1000</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">## each hour after that in seconds, </span>
+</span></span><span style="display:flex;"><span>    forecast_x_sequence <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">seq</span>(<span style="color:#ae81ff">3600000</span>, by <span style="color:#f92672">=</span> <span style="color:#ae81ff">3600000</span>, length.out <span style="color:#f92672">=</span> <span style="color:#ae81ff">12</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">## everything * 1000 to get to Javascript time</span>
+</span></span><span style="display:flex;"><span>    forecast_times <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as.numeric</span>(forecast_x_start <span style="color:#f92672">+</span> forecast_x_sequence)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    forecast_values <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as.numeric</span>(fc<span style="color:#f92672">$</span>mean)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    hc <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">highchart</span>() <span style="color:#f92672">%&gt;%</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">hc_chart</span>(zoomType <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;x&#34;</span>) <span style="color:#f92672">%&gt;%</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">hc_xAxis</span>(type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;datetime&#34;</span>) <span style="color:#f92672">%&gt;%</span> 
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">hc_add_series</span>(type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;line&#34;</span>,
+</span></span><span style="display:flex;"><span>                    name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;data&#34;</span>,
+</span></span><span style="display:flex;"><span>                    data <span style="color:#f92672">=</span> <span style="color:#a6e22e">list_parse2</span>(<span style="color:#a6e22e">data.frame</span>(date <span style="color:#f92672">=</span> raw_x_date, 
+</span></span><span style="display:flex;"><span>                                                  value <span style="color:#f92672">=</span> raw_data))) <span style="color:#f92672">%&gt;%</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">hc_add_series</span>(type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;arearange&#34;</span>, 
+</span></span><span style="display:flex;"><span>                    name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;80%&#34;</span>,
+</span></span><span style="display:flex;"><span>                    fillOpacity <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.3</span>,
+</span></span><span style="display:flex;"><span>                    data <span style="color:#f92672">=</span> <span style="color:#a6e22e">list_parse2</span>(<span style="color:#a6e22e">data.frame</span>(date <span style="color:#f92672">=</span> forecast_times,
+</span></span><span style="display:flex;"><span>                                                  upper <span style="color:#f92672">=</span> <span style="color:#a6e22e">as.numeric</span>(fc<span style="color:#f92672">$</span>upper[,<span style="color:#ae81ff">1</span>]),
+</span></span><span style="display:flex;"><span>                                                  lower <span style="color:#f92672">=</span> <span style="color:#a6e22e">as.numeric</span>(fc<span style="color:#f92672">$</span>lower[,<span style="color:#ae81ff">1</span>])))) <span style="color:#f92672">%&gt;%</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">hc_add_series</span>(type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;arearange&#34;</span>, 
+</span></span><span style="display:flex;"><span>                    name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;95%&#34;</span>,
+</span></span><span style="display:flex;"><span>                    fillOpacity <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.3</span>,
+</span></span><span style="display:flex;"><span>                    data <span style="color:#f92672">=</span> <span style="color:#a6e22e">list_parse2</span>(<span style="color:#a6e22e">data.frame</span>(date <span style="color:#f92672">=</span> forecast_times,
+</span></span><span style="display:flex;"><span>                                                  upper <span style="color:#f92672">=</span> <span style="color:#a6e22e">as.numeric</span>(fc<span style="color:#f92672">$</span>upper[,<span style="color:#ae81ff">2</span>]),
+</span></span><span style="display:flex;"><span>                                                  lower <span style="color:#f92672">=</span> <span style="color:#a6e22e">as.numeric</span>(fc<span style="color:#f92672">$</span>lower[,<span style="color:#ae81ff">2</span>])))) <span style="color:#f92672">%&gt;%</span> 
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">hc_add_series</span>(type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;line&#34;</span>,
+</span></span><span style="display:flex;"><span>                    name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;forecast&#34;</span>,
+</span></span><span style="display:flex;"><span>                    data <span style="color:#f92672">=</span> <span style="color:#a6e22e">list_parse2</span>(<span style="color:#a6e22e">data.frame</span>(date <span style="color:#f92672">=</span> forecast_times, 
+</span></span><span style="display:flex;"><span>                                                  value <span style="color:#f92672">=</span> forecast_values)))
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    hc
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>  })
+</span></span></code></pre></div><p>This can then be displayed now in a very simple <code>ui.R</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(shiny)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(highcharter)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">shinyUI</span>(<span style="color:#a6e22e">fluidPage</span>(
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">titlePanel</span>(<span style="color:#e6db74">&#34;Realtime Shiny Dashboard from BigQuery&#34;</span>),
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">highchartOutput</span>(<span style="color:#e6db74">&#34;hc&#34;</span>)
+</span></span><span style="display:flex;"><span>  )
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p>&hellip;to be tweaked and put into a template as needed.</p>
 <p>The gif doesn&rsquo;t quite do it justice, but you get the idea:</p>
 <p><img src="../images/realtime_forcast.gif" alt="Update as visits registered to the blog"></p>
 <h2 id="improvements">Improvements</h2>
@@ -577,7 +568,6 @@ check_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fu
 
         </div>
         <footer class="article-footer">
-    <a data-url="https://code.markedmondson.me/real-time-GTM-google-cloud-r-shiny-2/" data-id="6fa754014e02dd92b12c80c569ebde10" class="article-share-link">
         <i class="fa fa-share"></i>
         Share
     </a>
@@ -663,11 +653,11 @@ check_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fu
     
 
     
-    <a href="https://code.markedmondson.me/new-blog-down/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="https://code.markedmondson.me/rstudio-server-chromebook/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">
           Newer
       </strong>
-      <div class="article-nav-title">New Blog Down</div>
+      <div class="article-nav-title">Run RStudio Server on a Chromebook as a Cloud Native</div>
     </a>
     
 </nav>
@@ -723,68 +713,68 @@ check_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fu
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/writing-a-book/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/gtm-serverside-cloudrun/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/proto-book.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/princess-gtm.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/writing-a-book/" class="title">Why and How I&#39;m writing a GA4 book called &#39;Learning Google Analytics&#39; for O&#39;Reilly</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/gtm-serverside-cloudrun/" class="title">Google Tag Manager Server Side on Cloud Run - Pros and Cons</a></p>
                     <p class="item-date">
-                        <time datetime="2021-10-23 11:04:50 &#43;0100 &#43;0100" itemprop="datePublished">2021-10-23</time>
+                        <time datetime="2020-08-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-21</time>
                     </p>
                 </div>
             </li>
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/googleanalyticsr-100-release/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/shiny-cloudrun/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/GA4-090.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/shiny-clouds.jpg)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/googleanalyticsr-100-release/" class="title">googleAnalyticsR v1.0.0 - GA4 API, Automatic Shiny Dashboarding, Improved UI</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/shiny-cloudrun/" class="title">Shiny on Google Cloud Run - Scale-to-Zero R Web Apps</a></p>
                     <p class="item-date">
-                        <time datetime="2021-04-17 09:29:50 &#43;0100 &#43;0100" itemprop="datePublished">2021-04-17</time>
+                        <time datetime="2020-08-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-01</time>
                     </p>
                 </div>
             </li>
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/edmondlytica/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/datascience-aas/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/edmonlytica-shiny1.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/piketty-capital.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/edmondlytica/" class="title">Creating your own cookieless analytics tool with GTM Server Side, Cloud Run, BigQuery and Shiny</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/datascience-aas/" class="title">Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions</a></p>
                     <p class="item-date">
-                        <time datetime="2021-03-21 09:29:50 &#43;0100 CET" itemprop="datePublished">2021-03-21</time>
+                        <time datetime="2020-06-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-06-28</time>
                     </p>
                 </div>
             </li>
             
             <li>
                 <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/gtm-serverside-webhooks/" class="thumbnail">
+                    <a href="https://code.markedmondson.me/googleCloudRunner-intro/" class="thumbnail">
                     
-                        <span style="background-image:url(https://code.markedmondson.me/banners/gtm-serverside-events.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
+                        <span style="background-image:url(https://code.markedmondson.me/banners/gcp-pyramid.png)" alt="Real-time forecasting dashboard with Google Tag Manager, Google Cloud and R Shiny - Part two" class="thumbnail-image"></span>
                     
                     </a>
                 </div>
                 <div class="item-inner">
                     
-                    <p class="item-title"><a href="https://code.markedmondson.me/gtm-serverside-webhooks/" class="title">Using Google Tag Manager Server Side to Trigger Webhook Events</a></p>
+                    <p class="item-title"><a href="https://code.markedmondson.me/googleCloudRunner-intro/" class="title">Introducing googleCloudRunner - serverless R on Google Cloud Platform</a></p>
                     <p class="item-date">
-                        <time datetime="2020-09-04 12:50:50 &#43;0100 &#43;0100" itemprop="datePublished">2020-09-04</time>
+                        <time datetime="2020-01-18 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-01-18</time>
                     </p>
                 </div>
             </li>
@@ -853,7 +843,7 @@ check_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fu
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/r">
                     R
                 </a>
-                <span class="category-list-count">22</span>
+                <span class="category-list-count">14</span>
             </li>
             
             <li class="category-list-item">
@@ -861,7 +851,7 @@ check_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fu
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/big-query">
                     big-query
                 </a>
-                <span class="category-list-count">7</span>
+                <span class="category-list-count">4</span>
             </li>
             
             <li class="category-list-item">
@@ -869,7 +859,7 @@ check_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fu
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/blogging">
                     blogging
                 </a>
-                <span class="category-list-count">3</span>
+                <span class="category-list-count">1</span>
             </li>
             
             <li class="category-list-item">
@@ -877,7 +867,7 @@ check_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fu
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-functions">
                     cloud-functions
                 </a>
-                <span class="category-list-count">5</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -885,7 +875,7 @@ check_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fu
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-run">
                     cloud-run
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -893,7 +883,7 @@ check_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fu
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/docker">
                     docker
                 </a>
-                <span class="category-list-count">9</span>
+                <span class="category-list-count">8</span>
             </li>
             
             <li class="category-list-item">
@@ -909,7 +899,7 @@ check_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fu
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-analytics">
                     google-analytics
                 </a>
-                <span class="category-list-count">12</span>
+                <span class="category-list-count">6</span>
             </li>
             
             <li class="category-list-item">
@@ -917,7 +907,7 @@ check_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fu
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-app-engine">
                     google-app-engine
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -925,7 +915,7 @@ check_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fu
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-auth">
                     google-auth
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">2</span>
             </li>
             
             <li class="category-list-item">
@@ -933,7 +923,7 @@ check_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fu
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-cloud-storage">
                     google-cloud-storage
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -941,15 +931,7 @@ check_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fu
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-compute-engine">
                     google-compute-engine
                 </a>
-                <span class="category-list-count">7</span>
-            </li>
-            
-            <li class="category-list-item">
-                
-                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-language">
-                    google-language
-                </a>
-                <span class="category-list-count">2</span>
+                <span class="category-list-count">5</span>
             </li>
             
             <li class="category-list-item">
@@ -957,7 +939,7 @@ check_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fu
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/google-tag-manager">
                     google-tag-manager
                 </a>
-                <span class="category-list-count">7</span>
+                <span class="category-list-count">4</span>
             </li>
             
             <li class="category-list-item">
@@ -965,7 +947,7 @@ check_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fu
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/pubsub">
                     pubsub
                 </a>
-                <span class="category-list-count">3</span>
+                <span class="category-list-count">2</span>
             </li>
             
             <li class="category-list-item">
@@ -973,7 +955,7 @@ check_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fu
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/python">
                     python
                 </a>
-                <span class="category-list-count">6</span>
+                <span class="category-list-count">5</span>
             </li>
             
             <li class="category-list-item">
@@ -981,7 +963,7 @@ check_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fu
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/rstudio-server">
                     rstudio-server
                 </a>
-                <span class="category-list-count">4</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -989,7 +971,7 @@ check_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fu
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/search-console">
                     search-console
                 </a>
-                <span class="category-list-count">3</span>
+                <span class="category-list-count">1</span>
             </li>
             
         </ul>
@@ -1012,7 +994,7 @@ check_bq <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fu
 <footer id="footer">
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2022
+      &copy; 2023
       Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
     </div>
   </div>

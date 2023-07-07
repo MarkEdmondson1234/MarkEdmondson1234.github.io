@@ -6,28 +6,7 @@
     <description>Recent content in search-console on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
-    <lastBuildDate>Thu, 11 Jan 2018 00:00:00 +0000</lastBuildDate><atom:link href="https://code.markedmondson.me/tags/search-console/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Comparing Google Search Console queries with Google&#39;s Cloud Natural Language API</title>
-      <link>https://code.markedmondson.me/searchconsoler-vs-googlelanguager/</link>
-      <pubDate>Thu, 11 Jan 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://code.markedmondson.me/searchconsoler-vs-googlelanguager/</guid>
-      <description>With the launch of the Google Natural Language API (NLP API), and the emphasis of machine learning that is said to account for up to 30% of the SEO algorithmn for Google search, a natural question is whether you can use Google’s own macine learning APIs to help optimise your website for search.
-Whilst I don’t believe they will offer exactly the same results, I can see useful applications that include:</description>
-    </item>
-    
-    <item>
-      <title>My R Packages</title>
-      <link>https://code.markedmondson.me/r-packages/</link>
-      <pubDate>Tue, 24 Jan 2017 21:20:50 +0100</pubDate>
-      
-      <guid>https://code.markedmondson.me/r-packages/</guid>
-      <description>A full list of R packages I have published are on my Github, but some notable ones are below.
-Some are part of the cloudyR project, which has many packages useful for using R in the cloud. I concentrate on the Google cloud below, but be sure to check out the other packages if you’re looking to work with AWS or other cloud based services.
-CRAN     Status URL Description     googleAuthR The central workhorse for authentication on Google APIs   googleAnalyticsR Works with Google Analytics Reporting V3/V4 and Management APIs   googleComputeEngineR Launch Virtual Machines within the Google Cloud, via templates or your own Docker containers.</description>
-    </item>
-    
+    <lastBuildDate>Tue, 21 Jun 2016 23:03:57 +0100</lastBuildDate><atom:link href="https://code.markedmondson.me/tags/search-console/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>SEO keyword research using searchConsoleR and googleAnalyticsR</title>
       <link>https://code.markedmondson.me/search-console-google-analytics-r-keyword-research/</link>

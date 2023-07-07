@@ -18,26 +18,6 @@
     </item>
     
     <item>
-      <title>Why and How I&#39;m writing a GA4 book called &#39;Learning Google Analytics&#39; for O&#39;Reilly</title>
-      <link>https://code.markedmondson.me/writing-a-book/</link>
-      <pubDate>Sat, 23 Oct 2021 11:04:50 +0100</pubDate>
-      
-      <guid>https://code.markedmondson.me/writing-a-book/</guid>
-      <description>If you’ve been within two meters of me recently you may have heard I’m writing a book on Google Analytics 4 and I’m very excited about it. In this blog post I want to write about how it came about, and to give some love to the blog to show its not being neglected for its younger cousin, The Book.
-I want to cover how the book deal came about in case you are thinking about writing one too, the process of writing itself and how my attitude to writing has changed as a result.</description>
-    </item>
-    
-    <item>
-      <title>googleAnalyticsR v1.0.0 - GA4 API, Automatic Shiny Dashboarding, Improved UI</title>
-      <link>https://code.markedmondson.me/googleanalyticsr-100-release/</link>
-      <pubDate>Sat, 17 Apr 2021 09:29:50 +0100</pubDate>
-      
-      <guid>https://code.markedmondson.me/googleanalyticsr-100-release/</guid>
-      <description>The original intention for this blog was to announce updates to my R packages, but I tend to rely more on Twitter and other social media for that these days. A lot of documentation is also written for the package websites so I feel little need to put it on this blog as well.
-But for googleAnalyticsR v1.0.0 there are so many cool new things that I think it deserves a bit more limelight.</description>
-    </item>
-    
-    <item>
       <title>gago: Blazingly fast Google Analytics API downloads with Go</title>
       <link>https://code.markedmondson.me/gago/</link>
       <pubDate>Wed, 09 Oct 2019 00:00:00 +0000</pubDate>
@@ -57,56 +37,6 @@ The imagined use case is for when you need to download Google Analytics data but
       <description>Continuing my infatuation with cloud functions (see last post on using cloud functions to manipulate BigQuery exports) this is a post showing how to bring together various code examples out there so that you can easily upload custom data imports from a Google cloud storage bucket.
 The code is available in this GitHub repo for useful cloud functions with Google Analytics
 Extended data imports Google Analytics offers various versions of uploads.</description>
-    </item>
-    
-    <item>
-      <title>Turning GA360 BigQuery exports into partitioned tables using Cloud Functions</title>
-      <link>https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/</link>
-      <pubDate>Tue, 09 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://code.markedmondson.me/bigquery-ga360-exports-cloud-functions/</guid>
-      <description>Its been a while since my last blog, although I had a good excuse as I’ve moved house into the Copenhagen suburbs, Brønshøj. But in the meantime, I have had the chance to find my new favourite tool for data engineering - Google Cloud Functions in Python.
-This post will look at how to use them to work with the GA360 BigQuery export tables.
-The code is available in this GitHub repo for useful cloud functions with Google Analytics</description>
-    </item>
-    
-    <item>
-      <title>Talking Google Analytics dashboards via R, Shiny and Text-to-Speech APIs</title>
-      <link>https://code.markedmondson.me/talking-google-analytics-dashboards/</link>
-      <pubDate>Wed, 15 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://code.markedmondson.me/talking-google-analytics-dashboards/</guid>
-      <description>
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
-
-
-&lt;p&gt;What really makes Google Analytics stand apart from other analytics solutions for me is its integration with the Google Cloud, such as BigQuery and its machine learning APIs. An example of this integration is given in this workshop video that details how to use the &lt;a href=&#34;https://developers.google.com/analytics/devguides/reporting/core/v4/&#34;&gt;Google Analytics&lt;/a&gt; and &lt;a href=&#34;https://cloud.google.com/text-to-speech/&#34;&gt;Text-to-speech&lt;/a&gt; APIs to create a dashboard that talks through your statistics.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Five Ways to Schedule R scripts on Google Cloud Platform</title>
-      <link>https://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/</link>
-      <pubDate>Sun, 09 Jul 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://code.markedmondson.me/4-ways-schedule-r-scripts-on-google-cloud-platform/</guid>
-      <description>
-&lt;script src=&#34;https://code.markedmondson.me/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
-
-
-&lt;p&gt;A common question I come across is how to automate scheduling of R scripts downloading data. This post goes through some options that I have played around with, which I’ve mostly used for downloading API data such as Google Analytics using the Google Cloud platform, but the same principles could apply for AWS or Azure.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>My R Packages</title>
-      <link>https://code.markedmondson.me/r-packages/</link>
-      <pubDate>Tue, 24 Jan 2017 21:20:50 +0100</pubDate>
-      
-      <guid>https://code.markedmondson.me/r-packages/</guid>
-      <description>A full list of R packages I have published are on my Github, but some notable ones are below.
-Some are part of the cloudyR project, which has many packages useful for using R in the cloud. I concentrate on the Google cloud below, but be sure to check out the other packages if you’re looking to work with AWS or other cloud based services.
-CRAN     Status URL Description     googleAuthR The central workhorse for authentication on Google APIs   googleAnalyticsR Works with Google Analytics Reporting V3/V4 and Management APIs   googleComputeEngineR Launch Virtual Machines within the Google Cloud, via templates or your own Docker containers.</description>
     </item>
     
     <item>
