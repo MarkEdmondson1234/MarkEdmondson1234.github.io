@@ -2,6 +2,33 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://code.markedmondson.me/tags/cloud-run/</loc>
+    <lastmod>2023-07-07T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://code.markedmondson.me/tags/docker/</loc>
+    <lastmod>2023-07-07T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://code.markedmondson.me/</loc>
+    <lastmod>2023-07-07T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://code.markedmondson.me/post/</loc>
+    <lastmod>2023-07-07T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://code.markedmondson.me/tags/pubsub/</loc>
+    <lastmod>2023-07-07T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://code.markedmondson.me/tags/python/</loc>
+    <lastmod>2023-07-07T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://code.markedmondson.me/running-llms-on-gcp/</loc>
+    <lastmod>2023-07-07T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://code.markedmondson.me/tags/</loc>
+    <lastmod>2023-07-07T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://code.markedmondson.me/tags/vertex/</loc>
+    <lastmod>2023-07-07T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://code.markedmondson.me/sending-ga4-events-pubsub/</loc>
     <lastmod>2022-01-04T00:00:00+00:00</lastmod>
   </url><url>
@@ -16,27 +43,6 @@
   </url><url>
     <loc>https://code.markedmondson.me/tags/google-tag-manager/</loc>
     <lastmod>2022-01-04T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://code.markedmondson.me/</loc>
-    <lastmod>2022-01-04T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://code.markedmondson.me/post/</loc>
-    <lastmod>2022-01-04T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://code.markedmondson.me/tags/pubsub/</loc>
-    <lastmod>2022-01-04T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://code.markedmondson.me/tags/python/</loc>
-    <lastmod>2022-01-04T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://code.markedmondson.me/tags/</loc>
-    <lastmod>2022-01-04T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://code.markedmondson.me/tags/cloud-run/</loc>
-    <lastmod>2020-08-21T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://code.markedmondson.me/tags/docker/</loc>
-    <lastmod>2020-08-21T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://code.markedmondson.me/gtm-serverside-cloudrun/</loc>
     <lastmod>2020-08-21T00:00:00+00:00</lastmod>

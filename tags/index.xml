@@ -6,7 +6,52 @@
     <description>Recent content in Tags on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
-    <lastBuildDate>Tue, 04 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://code.markedmondson.me/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 07 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://code.markedmondson.me/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>cloud-run</title>
+      <link>https://code.markedmondson.me/tags/cloud-run/</link>
+      <pubDate>Fri, 07 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://code.markedmondson.me/tags/cloud-run/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>docker</title>
+      <link>https://code.markedmondson.me/tags/docker/</link>
+      <pubDate>Fri, 07 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://code.markedmondson.me/tags/docker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>pubsub</title>
+      <link>https://code.markedmondson.me/tags/pubsub/</link>
+      <pubDate>Fri, 07 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://code.markedmondson.me/tags/pubsub/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>python</title>
+      <link>https://code.markedmondson.me/tags/python/</link>
+      <pubDate>Fri, 07 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://code.markedmondson.me/tags/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>vertex</title>
+      <link>https://code.markedmondson.me/tags/vertex/</link>
+      <pubDate>Fri, 07 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://code.markedmondson.me/tags/vertex/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>big-query</title>
       <link>https://code.markedmondson.me/tags/big-query/</link>
@@ -40,42 +85,6 @@
       <pubDate>Tue, 04 Jan 2022 00:00:00 +0000</pubDate>
       
       <guid>https://code.markedmondson.me/tags/google-tag-manager/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>pubsub</title>
-      <link>https://code.markedmondson.me/tags/pubsub/</link>
-      <pubDate>Tue, 04 Jan 2022 00:00:00 +0000</pubDate>
-      
-      <guid>https://code.markedmondson.me/tags/pubsub/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>python</title>
-      <link>https://code.markedmondson.me/tags/python/</link>
-      <pubDate>Tue, 04 Jan 2022 00:00:00 +0000</pubDate>
-      
-      <guid>https://code.markedmondson.me/tags/python/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>cloud-run</title>
-      <link>https://code.markedmondson.me/tags/cloud-run/</link>
-      <pubDate>Fri, 21 Aug 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://code.markedmondson.me/tags/cloud-run/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>docker</title>
-      <link>https://code.markedmondson.me/tags/docker/</link>
-      <pubDate>Fri, 21 Aug 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://code.markedmondson.me/tags/docker/</guid>
       <description></description>
     </item>
     

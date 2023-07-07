@@ -6,7 +6,19 @@
     <description>Recent content in Posts on Mark Edmondson</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
-    <lastBuildDate>Tue, 04 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://code.markedmondson.me/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 07 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://code.markedmondson.me/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Running Large Language Models on Google Cloud Platform via Cloud Run, VertexAI and PubSub - LLMOps on GCP</title>
+      <link>https://code.markedmondson.me/running-llms-on-gcp/</link>
+      <pubDate>Fri, 07 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://code.markedmondson.me/running-llms-on-gcp/</guid>
+      <description>&lt;p&gt;Hello blog, its been a long time.  Since I finished the GA4 book I have had a good break and lots of life events have happened such as a new job, philosophies and family arrangements, but I have always intended to pick this thread up again once I had an idea on where it would best lead.&lt;/p&gt;
+&lt;p&gt;As old readers may remember, I&amp;rsquo;ve always tried to work on the meta-horizons of where I am, restlessly looking for the next exciting lesson, and that impulse has led me to Large Language Models (LLMs) sparked off by the Chat-GPT revolution, but foreshadowed by the image generation models such as Stable Diffusion a few months before.&lt;/p&gt;
+&lt;p&gt;A key facilitator has been Harrison Chase&amp;rsquo;s &lt;a href=&#34;https://python.langchain.com&#34;&gt;Langchain&lt;/a&gt;, an active hive of open-source goodness.  It has allowed me to learn and imagine and digest this new active field of LLMops (Large Language Model Operations), that is the data engineering to make LLMs actually useful on a day to day basis.  I took it upon myself to see how I could apply my Google Cloud Platform (GCP) data engineering background to these new toys Langchain has helped provide.&lt;/p&gt;
+&lt;p&gt;This means I now have this new brain, Edmonbrain, that I converse with daily in Google Chat, Slack and Discord.  I have fed it in interesting URLs, Git repos and Whitepapers so I can build up a unique bot of my very own.  I fed it my own book, and can ask it questions about it, for example:&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title>Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit</title>
       <link>https://code.markedmondson.me/sending-ga4-events-pubsub/</link>

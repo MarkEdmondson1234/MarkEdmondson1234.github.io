@@ -162,12 +162,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        20
+        21
         <span>Posts</span>
       </div>
       <div class="article-info-block">
         
-          17
+          18
         
         <span>
             Tags
@@ -249,6 +249,159 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <section id="main">
     
     
+
+<article class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        <a href="https://code.markedmondson.me/running-llms-on-gcp/" itemprop="url">
+            <img src="https://code.markedmondson.me/banners/webb-deep-space.jpeg" class="article-banner">
+        
+        </a>
+
+        <header class="article-header">
+    <a href="https://code.markedmondson.me/running-llms-on-gcp/">
+    <h1 class="article-title" itemprop="name">
+        Running Large Language Models on Google Cloud Platform via Cloud Run, VertexAI and PubSub - LLMOps on GCP
+    </h1>
+    </a>
+    <div class="article-meta">
+
+        
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2023-07-07 00:00:00 &#43;0000 UTC" itemprop="datePublished">2023-07-07</time>
+            &middot;
+            3078
+            words
+            &middot;
+            15
+            minute read
+        </div>
+        
+        
+            
+            
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/cloud-run">cloud-run</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/docker">docker</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/pubsub">pubsub</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/python">python</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/vertex">vertex</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+        <div class="article-entry" itemprop="articleBody">
+            <p>
+                <p>Hello blog, its been a long time.  Since I finished the GA4 book I have had a good break and lots of life events have happened such as a new job, philosophies and family arrangements, but I have always intended to pick this thread up again once I had an idea on where it would best lead.</p>
+<p>As old readers may remember, I&rsquo;ve always tried to work on the meta-horizons of where I am, restlessly looking for the next exciting lesson, and that impulse has led me to Large Language Models (LLMs) sparked off by the Chat-GPT revolution, but foreshadowed by the image generation models such as Stable Diffusion a few months before.</p>
+<p>A key facilitator has been Harrison Chase&rsquo;s <a href="https://python.langchain.com">Langchain</a>, an active hive of open-source goodness.  It has allowed me to learn and imagine and digest this new active field of LLMops (Large Language Model Operations), that is the data engineering to make LLMs actually useful on a day to day basis.  I took it upon myself to see how I could apply my Google Cloud Platform (GCP) data engineering background to these new toys Langchain has helped provide.</p>
+<p>This means I now have this new brain, Edmonbrain, that I converse with daily in Google Chat, Slack and Discord.  I have fed it in interesting URLs, Git repos and Whitepapers so I can build up a unique bot of my very own.  I fed it my own book, and can ask it questions about it, for example:</p>
+            </p>
+            <p class="article-more-link">
+                <a href="https://code.markedmondson.me/running-llms-on-gcp/">
+                    Read more
+                </a>
+            </p>
+        </div>
+        <footer class="article-footer">
+        <i class="fa fa-share"></i>
+        Share
+    </a>
+    
+
+    <script>
+    (function ($) {
+        
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+    </script>
+</footer>
+
+    </div>
+</article>
 
 <article class="article article-type-post" itemscope="" itemprop="blogPost">
     <div class="article-inner">
@@ -2946,138 +3099,15 @@ googleAnalyticsR searchConsoleR bigQueryR Batching This means the libraries abov
     </div>
 </article>
 
-<article class="article article-type-post" itemscope="" itemprop="blogPost">
-    <div class="article-inner">
-        
-        </a>
-
-        <header class="article-header">
-    <a href="https://code.markedmondson.me/hello-world/">
-    <h1 class="article-title" itemprop="name">
-        Jekyll &#43; Github &#43; Markdown = Blog
-    </h1>
-    </a>
-    <div class="article-meta">
-
-        
-        <div class="article-date">
-            <i class="fa fa-calendar"></i>
-            <time datetime="2016-01-14 23:03:57 &#43;0100 CET" itemprop="datePublished">2016-01-14</time>
-            &middot;
-            180
-            words
-            &middot;
-            1
-            minute read
-        </div>
-        
-        
-
-        
-            
-            
-            <div class="article-category">
-                <i class="fa fa-tags"></i>
-                
-                
-                <a class="article-category-link" href="https://code.markedmondson.me/tags/blogging">blogging</a>
-                
-                
-            </div>
-            
-        
-    </div>
-</header>
-
-        <div class="article-entry" itemprop="articleBody">
-            <p>
-                Hello World! Welcome to my new home for code blogging. I&rsquo;ll keep the regular blog for all the other stuff, running on Posthaven.
-Why? Its educational, and free, and writing code posts using Posthaven&rsquo;s rich text editor was sometimes painful.
-Using this setup means its all written in Markdown so I get control over everything just the way I want it, and since it combines Github and Markdown, two things I know well already, Jekyll seemed worth knowing.
-            </p>
-            <p class="article-more-link">
-                <a href="https://code.markedmondson.me/hello-world/">
-                    Read more
-                </a>
-            </p>
-        </div>
-        <footer class="article-footer">
-        <i class="fa fa-share"></i>
-        Share
-    </a>
-    
-
-    <script>
-    (function ($) {
-        
-        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
-            __SHARE_BUTTON_BINDED__ = true;
-        } else {
-            return;
-        }
-        $('body').on('click', function() {
-            $('.article-share-box.on').removeClass('on');
-        }).on('click', '.article-share-link', function(e) {
-            e.stopPropagation();
-
-            var $this = $(this),
-                url = $this.attr('data-url'),
-                encodedUrl = encodeURIComponent(url),
-                id = 'article-share-box-' + $this.attr('data-id'),
-                offset = $this.offset(),
-                box;
-
-            if ($('#' + id).length) {
-                box = $('#' + id);
-
-                if (box.hasClass('on')){
-                    box.removeClass('on');
-                    return;
-                }
-            } else {
-                var html = [
-                    '<div id="' + id + '" class="article-share-box">',
-                        '<input class="article-share-input" value="' + url + '">',
-                        '<div class="article-share-links">',
-                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
-                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
-                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
-                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
-                        '</div>',
-                    '</div>'
-                ].join('');
-
-              box = $(html);
-
-              $('body').append(box);
-            }
-
-            $('.article-share-box.on').hide();
-
-            box.css({
-                top: offset.top + 25,
-                left: offset.left
-            }).addClass('on');
-
-        }).on('click', '.article-share-box', function (e) {
-            e.stopPropagation();
-        }).on('click', '.article-share-box-input', function () {
-            $(this).select();
-        }).on('click', '.article-share-box-link', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
-        });
-    })(jQuery);
-    </script>
-</footer>
-
-    </div>
-</article>
-
 
 <nav id="page-nav">
+
+    
+    
+        <a class="extend next" rel="next" href="https://code.markedmondson.me/page/2/">
+            Next »
+        </a>
+    
 
 </nav>
 
@@ -3094,6 +3124,25 @@ Using this setup means its all written in Markdown so I get control over everyth
     </h3>
     <div class="widget">
         <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/running-llms-on-gcp/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/webb-deep-space.jpeg)" alt="Mark Edmondson" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/running-llms-on-gcp/" class="title">Running Large Language Models on Google Cloud Platform via Cloud Run, VertexAI and PubSub - LLMOps on GCP</a></p>
+                    <p class="item-date">
+                        <time datetime="2023-07-07 00:00:00 &#43;0000 UTC" itemprop="datePublished">2023-07-07</time>
+                    </p>
+                </div>
+            </li>
             
             <li>
                 <div class="item-thumbnail">
@@ -3161,23 +3210,6 @@ Using this setup means its all written in Markdown so I get control over everyth
                     <p class="item-title"><a href="https://code.markedmondson.me/datascience-aas/" class="title">Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions</a></p>
                     <p class="item-date">
                         <time datetime="2020-06-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-06-28</time>
-                    </p>
-                </div>
-            </li>
-            
-            <li>
-                <div class="item-thumbnail">
-                    <a href="https://code.markedmondson.me/googleCloudRunner-intro/" class="thumbnail">
-                    
-                        <span style="background-image:url(https://code.markedmondson.me/banners/gcp-pyramid.png)" alt="Mark Edmondson" class="thumbnail-image"></span>
-                    
-                    </a>
-                </div>
-                <div class="item-inner">
-                    
-                    <p class="item-title"><a href="https://code.markedmondson.me/googleCloudRunner-intro/" class="title">Introducing googleCloudRunner - serverless R on Google Cloud Platform</a></p>
-                    <p class="item-date">
-                        <time datetime="2020-01-18 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-01-18</time>
                     </p>
                 </div>
             </li>
@@ -3278,7 +3310,7 @@ Using this setup means its all written in Markdown so I get control over everyth
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-run">
                     cloud-run
                 </a>
-                <span class="category-list-count">3</span>
+                <span class="category-list-count">4</span>
             </li>
             
             <li class="category-list-item">
@@ -3286,7 +3318,7 @@ Using this setup means its all written in Markdown so I get control over everyth
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/docker">
                     docker
                 </a>
-                <span class="category-list-count">8</span>
+                <span class="category-list-count">9</span>
             </li>
             
             <li class="category-list-item">
@@ -3350,7 +3382,7 @@ Using this setup means its all written in Markdown so I get control over everyth
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/pubsub">
                     pubsub
                 </a>
-                <span class="category-list-count">2</span>
+                <span class="category-list-count">3</span>
             </li>
             
             <li class="category-list-item">
@@ -3358,7 +3390,7 @@ Using this setup means its all written in Markdown so I get control over everyth
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/python">
                     python
                 </a>
-                <span class="category-list-count">5</span>
+                <span class="category-list-count">6</span>
             </li>
             
             <li class="category-list-item">
@@ -3373,6 +3405,14 @@ Using this setup means its all written in Markdown so I get control over everyth
                 
                 <a class="category-list-link" href="https://code.markedmondson.me/tags/search-console">
                     search-console
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/vertex">
+                    vertex
                 </a>
                 <span class="category-list-count">1</span>
             </li>

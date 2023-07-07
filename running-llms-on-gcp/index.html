@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <title>Running Large Language Models on Google Cloud Platform via Cloud Run, VertexAI and PubSub - LLMOps on GCP &middot; Mark Edmondson</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Mark Edmondson">
+    
+      <meta name="description" content="The code bit of the blog">
+    
+      <link href="Page%28/post/2023-07-07-running-llms-on-gcp/index.md%29" rel="alternate" type="application/rss+xml" title="Mark Edmondson" />
+      <link href="Page%28/post/2023-07-07-running-llms-on-gcp/index.md%29" rel="feed" type="application/rss+xml" title="Mark Edmondson" />
+    <link rel="canonical" href="https://code.markedmondson.me/running-llms-on-gcp/"/>
+    <link rel="icon" href="https://code.markedmondson.me/favicon.ico">
+    <link rel="apple-touch-icon" href="https://code.markedmondson.me/apple-touch-icon.png"/>
+    <link rel="stylesheet" href="https://code.markedmondson.me/css/style.css">
+    <link rel="stylesheet" href="https://code.markedmondson.me/css/github.css" rel="stylesheet" id="theme-stylesheet">
+    <link rel="stylesheet" href="https://code.markedmondson.me/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://code.markedmondson.me/fancybox/jquery.fancybox.css">
+    
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+    <meta property="og:title" content="Running Large Language Models on Google Cloud Platform via Cloud Run, VertexAI and PubSub - LLMOps on GCP" />
+<meta property="og:description" content="Hello blog, its been a long time.  Since I finished the GA4 book I have had a good break and lots of life events have happened such as a new job, philosophies and family arrangements, but I have always intended to pick this thread up again once I had an idea on where it would best lead.
+As old readers may remember, I&rsquo;ve always tried to work on the meta-horizons of where I am, restlessly looking for the next exciting lesson, and that impulse has led me to Large Language Models (LLMs) sparked off by the Chat-GPT revolution, but foreshadowed by the image generation models such as Stable Diffusion a few months before.
+A key facilitator has been Harrison Chase&rsquo;s Langchain, an active hive of open-source goodness.  It has allowed me to learn and imagine and digest this new active field of LLMops (Large Language Model Operations), that is the data engineering to make LLMs actually useful on a day to day basis.  I took it upon myself to see how I could apply my Google Cloud Platform (GCP) data engineering background to these new toys Langchain has helped provide.
+This means I now have this new brain, Edmonbrain, that I converse with daily in Google Chat, Slack and Discord.  I have fed it in interesting URLs, Git repos and Whitepapers so I can build up a unique bot of my very own.  I fed it my own book, and can ask it questions about it, for example:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://code.markedmondson.me/running-llms-on-gcp/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2023-07-07T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-07-07T00:00:00+00:00" />
+
+    <meta itemprop="name" content="Running Large Language Models on Google Cloud Platform via Cloud Run, VertexAI and PubSub - LLMOps on GCP">
+<meta itemprop="description" content="Hello blog, its been a long time.  Since I finished the GA4 book I have had a good break and lots of life events have happened such as a new job, philosophies and family arrangements, but I have always intended to pick this thread up again once I had an idea on where it would best lead.
+As old readers may remember, I&rsquo;ve always tried to work on the meta-horizons of where I am, restlessly looking for the next exciting lesson, and that impulse has led me to Large Language Models (LLMs) sparked off by the Chat-GPT revolution, but foreshadowed by the image generation models such as Stable Diffusion a few months before.
+A key facilitator has been Harrison Chase&rsquo;s Langchain, an active hive of open-source goodness.  It has allowed me to learn and imagine and digest this new active field of LLMops (Large Language Model Operations), that is the data engineering to make LLMs actually useful on a day to day basis.  I took it upon myself to see how I could apply my Google Cloud Platform (GCP) data engineering background to these new toys Langchain has helped provide.
+This means I now have this new brain, Edmonbrain, that I converse with daily in Google Chat, Slack and Discord.  I have fed it in interesting URLs, Git repos and Whitepapers so I can build up a unique bot of my very own.  I fed it my own book, and can ask it questions about it, for example:"><meta itemprop="datePublished" content="2023-07-07T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2023-07-07T00:00:00+00:00" />
+<meta itemprop="wordCount" content="3078">
+<meta itemprop="keywords" content="cloud-run,docker,pubsub,python,vertex," />
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Running Large Language Models on Google Cloud Platform via Cloud Run, VertexAI and PubSub - LLMOps on GCP"/>
+<meta name="twitter:description" content="Hello blog, its been a long time.  Since I finished the GA4 book I have had a good break and lots of life events have happened such as a new job, philosophies and family arrangements, but I have always intended to pick this thread up again once I had an idea on where it would best lead.
+As old readers may remember, I&rsquo;ve always tried to work on the meta-horizons of where I am, restlessly looking for the next exciting lesson, and that impulse has led me to Large Language Models (LLMs) sparked off by the Chat-GPT revolution, but foreshadowed by the image generation models such as Stable Diffusion a few months before.
+A key facilitator has been Harrison Chase&rsquo;s Langchain, an active hive of open-source goodness.  It has allowed me to learn and imagine and digest this new active field of LLMops (Large Language Model Operations), that is the data engineering to make LLMs actually useful on a day to day basis.  I took it upon myself to see how I could apply my Google Cloud Platform (GCP) data engineering background to these new toys Langchain has helped provide.
+This means I now have this new brain, Edmonbrain, that I converse with daily in Google Chat, Slack and Discord.  I have fed it in interesting URLs, Git repos and Whitepapers so I can build up a unique bot of my very own.  I fed it my own book, and can ask it questions about it, for example:"/>
+<meta name="twitter:site" content="@HoloMarkeD"/>
+
+    
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://gtm2.markedmondson.me/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WFFMBH');</script>
+
+
+
+    <script src="https://code.markedmondson.me/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+
+
+<div id="container">
+	<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="https://code.markedmondson.me/" id="logo">
+          
+          <i class="logo" style="background-image: url('https://code.markedmondson.me/images/greenhand.png')"></i>
+          
+          <span class="site-title">Mark Edmondson</span>
+      </a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="https://code.markedmondson.me/">Home</a>
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.markedmondson.me/posts/">Non-code blog</a>
+          
+          
+          
+          <a class="main-nav-link" href="https://www.markedmondson.me/static/presentations/">Past Presentations</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="https://code.markedmondson.me/images/gde_avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+              <input type="hidden" name="sitesearch" value="https://code.markedmondson.me/" />
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="https://code.markedmondson.me/">Home</a></td>
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.markedmondson.me/posts/">Non-code blog</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="https://www.markedmondson.me/static/presentations/">Past Presentations</a></td>
+          
+          
+          <td>
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" class="search-form-input" placeholder="Search">
+          <input type="hidden" name="sitesearch" value="https://code.markedmondson.me/" />
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+   	
+   	<div class="outer">
+   	
+    	<aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      
+      <img id="avatar" src="https://code.markedmondson.me/images/gde_avatar.jpg">
+      
+      <h2 id="name">Mark Edmondson</h2>
+      <h3 id="title">Coding in digital analytics</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Copenhagen, Denmark</span>
+      
+          <a id="follow" href="https://github.com/MarkEdmondson1234">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+      <div class="article-info-block">
+        21
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          18
+        
+        <span>
+            Tags
+        </span>
+      </div>
+    </div>
+    <div class="profile-block social-links">
+      <table>
+        <tr>
+          
+<td><a href="//github.com/MarkEdmondson1234" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/MarkEdmondsonAtHome" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//linkedin.com/in/markpeteredmondson" target="_blank" title="LinkedIn"><i class="fa fa-linkedin"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/HoloMarkeD" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="https://code.markedmondson.me/index.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</aside>
+
+    
+
+    <section id="main">
+    
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+            <img src="https://code.markedmondson.me/banners/webb-deep-space.jpeg" class="article-banner">
+        
+
+        <header class="article-header">
+    <a href="https://code.markedmondson.me/running-llms-on-gcp/">
+    <h1 class="article-title" itemprop="name">
+        Running Large Language Models on Google Cloud Platform via Cloud Run, VertexAI and PubSub - LLMOps on GCP
+    </h1>
+    </a>
+    <div class="article-meta">
+
+        
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2023-07-07 00:00:00 &#43;0000 UTC" itemprop="datePublished">2023-07-07</time>
+            &middot;
+            3078
+            words
+            &middot;
+            15
+            minute read
+        </div>
+        
+        
+            
+            
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/cloud-run">cloud-run</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/docker">docker</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/pubsub">pubsub</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/python">python</a>
+                &middot;
+                
+                
+                <a class="article-category-link" href="https://code.markedmondson.me/tags/vertex">vertex</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+        <div class="article-entry" itemprop="articleBody">
+            <p>Hello blog, its been a long time.  Since I finished the GA4 book I have had a good break and lots of life events have happened such as a new job, philosophies and family arrangements, but I have always intended to pick this thread up again once I had an idea on where it would best lead.</p>
+<p>As old readers may remember, I&rsquo;ve always tried to work on the meta-horizons of where I am, restlessly looking for the next exciting lesson, and that impulse has led me to Large Language Models (LLMs) sparked off by the Chat-GPT revolution, but foreshadowed by the image generation models such as Stable Diffusion a few months before.</p>
+<p>A key facilitator has been Harrison Chase&rsquo;s <a href="https://python.langchain.com">Langchain</a>, an active hive of open-source goodness.  It has allowed me to learn and imagine and digest this new active field of LLMops (Large Language Model Operations), that is the data engineering to make LLMs actually useful on a day to day basis.  I took it upon myself to see how I could apply my Google Cloud Platform (GCP) data engineering background to these new toys Langchain has helped provide.</p>
+<p>This means I now have this new brain, Edmonbrain, that I converse with daily in Google Chat, Slack and Discord.  I have fed it in interesting URLs, Git repos and Whitepapers so I can build up a unique bot of my very own.  I fed it my own book, and can ask it questions about it, for example:</p>
+<p><img src="images/edmonbrain-demo.png" alt="edmonbrain gchat bot"></p>
+<p>And I&rsquo;m just getting started - imagine if we all shared a custom resource, and our feedback, questions and dreams are part of the bot&rsquo;s context?</p>
+<p>If you buy me a drink I will talk at length about how OpenAI, Google, Meta and Microsoft are interacting within this space, what the future may hold and what we can do already, but to keep a tight scope for this blog post I will share how I&rsquo;ve made Edmonbrain: a chat-bot powered by LLMs that can talk about my own private data.  As to the rest of the conversation about LLMs, I will for now only say I think I&rsquo;m 20-50% more productive in developing ideas thanks to them, and that I do believe we are at a place where the nature of work will change as a result once that is applied more generally throughout the population.  Naturally, Edmonbrain was very much LLM assisted and it was amazing to work with.</p>
+<h2 id="my-aims-for-llmops-on-google-cloud-platform">My Aims for LLMOps on Google Cloud Platform</h2>
+<p>My general aims for this data architecture were the following:</p>
+<ul>
+<li>As cheap as possible - scale-to-zero serverless</li>
+<li>As interoperability as possible - ability to switch out between models, databases and UIs</li>
+<li>Extendable - Be able to add new endpoints easily</li>
+<li>Modular - Be able to switch out different components with their own code base</li>
+<li>Private - be able to involve no 3rd parties outside of GCP, my trusted cloud provider</li>
+<li>Scalable - be able to go from zero to a billion if I pay money</li>
+<li>Easy to add your own data to - I wanted users to easily add their own sources such as URLs, GitHub repos, Google Drive folders etc.</li>
+<li>No authentication keys - use Google metadata to auth for ease of use and security</li>
+</ul>
+<p>My primary aim was to have a way for an entire company to share all their internal documents, chats, thoughts and dreams and have an LLM bot that could reply to questions against those documents to anyone who asked.  A &ldquo;company wide brain&rdquo;.  My ambition is that if adopted it could enable more efficient communication between colleagues in a familiar context: the chat apps they already use to chat to colleagues.</p>
+<p>Given the above, on GCP this always meant to me I would be running Cloud Run and Pub/Sub within my main orchestration.  Once Google also announced support for pgvector on AlloyDB and CloudSQL, this also meant I had more options other than the enterprise Matching Engine for a vectorstore.  But I&rsquo;m getting ahead of myself, lets show some of the main features that LLMOps as a field is creating as an emerging standard.</p>
+<h2 id="what-is-needed-for-running-an-llm-bot">What is needed for running an LLM bot?</h2>
+<p>The first material I produced for LLM on GCP was this slide deck on <a href="https://docs.google.com/presentation/d/1SsbkTz5NJCkDVuHCqBh_CKA_0TEReNlHfMyvI2Yj8Ok/edit?usp=sharing">&ldquo;Edmonbrain - building a brain&rdquo; in June 2023</a>.  I have to say when I presented it as its probably already out of date, given the pace of updates at the moment. It includes introducing a few key components that I summarise below:</p>
+<ul>
+<li>
+<p>LLM - the &ldquo;brain&rdquo; that will respond to the text you send in. This is the magic that enables everything else.  It supplies the intrinsic language understanding that was lacking in previous bots, and advanced LLMs can be like conversing to a knowledgeable individual</p>
+</li>
+<li>
+<p>Chat history - to make conversations natural, the LLM needs a short-term memory on what has happened.  This doesn&rsquo;t come for free (yet) in the APIs.  You need to supply the chat history and add it to the API calls you are making to the LLM</p>
+</li>
+<li>
+<p>Context - this is the current piece that is enabling a lot of excitement at the moment.  It basically means you pasting in a few examples or text context to any question you are asking, to help facilitate the LLMs answer, a form of prompt engineering.  If you ask &ldquo;What is my name?&rdquo; tools such as Langchain can turn that prompt into &ldquo;Answer below based on the context provided: What is my name?  Context: Mark Edmondson is the creator of this tool&rdquo;.  Its a simple idea but with very powerful applications once you automate generating that context.</p>
+</li>
+<li>
+<p>Vectorstore - this is the hot new tech that enables the context above.  You have a limited window of text to add to prompts, although there is a new arms race about which model can provide the largest context window (1 billion tokens?).  Vectorstores hold the vectors of text embeddings that help similarity searches so you can select the best context to add to the prompt to help its answers.  The gif below from Matching Engine helps illustrate what they are doing: vectors are similar if encoding similar context, and so you look for points close to existing embedded vectors when you get a new prompt so that the context returned is hopefully useful. <img src="https://lh5.googleusercontent.com/UTo1ko1g4Nil8N3ex7TKPjLkaWy9n3C8jSV9fRwSUOH77WhgoSmUA5ikU5LW1seey5pZZlWREpQnGnZ4UzeiWHbLROe9cEnhfh9nvlzTro-N9evwJbmQ-anxg33rNoLms-M2q5Ucrw5_ckq6mFlmZfF2VA=s2048" alt=""></p>
+</li>
+<li>
+<p>UX - how you interact with the bot.  Although there are lots of web based chat bots out there, I avoided the rabbit hole of building a UI by enabling LLM powered bots in the chat platforms I use daily, namely Discord, Slack and Google Chat.  You get a lot of features for free such as chat history, user management and mobile/desktop apps.</p>
+</li>
+<li>
+<p>Orchestration - you need something that strings all the above components together.  Langchain excels here since it offers a consistent API where you can swap out say the OpenAI and VertexAI LLM models, or say a Supabase, Chroma or CloudSQL database being used for your vectorstore.</p>
+</li>
+</ul>
+<p>The above are represented by these data architecture diagrams that I&rsquo;ve made or saved from the web.  Incidentally Langchain is also a great social media account to follow to keep up to date with all of the above.</p>
+<p><img src="images/LLM_app_stack.jpg" alt="large language app stack">
+<em>click to get bigger</em></p>
+<p>Its from <a href="https://a16z.com/2023/06/20/emerging-architectures-for-llm-applications/">Emerging Architectures for LLM Applications</a> by a16z.com which was my first realisation this is an emerging field that I&rsquo;d like to be involved with.</p>
+<p>Below is a diagram I made that helped me break down what I needed for my ambitions:</p>
+<p><img src="images/my-llm-stack.png" alt="my llm stack">
+What I don&rsquo;t cover in this blog are the tools or agents at the bottom.  Thats my next step.  But this diagram was the blueprint to what I built below.</p>
+<h2 id="google-cloud-platforms-data-architecture-for-llmops">Google Cloud Platform&rsquo;s Data Architecture for LLMOps</h2>
+<p>My solution was to use Cloud Run running various HTTP apps that are used as micro-services for all the different components.  This allowed me to tailor code for each micro-service as necessary, and to also take advantage of serverless scale to make big parallel processing when needed, but scale to zero when quiet.  The Cloud Run services include:</p>
+<ul>
+<li>Google Chat App - this accepts HTTP requests from a Google Chat bot, parses the questions into suitable format for the QA service.  It also includes some slash command processing to change behaviour such as a different LLM (Codey vs Bison).  It receives the answers back from the QA service, and sends them with formatting back to the user.</li>
+<li>Slack and Discord - similarly, there are Slack and Discord Apps dealing with their own APIs but outputting the same as the Google Chat App to the QA service.</li>
+<li>QA App - this accepts questions and chat history and sends them to the LLM for answering.  It runs Langchain to enable the various cool applications it has, such as <a href="https://python.langchain.com/docs/modules/chains/popular/chat_vector_db">ConversationalRetrievalChain</a>, which call the vectorstore for context before sending to the LLM.</li>
+<li>Embedding service - when a user issues a command (<code>!saveurl</code> ) or when it receives a PubSub message from a file broadcast from the attached Cloud Storage bucket, this service receives the raw file and sends it to the Unstructured service.  That Unstructured service creates Langchain Documents() that can then be chunked and passed into embedding.  The number of chunks per document can get large (1000s for a large PDF), so each chunk is sent separately in its own PubSub message, which scales up the Cloud Run app to support demand and scales back to 0.  This speeds up embedding A LOT.  I also added some special parses to improve usability, so for example if the URL starts with <code>https://github.com</code> then it will attempt to clone that repo and embed every file within it, or if it starts with <code>https://drive.google.com</code> then it will direct the load from the Google Drive loaders.</li>
+<li>Unstructured service - you can call the Unstructured API with an API key if you want, but to keep documents private and within GCP you can host your own Unstructured easily using their pre-made Docker container.  This accepts Document parsing requests from the Embedding service</li>
+<li>CloudSQL - the only non-serverless bit is CloudSQL running PostGres to use the pgvector extension. (video about this here: <a href="https://www.youtube.com/watch?v=Jl1S4ZcSY8k">https://www.youtube.com/watch?v=Jl1S4ZcSY8k</a> )  This is the database that can connect to Cloud Run via a Private VPC so no need for a public IP.  I&rsquo;m wondering when/if this should be switched out for AlloyDB (which has some built in ML features) or Matching Engine (which has enterprise pricing, but may perform better for 10k + documents)</li>
+<li>Cloud Storage - this is another way to load the Embedding service, since you can link a PubSub message to the Cloud Run endpoint.  This is handy for lots of documents added at once, or you have existing data flows putting documents into Cloud Storage.</li>
+<li>Pub/Sub - this is the glue that binds the Apps together, and allows you to message queue big chunky embeddings and/or send data to different destinations.  For example, each question/answer thread may themselves hold valuable training data, so those answers are also piped to BigQuery for use later on.</li>
+</ul>
+<p>Here is how it fits together, including the optional 3rd party options outside of GCP.</p>
+<p><img src="images/gcp-llm-stack.png" alt="GCP LLM data architecture">
+<em>click to get bigger</em></p>
+<p>The diagram covers the various services that GCP provide - Cloud Run is represented a lot and each Cloud Run box is its own micro-service, connected via PubSub and/or HTTP.</p>
+<h2 id="code-examples-for-the-llm-cloud-run-services">Code examples for the LLM Cloud Run services</h2>
+<p>Just to give you a flavour of the code required, here are some examples from various app services.  If you want to browse at depth my working Edmonbrain back-end on GCP, ask to be added to this GitHub repo: <a href="https://github.com/MarkEdmondson1234/edmonbrain">https://github.com/MarkEdmondson1234/edmonbrain</a> or see the development leading up to it at this playground: <a href="https://github.com/MarkEdmondson1234/langchain-github">https://github.com/MarkEdmondson1234/langchain-github</a></p>
+<h3 id="google-chat">Google Chat</h3>
+<p>The Google Chat service uses PubSub since you must reply within 30secs so the Q&amp;A service needed to be asynchronous in case it was longer than that (its usually under 10 seconds to generate a response but longer more complicated answers could be longer)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> flask <span style="color:#f92672">import</span> Flask, request, jsonify
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> gchat_help
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> logging
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>app <span style="color:#f92672">=</span> Flask(__name__)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># this sends an immediate Thinking... message and sends chat to PubSub</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@app.route</span>(<span style="color:#e6db74">&#39;/gchat/&lt;vector_name&gt;/message&#39;</span>, methods<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;POST&#39;</span>])
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">gchat_message</span>(vector_name):
+</span></span><span style="display:flex;"><span>	event <span style="color:#f92672">=</span> request<span style="color:#f92672">.</span>get_json()
+</span></span><span style="display:flex;"><span>	logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;gchat_event: </span><span style="color:#e6db74">{</span>event<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> event[<span style="color:#e6db74">&#39;type&#39;</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;MESSAGE&#39;</span>:
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	gchat_help<span style="color:#f92672">.</span>send_to_pubsub(event, vector_name<span style="color:#f92672">=</span>vector_name)
+</span></span><span style="display:flex;"><span>	space_id <span style="color:#f92672">=</span> event[<span style="color:#e6db74">&#39;space&#39;</span>][<span style="color:#e6db74">&#39;name&#39;</span>]
+</span></span><span style="display:flex;"><span>	user_name <span style="color:#f92672">=</span> event[<span style="color:#e6db74">&#39;message&#39;</span>][<span style="color:#e6db74">&#39;sender&#39;</span>][<span style="color:#e6db74">&#39;displayName&#39;</span>]
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Received from </span><span style="color:#e6db74">{</span>space_id<span style="color:#e6db74">}</span><span style="color:#e6db74">:</span><span style="color:#e6db74">{</span>user_name<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> jsonify({<span style="color:#e6db74">&#39;text&#39;</span>:<span style="color:#e6db74">&#34;Thinking...&#34;</span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># this recieves the pubsub message and sends a reply back to the same thread</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@app.route</span>(<span style="color:#e6db74">&#39;/pubsub/callback&#39;</span>, methods<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;POST&#39;</span>])
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">gchat_send</span>():
+</span></span><span style="display:flex;"><span>	event <span style="color:#f92672">=</span> request<span style="color:#f92672">.</span>get_json()
+</span></span><span style="display:flex;"><span>	bot_output, vector_name, space_id <span style="color:#f92672">=</span> gchat_help<span style="color:#f92672">.</span>process_pubsub_data(event)
+</span></span><span style="display:flex;"><span>	logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;bot_output: </span><span style="color:#e6db74">{</span>bot_output<span style="color:#e6db74">}</span><span style="color:#e6db74"> </span><span style="color:#e6db74">{</span>vector_name<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	meta_card <span style="color:#f92672">=</span> gchat_help<span style="color:#f92672">.</span>generate_google_chat_card(bot_output)
+</span></span><span style="display:flex;"><span>	gchat_output <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#39;cards&#39;</span>: meta_card[<span style="color:#e6db74">&#39;cards&#39;</span>] }
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e"># send gchat_output to gchat</span>
+</span></span><span style="display:flex;"><span>	gchat_help<span style="color:#f92672">.</span>send_to_gchat(gchat_output, space_id<span style="color:#f92672">=</span>space_id)
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;Ok&#34;</span>
+</span></span></code></pre></div><p>I generated Google Chat Card for output as it looked nice, although not for Codey that will only output text since its output includes back tick code blocks that didn&rsquo;t work with Card format.  Authentication is done using Cloud Run&rsquo;s default service account, but for downloading chat history it seems this is only available with explicit opt-in by the user.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> google.auth <span style="color:#f92672">import</span> exceptions, default
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> googleapiclient.discovery <span style="color:#f92672">import</span> build
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>SCOPES <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;https://www.googleapis.com/auth/chat.messages&#39;</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">send_to_gchat</span>(gchat_output, space_id):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Sending gchat output </span><span style="color:#e6db74">{</span>gchat_output<span style="color:#e6db74">}</span><span style="color:#e6db74"> to </span><span style="color:#e6db74">{</span>space_id<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e"># can auth on Cloud Run directly</span>
+</span></span><span style="display:flex;"><span>	creds, _ <span style="color:#f92672">=</span> default()
+</span></span><span style="display:flex;"><span>	creds <span style="color:#f92672">=</span> creds<span style="color:#f92672">.</span>with_scopes(SCOPES)
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	chat <span style="color:#f92672">=</span> build(<span style="color:#e6db74">&#39;chat&#39;</span>, <span style="color:#e6db74">&#39;v1&#39;</span>, credentials<span style="color:#f92672">=</span>creds)
+</span></span><span style="display:flex;"><span>	message <span style="color:#f92672">=</span> chat<span style="color:#f92672">.</span>spaces()<span style="color:#f92672">.</span>messages()<span style="color:#f92672">.</span>create(
+</span></span><span style="display:flex;"><span>		parent<span style="color:#f92672">=</span>space_id,
+</span></span><span style="display:flex;"><span>		body<span style="color:#f92672">=</span>gchat_output)<span style="color:#f92672">.</span>execute()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Message sent: </span><span style="color:#e6db74">{</span>message<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span></code></pre></div><p>Discord&rsquo;s API was easier to work with to get chat history and message events, and was my favourite compared to Slack and Google Chat</p>
+<h3 id="cloudsql-running-postgres-with-pgvector">CloudSQL running PostGres with pgvector</h3>
+<p>Langchain already has an existing <a href="https://python.langchain.com/docs/modules/data_connection/vectorstores/integrations/pgvector">PGVector connector</a> which I reused for CloudSQL, but there was a pending issue where the PostGres assumed OpenAIs vector size of 1536 rather than VertexAIs 768.  I can see a business in embedding documents with a certain embedding and selling those pre-done.  A patch adding <code>PGVECTOR_VECTOR_SIZE</code> solves the issue though, and I guess will be merged soon.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain.vectorstores.pgvector <span style="color:#f92672">import</span> PGVector
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain.embeddings <span style="color:#f92672">import</span> VertexAIEmbeddings
+</span></span><span style="display:flex;"><span>logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">&#34;Inititaing CloudSQL pgvector&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>CONNECTION_STRING <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;PGVECTOR_CONNECTION_STRING&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># postgresql://brainuser:password@10.24.0.3:5432/brain</span>
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 768 for Vertex, 1536 for OpenAI</span>
+</span></span><span style="display:flex;"><span>vector_size <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#34;PGVECTOR_VECTOR_SIZE&#34;</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>vectorstore <span style="color:#f92672">=</span> PGVector(connection_string<span style="color:#f92672">=</span>CONNECTION_STRING,
+</span></span><span style="display:flex;"><span>					   embedding_function<span style="color:#f92672">=</span>VertexAIEmbeddings(),
+</span></span><span style="display:flex;"><span>					   collection_name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;your-collection&#34;</span>)
+</span></span></code></pre></div><p>Setting up the CloudSQL instance was simple enough.  I opted for a privateIP instance and used a serverless VPC connector as described at these links:</p>
+<ul>
+<li><a href="https://cloud.google.com/sql/docs/postgres/connect-run#private-ip_1">https://cloud.google.com/sql/docs/postgres/connect-run#private-ip_1</a></li>
+<li><a href="https://cloud.google.com/sql/docs/postgres/connect-instance-cloud-run">https://cloud.google.com/sql/docs/postgres/connect-instance-cloud-run</a></li>
+</ul>
+<p>I then needed to specify the VPC connector when creating the Cloud Run service within Cloud Run via the <code>--vpc-connector</code> flag and the database was found at the private ip (10.24.0.3 in above code snippet).  I then constructed the <code>PGVECTOR_CONNECTION_STRING</code> and placed it in Secret Manager, accessible during Cloud Run start up via:</p>
+<p><code>--update-secrets=PGVECTOR_CONNECTION_STRING=PGVECTOR_CONNECTION_STRING:latest</code></p>
+<h3 id="hosting-unstructured-document-loading-on-cloud-run">Hosting Unstructured Document Loading on Cloud Run</h3>
+<p>Unstructured is a great short cut to parsing out lots of different file formats that can work with embeddings.  The easiest way to get started is to just call their API with your files for which you need a free API key, but for private documents I hosted my own instance on a bigger Cloud Run instance since parsing PDFs can get pretty intensive CPU wise as it uses OCR techniques to read diagrams etc.</p>
+<p>Once a Cloud Run URL was available then it was just a matter of pointing the function at your own URL endpoint rather than the public one:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">read_file_to_document</span>(gs_file: pathlib<span style="color:#f92672">.</span>Path):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  docs <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Sending </span><span style="color:#e6db74">{</span>gs_file<span style="color:#e6db74">}</span><span style="color:#e6db74"> to UnstructuredAPIFileLoader&#34;</span>)
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  UNSTRUCTURED_URL <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>getenv(<span style="color:#e6db74">&#34;UNSTRUCTURED_URL&#34;</span>, <span style="color:#66d9ef">None</span>)
+</span></span><span style="display:flex;"><span>  the_endpoint <span style="color:#f92672">=</span> <span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{</span>UNSTRUCTURED_URL<span style="color:#e6db74">}</span><span style="color:#e6db74">/general/v0/general&#34;</span>
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  loader <span style="color:#f92672">=</span> UnstructuredAPIFileLoader(gs_file, url<span style="color:#f92672">=</span>the_endpoint)
+</span></span><span style="display:flex;"><span>  docs <span style="color:#f92672">=</span> loader<span style="color:#f92672">.</span>load()
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Loaded docs for </span><span style="color:#e6db74">{</span>gs_file<span style="color:#e6db74">}</span><span style="color:#e6db74"> from UnstructuredAPIFileLoader&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> docs
+</span></span></code></pre></div><h3 id="qa-service">Q&amp;A Service</h3>
+<p>The LLM calls itself with context is handled by Langchain.  The choice of which vector store or LLM is made by a simple config file that looks at the name space.  For example, Edmonbrain running in Discord uses Supabase/OpenAI whilst GoogleBrain on GChat uses Vertex and CloudSQL.  Langchain&rsquo;s abstractions means you can run the same <a href="https://python.langchain.com/en/latest/modules/chains/index_examples/chat_vector_db.html">chat operation</a> across both:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> qna.llm <span style="color:#f92672">import</span> pick_llm
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> qna.llm <span style="color:#f92672">import</span> pick_vectorstore
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain.chains <span style="color:#f92672">import</span> ConversationalRetrievalChain
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain.prompts.prompt <span style="color:#f92672">import</span> PromptTemplate
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">qna</span>(question: str, vector_name: str, chat_history<span style="color:#f92672">=</span>[]):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	llm, embeddings <span style="color:#f92672">=</span> pick_llm(vector_name)
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>	vectorstore <span style="color:#f92672">=</span> pick_vectorstore(vector_name, embeddings<span style="color:#f92672">=</span>embeddings)
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>	retriever <span style="color:#f92672">=</span> vectorstore<span style="color:#f92672">.</span>as_retriever(search_kwargs<span style="color:#f92672">=</span>dict(k<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>))
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>	prompt_template <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;&#34;Use the following pieces of context to 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">answer the question at the end. If you don&#39;t know the answer, 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">reply stating you have no context sources to back up your reply, 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">but taking a best guess.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"></span><span style="color:#e6db74">{context}</span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Question: </span><span style="color:#e6db74">{question}</span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Helpful Answer:&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	QA_PROMPT <span style="color:#f92672">=</span> PromptTemplate(
+</span></span><span style="display:flex;"><span>		template<span style="color:#f92672">=</span>prompt_template, input_variables<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#34;context&#34;</span>, <span style="color:#e6db74">&#34;question&#34;</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	qa <span style="color:#f92672">=</span> ConversationalRetrievalChain<span style="color:#f92672">.</span>from_llm(
+</span></span><span style="display:flex;"><span>			llm,
+</span></span><span style="display:flex;"><span>			retriever<span style="color:#f92672">=</span>retriever,
+</span></span><span style="display:flex;"><span>			return_source_documents<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>,
+</span></span><span style="display:flex;"><span>			output_key<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;answer&#39;</span>,
+</span></span><span style="display:flex;"><span>			combine_docs_chain_kwargs<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#39;prompt&#39;</span>: QA_PROMPT},
+</span></span><span style="display:flex;"><span>			max_tokens_limit<span style="color:#f92672">=</span><span style="color:#ae81ff">3500</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	result <span style="color:#f92672">=</span> qa({<span style="color:#e6db74">&#34;question&#34;</span>: question, <span style="color:#e6db74">&#34;chat_history&#34;</span>: chat_history})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> result
+</span></span></code></pre></div><p>I also plan to be able to customise the prompt more, since this is an area where a lot of optimisation can happen.  Eventually I also want to enable Agents, that trigger actions via code functions you ask the LLM to create variables for, and feed it back the results.  This is an exciting rapidly developing field.</p>
+<h2 id="summary">Summary</h2>
+<p>I&rsquo;m aware that a lot of the infrastructure I&rsquo;ve built may be made redundant as Google and other companies launch their own GenAI products. I got a demo of <a href="https://cloud.google.com/generative-ai-app-builder">Google&rsquo;s GenApp builder</a> and looks like you can set up your own chat bot over your own documents with a few clicks, and get some JavaScript to embed that app anyway you like.</p>
+<p>However, its been so educational for me to work through the infrastructure and I&rsquo;m sure for custom solutions going forward it will stand me in good stead.  I may be able to swap in and out easily with my modular structure some GenApp builder elements, but keep my own custom prompts, for example.  All in all its a good basis for the next stage, which I believe will be the how unsupervised LLMs interacting by themselves will behave.  Will we ever be able to eliminate hallucinations to make them reliable enough to not need human interaction?  Is code syntax doomed, and we will be able to program via concepts, not syntax?</p>
+<p>I do feel changed by having LLM assistance in this project and will not be able to go back to having none.  Its like an enthusiastic intern coding buddy that can quickly return research results.  I look back at my time without LLM assistance and wonder at how much time was spent just struggling with syntax instead of advancing or trying out ideas.  All in all its an exciting time to be working within data, and I look forward to seeing what develops.  Please get in touch if you wish to feedback, speculate or build something related to it, as I think its going to be a big part of our future.</p>
+<p>And in case you are wondering, none of this blog was generated by an LLM :) I did ask it for editor suggestions though. I don&rsquo;t see LLMs replacing original thought, just facilitating their execution.</p>
+        </div>
+        <footer class="article-footer">
+        <i class="fa fa-share"></i>
+        Share
+    </a>
+    
+
+    <script>
+    (function ($) {
+        
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+    </script>
+</footer>
+
+    </div>
+
+    
+<nav id="article-nav">
+    
+    <a href="https://code.markedmondson.me/sending-ga4-events-pubsub/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">
+          Older
+      </strong>
+      <div class="article-nav-title">Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit</div>
+    </a>
+    
+
+    
+</nav>
+
+
+</article>
+
+
+<section id="comments">
+    <div id="utterances_thread">
+        <script src="https://utteranc.es/client.js"
+    repo="MarkEdmondson1234/markedmondson.me-hugo"
+    issue-term="pathname"
+    label="comment"
+    theme="github-light"
+    crossorigin="anonymous"
+    async>
+</script>
+    </div>
+</section>
+
+
+    </section>
+
+   	
+    	<aside id="sidebar">
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/running-llms-on-gcp/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/webb-deep-space.jpeg)" alt="Running Large Language Models on Google Cloud Platform via Cloud Run, VertexAI and PubSub - LLMOps on GCP" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/running-llms-on-gcp/" class="title">Running Large Language Models on Google Cloud Platform via Cloud Run, VertexAI and PubSub - LLMOps on GCP</a></p>
+                    <p class="item-date">
+                        <time datetime="2023-07-07 00:00:00 &#43;0000 UTC" itemprop="datePublished">2023-07-07</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/sending-ga4-events-pubsub/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/sun-outburst.jpg)" alt="Running Large Language Models on Google Cloud Platform via Cloud Run, VertexAI and PubSub - LLMOps on GCP" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/sending-ga4-events-pubsub/" class="title">Activating GA4 events with GTM Server-Side and Pub/Sub for Fun and Profit</a></p>
+                    <p class="item-date">
+                        <time datetime="2022-01-04 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-01-04</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/gtm-serverside-cloudrun/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/princess-gtm.png)" alt="Running Large Language Models on Google Cloud Platform via Cloud Run, VertexAI and PubSub - LLMOps on GCP" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/gtm-serverside-cloudrun/" class="title">Google Tag Manager Server Side on Cloud Run - Pros and Cons</a></p>
+                    <p class="item-date">
+                        <time datetime="2020-08-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-21</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/shiny-cloudrun/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/shiny-clouds.jpg)" alt="Running Large Language Models on Google Cloud Platform via Cloud Run, VertexAI and PubSub - LLMOps on GCP" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/shiny-cloudrun/" class="title">Shiny on Google Cloud Run - Scale-to-Zero R Web Apps</a></p>
+                    <p class="item-date">
+                        <time datetime="2020-08-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-01</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="https://code.markedmondson.me/datascience-aas/" class="thumbnail">
+                    
+                        <span style="background-image:url(https://code.markedmondson.me/banners/piketty-capital.png)" alt="Running Large Language Models on Google Cloud Platform via Cloud Run, VertexAI and PubSub - LLMOps on GCP" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-title"><a href="https://code.markedmondson.me/datascience-aas/" class="title">Online payments for data science apps (DSaaS) using R, Shiny, Firebase, Paddle and Google Cloud Functions</a></p>
+                    <p class="item-date">
+                        <time datetime="2020-06-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-06-28</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Donate
+    </h3>
+    <div class="widget">
+       	<script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="marked" data-description="Support me on Buy me a coffee!" data-message="" data-color="#FFDD00" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+       	<iframe src="https://github.com/sponsors/MarkEdmondson1234/button" title="Sponsor MarkEdmondson1234" height="35" width="116" style="border: 0;"></iframe>
+    </div>
+</div>
+
+
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Get your GA4 history
+    </h3>
+    <script>
+      function submitDL(value){
+        dataLayer.push({'event':'ga4_email','ga4_email':value});
+        document.getElementById('email').value = 'Submitted! See inbox'
+        var button = document.getElementById('email_button');
+        button.disabled = true;
+      }
+        
+    </script>
+    <div>
+        <input type="email" name="email"  id="email"
+          required 
+          minlength="8"
+          placeholder="you@email.com">
+        <button id='email_button'
+          onclick="javascript:submitDL(document.getElementById('email').value);"
+         >Send</button>
+    </div>
+</div>
+
+
+    
+
+
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/r">
+                    R
+                </a>
+                <span class="category-list-count">14</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/big-query">
+                    big-query
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/blogging">
+                    blogging
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-functions">
+                    cloud-functions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/cloud-run">
+                    cloud-run
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/docker">
+                    docker
+                </a>
+                <span class="category-list-count">9</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/firebase">
+                    firebase
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-analytics">
+                    google-analytics
+                </a>
+                <span class="category-list-count">6</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-app-engine">
+                    google-app-engine
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-auth">
+                    google-auth
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-cloud-storage">
+                    google-cloud-storage
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-compute-engine">
+                    google-compute-engine
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/google-tag-manager">
+                    google-tag-manager
+                </a>
+                <span class="category-list-count">4</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/pubsub">
+                    pubsub
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/python">
+                    python
+                </a>
+                <span class="category-list-count">6</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/rstudio-server">
+                    rstudio-server
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/search-console">
+                    search-console
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                
+                <a class="category-list-link" href="https://code.markedmondson.me/tags/vertex">
+                    vertex
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+
+    
+
+
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+    
+	</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script src="https://code.markedmondson.me/fancybox/jquery.fancybox.pack.js"></script>
+<script src="https://code.markedmondson.me/js/script.js"></script>
+<script src="https://code.markedmondson.me/js/highlight.pack.js"></script>
+
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+</body>
+</html>
