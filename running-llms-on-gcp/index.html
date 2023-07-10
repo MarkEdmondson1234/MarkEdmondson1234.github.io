@@ -36,7 +36,7 @@ As old readers may remember, I&rsquo;ve always tried to work on the meta-horizon
 A key facilitator has been Harrison Chase&rsquo;s Langchain, an active hive of open-source goodness.  It has allowed me to learn and imagine and digest this new active field of LLMops (Large Language Model Operations), that is the data engineering to make LLMs actually useful on a day to day basis.  I took it upon myself to see how I could apply my Google Cloud Platform (GCP) data engineering background to these new toys Langchain has helped provide.
 This means I now have this new brain, Edmonbrain, that I converse with daily in Google Chat, Slack and Discord.  I have fed it in interesting URLs, Git repos and Whitepapers so I can build up a unique bot of my very own.  I fed it my own book, and can ask it questions about it, for example:"><meta itemprop="datePublished" content="2023-07-07T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2023-07-07T00:00:00+00:00" />
-<meta itemprop="wordCount" content="3088">
+<meta itemprop="wordCount" content="3040">
 <meta itemprop="keywords" content="cloud-run,docker,pubsub,python,vertex," />
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Running Large Language Models on Google Cloud Platform via Cloud Run, VertexAI and PubSub - LLMOps on GCP"/>
@@ -280,7 +280,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <i class="fa fa-calendar"></i>
             <time datetime="2023-07-07 00:00:00 &#43;0000 UTC" itemprop="datePublished">2023-07-07</time>
             &middot;
-            3088
+            3040
             words
             &middot;
             15
@@ -344,7 +344,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li>No authentication keys - use Google metadata to auth for ease of use and security</li>
 </ul>
 <p>My primary aim was to have a way for an entire company to share all their emails, internal documents, chats, documentation and have an LLM bot that could reply to questions against those documents to anyone who asked.  A &ldquo;company wide brain&rdquo;.  My ambition is that if adopted it could enable more efficient communication between colleagues in a familiar context, using the chat apps they already use.</p>
-<p>On GCP the above requirements always meant to me I would be running Cloud Run and Pub/Sub within my main orchestration.  Once Google also announced support for pgvector on AlloyDB and CloudSQL, this also meant I had more options other than the enterprise Matching Engine for a vectorstore to keep it all pure-GCP.  But I&rsquo;m getting ahead of myself, lets show some of the main features that LLMOps as a field is creating as an emerging standard.</p>
+<p>On GCP the above requirements always meant to me I would be running Cloud Run and Pub/Sub within my main orchestration.  Once Google announced support for pgvector on AlloyDB and CloudSQL, this also meant I had more options other than the enterprise Matching Engine for a vectorstore to keep it all pure-GCP.  But I&rsquo;m getting ahead of myself, lets show some of the main features that LLMOps as a field is creating as an emerging standard.</p>
 <h2 id="what-is-needed-for-running-an-llm-bot">What is needed for running an LLM bot?</h2>
 <p>The first material I produced for LLM on GCP was this slide deck on <a href="https://docs.google.com/presentation/d/1SsbkTz5NJCkDVuHCqBh_CKA_0TEReNlHfMyvI2Yj8Ok/edit?usp=sharing">&ldquo;Edmonbrain - building a brain&rdquo; in June 2023</a>.  I have to mention the date, as its probably already out of date given the pace of updates at the moment. It includes introducing a few key components that I summarise below:</p>
 <ul>
@@ -358,7 +358,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p>Context - this is the current piece that is enabling a lot of excitement at the moment.  It basically means you pasting in a few examples or text context to any question you are asking, to help facilitate the LLMs answer, a form of prompt engineering.  If you ask &ldquo;What is my name?&rdquo; tools such as Langchain can turn that prompt into &ldquo;Answer below based on the context provided: What is my name?  Context: Mark Edmondson is the creator of this tool&rdquo;.  Its a simple idea but with very powerful applications once you automate generating that context.</p>
 </li>
 <li>
-<p>Vectorstore - this is the hot new tech that enables the context above.  You have a limited window of text to add to prompts, although there is a new arms race about which model can provide the largest context window (1 billion tokens?).  Vectorstores hold the vectors of text embeddings that help similarity searches so you can select the best context to add to the prompt to help its answers.  The gif below from Matching Engine helps illustrate what they are doing: vectors are similar if encoding similar context, and so you look for points close to existing embedded vectors when you get a new prompt so that the context returned is hopefully useful. <img src="https://lh5.googleusercontent.com/UTo1ko1g4Nil8N3ex7TKPjLkaWy9n3C8jSV9fRwSUOH77WhgoSmUA5ikU5LW1seey5pZZlWREpQnGnZ4UzeiWHbLROe9cEnhfh9nvlzTro-N9evwJbmQ-anxg33rNoLms-M2q5Ucrw5_ckq6mFlmZfF2VA=s2048" alt=""></p>
+<p>Vectorstore - this is the hot new tech that enables the context above.  You have a limited window of text to add to prompts, although there is a new arms race about which model can provide the largest context window (<a href="https://huggingface.co/papers/2307.02486">1 billion tokens?</a>).  Vectorstores hold the vectors of text embeddings that help similarity searches so you can select the best context to add to the prompt to help its answers.  The gif below from Matching Engine helps illustrate what they are doing: vectors are similar if encoding similar context, and so you look for points close to existing embedded vectors when you get a new prompt so that the context returned is hopefully useful. <img src="https://lh5.googleusercontent.com/UTo1ko1g4Nil8N3ex7TKPjLkaWy9n3C8jSV9fRwSUOH77WhgoSmUA5ikU5LW1seey5pZZlWREpQnGnZ4UzeiWHbLROe9cEnhfh9nvlzTro-N9evwJbmQ-anxg33rNoLms-M2q5Ucrw5_ckq6mFlmZfF2VA=s2048" alt=""></p>
 </li>
 <li>
 <p>UX - how you interact with the bot.  Although there are lots of web based chat bots out there, I avoided the rabbit hole of building a UI by favouring building LLM powered bots in the chat platforms I use daily, namely Discord, Slack and Google Chat.  You get a lot of features for free such as chat history, user management and mobile/desktop apps.</p>
@@ -367,7 +367,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p>Orchestration - you need something that strings all the above components together.  Langchain excels here since it offers a consistent API where you can swap out betwen say the OpenAI and VertexAI LLM models, or a different vectorstore such as Supabase, Chroma or CloudSQL.</p>
 </li>
 </ul>
-<p>The above are represented by these data architecture diagrams that I&rsquo;ve made or saved from the web.  Incidentally Langchain is also a great social media account to follow to keep up to date with all of the above, and was how I found out about these concepts.</p>
+<p>The above are represented by these data architecture diagrams that I&rsquo;ve made or saved from the web.  Incidentally <a href="https://twitter.com/LangChainAI">@Langchain</a> is also a great social media account to follow to keep up to date with all of the above, and was how I found out about these concepts.</p>
 <p><img src="images/LLM_app_stack.jpg" alt="large language app stack">
 <em>click to get bigger</em></p>
 <p>The diagram above is from a comprehensive post called <a href="https://a16z.com/2023/06/20/emerging-architectures-for-llm-applications/">Emerging Architectures for LLM Applications</a> by a16z.com which was my first realisation this LLMOps is an emerging field that I&rsquo;d like to be involved with.</p>
@@ -391,7 +391,7 @@ What I don&rsquo;t cover in this blog are the tools or agents at the bottom.  Th
 <em>click to get bigger</em></p>
 <p>The diagram covers the various services that GCP provide - Cloud Run is represented a lot and each Cloud Run box is its own micro-service, connected via PubSub and/or HTTP.</p>
 <h2 id="code-examples-for-the-llm-cloud-run-services">Code examples for the LLM Cloud Run services</h2>
-<p>Just to give you a flavour of the code required, here are some examples from various app services.  If you want to browse at depth my working Edmonbrain back-end on GCP, ask to be added to this GitHub repo: <a href="https://github.com/MarkEdmondson1234/edmonbrain">https://github.com/MarkEdmondson1234/edmonbrain</a> or see the development leading up to it at this playground: <a href="https://github.com/MarkEdmondson1234/langchain-github">https://github.com/MarkEdmondson1234/langchain-github</a></p>
+<p>Just to give you a flavour of the code required, here are some examples from various app services.  If you want to browse at depth my working Edmonbrain back-end on GCP, the code is open-sourced here: <a href="https://github.com/MarkEdmondson1234/edmonbrain">https://github.com/MarkEdmondson1234/edmonbrain</a> or see the development leading up to it at this playground: <a href="https://github.com/MarkEdmondson1234/langchain-github">https://github.com/MarkEdmondson1234/langchain-github</a></p>
 <h3 id="google-chat">Google Chat</h3>
 <p>The Google Chat service uses PubSub since you must reply within 30secs so the Q&amp;A service needed to be asynchronous in case it was longer than that (its usually under 10 seconds to generate a response but longer more complicated answers could happen)</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> flask <span style="color:#f92672">import</span> Flask, request, jsonify
@@ -453,21 +453,18 @@ What I don&rsquo;t cover in this blog are the tools or agents at the bottom.  Th
 </span></span><span style="display:flex;"><span>	logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Message sent: </span><span style="color:#e6db74">{</span>message<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
 </span></span></code></pre></div><p>Discord&rsquo;s API was easier to work with to get chat history and message events, and was my favourite compared to Slack and Google Chat</p>
 <h3 id="cloudsql-running-postgresql-with-pgvector">CloudSQL running PostgreSQL with pgvector</h3>
-<p>Langchain already has an existing <a href="https://python.langchain.com/docs/modules/data_connection/vectorstores/integrations/pgvector">PGVector connector</a> which I reused for CloudSQL, but there was a pending issue where the PostgreSQL connector always assumed OpenAIs vector size of 1536 rather than VertexAIs 768.  I can see a business in embedding documents with a certain embedding and selling those pre-done.  A patch adding <code>PGVECTOR_VECTOR_SIZE</code> solves the issue though, and I guess will be merged soon.</p>
+<p>Langchain already has an existing <a href="https://python.langchain.com/docs/modules/data_connection/vectorstores/integrations/pgvector">PGVector connector</a> which I reused for CloudSQL.  I can see a business in embedding documents with a certain embedding size and selling those pre-done.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain.vectorstores.pgvector <span style="color:#f92672">import</span> PGVector
 </span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain.embeddings <span style="color:#f92672">import</span> VertexAIEmbeddings
 </span></span><span style="display:flex;"><span>logging<span style="color:#f92672">.</span>info(<span style="color:#e6db74">&#34;Inititaing CloudSQL pgvector&#34;</span>)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>CONNECTION_STRING <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;PGVECTOR_CONNECTION_STRING&#34;</span>)
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># postgresql://brainuser:password@10.24.0.3:5432/brain</span>
-</span></span><span style="display:flex;"><span>  
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 768 for Vertex, 1536 for OpenAI</span>
-</span></span><span style="display:flex;"><span>vector_size <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#34;PGVECTOR_VECTOR_SIZE&#34;</span>]
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>vectorstore <span style="color:#f92672">=</span> PGVector(connection_string<span style="color:#f92672">=</span>CONNECTION_STRING,
-</span></span><span style="display:flex;"><span>					   embedding_function<span style="color:#f92672">=</span>VertexAIEmbeddings(),
-</span></span><span style="display:flex;"><span>					   collection_name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;your-collection&#34;</span>)
-</span></span></code></pre></div><p>Setting up the CloudSQL instance was simple enough.  I opted for a privateIP instance and used a serverless VPC connector as described at these links:</p>
+</span></span><span style="display:flex;"><span>                       embedding_function<span style="color:#f92672">=</span>VertexAIEmbeddings(),
+</span></span><span style="display:flex;"><span>					             collection_name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;your-collection&#34;</span>)
+</span></span></code></pre></div><p>Setting up the CloudSQL instance was simple enough.  I opted for a private IP instance and used a serverless VPC connector as described at these links:</p>
 <ul>
 <li><a href="https://cloud.google.com/sql/docs/postgres/connect-run#private-ip_1">https://cloud.google.com/sql/docs/postgres/connect-run#private-ip_1</a></li>
 <li><a href="https://cloud.google.com/sql/docs/postgres/connect-instance-cloud-run">https://cloud.google.com/sql/docs/postgres/connect-instance-cloud-run</a></li>
